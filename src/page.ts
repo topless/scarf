@@ -186,7 +186,7 @@ function header(root: string, nav: string): string {
 
 function footer(): string {
   return `<footer class="wrap site-footer">
-  <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Fans, not fanatics.</span></div>
+  <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Wrapped up in the game.</span></div>
 </footer>`
 }
 

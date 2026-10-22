@@ -102,7 +102,6 @@ test('landing lists every team with its stripe and a link to its page', () => {
   assert.match(html, /No games announced yet/)
   assert.match(html, /<span>From UEFA<\/span>/)
   assert.match(html, /<span>From FIBA<\/span>/)
-  assert.match(html, /Fans, not fanatics\./)
   assert.doesNotMatch(html, /Updated daily from UEFA and FIBA|last run/)
   assert.match(html, /<link rel="icon" href="favicon\.svg" type="image\/svg\+xml">/)
 })
@@ -157,4 +156,11 @@ test('a new team page shows its flag, its own feed and links every other team', 
   assert.match(html, /href="\.\.\/\.\.\/spain\/basketball\/" style="[^"]*#AA151B[^"]*" aria-current="page"/)
   assert.match(html, /href="\.\.\/\.\.\/germany\/basketball\/" style="[^"]*#000000 0px 18px, #DD0000 18px 36px, #FFCC00 36px 54px[^"]*"/)
   assert.match(html, /Updated daily from FIBA\./)
+})
+
+test('both footers carry the motto', () => {
+  const pages = [teamPage([timed], site), renderLanding([{ team: football, games: [timed] }])]
+  for (const html of pages) {
+    assert.match(html, /<span>· Wrapped up in the game\.<\/span>/)
+  }
 })

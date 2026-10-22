@@ -2,7 +2,7 @@
 
 Your colours, in your calendar. scarf publishes one subscribable calendar feed per national team:
 every game with kickoff, venue, TV channel and ticket link, and a reminder an hour before. Fans
-subscribe once, and the calendar they already use keeps itself up to date. Fans, not fanatics.
+subscribe once, and the calendar they already use keeps itself up to date. Wrapped up in the game.
 
 Teams so far: Greece and Spain (men's football and basketball), France and Germany (men's basketball).
 The identity, the exact calendar-event copy and the backlog come from the design handover:

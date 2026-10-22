@@ -8,7 +8,7 @@ venue, TV channel, ticket link, with a reminder an hour before. Working title un
 **Brand decision (made).** Name: **scarf** (lowercase wordmark). Direction: *fan culture* —
 the scarf is the one fan object football and basketball, national teams and clubs all share.
 The brand stays neutral; each team brings its colours as a knitted stripe. Line: *"Your colours,
-in your calendar."* Principle: **fans, not fanatics.**
+in your calendar."* Motto: *"Wrapped up in the game."*
 
 **Domain decision (pending, not blocking).** Develop and run the closed-circle test on the GitHub
 Pages URL. Recommended purchase when ready: `scarf.fan` (canonical) + `scarfcal.com` (secondary,
