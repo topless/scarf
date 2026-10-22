@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { parseFibaGames } from '../src/fiba.ts'
-import { parseUefaMatches } from '../src/uefa.ts'
+import { fetchUefaMatches, parseUefaMatches } from '../src/uefa.ts'
 
 // Both fixtures are cut down from real responses: the UEFA one from the single batched probe of
 // 2026-10-17 (teamId=49,122,35), the FIBA one from the 2027 qualifiers page on 2026-10-02.
@@ -37,6 +37,12 @@ test('a changed UEFA format fails loudly', () => {
   assert.throws(() => parseUefaMatches([{ ...match, kickOffTime: {} }], 122), /format changed/)
   // Without team ids no team could pick out its matches, and every feed would silently empty.
   assert.throws(() => parseUefaMatches([{ ...match, homeTeam: { internationalName: 'Czechia' } }], 122), /format changed/)
+})
+
+test('an empty UEFA response fails loudly instead of emptying every football feed', async (t) => {
+  // Stubbed: the test makes no request to UEFA.
+  t.mock.method(globalThis, 'fetch', async () => new Response('[]'))
+  await assert.rejects(fetchUefaMatches([49, 122], '2026-10-22'), /UEFA returned no matches at all for teamId=49,122/)
 })
 
 test('FIBA page yields only the requested team, with time and venue once announced', () => {
