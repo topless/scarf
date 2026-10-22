@@ -7,7 +7,7 @@ card header, the share image and the recoloured mark.
 
 - Name: **scarf** — lowercase wordmark, always. "Scarf" only at the start of a sentence.
 - Line: **Your colours, in your calendar.**
-- Principle: **Fans, not fanatics.**
+- Motto: **Wrapped up in the game.**
 
 ## Colour tokens
 
@@ -87,7 +87,8 @@ Never rotate the mark further, never stretch, never add a drop shadow.
 
 ## Voice
 
-- Warm, communal, a little cheeky: the friend who always knows when we play.
+- Warm, communal, a little cheeky: the friend who always knows when we play. Cheerful about the
+  team, the players and the game; never preachy.
 - "We" is the team, "you" is the fan. Sentence case. No exclamation marks, no emoji.
 - Times name their city ("21:45 in Volos"). Unknowns are said plainly: "time not announced",
   "venue not announced". Never TBA, TBC, "don't miss out", "notification".

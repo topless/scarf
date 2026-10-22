@@ -1,4 +1,5 @@
 import { feedPath, landingSharePath, sharePath, shareSize, siteName, type Sport, type Team } from './config.ts'
+import { flagPath } from './flags.ts'
 import type { Game } from './game.ts'
 
 // Team pages and the landing page, ported from reference/team-page.html. Styles live in
@@ -28,7 +29,7 @@ const WORDS: Record<Sport, { start: string; ground: string }> = {
 
 // siteUrl is the public address of the site; without it (local builds) the subscribe links are
 // relative and the ones that need a public address (Google, Outlook, the paste field) are left out.
-export function renderTeamPage(section: Section, all: Team[], now: Date, siteUrl?: string): string {
+export function renderTeamPage(section: Section, all: Team[], siteUrl?: string): string {
   const { team, games } = section
   const from = federation(team)
   const { start, ground } = WORDS[team.sport]
@@ -50,7 +51,7 @@ ${header('../../', `<nav class="site-nav" aria-label="Page">
 <main>
 <section class="wrap hero">
   <div class="hero-text">
-    <p class="eyebrow">${team.flag ? `<img src="../../${esc(team.flag)}" width="24" height="16" alt="">` : ''}<span>${esc(teamKind(team))}</span></p>
+    <p class="eyebrow"><img src="../../${flagPath(team.flag)}" width="24" height="18" alt=""><span>${esc(teamKind(team))}</span></p>
     <h1>${esc(team.name)}, in your calendar.</h1>
     <p class="lede">Every ${start}, ${ground}, channel and ticket sale for the national team — kept current in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
 ${subscribePanel(team, siteUrl)}
@@ -85,13 +86,12 @@ ${teamChips(all, team)}
   </div>
 </section>
 </main>
-${footer('../../', from, now)}`,
+${footer()}`,
     script: COPY_SCRIPT,
   })
 }
 
-export function renderLanding(sections: Section[], now: Date, siteUrl?: string): string {
-  const teams = sections.map(({ team }) => team)
+export function renderLanding(sections: Section[], siteUrl?: string): string {
   return page({
     root: '',
     title: `${siteName} · Your colours, in your calendar`,
@@ -117,7 +117,7 @@ ${group.map(teamCard).join('\n')}
   )
   .join('\n')}
 </main>
-${footer('', federations(teams), now)}`,
+${footer()}`,
   })
 }
 
@@ -198,10 +198,9 @@ function header(root: string, nav: string): string {
 </header>`
 }
 
-function footer(root: string, sources: string, now: Date): string {
+function footer(): string {
   return `<footer class="wrap site-footer">
-  <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Fans, not fanatics.</span></div>
-  <p>Updated daily from ${sources} · last run ${longDate(now)}, ${TIME.format(now)} UTC</p>
+  <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Wrapped up in the game.</span></div>
 </footer>`
 }
 

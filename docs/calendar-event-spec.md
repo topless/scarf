@@ -45,6 +45,11 @@ Rules: six lines at most; the TV line is dropped when unknown rather than filled
 the ticket line is dropped until a link exists; the footer is the only place the brand name appears.
 In a combined personal feed the summary gains a sport suffix: `Greece vs Serbia · football`.
 
+Until the city is announced the kickoff line reads `Kickoff 21:45 at the venue`, as on the team
+page and the share card. A team the federation has not named yet (later-round qualifiers) reads
+`opponent not announced`, capitalised when it is the home team: `Greece vs opponent not announced`,
+`Opponent not announced vs Greece`.
+
 ## 2 · Time not announced (all-day placeholder)
 
 Same `UID` as the eventual timed game, so the placeholder turns into the game in place.
@@ -81,6 +86,23 @@ The game: Mon 16 Nov, 21:45 in Volos, Panthessaliko Stadium
 Kept up to date by scarf · {canonical}/greece/football
 ```
 
+While the time is not announced the game line says so; the venue stays only while it is known:
+
+```
+Sales open today at pame-ethniki.gr
+The game: Mon 16 Nov, time not announced, Panthessaliko Stadium
+
+Kept up to date by scarf · {canonical}/greece/football
+```
+
+Rules: the event needs both the `onSale` day and a ticket link; it lives as long as its game, so it
+goes when the game is past, and removing the day removes it in place on the next build. The day and the
+kickoff are venue-local; the kickoff reads `21:45 at the venue` until the city is announced, as on the
+kickoff line, and is left out while the venue's UTC offset is unknown.
+The reminder is 09:00 at the venue, from the game's UTC offset, so it lands an hour off when the
+clocks change between the sale day and the game; without one it is nine hours into the
+all-day event (`TRIGGER;RELATED=START:PT9H`), which is 09:00 in the reader's own zone.
+
 ## 4 · New game announced (optional, off by default)
 
 All-day event on the day the build first sees a new `UID`. Only in the `-alerts` feed variant
@@ -105,6 +127,6 @@ uses the user's default notification for that calendar. The team page says so in
 
 ## Voice checks (test these as string assertions)
 
-- No `!`, no emoji, no "notification", no "TBA"/"TBC", no "don't miss".
-- Every time is followed by ` in <City>`.
+- No `!`, no emoji, no "notification", no "TBA"/"TBC"/"TBD", no "don't miss".
+- Every time is followed by ` in <City>`, or ` at the venue` until the city is announced.
 - Summary never contains the competition or the sport (except the ` · football` suffix in a combined feed).
