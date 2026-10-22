@@ -95,6 +95,10 @@ const ukraine: Game = {
   away: 'Ukraine',
   date: '2027-02-26',
 }
+// The spec's sample game with a hand-kept on-sale day (spec section 3).
+const onSale: Game = { ...serbia, onSale: '2026-11-02' }
+// The time is out, the stadium is not: UEFA often publishes them in that order.
+const noCity: Game = { ...serbia, id: 'uefa-3', venue: undefined, city: undefined }
 
 test('a timed game reads as the spec writes it', () => {
   assert.deepEqual(vevent(toIcs(football, [serbia], now), 'uefa-2047926@scarf'), [
@@ -185,24 +189,98 @@ test('a new game already timed gets the short line; football has a stadium, not 
   assert.ok(!timedAlert.includes('BEGIN:VALARM'))
 })
 
-test('feed copy passes the voice checks', () => {
-  const games = [timed, unscheduled, serbia, ukraine]
-  const feeds = [toIcs(football, games, now), toIcs(football, games, now, undefined, { 'uefa-1': '2026-10-01', 'fiba-2': '2026-10-01' })]
-  for (const feed of feeds) {
+test('a kickoff without a city reads "at the venue", as on the page', () => {
+  const lines = vevent(toIcs(football, [noCity], now), 'uefa-3@scarf')
+  assert.ok(
+    lines.includes(
+      'DESCRIPTION:UEFA Nations League\\nKickoff 21:45 at the venue\\nTV: Alpha\\, Novasports (Greek TV)\\nTickets: pame-ethniki.gr\\n\\nKept up to date by scarf · scarf.fan/greece/football',
+    ),
+  )
+})
+
+test('feed copy passes the voice checks, in the default feed and the alerts variant', () => {
+  // Every sample once; the spec's game, a no-time game and a no-city game each with a sale day.
+  const games = [timed, unscheduled, onSale, { ...ukraine, tickets: 'https://tickets.example/u', onSale: '2027-01-15' }, { ...noCity, onSale: '2026-11-02' }]
+  // The variant announces every one of them, so each "New game" wording is checked too.
+  const everyGameNew = Object.fromEntries(games.map((game) => [game.id, '2026-10-01']))
+  for (const feed of [toIcs(football, games, now), toIcs(football, games, now, undefined, everyGameNew)]) {
     const ics = feed.replaceAll(/\r\n[ \t]/g, '')
     assert.doesNotMatch(ics, /!/)
     assert.doesNotMatch(ics, /\p{Extended_Pictographic}/u)
-    assert.doesNotMatch(ics, /notification|don't miss|\bTBA\b|\bTBC\b/i)
-    const kickoffs = [...ics.matchAll(/Kickoff \d{2}:\d{2}(.{0,5})/g)]
-    assert.equal(kickoffs.length, 2)
-    for (const [, after] of kickoffs) assert.match(after, /^ in \S/)
+    assert.doesNotMatch(ics, /notification|don't miss|\bTBA\b|\bTBC\b|\bTBD\b/i)
+    const kickoffs = [...ics.matchAll(/Kickoff \d{2}:\d{2}(.{0,13})/g)]
+    assert.equal(kickoffs.length, 3)
+    for (const [, after] of kickoffs) assert.match(after, /^( in \S| at the venue)/)
+    // The sale event's game line reads its time the same way, or says the time is not announced.
+    const gameLines = [...ics.matchAll(/The game: (.*?)\\n/g)].map(([, line]) => line)
+    assert.deepEqual(gameLines, ['Mon 16 Nov\\, 21:45 in Volos\\, Panthessaliko Stadium', 'Fri 26 Feb\\, time not announced', 'Mon 16 Nov\\, 21:45 at the venue'])
   }
+})
+
+test('the alerts variant carries every event of the default feed, sale days included', () => {
+  const games = [timed, unscheduled, onSale]
+  const uids = (ics: string) => icsLines(ics).filter((line) => line.startsWith('UID:'))
+  const plain = uids(toIcs(football, games, now))
+  assert.ok(plain.includes('UID:uefa-2047926-tickets@scarf'))
+  assert.deepEqual(uids(toIcs(football, games, now, undefined, { 'fiba-2': '2026-10-01' })), [...plain, 'UID:fiba-2-new@scarf'])
 })
 
 test('nothing a fan reads carries the working title or a TBA', () => {
   const ics = toIcs(football, [timed, unscheduled], now)
-  assert.doesNotMatch(ics, /event-schedule|Event schedule|\bTBA\b|\bTBC\b/)
+  assert.doesNotMatch(ics, /event-schedule|Event schedule|\bTBA\b|\bTBC\b|\bTBD\b/)
   assert.doesNotMatch(ics, /!/)
+})
+
+test('an on-sale day comes from the manual details alone', () => {
+  assert.equal(withDetails(unscheduled, { onSale: '2026-11-01' }, { onSale: '2026-11-02' }).onSale, '2026-11-02')
+  assert.equal(withDetails(unscheduled, { onSale: '2026-11-01' }).onSale, undefined)
+})
+
+test('a game with an on-sale day and a ticket link gets exactly one extra event, as the spec writes it', () => {
+  const ics = toIcs(football, [onSale], now)
+  assert.equal(icsLines(ics).filter((l) => l === 'BEGIN:VEVENT').length, 2)
+  assert.deepEqual(vevent(ics, 'uefa-2047926-tickets@scarf'), [
+    'BEGIN:VEVENT',
+    'UID:uefa-2047926-tickets@scarf',
+    'SEQUENCE:0',
+    'DTSTART;VALUE=DATE:20261102',
+    'X-MICROSOFT-CDO-ALLDAYEVENT:TRUE',
+    'X-MICROSOFT-MSNCALENDAR-ALLDAYEVENT:TRUE',
+    'SUMMARY:Tickets on sale · Greece vs Serbia',
+    'DESCRIPTION:Sales open today at pame-ethniki.gr\\nThe game: Mon 16 Nov\\, 21:45 in Volos\\, Panthessaliko Stadium\\n\\nKept up to date by scarf · scarf.fan/greece/football',
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    // 09:00 in Volos (UTC+2) as an absolute instant.
+    'TRIGGER;VALUE=DATE-TIME:20261102T070000Z',
+    'DESCRIPTION:Tickets for Greece vs Serbia go on sale today · pame-ethniki.gr',
+    'END:VALARM',
+    'URL;VALUE=URI:https://www.pame-ethniki.gr/gnfc/showProductList.html',
+    'END:VEVENT',
+  ])
+})
+
+test('the on-sale event of a game without a time says so, names the venue only when known, and reminds nine hours into the day', () => {
+  const tickets = 'https://www.ticketmaster.gr/greece'
+  const sale = (game: Game) => vevent(toIcs(basketball, [game], now), 'fiba-127100-tickets@scarf')
+  const bare = sale({ ...ukraine, tickets, onSale: '2027-01-15' })
+  assert.ok(bare.includes('DTSTART;VALUE=DATE:20270115'))
+  assert.ok(
+    bare.includes(
+      'DESCRIPTION:Sales open today at ticketmaster.gr\\nThe game: Fri 26 Feb\\, time not announced\\n\\nKept up to date by scarf · scarf.fan/greece/basketball',
+    ),
+  )
+  // No UTC offset to place 09:00 at the venue, so 09:00 in the reader's own zone.
+  assert.ok(bare.includes('TRIGGER;RELATED=START:PT9H'))
+  assert.ok(bare.includes('DESCRIPTION:Tickets for Greece vs Ukraine go on sale today · ticketmaster.gr'))
+  const arena = sale({ ...ukraine, tickets, onSale: '2027-01-15', venue: 'OAKA' })
+  assert.ok(arena.some((l) => l.endsWith('The game: Fri 26 Feb\\, time not announced\\, OAKA\\n\\nKept up to date by scarf · scarf.fan/greece/basketball')))
+})
+
+test('removing the on-sale day, or having no ticket link, removes the extra event in place', () => {
+  const uids = (games: Game[]) => icsLines(toIcs(football, games, now)).filter((l) => l.startsWith('UID:'))
+  assert.deepEqual(uids([onSale]), ['UID:uefa-2047926@scarf', 'UID:uefa-2047926-tickets@scarf'])
+  assert.deepEqual(uids([serbia]), ['UID:uefa-2047926@scarf'])
+  assert.deepEqual(uids([{ ...onSale, tickets: undefined }]), ['UID:uefa-2047926@scarf'])
 })
 
 test('every team gets a feed in its own name, colour and side', () => {

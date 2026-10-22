@@ -1,7 +1,7 @@
 # Issue drafts for topless/scarf
 
 Grouped by milestone. Labels: `brand` `feeds` `pages` `alerts` `data` `ops` `later`.
-`scripts/create-issues.sh` creates all of this with `gh`; edit here first, then run it once.
+These drafts became the GitHub issues on 2026-10-17; the issues are the source of truth now.
 The existing issue **#2 "Alert when a new game or ticket sale is announced"** stays as the umbrella;
 issues 7 and 8 reference it.
 

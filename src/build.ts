@@ -2,6 +2,7 @@ import { cp, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { setTimeout as pause } from 'node:timers/promises'
 import { alertsFeedPath, feedPath, landingSharePath, sharePath, teams, type Team } from './config.ts'
 import { fetchFibaPage, parseFibaGames } from './fiba.ts'
+import { flagFile, flagLicenseFile, flagPath } from './flags.ts'
 import { byStart, withDetails, type Game } from './game.ts'
 import { toIcs } from './ics.ts'
 import { announced, recordSeen, type KnownGames } from './known-games.ts'
@@ -11,8 +12,8 @@ import { renderLandingShareImage, renderShareImage } from './share.ts'
 import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
 
 // Fetches every team's upcoming games and writes one calendar feed, one page and one share image
-// per team, the landing page with its own share image, and the brand assets (stylesheets, icons,
-// flags) next to them.
+// per team, the landing page with its own share image, and next to them the brand assets
+// (stylesheets, icons) and the flags the teams use, copied out of flag-icons with its licence.
 // Requests stay minimal: UEFA answers for every football team in one call, and a FIBA page is
 // fetched once per competition and shared by the teams playing in it (Greece and Spain are in
 // the same qualifiers). Any failure aborts the whole build, so the previously published files
@@ -66,11 +67,15 @@ for (const team of teams) {
 }
 for (const section of sections) {
   const { team, games } = section
-  await writeFile(`dist/${team.country}/${team.sport}/index.html`, renderTeamPage(section, teams, now, siteUrl))
+  await writeFile(`dist/${team.country}/${team.sport}/index.html`, renderTeamPage(section, teams, siteUrl))
   await writeFile(`dist/${sharePath(team)}`, await renderShareImage(team, games[0], siteUrl))
 }
-await writeFile('dist/index.html', renderLanding(sections, now, siteUrl))
+await writeFile('dist/index.html', renderLanding(sections, siteUrl))
 await writeFile(`dist/${landingSharePath}`, await renderLandingShareImage(teams, siteUrl))
 await cp('assets', 'dist', { recursive: true })
+// Only the flags a team uses, never the whole package; the licence sits next to the copies, as
+// MIT asks. Every flag was already read for its share image, so a wrong code failed before this.
+for (const code of new Set(teams.map((team) => team.flag))) await cp(flagFile(code), `dist/${flagPath(code)}`)
+await cp(flagLicenseFile(), 'dist/flags/LICENSE')
 // Last, so a build that fails part-way leaves the file as it was; the job caches it after the deploy.
 await writeFile(KNOWN_GAMES, JSON.stringify(known, null, 2) + '\n')
