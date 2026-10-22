@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { existsSync } from 'node:fs'
 import { test } from 'node:test'
 import { feedPath, teams } from '../src/config.ts'
+import { manual } from '../src/manual.ts'
 
 test('every team has its own frozen feed path, named after the team', () => {
   assert.deepEqual(
@@ -49,5 +50,16 @@ test('hand-kept ticket links are https pages, and no TV line is a guess', () => 
   for (const { defaults, name } of teams) {
     if (defaults.tickets) assert.match(defaults.tickets, /^https:\/\/[^ ]+$/, name)
     if (defaults.tv) assert.match(defaults.tv, /^[^!?]+ \([A-Z][a-z]+ TV\)$/, name)
+  }
+})
+
+// Runs before every build, so a typo stops the build instead of shipping a sale on the wrong day.
+test('hand-kept game details: ticket links are https pages, on-sale days are real YYYY-MM-DD dates', () => {
+  for (const [id, { tickets, onSale }] of Object.entries(manual)) {
+    if (tickets) assert.match(tickets, /^https:\/\/[^ ]+$/, id)
+    if (onSale === undefined) continue
+    assert.match(onSale, /^\d{4}-\d{2}-\d{2}$/, id)
+    // "2026-02-30" would roll over to 2 March.
+    assert.equal(new Date(`${onSale}T00:00:00Z`).toISOString().slice(0, 10), onSale, id)
   }
 })
