@@ -1,4 +1,5 @@
 import { feedPath, landingSharePath, sharePath, shareSize, siteName, type Team } from './config.ts'
+import { flagPath } from './flags.ts'
 import type { Game } from './game.ts'
 
 // Team pages and the landing page, ported from reference/team-page.html. Styles live in
@@ -42,7 +43,7 @@ ${header('../../', `<nav class="site-nav" aria-label="Page">
 <main>
 <section class="wrap hero">
   <div class="hero-text">
-    <p class="eyebrow">${team.flag ? `<img src="../../${esc(team.flag)}" width="24" height="16" alt="">` : ''}<span>${esc(teamKind(team))}</span></p>
+    <p class="eyebrow"><img src="../../${flagPath(team.flag)}" width="24" height="18" alt=""><span>${esc(teamKind(team))}</span></p>
     <h1>${esc(team.name)}, in your calendar.</h1>
     <p class="lede">Every kickoff, stadium, channel and ticket sale for the national team — kept current in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
 ${subscribePanel(team, siteUrl)}
