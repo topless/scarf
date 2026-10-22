@@ -13,6 +13,7 @@ export interface Game {
   tv?: string
   tickets?: string
   note?: string
+  onSale?: string // YYYY-MM-DD at the venue: the day tickets go on sale, kept by hand in manual.ts
 }
 
 // What the sources don't provide, kept by hand in config.ts and manual.ts.
@@ -24,6 +25,7 @@ export interface Details {
   tv?: string
   tickets?: string
   note?: string
+  onSale?: string
 }
 
 // The source wins for time and place once it has them; hand-kept values only fill the gaps.
@@ -37,6 +39,7 @@ export function withDetails(game: Game, teamDefaults: Details, manual: Details =
     tv: manual.tv ?? teamDefaults.tv,
     tickets: manual.tickets ?? teamDefaults.tickets,
     note: manual.note,
+    onSale: manual.onSale ?? game.onSale,
   }
 }
 

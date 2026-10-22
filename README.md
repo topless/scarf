@@ -67,6 +67,11 @@ npm run build
 - **One game's details** (time, venue, tickets, a note) go in [src/manual.ts](src/manual.ts), keyed by the game id.
   The id is the first part of the event's `UID` in the calendar file, for example `fiba-127107`.
   Time and venue entered by hand are used only until the official source has its own.
+- **A ticket sale** is an `onSale` day (`YYYY-MM-DD`, at the venue) next to the ticket link in that game's
+  entry in [src/manual.ts](src/manual.ts). The feed then carries an all-day "Tickets on sale · Greece vs Serbia"
+  event on that day: it links to the ticket page, names the game's date, kickoff and venue, and reminds
+  the fan at 09:00 at the venue. It leaves the calendar together with the game; remove the day to remove
+  it earlier. Skip it for a sale that has already opened, as the event would only sit in the past.
 - **A new team** is one more entry in [src/config.ts](src/config.ts): country and sport slugs, the stripe
   colours from [docs/brand.md](docs/brand.md), the flag's code, and a UEFA team id for football or a
   FIBA event and team code for basketball. The flags come from [flag-icons](https://github.com/lipis/flag-icons)
