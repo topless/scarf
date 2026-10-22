@@ -21,7 +21,7 @@ test('every team has its own frozen feed path, named after the team', () => {
   for (const team of teams) {
     assert.match(team.country, /^[a-z]+(-[a-z]+)*$/, team.name)
     assert.match(team.sport, /^[a-z]+$/, team.name)
-    assert.match(team.side, /^[A-Z][a-z]+ men's national (football|basketball) team$/, team.name)
+    assert.match(team.side, /^[A-Z][A-Za-z ]+ men's national (football|basketball) team$/, team.name)
   }
 })
 

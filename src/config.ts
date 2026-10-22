@@ -152,9 +152,9 @@ export const teams: Team[] = [
     // and again in the #35 probe (England v Croatia, Spain v England).
     source: { kind: 'uefa', teamId: 39 },
     defaults: {
-      // The FA's own where-to-watch note says every game of the Nations League 2026-27 campaign is
-      // on ITV (checked 2026-10-17):
-      // https://www.englandfootball.com/articles/2026/Sep/17/where-to-watch-england-mens-teams-in-september-october-international-window-20261709
+      // The FA: ITV shows every England men's game outside tournament finals, Nations League,
+      // qualifiers and friendlies, from September 2024 to June 2028 (checked 2026-10-22):
+      // https://www.englandfootball.com/articles/2023/Sep/19/itv-england-men-games-tv-deal-2024-2028-20230919
       tv: 'ITV (British TV)',
       // Wembley's ticket page, where the "England Tickets" link on englandfootball.com goes: every
       // England game on sale, home and away.
