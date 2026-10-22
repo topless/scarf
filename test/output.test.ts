@@ -157,8 +157,8 @@ test('the alerts variant announces a newly seen game; the default feed never doe
     'X-MICROSOFT-CDO-ALLDAYEVENT:TRUE',
     'X-MICROSOFT-MSNCALENDAR-ALLDAYEVENT:TRUE',
     'SUMMARY:New game · Greece vs Ukraine\\, 26 Feb 2027',
-    "DESCRIPTION:Just announced by FIBA. It's already in this calendar — time and arena to follow.\\n\\nKept up to date by scarf · topless.github.io/scarf/greece/basketball",
-    'URL;VALUE=URI:https://topless.github.io/scarf/greece/basketball/',
+    "DESCRIPTION:Just announced by FIBA. It's already in this calendar — time and arena to follow.\\n\\nKept up to date by scarf · scarf.fan/greece/basketball",
+    'URL;VALUE=URI:https://scarf.fan/greece/basketball/',
     'END:VEVENT',
   ])
 
@@ -174,14 +174,14 @@ test('the alerts variant announces a newly seen game; the default feed never doe
 
 test('a new game already timed gets the short line; football has a stadium, not an arena', () => {
   const alert = (game: Game) => vevent(toIcs(football, [game], now, undefined, { 'uefa-2047926': '2026-10-20' }), 'uefa-2047926-new@scarf')
-  const footer = 'Kept up to date by scarf · topless.github.io/scarf/greece/football'
+  const footer = 'Kept up to date by scarf · scarf.fan/greece/football'
   const timedAlert = alert(serbia)
   assert.ok(timedAlert.includes('SUMMARY:New game · Greece vs Serbia\\, 16 Nov 2026'))
   assert.ok(timedAlert.includes(`DESCRIPTION:Just announced by UEFA. It's already in this calendar.\\n\\n${footer}`))
   assert.ok(alert({ ...serbia, kickoff: undefined, venue: undefined }).includes(`DESCRIPTION:Just announced by UEFA. It's already in this calendar — time and stadium to follow.\\n\\n${footer}`))
   assert.ok(alert({ ...serbia, kickoff: undefined }).includes(`DESCRIPTION:Just announced by UEFA. It's already in this calendar — time to follow.\\n\\n${footer}`))
   // The game page is the link; the game's own entry carries the ticket link.
-  assert.ok(timedAlert.includes('URL;VALUE=URI:https://topless.github.io/scarf/greece/football/'))
+  assert.ok(timedAlert.includes('URL;VALUE=URI:https://scarf.fan/greece/football/'))
   assert.ok(!timedAlert.includes('BEGIN:VALARM'))
 })
 
