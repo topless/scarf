@@ -26,6 +26,8 @@ const timed: Game = {
   venue: 'Johan Cruijff ArenA',
   city: 'Amsterdam',
 }
+// The time is out, the stadium is not: UEFA often publishes them in that order.
+const noCity: Game = { ...timed, id: 'uefa-3', venue: undefined, city: undefined }
 const unscheduled: Game = { id: 'fiba-2', competition: 'Qualifiers', home: 'Greece', away: 'Georgia', date: '2026-11-26' }
 const flag = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 18"><rect width="27" height="18" fill="#0D5EAF"/></svg>'
 
@@ -35,6 +37,7 @@ const svgs = (card: string) => [...card.matchAll(/base64,([A-Za-z0-9+/=]+)"/g)].
 
 test('share card names the next game with the venue-local time and its city', () => {
   assert.equal(nextGameLine(timed), 'Netherlands vs Greece · Fri 13 Nov · 20:45 in Amsterdam')
+  assert.equal(nextGameLine(noCity), 'Netherlands vs Greece · Fri 13 Nov · 20:45 at the venue')
   assert.equal(nextGameLine(unscheduled), 'Greece vs Georgia · Thu 26 Nov · time not announced')
   assert.equal(nextGameLine(undefined), 'No games announced yet · subscribe and they find you')
   assert.match(text(renderShareCard(football, timed, site, flag)), /NEXT Netherlands vs Greece · Fri 13 Nov · 20:45 in Amsterdam/)
@@ -64,12 +67,12 @@ test('share card escapes text from the sources', () => {
 })
 
 test('nothing on a share card breaks the voice rules', () => {
-  const cards = [timed, unscheduled, undefined].map((game) => renderShareCard(football, game, site, flag))
+  const cards = [timed, noCity, unscheduled, undefined].map((game) => renderShareCard(football, game, site, flag))
   for (const card of [...cards, renderLandingShareCard(teams, site)]) {
     const copy = text(card)
-    assert.doesNotMatch(copy, /!|\bTBA\b|\bTBC\b|don't miss|notification/i)
+    assert.doesNotMatch(copy, /!|\bTBA\b|\bTBC\b|\bTBD\b|don't miss|notification/i)
     assert.doesNotMatch(copy, /\bv\b/)
-    assert.doesNotMatch(copy, /\d\d:\d\d(?! in )/)
+    assert.doesNotMatch(copy, /\d\d:\d\d(?! in | at the venue\b)/)
   }
 })
 

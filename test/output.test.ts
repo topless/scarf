@@ -97,6 +97,8 @@ const ukraine: Game = {
 }
 // The spec's sample game with a hand-kept on-sale day (spec section 3).
 const onSale: Game = { ...serbia, onSale: '2026-11-02' }
+// The time is out, the stadium is not: UEFA often publishes them in that order.
+const noCity: Game = { ...serbia, id: 'uefa-3', venue: undefined, city: undefined }
 
 test('a timed game reads as the spec writes it', () => {
   assert.deepEqual(vevent(toIcs(football, [serbia], now), 'uefa-2047926@scarf'), [
@@ -141,25 +143,33 @@ test('unknown lines drop out, and the footer and team page follow the site URL',
   assert.ok(lines.includes('URL;VALUE=URI:https://example.github.io/scarf/greece/football/'))
 })
 
+test('a kickoff without a city reads "at the venue", as on the page', () => {
+  const lines = vevent(toIcs(football, [noCity], now), 'uefa-3@scarf')
+  assert.ok(
+    lines.includes(
+      'DESCRIPTION:UEFA Nations League\\nKickoff 21:45 at the venue\\nTV: Alpha\\, Novasports (Greek TV)\\nTickets: pame-ethniki.gr\\n\\nKept up to date by scarf · scarf.fan/greece/football',
+    ),
+  )
+})
+
 test('feed copy passes the voice checks', () => {
-  // Every sample once, the spec's game with its sale day and a no-time game with one.
-  const games = [timed, unscheduled, onSale, ukraine, { ...ukraine, tickets: 'https://tickets.example/u', onSale: '2027-01-15' }]
+  // Every sample once; the spec's game, a no-time game and a no-city game each with a sale day.
+  const games = [timed, unscheduled, onSale, { ...ukraine, tickets: 'https://tickets.example/u', onSale: '2027-01-15' }, { ...noCity, onSale: '2026-11-02' }]
   const ics = toIcs(football, games, now).replaceAll(/\r\n[ \t]/g, '')
   assert.doesNotMatch(ics, /!/)
   assert.doesNotMatch(ics, /\p{Extended_Pictographic}/u)
-  assert.doesNotMatch(ics, /notification|don't miss|\bTBA\b|\bTBC\b/i)
-  const kickoffs = [...ics.matchAll(/Kickoff \d{2}:\d{2}(.{0,5})/g)]
-  assert.equal(kickoffs.length, 2)
-  for (const [, after] of kickoffs) assert.match(after, /^ in \S/)
-  // The sale event names the game's time with its city too, or says the time is not announced.
+  assert.doesNotMatch(ics, /notification|don't miss|\bTBA\b|\bTBC\b|\bTBD\b/i)
+  const kickoffs = [...ics.matchAll(/Kickoff \d{2}:\d{2}(.{0,13})/g)]
+  assert.equal(kickoffs.length, 3)
+  for (const [, after] of kickoffs) assert.match(after, /^( in \S| at the venue)/)
+  // The sale event's game line reads its time the same way, or says the time is not announced.
   const gameLines = [...ics.matchAll(/The game: (.*?)\\n/g)].map(([, line]) => line)
-  assert.equal(gameLines.length, 2)
-  for (const line of gameLines) assert.match(line, /\d{2}:\d{2} in \S|time not announced/)
+  assert.deepEqual(gameLines, ['Mon 16 Nov\\, 21:45 in Volos\\, Panthessaliko Stadium', 'Fri 26 Feb\\, time not announced', 'Mon 16 Nov\\, 21:45 at the venue'])
 })
 
 test('nothing a fan reads carries the working title or a TBA', () => {
   const ics = toIcs(football, [timed, unscheduled], now)
-  assert.doesNotMatch(ics, /event-schedule|Event schedule|\bTBA\b|\bTBC\b/)
+  assert.doesNotMatch(ics, /event-schedule|Event schedule|\bTBA\b|\bTBC\b|\bTBD\b/)
   assert.doesNotMatch(ics, /!/)
 })
 

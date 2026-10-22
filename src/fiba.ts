@@ -35,8 +35,9 @@ export function parseFibaGames(html: string, teamCode: string): Game[] {
     const game: Game = {
       id: `fiba-${g.gameId}`,
       competition: g.competition?.officialName,
-      home: g.teamA?.officialName ?? 'TBD',
-      away: g.teamB?.officialName ?? 'TBD',
+      // Later-round games are listed before both teams are known. The home team opens the title.
+      home: g.teamA?.officialName ?? 'Opponent not announced',
+      away: g.teamB?.officialName ?? 'opponent not announced',
       date: g.gameDateTime?.slice(0, 10),
       kickoff: g.hasTimeGameDateTime ? `${g.gameDateTimeUTC}Z` : undefined,
       utcOffsetHours: g.hasTimeGameDateTime ? (g.utcOffset ?? undefined) : undefined,

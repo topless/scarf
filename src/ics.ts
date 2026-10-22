@@ -74,18 +74,20 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
   return calendar.toString()
 }
 
-// Venue-local time with the city, so the copy never pretends to be the reader's time. Dropped
-// when either is unknown; the calendar still shows the kickoff in the reader's own zone.
+// Venue-local time with the city, so the copy never pretends to be the reader's time; "at the
+// venue" until the city is known, as on the page. Dropped while the venue's offset is unknown;
+// the calendar still shows the kickoff in the reader's own zone.
 function kickoffLine(game: Game, city: string | undefined): string | undefined {
   const time = localTime(game, city)
   return time && `Kickoff ${time}`
 }
 
-// "21:45 in Volos", or undefined while the kickoff, the venue's offset or the city is unknown.
+// "21:45 in Volos", "21:45 at the venue" while the city is unknown, or undefined while the kickoff
+// or the venue's offset is unknown.
 function localTime(game: Game, city: string | undefined): string | undefined {
-  if (!game.kickoff || game.utcOffsetHours === undefined || !city) return undefined
+  if (!game.kickoff || game.utcOffsetHours === undefined) return undefined
   const local = new Date(new Date(game.kickoff).getTime() + game.utcOffsetHours * 60 * 60 * 1000)
-  return `${local.toISOString().slice(11, 16)} in ${city}`
+  return `${local.toISOString().slice(11, 16)} ${city ? `in ${city}` : 'at the venue'}`
 }
 
 // Spec section 3: an all-day event on the day tickets go on sale, with a reminder at 09:00 at the
@@ -117,8 +119,8 @@ function ticketSaleEvent(calendar: ICalCalendar, game: Game, now: Date, footer: 
   }
 }
 
-// "The game: Mon 16 Nov, 21:45 in Volos, Panthessaliko Stadium". The time keeps its city or is
-// left out; "time not announced" while there is none; the venue only when known.
+// "The game: Mon 16 Nov, 21:45 in Volos, Panthessaliko Stadium". The time reads as on the kickoff
+// line; "time not announced" while there is none; the venue only when known.
 function gameLine(game: Game): string {
   const time = game.kickoff ? localTime(game, game.city?.trim()) : 'time not announced'
   return `The game: ${[DAY.format(new Date(game.date)), time, game.venue].filter(Boolean).join(', ')}`

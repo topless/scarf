@@ -50,6 +50,7 @@ export function byStart(a: Game, b: Game): number {
 export async function fetchText(url: string): Promise<string> {
   const res = await fetch(url, {
     headers: { 'User-Agent': 'scarf/0.1 (personal fixture calendar)' },
+    signal: AbortSignal.timeout(30_000), // fail in 30 s, not after GitHub's six-hour job limit
   })
   if (!res.ok) throw new Error(`${res.status} ${res.statusText} for ${url}`)
   return res.text()

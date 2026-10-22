@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pick your teams · scarf</title>
+<meta name="description" content="Follow more than one team with one calendar: pick your teams and subscribe once.">
+<!--
+  Reference for the team picker at /my/ (issue #17, docs/spike-team-picker.md). Same header, footer,
+  tokens and layout as reference/team-page.html; the page-specific styles are in the <style> below.
+  Port, don't redesign. The build emits one chip per team in src/config.ts, in config order; names,
+  slugs, feed paths and stripe colours below are copied from the six teams there on 2026-10-22. At
+  1280 px the six chips wrap two to a row; past eight or so, group them under a country heading
+  (one fieldset per country).
+-->
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&amp;family=Bricolage+Grotesque:opsz,wght@12..96,300..800&amp;display=swap">
+<link rel="stylesheet" href="../assets/brand-tokens.css">
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+/* The picker: chips with stripes, on wool. A chip is a label around a real checkbox, so it works
+   with a keyboard and a screen reader like any checkbox; 44 px tall, the brand's nav-pill height. */
+.picker { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.picker legend { padding: 0; margin-bottom: 12px; font-size: 14px; font-weight: 600; color: var(--stand); }
+.pick { position: relative; display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 16px 0 10px; border: var(--border) solid var(--ink); border-radius: var(--radius-pill); background: var(--white); color: var(--ink); font-size: 14px; font-weight: 600; cursor: pointer; user-select: none; }
+.pick input { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.pick:hover { background: var(--wool); }
+.pick.is-on, .pick.is-on:hover { background: var(--ink); color: var(--wool); }
+.pick.is-off { border-color: var(--chalk); color: var(--stand); background: transparent; cursor: not-allowed; }
+.pick:has(input:focus-visible) { outline: 2px solid var(--ink); outline-offset: 3px; }
+.pick-check { display: none; flex: none; }
+.pick.is-on .pick-check { display: block; }
+
+/* The subscribe panel is the team page's; before a team is picked its links have no href. */
+.subscribe a:not([href]) { background: var(--chalk); border-color: var(--chalk); color: var(--stand); cursor: not-allowed; }
+.paste input::placeholder { color: var(--stand); }
+.paste button:disabled { border-color: var(--chalk); color: var(--stand); cursor: not-allowed; }
+
+/* The preview card lists the picked teams with their stripes. */
+.picked li { gap: 12px; }
+.picked .team-stripe { flex: none; }
+.picked .yours { margin-left: auto; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="band" id="band"></div>
+<header class="wrap site-header">
+  <a class="brand" href="./"><svg viewBox="0 0 64 64" width="38" height="38" fill="none" aria-hidden="true"><g transform="rotate(-14 32 32)"><rect x="8" y="22" width="48" height="20" rx="7" fill="#D7263D"/><rect x="17" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="29" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="41" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="8" y="22" width="48" height="20" rx="7" stroke="#17171C" stroke-width="3"/><path d="M8 27H2M8 32H2M8 37H2M56 27h6M56 32h6M56 37h6" stroke="#17171C" stroke-width="3" stroke-linecap="round"/></g></svg><span class="wordmark">scarf</span></a>
+  <nav class="site-nav" aria-label="Page">
+    <a class="pill" href="#teams">Teams</a>
+    <a class="pill" href="#how">How it works</a>
+    <a class="pill pill-primary" href="#subscribe">Add to my calendar</a>
+  </nav>
+</header>
+<main>
+<section class="wrap hero">
+  <div class="hero-text">
+    <p class="eyebrow"><span>Personal feed · Up to three teams</span></p>
+    <h1>All your teams, in one calendar.</h1>
+    <p class="lede">Pick the teams you follow and subscribe once. Every kickoff, stadium, channel and ticket sale lands in the calendar you already use, with a nudge an hour before each game. Nothing to install, nothing to sign up for.</p>
+
+    <fieldset class="picker" id="teams">
+      <legend>Pick your teams</legend>
+      <div class="chips">
+        <label class="pick" style="--stripe-pill: repeating-linear-gradient(90deg, #0D5EAF 0px 5px, #FFFFFF 5px 10px)">
+          <input type="checkbox" name="team" value="greece-football" data-name="Greece football" data-sport="football" data-from="UEFA" data-feed="greece/football.ics" data-colours="#0D5EAF #FFFFFF">
+          <span class="team-stripe" aria-hidden="true"></span>
+          <span>Greece football</span>
+          <svg class="pick-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </label>
+        <label class="pick" style="--stripe-pill: repeating-linear-gradient(90deg, #0D5EAF 0px 5px, #FFFFFF 5px 10px)">
+          <input type="checkbox" name="team" value="greece-basketball" data-name="Greece basketball" data-sport="basketball" data-from="FIBA" data-feed="greece/basketball.ics" data-colours="#0D5EAF #FFFFFF">
+          <span class="team-stripe" aria-hidden="true"></span>
+          <span>Greece basketball</span>
+          <svg class="pick-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </label>
+        <label class="pick" style="--stripe-pill: repeating-linear-gradient(90deg, #AA151B 0px 5px, #F1BF00 5px 10px)">
+          <input type="checkbox" name="team" value="spain-football" data-name="Spain football" data-sport="football" data-from="UEFA" data-feed="spain/football.ics" data-colours="#AA151B #F1BF00">
+          <span class="team-stripe" aria-hidden="true"></span>
+          <span>Spain football</span>
+          <svg class="pick-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </label>
+        <label class="pick" style="--stripe-pill: repeating-linear-gradient(90deg, #AA151B 0px 5px, #F1BF00 5px 10px)">
+          <input type="checkbox" name="team" value="spain-basketball" data-name="Spain basketball" data-sport="basketball" data-from="FIBA" data-feed="spain/basketball.ics" data-colours="#AA151B #F1BF00">
+          <span class="team-stripe" aria-hidden="true"></span>
+          <span>Spain basketball</span>
+          <svg class="pick-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </label>
+        <label class="pick" style="--stripe-pill: repeating-linear-gradient(90deg, #0055A4 0px 5px, #FFFFFF 5px 10px, #EF4135 10px 15px)">
+          <input type="checkbox" name="team" value="france-basketball" data-name="France basketball" data-sport="basketball" data-from="FIBA" data-feed="france/basketball.ics" data-colours="#0055A4 #FFFFFF #EF4135">
+          <span class="team-stripe" aria-hidden="true"></span>
+          <span>France basketball</span>
+          <svg class="pick-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </label>
+        <label class="pick" style="--stripe-pill: repeating-linear-gradient(90deg, #000000 0px 5px, #DD0000 5px 10px, #FFCC00 10px 15px)">
+          <input type="checkbox" name="team" value="germany-basketball" data-name="Germany basketball" data-sport="basketball" data-from="FIBA" data-feed="germany/basketball.ics" data-colours="#000000 #DD0000 #FFCC00">
+          <span class="team-stripe" aria-hidden="true"></span>
+          <span>Germany basketball</span>
+          <svg class="pick-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </label>
+      </div>
+      <p class="small" id="pick-note" aria-live="polite">Nothing picked yet. Tick up to three.</p>
+    </fieldset>
+
+    <div class="subscribe" id="subscribe">
+      <a class="btn-primary" id="add" aria-disabled="true">Add to my calendar</a>
+      <div class="apps">
+        <a class="btn-secondary" id="apple" aria-disabled="true">Apple</a>
+        <a class="btn-secondary" id="google" aria-disabled="true">Google</a>
+        <a class="btn-secondary" id="outlook" aria-disabled="true">Outlook</a>
+      </div>
+      <div class="paste">
+        <label for="feed-url">Or paste into any calendar app</label>
+        <div class="paste-row"><input id="feed-url" type="text" readonly placeholder="Pick a team first"><button class="btn-secondary" type="button" data-copy="feed-url" disabled>Copy</button></div>
+      </div>
+      <p class="small">Free. Updated daily from UEFA and FIBA. Leave any time by deleting the calendar. On Google Calendar, set a notification for this calendar once — it applies to every game.</p>
+      <noscript><p class="small">This page needs JavaScript to build your feed. Each team's own page works without it.</p></noscript>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-stripe" id="card-stripe"></div>
+    <div class="card-body">
+      <p class="card-meta"><span>Your calendar</span><span id="count">No teams yet</span></p>
+      <p class="card-title" id="cal-name">Pick a team to start.</p>
+      <ul class="facts picked" id="picked"></ul>
+      <p class="card-foot" id="foot">Your colours, in your calendar. Tick a team and this card shows what you get.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap how" id="how">
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li class="step"><span class="step-num">1</span><h3>Pick your teams</h3><p>Tick up to three. One team gives you its own feed; two or three give you one calendar with all of them.</p></li>
+    <li class="step"><span class="step-num">2</span><h3>Subscribe once</h3><p>Tap Add to my calendar and pick your app. That is the whole setup — no account, no download.</p></li>
+    <li class="step"><span class="step-num">3</span><h3>Your calendar keeps itself current</h3><p>We rebuild every feed daily from UEFA and FIBA. Each game says its sport, so Greece vs Serbia on the pitch and on the court stay apart.</p></li>
+  </ol>
+</section>
+</main>
+<footer class="wrap site-footer">
+  <div class="footer-brand"><svg viewBox="0 0 64 64" width="28" height="28" fill="none" aria-hidden="true"><g transform="rotate(-14 32 32)"><rect x="8" y="22" width="48" height="20" rx="7" fill="#D7263D"/><rect x="17" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="29" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="41" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="8" y="22" width="48" height="20" rx="7" stroke="#17171C" stroke-width="3"/><path d="M8 27H2M8 32H2M8 37H2M56 27h6M56 32h6M56 37h6" stroke="#17171C" stroke-width="3" stroke-linecap="round"/></g></svg><span class="wordmark">scarf</span><span>· Wrapped up in the game.</span></div>
+  <p>Updated daily from UEFA and FIBA · last run Sat 17 Oct 2026, 04:31 UTC</p>
+</footer>
+<script>
+  // ---- URL scheme: the one thing that changes with the approach picked in docs/spike-team-picker.md ----
+  const SITE = 'https://scarf.fan' // the canonical host; the build fills this in from SITE_URL
+  const SCHEME = 'static' // 'static': pre-built files (approach a) · 'worker': merged on request (approach b)
+  const MAX_TEAMS = 3
+  const FEED_URL = {
+    static: (slugs) => `${SITE}/my/${slugs.join('+')}.ics`,
+    worker: (slugs) => `${SITE}/my.ics?t=${slugs.join(',')}`,
+  }
+  // Slugs are sorted, so one selection has one address whatever order the fan ticked in. One team
+  // is the team's own feed, the same one its page offers. Nothing is stored anywhere: the choice
+  // lives in the URL the fan subscribes to.
+  const feedUrl = (teams) =>
+    teams.length === 1 ? `${SITE}/${teams[0].feed}` : FEED_URL[SCHEME](teams.map((t) => t.slug).sort())
+  const calendarName = (teams) => (teams.length === 1 ? `${teams[0].name} · scarf` : 'My teams · scarf')
+
+  const inputs = [...document.querySelectorAll('input[name="team"]')]
+  const $ = (id) => document.getElementById(id)
+  const WORDS = ['No', 'One', 'Two', 'Three', 'Four']
+
+  function update() {
+    const picked = inputs.filter((i) => i.checked).map((i) => ({ slug: i.value, feed: i.dataset.feed, name: i.dataset.name, sport: i.dataset.sport, from: i.dataset.from, colours: i.dataset.colours.split(' ') }))
+    const full = picked.length >= MAX_TEAMS
+    for (const input of inputs) {
+      input.disabled = full && !input.checked
+      input.closest('.pick').classList.toggle('is-on', input.checked)
+      input.closest('.pick').classList.toggle('is-off', input.disabled)
+    }
+
+    const https = picked.length ? feedUrl(picked) : ''
+    const webcal = https.replace(/^https?:/, 'webcal:')
+    const name = calendarName(picked)
+    link($('add'), webcal)
+    link($('apple'), webcal)
+    link($('google'), https && `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}`)
+    link($('outlook'), https && `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(https)}&name=${encodeURIComponent(name)}`)
+    $('feed-url').value = https
+    const copy = document.querySelector('button[data-copy]')
+    copy.disabled = !https
+    copy.textContent = 'Copy'
+
+    // The band and the card header are knitted from the picked teams' stripes; chalk until then.
+    $('band').style.background = stripes(picked, 24)
+    $('card-stripe').style.background = stripes(picked, 18)
+    $('count').textContent = picked.length ? `${picked.length} ${picked.length === 1 ? 'team' : 'teams'}` : 'No teams yet'
+    $('cal-name').textContent = picked.length ? name : 'Pick a team to start.'
+    $('picked').replaceChildren(...picked.map(row))
+    $('foot').textContent = !picked.length
+      ? 'Your colours, in your calendar. Tick a team and this card shows what you get.'
+      : picked.length === 1
+        ? "The team's own feed, in the team's colour: the same one its page offers."
+        : `Each game says its sport, like Greece vs Serbia · ${picked[0].sport}.`
+    const names = list(picked.map((t) => t.name))
+    $('pick-note').textContent = !picked.length
+      ? 'Nothing picked yet. Tick up to three.'
+      : `${WORDS[picked.length]} ${picked.length === 1 ? 'team' : 'teams'}: ${names}.${full ? ' That is the limit; untick one to swap.' : ''}`
+  }
+
+  function link(a, href) {
+    if (href) { a.href = href; a.removeAttribute('aria-disabled') }
+    else { a.removeAttribute('href'); a.setAttribute('aria-disabled', 'true') }
+  }
+
+  // Hard-stop stripes per docs/brand.md, one band per colour of every picked team in turn.
+  function stripes(teams, width) {
+    const colours = teams.length ? teams.flatMap((t) => t.colours) : ['#E6E1D8', '#FBF8F2']
+    return `repeating-linear-gradient(90deg, ${colours.map((c, i) => `${c} ${i * width}px ${(i + 1) * width}px`).join(', ')})`
+  }
+
+  function row(team) {
+    const li = document.createElement('li')
+    const pill = document.createElement('span')
+    pill.className = 'team-stripe'
+    pill.style.background = stripes([team], 5)
+    const name = document.createElement('span')
+    name.textContent = team.name
+    const from = document.createElement('span')
+    from.className = 'yours'
+    from.textContent = `from ${team.from}`
+    li.append(pill, name, from)
+    return li
+  }
+
+  const list = (names) => (names.length < 2 ? names.join('') : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`)
+
+  for (const input of inputs) input.addEventListener('change', update)
+  update()
+
+  for (const button of document.querySelectorAll('button[data-copy]')) {
+    button.addEventListener('click', () => {
+      const input = document.getElementById(button.dataset.copy)
+      input.select() // stays selected for a manual copy if the browser refuses the clipboard
+      navigator.clipboard?.writeText(input.value).then(() => { button.textContent = 'Copied' }, () => {})
+    })
+  }
+</script>
+</body>
+</html>
