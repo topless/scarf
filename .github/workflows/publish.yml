@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write # the run commits src/known-games.json back to main (last step)
+  contents: read
   pages: write
   id-token: write
 
@@ -32,6 +32,15 @@ jobs:
       - run: npm test
       - id: pages
         uses: actions/configure-pages@v6
+      # The games earlier runs saw, so the build can tell a newly announced game from an old one for
+      # the -alerts feeds (src/known-games.ts). They live in the Actions cache because the
+      # protect-main ruleset rejects a commit back to main. With no cache (the first run, or GitHub
+      # dropped it after 7 days unused) the build seeds the file again and announces nothing.
+      - uses: actions/cache/restore@v6
+        with:
+          path: known-games.json
+          key: known-games-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: known-games-
       # A failed fetch stops here, so the last published calendars stay online.
       - run: npm run build
         env:
@@ -41,19 +50,13 @@ jobs:
           path: dist
       - id: deploy
         uses: actions/deploy-pages@v5
-      # The build records the games it saw in src/known-games.json, so the next run can tell a newly
-      # announced game from an old one (the -alerts feeds). Commit it back when it changed. A push made
-      # with GITHUB_TOKEN starts no workflow run, so this cannot loop, and the concurrency group above
-      # keeps two runs from racing. Runs after the deploy, so a failed push never holds the feeds back.
-      - name: Record newly seen games
-        run: |
-          git diff --quiet -- src/known-games.json && exit 0
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add src/known-games.json
-          git commit -m 'chore(data): record newly seen games' -m '- Remembers the games this run saw, so the next run can tell a new announcement from an old game'
-          git pull --rebase origin main # main may have moved since the checkout
-          git push origin HEAD:main
+      # Saved only once the feeds are live, so a failed run leaves the known games as they were. A
+      # cache entry cannot be overwritten: each run saves its own, and restore-keys above picks the
+      # newest. The concurrency group keeps two runs from interleaving.
+      - uses: actions/cache/save@v6
+        with:
+          path: known-games.json
+          key: known-games-${{ github.run_id }}-${{ github.run_attempt }}
 
   # GitHub disables a scheduled workflow after 60 days without repository activity, and this
   # repository only changes when a game's details do. Re-enabling the scheduled workflows through

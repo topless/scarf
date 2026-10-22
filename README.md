@@ -21,8 +21,8 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
    page at `dist/share.png`, the card a chat app shows when someone pastes a page's address, from
    [src/share.ts](src/share.ts): a team's in its colours with its next game, the landing page's in the
    brand colours with every team's name;
-5. records the games it saw in [src/known-games.json](src/known-games.json), which the Actions job commits back to
-   `main` when it changed, so the next run can tell a newly announced game from an old one.
+5. records the games it saw in `known-games.json`, which the Actions job keeps in its cache between runs
+   (not in git), so the next run can tell a newly announced game from an old one.
 
 If a source cannot be fetched or its format changed, the build fails and the last published files stay online.
 
@@ -61,9 +61,7 @@ npm test
 npm run build
 ```
 
-A local `npm run build` also updates [src/known-games.json](src/known-games.json) when it sees a game for the first
-time (the very first build seeds it with every current game). Commit that change or discard it with
-`git checkout -- src/known-games.json`; the daily run keeps the file current either way.
+A local build also writes `known-games.json` in the repository root, which git ignores.
 
 ## Maintaining it by hand
 
@@ -133,5 +131,9 @@ of the site.
   is on for the subscription; Google Calendar is believed to ignore embedded reminders, but lets you set a
   notification for the whole calendar in its settings. Outlook is unverified.
 - Games with no announced time appear as all-day entries marked "time not announced".
+- The `-alerts` feeds rely on the `known-games-…` entries under Actions → Caches. GitHub drops a cache
+  unused for 7 days, and the daily run uses it every day. If it is lost anyway, or deleted to start afresh,
+  the next run seeds it again: it announces nothing, the "New game" entries already in the alerts feeds
+  disappear, and only games first seen from the next day on are announced.
 
 Background on the data sources: [docs/research-2026-10-02.md](docs/research-2026-10-02.md).

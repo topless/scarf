@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
-import { announced, parse, recordSeen, serialize } from '../src/known-games.ts'
+import { announced, recordSeen } from '../src/known-games.ts'
 
 test('the first build of a team seeds every game and announces none', () => {
   const { feed, fresh } = recordSeen(undefined, ['uefa-1', 'uefa-2'], '2026-10-18')
@@ -27,33 +27,4 @@ test('a game that leaves the feed stays known, so its return is not an announcem
   const without = recordSeen(seeded, ['fiba-1'], '2026-10-19').feed
   assert.deepEqual(Object.keys(without.games), ['fiba-1', 'fiba-2'])
   assert.deepEqual(recordSeen(without, ['fiba-1', 'fiba-2'], '2026-10-20').fresh, [])
-})
-
-test('the state file is sorted and round-trips, so it changes only when a game is added', () => {
-  const known = {
-    'greece/football': { seeded: '2026-10-18', games: { 'uefa-2': '2026-10-18', 'uefa-1': '2026-10-18' } },
-    'greece/basketball': { seeded: '2026-10-18', games: {} },
-  }
-  const text = serialize(known)
-  assert.equal(
-    text,
-    `{
-  "greece/basketball": {
-    "seeded": "2026-10-18",
-    "games": {}
-  },
-  "greece/football": {
-    "seeded": "2026-10-18",
-    "games": {
-      "uefa-1": "2026-10-18",
-      "uefa-2": "2026-10-18"
-    }
-  }
-}
-`,
-  )
-  assert.deepEqual(parse(text), known)
-  assert.equal(serialize(parse(text)), text)
-  assert.deepEqual(parse(''), {})
-  assert.deepEqual(parse('\n'), {})
 })

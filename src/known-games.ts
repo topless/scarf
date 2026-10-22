@@ -1,7 +1,7 @@
-// Which games the build has already seen, kept in src/known-games.json between runs (the Actions
-// job commits it back to main). With it a run can tell a game announced today from one it has
-// carried for weeks, which is what the -alerts feed variant needs. Pure functions; the build reads
-// and writes the file.
+// Which games the build has already seen, kept in known-games.json between runs (the Actions job
+// restores it from its cache and saves it after the deploy). With it a run can tell a game announced
+// today from one it has carried for weeks, which is what the -alerts feed variant needs. Pure
+// functions; the build reads and writes the file.
 
 export interface KnownFeed {
   // The day (YYYY-MM-DD, UTC) a build first watched this team. Everything it saw that day had been
@@ -27,19 +27,4 @@ export function announced(feed: KnownFeed): Record<string, string> {
   return Object.fromEntries(Object.entries(feed.games).filter(([, day]) => day > feed.seeded))
 }
 
-// Sorted keys and a trailing newline, so the committed file changes only when a game is added.
-export function serialize(known: KnownGames): string {
-  const sorted = Object.fromEntries(
-    Object.keys(known)
-      .sort()
-      .map((key) => [key, { seeded: known[key].seeded, games: Object.fromEntries(Object.entries(known[key].games).sort(byKey)) }]),
-  )
-  return JSON.stringify(sorted, null, 2) + '\n'
-}
-
-export function parse(text: string): KnownGames {
-  return text.trim() ? (JSON.parse(text) as KnownGames) : {}
-}
-
 const dated = (ids: string[], day: string): Record<string, string> => Object.fromEntries(ids.map((id) => [id, day]))
-const byKey = ([a]: [string, string], [b]: [string, string]): number => (a < b ? -1 : a > b ? 1 : 0)

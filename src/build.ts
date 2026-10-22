@@ -4,7 +4,7 @@ import { alertsFeedPath, feedPath, landingSharePath, sharePath, teams, type Team
 import { fetchFibaPage, parseFibaGames } from './fiba.ts'
 import { byStart, withDetails, type Game } from './game.ts'
 import { toIcs } from './ics.ts'
-import { announced, parse, recordSeen, serialize } from './known-games.ts'
+import { announced, recordSeen, type KnownGames } from './known-games.ts'
 import { manual } from './manual.ts'
 import { renderLanding, renderTeamPage, type Section } from './page.ts'
 import { renderLandingShareImage, renderShareImage } from './share.ts'
@@ -23,13 +23,15 @@ const today = now.toISOString().slice(0, 10)
 const siteUrl = process.env.SITE_URL?.replace(/\/$/, '')
 
 // The games earlier builds saw, so this one can tell a newly announced game from an old one for
-// the -alerts feeds. Missing or empty on the very first build, which seeds it and announces nothing.
-const KNOWN_GAMES = 'src/known-games.json'
-const knownBefore = await readFile(KNOWN_GAMES, 'utf8').catch((error: NodeJS.ErrnoException) => {
-  if (error.code === 'ENOENT') return ''
-  throw error
-})
-const known = parse(knownBefore)
+// the -alerts feeds. Not in git: the Actions job keeps it in its cache (.github/workflows/publish.yml).
+// Missing on the first build, or once the cache is lost, which seeds it again and announces nothing.
+const KNOWN_GAMES = 'known-games.json'
+const known = JSON.parse(
+  await readFile(KNOWN_GAMES, 'utf8').catch((error: NodeJS.ErrnoException) => {
+    if (error.code === 'ENOENT') return '{}'
+    throw error
+  }),
+) as KnownGames
 
 const uefaTeamIds = teams.flatMap(({ source }) => (source.kind === 'uefa' ? [source.teamId] : []))
 const uefaMatches = uefaTeamIds.length ? await fetchUefaMatches(uefaTeamIds, today) : []
@@ -70,7 +72,5 @@ for (const section of sections) {
 await writeFile('dist/index.html', renderLanding(sections, now, siteUrl))
 await writeFile(`dist/${landingSharePath}`, await renderLandingShareImage(teams, siteUrl))
 await cp('assets', 'dist', { recursive: true })
-// Written only when it changed, so the Actions job has nothing to commit on a quiet day
-// (.github/workflows/publish.yml). After a local build, commit or discard the change (README).
-const knownAfter = serialize(known)
-if (knownAfter !== knownBefore) await writeFile(KNOWN_GAMES, knownAfter)
+// Last, so a build that fails part-way leaves the file as it was; the job caches it after the deploy.
+await writeFile(KNOWN_GAMES, JSON.stringify(known, null, 2) + '\n')
