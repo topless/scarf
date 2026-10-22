@@ -9,8 +9,9 @@
   Reference for the team picker at /my/ (issue #17, docs/spike-team-picker.md). Same header, footer,
   tokens and layout as reference/team-page.html; the page-specific styles are in the <style> below.
   Port, don't redesign. The build emits one chip per team in src/config.ts, in config order; names,
-  slugs, feed paths and stripe colours below are copied from there. At six teams this stays one
-  row of chips; past eight or so, group them under a country heading (one fieldset per country).
+  slugs, feed paths and stripe colours below are copied from the six teams there on 2026-10-22. At
+  1280 px the six chips wrap two to a row; past eight or so, group them under a country heading
+  (one fieldset per country).
 -->
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -75,6 +76,30 @@
           <span>Greece basketball</span>
           <svg class="pick-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
         </label>
+        <label class="pick" style="--stripe-pill: repeating-linear-gradient(90deg, #AA151B 0px 5px, #F1BF00 5px 10px)">
+          <input type="checkbox" name="team" value="spain-football" data-name="Spain football" data-sport="football" data-from="UEFA" data-feed="spain/football.ics" data-colours="#AA151B #F1BF00">
+          <span class="team-stripe" aria-hidden="true"></span>
+          <span>Spain football</span>
+          <svg class="pick-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </label>
+        <label class="pick" style="--stripe-pill: repeating-linear-gradient(90deg, #AA151B 0px 5px, #F1BF00 5px 10px)">
+          <input type="checkbox" name="team" value="spain-basketball" data-name="Spain basketball" data-sport="basketball" data-from="FIBA" data-feed="spain/basketball.ics" data-colours="#AA151B #F1BF00">
+          <span class="team-stripe" aria-hidden="true"></span>
+          <span>Spain basketball</span>
+          <svg class="pick-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </label>
+        <label class="pick" style="--stripe-pill: repeating-linear-gradient(90deg, #0055A4 0px 5px, #FFFFFF 5px 10px, #EF4135 10px 15px)">
+          <input type="checkbox" name="team" value="france-basketball" data-name="France basketball" data-sport="basketball" data-from="FIBA" data-feed="france/basketball.ics" data-colours="#0055A4 #FFFFFF #EF4135">
+          <span class="team-stripe" aria-hidden="true"></span>
+          <span>France basketball</span>
+          <svg class="pick-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </label>
+        <label class="pick" style="--stripe-pill: repeating-linear-gradient(90deg, #000000 0px 5px, #DD0000 5px 10px, #FFCC00 10px 15px)">
+          <input type="checkbox" name="team" value="germany-basketball" data-name="Germany basketball" data-sport="basketball" data-from="FIBA" data-feed="germany/basketball.ics" data-colours="#000000 #DD0000 #FFCC00">
+          <span class="team-stripe" aria-hidden="true"></span>
+          <span>Germany basketball</span>
+          <svg class="pick-check" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </label>
       </div>
       <p class="small" id="pick-note" aria-live="polite">Nothing picked yet. Tick up to three.</p>
     </fieldset>
@@ -121,7 +146,7 @@
 </footer>
 <script>
   // ---- URL scheme: the one thing that changes with the approach picked in docs/spike-team-picker.md ----
-  const SITE = 'https://topless.github.io/scarf' // the canonical host; the build fills this in (#11)
+  const SITE = 'https://scarf.fan' // the canonical host; the build fills this in from SITE_URL
   const SCHEME = 'static' // 'static': pre-built files (approach a) · 'worker': merged on request (approach b)
   const MAX_TEAMS = 3
   const FEED_URL = {

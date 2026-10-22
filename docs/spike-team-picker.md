@@ -9,9 +9,10 @@ GitHub Pages, which runs no code at request time. Two ways to offer one feed for
 - **(b) A tiny worker.** A Cloudflare Worker (or Deno Deploy) merges the selected static feeds when
   a calendar app asks for them. The picker page composes a query string.
 
-Two teams exist on `main` (Greece football, Greece basketball); #15 brings Spain and Denmark, six
-teams. The page in `reference/picker-page.html` works with either approach: the URL scheme is one
-constant at the top of its script.
+Six teams exist on `main` (Greece and Spain in football and basketball, France and Germany in
+basketball, #31); #35 (PR #37) brings Switzerland, England and Germany in football, nine teams. The page in
+`reference/picker-page.html` works with either approach: the URL scheme is one constant at the top
+of its script.
 
 ## (a) Pre-built combinations as static files
 
@@ -28,10 +29,12 @@ to encode it, `_` is the fallback, decided before the first fan subscribes.
 | 2 | 1 | 0 | 1 | 1 | 1 |
 | 4 | 6 | 4 | 10 | 11 | 11 |
 | 6 | 15 | 20 | 35 | 50 | 57 |
+| 9 | 36 | 84 | 120 | 246 | 502 |
 | 10 | 45 | 120 | 165 | 375 | 1,013 |
 | 20 | 190 | 1,140 | 1,330 | 6,175 | 1,048,555 |
 
-A feed is a few kilobytes, so even 1,330 files are under 10 MB on a host that allows 1 GB. The cap
+A game takes about 700 bytes of a feed, so a triple with ten games per team is about 21 KB, and even
+1,330 files stay under 30 MB on a host that allows 1 GB. The cap
 is a product limit ("fans, not fanatics": three teams is a fan), not a technical one; it can go to
 four at any point without moving a single existing file.
 
@@ -55,11 +58,12 @@ verbatim apart from the `SUMMARY` line, and wraps them in a new `VCALENDAR` head
 no `VTIMEZONE` blocks (times are UTC, placeholders are dates), so there is nothing to deduplicate,
 and the only parsing is unfolding RFC 5545 lines before touching `SUMMARY`.
 
-**Account.** Chris must create one. Cloudflare Workers free tier allows about 100,000 requests a
-day; Deno Deploy's free tier about a million a month (figures as of writing; check at sign-up). A
-hundred subscribers whose apps poll every hour are 2,400 requests a day. Cloudflare is the better
-fit because #24 already proposes putting the domain on Cloudflare; Deno Deploy would be a second
-vendor for no gain.
+**Account.** `scarf.fan` is registered at Cloudflare and its DNS lives there (#44), so the account
+exists; the worker is a new service on it. Cloudflare Workers free tier allows about 100,000
+requests a day; Deno Deploy's free tier about a million a month (figures as of writing; check at
+sign-up). A hundred subscribers whose apps poll every hour are 2,400 requests a day. Cloudflare is
+the better fit because the domain is already there and #24 proposes putting Cloudflare in front of
+the site; Deno Deploy would be a second vendor for no gain.
 
 **Caching.** The merged response carries `Cache-Control: public, max-age=3600`; the subrequests to
 our own feeds use the same one-hour TTL, and the merged body is stored in the edge cache keyed on
@@ -98,10 +102,10 @@ own domain limits the damage to "re-point the route", so the worker should never
   static host cannot vary a response on its query string, so a worker or a Cloudflare redirect rule
   must keep answering that URL with a 301 for as long as anyone is subscribed; calendar apps follow
   redirects but never update the stored address. (a) is the reversible choice.
-- **Custom domain (#11).** Both print absolute URLs, so both wait for the canonical-host setting
-  from #11 the way the team pages do. (a) works on `topless.github.io/scarf` today and moves to the
-  domain with the same path-preserving 301 as every other feed. (b) can only share the feeds' host
-  once the domain's DNS is on Cloudflare, so it is sequenced after #11.
+- **Custom domain.** The site is served at `https://scarf.fan` (#44), and both print absolute URLs
+  from the build's `SITE_URL` the way the team pages do. (a) works there as soon as it ships. (b)
+  can share the feeds' host only with the Cloudflare proxy turned on for `scarf.fan`; today every
+  record is "DNS only" so GitHub can issue the certificate (README, "One-time setup").
 - **Observability (#24).** Once Cloudflare is in front, both show up in the zone analytics with no
   script and no cookie: (a) as requests per `/my/…` path, (b) as requests per query. Either way a
   one-of-a-kind combination is one fan's calendar polling, which is worth a line in the README's
@@ -111,16 +115,17 @@ own domain limits the damage to "re-point the route", so the worker should never
 ## Recommendation
 
 **Go with (a), pre-built combinations, cap of three teams.** At six teams it is 35 files written
-from data already in memory, no account, no second host, no new way to be down, and the one
-choice that can be reversed. The worker is a **no-go for now**: it buys an uncapped selection at the
-price of an account, a dependency on #11, and an address that can never be retired. Reopen it when
+from data already in memory (120 at nine), no new service, no second host, no new way to be down,
+and the one choice that can be reversed. The worker is a **no-go for now**: it buys an uncapped
+selection at the price of a new service, the Cloudflare proxy in front of the site, and an address
+that can never be retired. Reopen it when
 Cloudflare fronts the domain for #24 anyway, if the cap has bitten by then; the picker page, the
 suffix rules and the tests carry over unchanged.
 
 **Decisions that are Chris's**
 
-1. Approach: (a) now, or (b) with a Cloudflare account and the domain on Cloudflare DNS.
-2. The cap: three teams per feed (four costs 15 more files at six teams, 210 more at ten).
+1. Approach: (a) now, or (b) with a Cloudflare Worker and the proxy turned on for `scarf.fan`.
+2. The cap: three teams per feed (four costs 15 more files at six teams, 126 more at nine).
 3. The paths: picker at `/my/`, feeds at `/my/{slug}+{slug}.ics` with sorted slugs, `+` as the
    separator. Frozen the moment the first fan subscribes.
 4. Calendar name `My teams · scarf` and colour Terrace red (or Ink).
@@ -136,8 +141,9 @@ suffix rules and the tests carry over unchanged.
   with more pairs. `UID`, `URL`, footer and reminder stay per event.
 - `src/build.ts`: after the per-team loop, enumerate sorted combinations of size 2 to the cap, write
   `dist/my/{slugs}.ics` from the games already fetched, and write `dist/my/index.html`. No fetches.
-- `src/page.ts`: port `reference/picker-page.html`; the team list, the site address and the URL
-  scheme are emitted into the page script from config, and the subscribe panel is shared with the
+- `src/page.ts`: port `reference/picker-page.html`; the team list and the URL scheme are emitted
+  into the page script from config and the site address from the build's `SITE_URL`, and the
+  subscribe panel is shared with the
   team page. A link to `/my/` from the landing page and the "Other teams" section.
 - Tests: a combined feed keeps every `UID` from its team feeds; every summary ends in ` · {sport}`
   and the voice checks still pass; the build writes exactly C(n,2)+C(n,3) files for n teams; the
