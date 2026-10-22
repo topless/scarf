@@ -108,7 +108,6 @@ The health signals we have today, in the order to check them:
 - **Run status.** The Actions tab lists every run of "Build feeds" and "Check feeds" with its outcome,
   and a failed run is also an open `ops` issue.
 - **Freshness.** The log of a "Check feeds" run prints how many hours old each live feed is.
-- **Last run.** The footer of every page shows the date and time of the build that wrote it.
 
 GitHub Pages keeps no access logs and the site carries no tracking, so how often the feeds are fetched
 (the closest thing to a subscriber count) and how many people visit the pages cannot be seen today.

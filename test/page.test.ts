@@ -4,7 +4,6 @@ import { teams } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
 import { renderLanding, renderTeamPage } from '../src/page.ts'
 
-const now = new Date('2026-10-02T06:00:00Z')
 const [football, basketball] = teams
 const site = 'https://example.github.io/scarf'
 
@@ -23,7 +22,7 @@ const timed: Game = {
 }
 const unscheduled: Game = { id: 'fiba-2', competition: 'Qualifiers', home: 'Greece', away: 'Georgia', date: '2026-11-26' }
 
-const teamPage = (games: Game[], siteUrl?: string) => renderTeamPage({ team: football, games }, teams, now, siteUrl)
+const teamPage = (games: Game[], siteUrl?: string) => renderTeamPage({ team: football, games }, teams, siteUrl)
 
 test('team page shows venue-local times naming the city, and says when the time is not announced', () => {
   const html = teamPage([timed, unscheduled], site)
@@ -61,9 +60,9 @@ test('without a public address the page links the feed relative to /greece/footb
 
 test('team page names the federation of its source, and links every team', () => {
   const football_ = teamPage([timed], site)
-  const basketball_ = renderTeamPage({ team: basketball, games: [] }, teams, now, site)
+  const basketball_ = renderTeamPage({ team: basketball, games: [] }, teams, site)
   assert.match(football_, /Updated daily from UEFA\./)
-  assert.match(football_, /Updated daily from UEFA · last run Fri 2 Oct 2026, 06:00 UTC/)
+  assert.doesNotMatch(football_, /last run/)
   assert.match(basketball_, /Updated daily from FIBA\./)
   assert.match(football_, /<a class="team-chip" href="\.\.\/\.\.\/greece\/football\/" style="[^"]*#0D5EAF[^"]*" aria-current="page">/)
   assert.match(football_, /href="\.\.\/\.\.\/greece\/basketball\/"/)
@@ -96,17 +95,20 @@ test('team page says so when no games are announced', () => {
 })
 
 test('landing lists every team with its stripe and a link to its page', () => {
-  const html = renderLanding([{ team: football, games: [timed] }, { team: basketball, games: [] }], now)
+  const html = renderLanding([{ team: football, games: [timed] }, { team: basketball, games: [] }])
   assert.match(html, /<a class="card" href="greece\/football\/" style="--stripe: repeating-linear-gradient\(90deg, #0D5EAF 0px 18px, #FFFFFF 18px 36px\)/)
   assert.match(html, /<a class="card" href="greece\/basketball\/"/)
   assert.match(html, /Next: Greece vs Germany/)
   assert.match(html, /No games announced yet/)
-  assert.match(html, /Updated daily from UEFA and FIBA/)
+  assert.match(html, /<span>From UEFA<\/span>/)
+  assert.match(html, /<span>From FIBA<\/span>/)
+  assert.match(html, /Fans, not fanatics\./)
+  assert.doesNotMatch(html, /Updated daily from UEFA and FIBA|last run/)
   assert.match(html, /<link rel="icon" href="favicon\.svg" type="image\/svg\+xml">/)
 })
 
 test('landing tells chat apps its address and its share image', () => {
-  const html = renderLanding([{ team: football, games: [timed] }, { team: basketball, games: [] }], now, site)
+  const html = renderLanding([{ team: football, games: [timed] }, { team: basketball, games: [] }], site)
   assert.match(html, /<meta property="og:title" content="scarf · Your colours, in your calendar">/)
   assert.match(html, /<meta property="og:description" content="Every game of the national teams we follow in your calendar: kickoff, venue, TV and tickets, updated daily\.">/)
   assert.match(html, /<meta property="og:url" content="https:\/\/example\.github\.io\/scarf\/">/)
@@ -116,14 +118,14 @@ test('landing tells chat apps its address and its share image', () => {
 })
 
 test('without a public address the landing leaves out the tags that need an absolute address', () => {
-  const html = renderLanding([{ team: football, games: [timed] }], now)
+  const html = renderLanding([{ team: football, games: [timed] }])
   assert.match(html, /<meta property="og:title" content="scarf · Your colours, in your calendar">/)
   assert.match(html, /<meta name="twitter:card" content="summary_large_image">/)
   assert.doesNotMatch(html, /og:url|og:image/)
 })
 
 test('nothing a fan reads breaks the voice rules', () => {
-  const pages = [teamPage([timed, unscheduled], site), renderLanding([{ team: football, games: [timed] }], now)]
+  const pages = [teamPage([timed, unscheduled], site), renderLanding([{ team: football, games: [timed] }])]
   for (const html of pages) {
     const text = html.replace(/<script>[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ')
     assert.doesNotMatch(text, /!|event-schedule|Event schedule|\bTBA\b|\bTBC\b|don't miss/i)
@@ -132,19 +134,21 @@ test('nothing a fan reads breaks the voice rules', () => {
 })
 
 test('landing lists all six teams, each in its own colours', () => {
-  const html = renderLanding(teams.map((team) => ({ team, games: [] })), now)
+  const html = renderLanding(teams.map((team) => ({ team, games: [] })))
   assert.equal(html.match(/<a class="card" href="/g)?.length, 6)
   for (const team of teams) {
     const [first, second] = team.colours
     assert.match(html, new RegExp(`<a class="card" href="${team.country}/${team.sport}/" style="--stripe: repeating-linear-gradient\\(90deg, ${first} 0px 18px, ${second} 18px 36px`))
     assert.ok(html.includes(`<p class="card-title">${team.name}</p>`), team.name)
   }
-  assert.match(html, /Updated daily from UEFA and FIBA/)
+  assert.match(html, /<span>From UEFA<\/span>/)
+  assert.match(html, /<span>From FIBA<\/span>/)
+  assert.doesNotMatch(html, /last run/)
 })
 
 test('a new team page shows its flag, its own feed and links every other team', () => {
   const spain = teams.find((team) => team.country === 'spain' && team.sport === 'basketball')!
-  const html = renderTeamPage({ team: spain, games: [] }, teams, now, site)
+  const html = renderTeamPage({ team: spain, games: [] }, teams, site)
   assert.match(html, /<img src="\.\.\/\.\.\/flag-es\.svg" width="24" height="16" alt="">/)
   assert.match(html, /National team · Men's basketball/)
   assert.match(html, /<h1>Spain basketball, in your calendar\.<\/h1>/)
