@@ -95,6 +95,8 @@ const ukraine: Game = {
   away: 'Ukraine',
   date: '2027-02-26',
 }
+// The time is out, the stadium is not: UEFA often publishes them in that order.
+const noCity: Game = { ...serbia, id: 'uefa-3', venue: undefined, city: undefined }
 
 test('a timed game reads as the spec writes it', () => {
   assert.deepEqual(vevent(toIcs(football, [serbia], now), 'uefa-2047926@scarf'), [
@@ -139,19 +141,28 @@ test('unknown lines drop out, and the footer and team page follow the site URL',
   assert.ok(lines.includes('URL;VALUE=URI:https://example.github.io/scarf/greece/football/'))
 })
 
+test('a kickoff without a city reads "at the venue", as on the page', () => {
+  const lines = vevent(toIcs(football, [noCity], now), 'uefa-3@scarf')
+  assert.ok(
+    lines.includes(
+      'DESCRIPTION:UEFA Nations League\\nKickoff 21:45 at the venue\\nTV: Alpha\\, Novasports (Greek TV)\\nTickets: pame-ethniki.gr\\n\\nKept up to date by scarf · scarf.fan/greece/football',
+    ),
+  )
+})
+
 test('feed copy passes the voice checks', () => {
-  const ics = toIcs(football, [timed, unscheduled, serbia, ukraine], now).replaceAll(/\r\n[ \t]/g, '')
+  const ics = toIcs(football, [timed, unscheduled, serbia, ukraine, noCity], now).replaceAll(/\r\n[ \t]/g, '')
   assert.doesNotMatch(ics, /!/)
   assert.doesNotMatch(ics, /\p{Extended_Pictographic}/u)
-  assert.doesNotMatch(ics, /notification|don't miss|\bTBA\b|\bTBC\b/i)
-  const kickoffs = [...ics.matchAll(/Kickoff \d{2}:\d{2}(.{0,5})/g)]
-  assert.equal(kickoffs.length, 2)
-  for (const [, after] of kickoffs) assert.match(after, /^ in \S/)
+  assert.doesNotMatch(ics, /notification|don't miss|\bTBA\b|\bTBC\b|\bTBD\b/i)
+  const kickoffs = [...ics.matchAll(/Kickoff \d{2}:\d{2}(.{0,13})/g)]
+  assert.equal(kickoffs.length, 3)
+  for (const [, after] of kickoffs) assert.match(after, /^( in \S| at the venue)/)
 })
 
 test('nothing a fan reads carries the working title or a TBA', () => {
   const ics = toIcs(football, [timed, unscheduled], now)
-  assert.doesNotMatch(ics, /event-schedule|Event schedule|\bTBA\b|\bTBC\b/)
+  assert.doesNotMatch(ics, /event-schedule|Event schedule|\bTBA\b|\bTBC\b|\bTBD\b/)
   assert.doesNotMatch(ics, /!/)
 })
 

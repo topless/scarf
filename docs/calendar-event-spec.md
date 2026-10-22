@@ -45,6 +45,11 @@ Rules: six lines at most; the TV line is dropped when unknown rather than filled
 the ticket line is dropped until a link exists; the footer is the only place the brand name appears.
 In a combined personal feed the summary gains a sport suffix: `Greece vs Serbia · football`.
 
+Until the city is announced the kickoff line reads `Kickoff 21:45 at the venue`, as on the team
+page and the share card. A team the federation has not named yet (later-round qualifiers) reads
+`opponent not announced`, capitalised when it is the home team: `Greece vs opponent not announced`,
+`Opponent not announced vs Greece`.
+
 ## 2 · Time not announced (all-day placeholder)
 
 Same `UID` as the eventual timed game, so the placeholder turns into the game in place.
@@ -105,6 +110,6 @@ uses the user's default notification for that calendar. The team page says so in
 
 ## Voice checks (test these as string assertions)
 
-- No `!`, no emoji, no "notification", no "TBA"/"TBC", no "don't miss".
-- Every time is followed by ` in <City>`.
+- No `!`, no emoji, no "notification", no "TBA"/"TBC"/"TBD", no "don't miss".
+- Every time is followed by ` in <City>`, or ` at the venue` until the city is announced.
 - Summary never contains the competition or the sport (except the ` · football` suffix in a combined feed).

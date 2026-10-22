@@ -35,6 +35,11 @@ test('team page shows venue-local times naming the city, and says when the time 
   assert.match(html, /your time/)
 })
 
+test('a kickoff without a city reads "at the venue", as in the feed', () => {
+  const html = teamPage([{ ...timed, venue: undefined, city: undefined }], site)
+  assert.match(html, /<time datetime="2026-10-04T18:45:00Z" data-offset="3">Sun 4 Oct 2026 · 21:45 at the venue<\/time>/)
+})
+
 test('team page escapes text from the sources', () => {
   const html = teamPage([{ ...timed, away: 'A <b> & "C"' }], site)
   assert.match(html, /Greece vs A &lt;b&gt; &amp; &quot;C&quot;/)
@@ -126,7 +131,7 @@ test('nothing a fan reads breaks the voice rules', () => {
   const pages = [teamPage([timed, unscheduled], site), renderLanding([{ team: football, games: [timed] }], now)]
   for (const html of pages) {
     const text = html.replace(/<script>[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ')
-    assert.doesNotMatch(text, /!|event-schedule|Event schedule|\bTBA\b|\bTBC\b|don't miss/i)
+    assert.doesNotMatch(text, /!|event-schedule|Event schedule|\bTBA\b|\bTBC\b|\bTBD\b|don't miss/i)
     assert.doesNotMatch(text, /\bv\b/)
   }
 })
