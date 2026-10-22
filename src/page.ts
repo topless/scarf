@@ -1,4 +1,4 @@
-import { feedPath, landingSharePath, sharePath, shareSize, siteName, type Team } from './config.ts'
+import { feedPath, landingSharePath, sharePath, shareSize, siteName, type Sport, type Team } from './config.ts'
 import { flagPath } from './flags.ts'
 import type { Game } from './game.ts'
 
@@ -20,16 +20,24 @@ const longDate = (d: Date) => `${shortDate(d)} ${YEAR.format(d)}`
 
 const GOOGLE_NOTE = 'On Google Calendar, set a notification for this calendar once — it applies to every game.'
 
+// Each sport's own words for the start of a game and the ground it is played on, so a basketball
+// page never promises a kickoff in a stadium. A new sport in config.ts brings its words here.
+const WORDS: Record<Sport, { start: string; ground: string }> = {
+  football: { start: 'kickoff', ground: 'stadium' },
+  basketball: { start: 'tip-off', ground: 'arena' },
+}
+
 // siteUrl is the public address of the site; without it (local builds) the subscribe links are
 // relative and the ones that need a public address (Google, Outlook, the paste field) are left out.
 export function renderTeamPage(section: Section, all: Team[], siteUrl?: string): string {
   const { team, games } = section
   const from = federation(team)
+  const { start, ground } = WORDS[team.sport]
   const next = games[0]
   return page({
     root: '../../',
     title: `${team.name} · ${siteName}`,
-    description: `Every game of the ${team.side} in your calendar: kickoff, venue, TV and tickets, updated daily.`,
+    description: `Every game of the ${team.side} in your calendar: ${start}, venue, TV and tickets, updated daily.`,
     // The share image sits next to the page; chat apps need both addresses absolute, so a local
     // build (no public address) leaves them out rather than printing relative ones.
     share: { url: siteUrl && `${siteUrl}/${team.country}/${team.sport}/`, image: siteUrl && `${siteUrl}/${sharePath(team)}` },
@@ -45,7 +53,7 @@ ${header('../../', `<nav class="site-nav" aria-label="Page">
   <div class="hero-text">
     <p class="eyebrow"><img src="../../${flagPath(team.flag)}" width="24" height="18" alt=""><span>${esc(teamKind(team))}</span></p>
     <h1>${esc(team.name)}, in your calendar.</h1>
-    <p class="lede">Every kickoff, stadium, channel and ticket sale for the national team — kept current in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
+    <p class="lede">Every ${start}, ${ground}, channel and ticket sale for the national team — kept current in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
 ${subscribePanel(team, siteUrl)}
   </div>
 ${nextGameCard(team, next)}
@@ -57,15 +65,15 @@ ${nextGameCard(team, next)}
       ${games.length ? `<p class="aside">${inTheFeed(games.length)}</p>` : ''}
     </div>
     ${games.length ? `<ul class="rows">\n${games.map(renderRow).join('\n')}\n</ul>` : '<p>No games announced yet.</p>'}
-    <p class="small">New games and kickoff times appear a day or two after ${from} announces them. TV channels are the expected broadcasters — we update them closer to the game.</p>
+    <p class="small">New games and ${start} times appear a day or two after ${from} announces them. TV channels are the expected broadcasters — we update them closer to the game.</p>
   </div>
 </section>
 <section class="wrap how" id="how">
   <h2>How it works</h2>
   <ol class="steps">
     <li class="step"><span class="step-num">1</span><h3>Subscribe once</h3><p>Tap Add to my calendar and pick your app. That is the whole setup — no account, no download.</p></li>
-    <li class="step"><span class="step-num">2</span><h3>Your calendar keeps itself current</h3><p>We rebuild the feed every day from ${from}. New games, kickoff times and venues appear on their own, in your time zone.</p></li>
-    <li class="step"><span class="step-num">3</span><h3>A nudge an hour before kickoff</h3><p>Channel and ticket link live inside the event, so nobody is hunting for them at 20:40.</p></li>
+    <li class="step"><span class="step-num">2</span><h3>Your calendar keeps itself current</h3><p>We rebuild the feed every day from ${from}. New games, ${start} times and venues appear on their own, in your time zone.</p></li>
+    <li class="step"><span class="step-num">3</span><h3>A nudge an hour before ${start}</h3><p>Channel and ticket link live inside the event, so nobody is hunting for them at 20:40.</p></li>
   </ol>
 </section>
 <section class="teams" id="teams">
@@ -74,9 +82,7 @@ ${nextGameCard(team, next)}
       <h2>Other teams</h2>
       <p>Each team is its own feed, in its own colours. Add as many as you follow — national sides today, your club next.</p>
     </div>
-    <div class="chips">
-${all.map((other) => teamChip(other, other === team)).join('\n')}
-    </div>
+${teamChips(all, team)}
   </div>
 </section>
 </main>
@@ -89,7 +95,7 @@ export function renderLanding(sections: Section[], siteUrl?: string): string {
   return page({
     root: '',
     title: `${siteName} · Your colours, in your calendar`,
-    description: 'Every game of the national teams we follow in your calendar: kickoff, venue, TV and tickets, updated daily.',
+    description: 'Every game of the national teams we follow in your calendar: kickoff or tip-off, venue, TV and tickets, updated daily.',
     // The landing page's share image sits at the site root, next to it.
     share: { url: siteUrl && `${siteUrl}/`, image: siteUrl && `${siteUrl}/${landingSharePath}` },
     body: `${header('', '')}
@@ -97,12 +103,19 @@ export function renderLanding(sections: Section[], siteUrl?: string): string {
 <section class="wrap hero">
   <div class="hero-text">
     <h1>Your colours, in your calendar.</h1>
-    <p class="lede">Pick your team and subscribe once. Every kickoff, stadium, channel and ticket sale lands in the calendar you already use, with a nudge an hour before kickoff. Nothing to install.</p>
+    <p class="lede">Pick your team and subscribe once. Every kickoff or tip-off, venue, channel and ticket sale lands in the calendar you already use, with a nudge an hour before the game. Nothing to install.</p>
   </div>
 </section>
-<section class="wrap team-cards" aria-label="Teams">
-${sections.map(teamCard).join('\n')}
-</section>
+${bySport(sections, ({ team }) => team.sport)
+  .map(
+    ([sport, group]) => `<section class="wrap sport" aria-labelledby="${sport}">
+  <h2 id="${sport}">${capitalise(sport)}</h2>
+  <div class="team-cards">
+${group.map(teamCard).join('\n')}
+  </div>
+</section>`,
+  )
+  .join('\n')}
 </main>
 ${footer()}`,
   })
@@ -219,6 +232,7 @@ ${
 }
 
 function nextGameCard(team: Team, game?: Game): string {
+  const { start } = WORDS[team.sport]
   if (!game) {
     return `  <div class="card">
     <div class="card-stripe"></div>
@@ -241,7 +255,7 @@ function nextGameCard(team: Team, game?: Game): string {
         ${game.tickets ? `<li>${ICON.ticket}<a href="${esc(game.tickets)}">Tickets</a></li>` : ''}
         ${game.note ? `<li><span>${esc(game.note)}</span></li>` : ''}
       </ul>
-      <p class="card-foot">In your calendar it shows in your own time zone. We nudge you an hour before kickoff.</p>
+      <p class="card-foot">In your calendar it shows in your own time zone. We nudge you an hour before ${start}.</p>
     </div>
   </div>`
 }
@@ -256,16 +270,35 @@ function renderRow(game: Game): string {
 </li>`
 }
 
+// Every team as a chip, grouped by sport with the page's own sport first, so a basketball fan
+// sees the other basketball sides before the football ones.
+function teamChips(all: Team[], current: Team): string {
+  return `    <div class="chip-groups">
+${bySport(all, (team) => team.sport, current.sport)
+  .map(
+    ([sport, group]) => `      <div class="chip-group">
+        <h3>${capitalise(sport)}</h3>
+        <div class="chips">
+${group.map((team) => teamChip(team, team === current)).join('\n')}
+        </div>
+      </div>`,
+  )
+  .join('\n')}
+    </div>`
+}
+
 function teamChip(team: Team, current: boolean): string {
   return `      <a class="team-chip" href="../../${team.country}/${team.sport}/" style="${stripeVars(team.colours)}"${current ? ' aria-current="page"' : ''}><span class="team-stripe"></span>${esc(team.name)}</a>`
 }
 
+// A team's card on the landing page. It sits under its sport's heading, so the eyebrow names
+// only the side and the source.
 function teamCard({ team, games }: Section): string {
   const next = games[0]
   return `  <a class="card" href="${team.country}/${team.sport}/" style="${stripeVars(team.colours)}">
     <div class="card-stripe"></div>
     <div class="card-body">
-      <p class="card-meta"><span>${esc(teamKind(team))}</span><span>From ${federation(team)}</span></p>
+      <p class="card-meta"><span>Men's national team</span><span>From ${federation(team)}</span></p>
       <p class="card-title">${esc(team.name)}</p>
       <p>${next ? `Next: ${matchTitle(next)}<br><span class="num">${when(next, 'long')}</span>` : 'No games announced yet.'}</p>
       <span class="card-cta">See the games and subscribe</span>
@@ -281,10 +314,18 @@ const and = (items: string[]) => (items.length < 2 ? items.join('') : `${items.s
 // "UEFA and FIBA": every source behind a list of teams, once each, in the teams' order.
 export const federations = (teams: Team[]) => and([...new Set(teams.map(federation))])
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
-// "National team · Men's football": the eyebrow over a team's name on its page, card and share image.
+// "National team · Men's football": the eyebrow over a team's name on its page and share image.
 export const teamKind = (team: Team) => `National team · ${capitalise(`men's ${team.sport}`)}`
 // "National teams · Football and basketball": the same over the landing page's share image.
 export const landingKind = (teams: Team[]) => `National teams · ${capitalise(and([...new Set(teams.map((team) => team.sport))]))}`
+
+// Items split by sport, the sports in the order they first appear (football before basketball,
+// as config.ts lists the teams), or with one sport moved to the front.
+function bySport<T>(items: T[], sportOf: (item: T) => Sport, first?: Sport): [Sport, T[]][] {
+  const seen = [...new Set(items.map(sportOf))]
+  const sports = first ? [first, ...seen.filter((sport) => sport !== first)] : seen
+  return sports.map((sport) => [sport, items.filter((item) => sportOf(item) === sport)])
+}
 
 // The kickoff as a clock at the venue reads it.
 const shift = (game: Game) => new Date(new Date(game.kickoff!).getTime() + game.utcOffsetHours! * 60 * 60 * 1000)
