@@ -50,9 +50,9 @@ for (const team of teams) {
 }
 for (const section of sections) {
   const { team, games } = section
-  await writeFile(`dist/${team.country}/${team.sport}/index.html`, renderTeamPage(section, teams, now, siteUrl))
+  await writeFile(`dist/${team.country}/${team.sport}/index.html`, renderTeamPage(section, teams, siteUrl))
   await writeFile(`dist/${sharePath(team)}`, await renderShareImage(team, games[0], siteUrl))
 }
-await writeFile('dist/index.html', renderLanding(sections, now, siteUrl))
+await writeFile('dist/index.html', renderLanding(sections, siteUrl))
 await writeFile(`dist/${landingSharePath}`, await renderLandingShareImage(teams, siteUrl))
 await cp('assets', 'dist', { recursive: true })
