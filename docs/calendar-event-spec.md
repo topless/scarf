@@ -93,7 +93,8 @@ Kept up to date by scarf · {canonical}/greece/football
 Rules: the event needs both the `onSale` day and a ticket link; it lives as long as its game, so it
 goes when the game is past, and removing the day removes it in place on the next build. The day and the
 kickoff are venue-local; the kickoff is left out when its city or the venue's UTC offset is unknown.
-The reminder is 09:00 at the venue, from the game's UTC offset; without one it is nine hours into the
+The reminder is 09:00 at the venue, from the game's UTC offset, so it lands an hour off when the
+clocks change between the sale day and the game; without one it is nine hours into the
 all-day event (`TRIGGER;RELATED=START:PT9H`), which is 09:00 in the reader's own zone.
 
 ## 4 · New game announced (optional, off by default)
