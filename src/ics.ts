@@ -68,13 +68,14 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
   return calendar.toString()
 }
 
-// Venue-local time with the city, so the copy never pretends to be the reader's time. Dropped
-// when either is unknown; the calendar still shows the kickoff in the reader's own zone.
+// Venue-local time with the city, so the copy never pretends to be the reader's time; "at the
+// venue" until the city is known, as on the page. Dropped while the venue's offset is unknown;
+// the calendar still shows the kickoff in the reader's own zone.
 function kickoffLine(game: Game, city: string | undefined): string | undefined {
-  if (!game.kickoff || game.utcOffsetHours === undefined || !city) return undefined
+  if (!game.kickoff || game.utcOffsetHours === undefined) return undefined
   const local = new Date(new Date(game.kickoff).getTime() + game.utcOffsetHours * 60 * 60 * 1000)
   const hhmm = local.toISOString().slice(11, 16)
-  return `Kickoff ${hhmm} in ${city}`
+  return `Kickoff ${hhmm} ${city ? `in ${city}` : 'at the venue'}`
 }
 
 // Unknown lines drop out; the blank line before the footer stays.

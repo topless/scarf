@@ -3,7 +3,7 @@
 scarf publishes subscribable calendar feeds (.ics) for the national teams fans follow — kickoff,
 venue, TV, tickets, a reminder an hour before — plus one static page per team and a landing page.
 Static output, rebuilt daily by GitHub Actions, served by GitHub Pages. Brand line: "Your colours,
-in your calendar." Principle: fans, not fanatics.
+in your calendar." Motto: "Wrapped up in the game."
 
 ## Stack and commands
 
@@ -35,6 +35,7 @@ in your calendar." Principle: fans, not fanatics.
 
 ## Voice (applies to every string a fan can read)
 
+- Cheerful about the team, the players and the game; never preachy.
 - Sentence case. No exclamation marks, no emoji, no "notification" (say reminder/nudge), no TBA/TBC
   (say "time not announced"), no "don't miss out".
 - "We" is the team, "you" is the fan: "We play Serbia on Monday."

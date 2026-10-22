@@ -2,9 +2,10 @@
 
 Your colours, in your calendar. scarf publishes one subscribable calendar feed per national team:
 every game with kickoff, venue, TV channel and ticket link, and a reminder an hour before. Fans
-subscribe once, and the calendar they already use keeps itself up to date. Fans, not fanatics.
+subscribe once, and the calendar they already use keeps itself up to date. Wrapped up in the game.
 
-Teams so far: Greece and Spain (men's football and basketball), France and Germany (men's basketball).
+Teams so far: Greece, Spain and Germany (men's football and basketball), France (men's basketball),
+Switzerland and England (men's football).
 The identity, the exact calendar-event copy and the backlog come from the design handover:
 [HANDOVER.md](HANDOVER.md), [docs/brand.md](docs/brand.md),
 [docs/calendar-event-spec.md](docs/calendar-event-spec.md), [docs/issues.md](docs/issues.md).
@@ -16,7 +17,8 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
 1. fetches the games from the official sources: one UEFA request for every football team, and one FIBA
    page per basketball competition, shared by the teams playing in it;
 2. adds what no source provides (TV channel, ticket link) from [src/config.ts](src/config.ts) and [src/manual.ts](src/manual.ts);
-3. writes one `dist/{country}/{sport}.ics` per team and `dist/index.html`, which GitHub Pages serves;
+3. writes one `dist/{country}/{sport}.ics` and one team page `dist/{country}/{sport}/index.html` per team,
+   and the landing page `dist/index.html` listing every team, which GitHub Pages serves;
 4. renders a 1200×630 share image per team at `dist/{country}/{sport}/share.png` and one for the landing
    page at `dist/share.png`, the card a chat app shows when someone pastes a page's address, from
    [src/share.ts](src/share.ts): a team's in its colours with its next game, the landing page's in the
@@ -29,7 +31,9 @@ If a source cannot be fetched or its format changed, the build fails and the las
 Subscriptions point at these paths, so they are frozen (see [HANDOVER.md](HANDOVER.md)):
 
 - `/{country}/{sport}.ics`: one feed per team, for example `/greece/football.ics` and `/greece/basketball.ics`.
-- `/`: the page listing every team. Team pages at `/{country}/{sport}/` are planned.
+- `/{country}/{sport}/`: the team's page, for example `/greece/football/`, with its share image at
+  `/{country}/{sport}/share.png`.
+- `/`: the page listing every team.
 
 Each event's `UID` is the source's id (`uefa-…`, `fiba-…`) and never changes, so an updated game
 replaces the old entry instead of duplicating it.
@@ -108,7 +112,6 @@ The health signals we have today, in the order to check them:
 - **Run status.** The Actions tab lists every run of "Build feeds" and "Check feeds" with its outcome,
   and a failed run is also an open `ops` issue.
 - **Freshness.** The log of a "Check feeds" run prints how many hours old each live feed is.
-- **Last run.** The footer of every page shows the date and time of the build that wrote it.
 
 GitHub Pages keeps no access logs and the site carries no tracking, so how often the feeds are fetched
 (the closest thing to a subscriber count) and how many people visit the pages cannot be seen today.

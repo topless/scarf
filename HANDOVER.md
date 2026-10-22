@@ -8,7 +8,7 @@ venue, TV channel, ticket link, with a reminder an hour before. Working title un
 **Brand decision (made).** Name: **scarf** (lowercase wordmark). Direction: *fan culture* —
 the scarf is the one fan object football and basketball, national teams and clubs all share.
 The brand stays neutral; each team brings its colours as a knitted stripe. Line: *"Your colours,
-in your calendar."* Principle: **fans, not fanatics.**
+in your calendar."* Motto: *"Wrapped up in the game."*
 
 **Domain decision (pending, not blocking).** Develop and run the closed-circle test on the GitHub
 Pages URL. Recommended purchase when ready: `scarf.fan` (canonical) + `scarfcal.com` (secondary,
@@ -22,7 +22,6 @@ Pages URL. Recommended purchase when ready: `scarf.fan` (canonical) + `scarfcal.
 | `docs/brand.md` | Identity spec: tokens, type, logo, team-stripe system, components, voice. |
 | `docs/calendar-event-spec.md` | Exact copy and ICS fields for the event, reminder and the four event types. |
 | `docs/issues.md` | Issue drafts by milestone, with acceptance criteria. |
-| `scripts/create-issues.sh` | `gh` commands that create labels, milestones and the issues. Review `docs/issues.md` first. |
 | `assets/` | `scarf-mark.svg`, `scarf-mark-greece.svg`, `flag-gr.svg`, `brand-tokens.css`. |
 | `reference/team-page.html` | Working, responsive reference of the team page (`/greece/football`). Port, don't redesign. |
 | `reference/share-card.html` | 1200×630 share card reference; render it to PNG at build time. |
