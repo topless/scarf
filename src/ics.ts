@@ -4,7 +4,7 @@ import type { Game } from './game.ts'
 
 const GAME_HOURS = 2
 const REMINDER_HOURS = 1
-const DEFAULT_SITE_URL = 'https://topless.github.io/scarf'
+const DEFAULT_SITE_URL = 'https://scarf.fan'
 const FEDERATION = { uefa: 'UEFA', fiba: 'FIBA' } as const
 const GROUND: Record<string, string> = { football: 'stadium', basketball: 'arena' }
 const DAY_MONTH_YEAR = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' })

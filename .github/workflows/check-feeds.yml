@@ -26,7 +26,7 @@ jobs:
           MAX_AGE_HOURS: ${{ inputs.max_age_hours || '36' }}
         run: |
           node --input-type=module - <<'EOF'
-          const site = 'https://topless.github.io/scarf'
+          const site = 'https://scarf.fan'
           const feeds = ['greece/football', 'greece/basketball']
           const maxAgeHours = Number(process.env.MAX_AGE_HOURS)
           const fail = (message) => {

@@ -105,7 +105,7 @@ test('a timed game reads as the spec writes it', () => {
     'DTEND:20261116T214500Z',
     'SUMMARY:Greece vs Serbia',
     'LOCATION:Panthessaliko Stadium\\, Volos',
-    'DESCRIPTION:UEFA Nations League\\nKickoff 21:45 in Volos\\nTV: Alpha\\, Novasports (Greek TV)\\nTickets: pame-ethniki.gr\\n\\nKept up to date by scarf · topless.github.io/scarf/greece/football',
+    'DESCRIPTION:UEFA Nations League\\nKickoff 21:45 in Volos\\nTV: Alpha\\, Novasports (Greek TV)\\nTickets: pame-ethniki.gr\\n\\nKept up to date by scarf · scarf.fan/greece/football',
     'BEGIN:VALARM',
     'ACTION:DISPLAY',
     'TRIGGER:-PT1H',
@@ -125,8 +125,8 @@ test('a game without a time is an all-day placeholder that names the federation'
     'X-MICROSOFT-CDO-ALLDAYEVENT:TRUE',
     'X-MICROSOFT-MSNCALENDAR-ALLDAYEVENT:TRUE',
     'SUMMARY:Greece vs Ukraine · time not announced',
-    "DESCRIPTION:FIBA Basketball World Cup 2027 European Qualifiers\\nVenue not announced\\nWe'll fill in the time and arena as soon as FIBA publishes them.\\n\\nKept up to date by scarf · topless.github.io/scarf/greece/basketball",
-    'URL;VALUE=URI:https://topless.github.io/scarf/greece/basketball/',
+    "DESCRIPTION:FIBA Basketball World Cup 2027 European Qualifiers\\nVenue not announced\\nWe'll fill in the time and arena as soon as FIBA publishes them.\\n\\nKept up to date by scarf · scarf.fan/greece/basketball",
+    'URL;VALUE=URI:https://scarf.fan/greece/basketball/',
     'END:VEVENT',
   ])
 })

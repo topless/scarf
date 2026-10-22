@@ -43,6 +43,12 @@ replaces the old entry instead of duplicating it.
 The repository must be public (GitHub Pages on a free plan). In the repository settings, under
 Pages, set the source to "GitHub Actions"; the first run fails until that is done.
 
+The site lives at `https://scarf.fan`. The domain's DNS is at Cloudflare: four `A` and four `AAAA`
+records on the apex to GitHub Pages' addresses, and `www` as a `CNAME` to `topless.github.io`, all
+"DNS only" (grey cloud) so GitHub can issue the certificate. Under Pages, the custom domain is
+`scarf.fan` with "Enforce HTTPS" on. The build takes its address from that setting
+(`SITE_URL`), so no `CNAME` file is needed.
+
 ## Running it
 
 Needs Node 22.18 or newer. The share images need nothing else: they are laid out by Satori and
