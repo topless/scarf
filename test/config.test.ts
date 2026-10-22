@@ -13,12 +13,15 @@ test('every team has its own frozen feed path, named after the team', () => {
       ['spain/basketball.ics', 'Spain basketball'],
       ['france/basketball.ics', 'France basketball'],
       ['germany/basketball.ics', 'Germany basketball'],
+      ['switzerland/football.ics', 'Switzerland football'],
+      ['england/football.ics', 'England football'],
+      ['germany/football.ics', 'Germany football'],
     ],
   )
   for (const team of teams) {
     assert.match(team.country, /^[a-z]+(-[a-z]+)*$/, team.name)
     assert.match(team.sport, /^[a-z]+$/, team.name)
-    assert.match(team.side, /^[A-Z][a-z]+ men's national (football|basketball) team$/, team.name)
+    assert.match(team.side, /^[A-Z][A-Za-z ]+ men's national (football|basketball) team$/, team.name)
   }
 })
 
