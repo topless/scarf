@@ -4,8 +4,8 @@ Team names are joined with "vs" ("Greece vs Serbia"): decided by Chris on 2026-1
 originally wrote "v".
 
 This is the surface every subscriber sees, every match week. No logo lives here; the brand is the
-team's colour and the voice. All strings below are exact. `{canonical}` is the canonical domain
-(until it exists: `topless.github.io/scarf`).
+team's colour and the voice. All strings below are exact. `{canonical}` is the canonical domain,
+`scarf.fan`.
 
 ## Feed header
 

@@ -15,9 +15,8 @@ import { federation, federations, kickoffText, landingKind, shortDate, teamKind 
 const { width: WIDTH, height: HEIGHT } = shareSize
 export const SHARE_MAX_BYTES = 300 * 1024
 
-// The site's address without the scheme, as printed in a card's footer. The default host is the
-// GitHub Pages one until the custom domain exists (see HANDOVER.md).
-const DEFAULT_HOST = 'topless.github.io/scarf'
+// The site's address without the scheme, as printed in a card's footer.
+const DEFAULT_HOST = 'scarf.fan'
 
 const WOOL = '#FBF8F2'
 const INK = '#17171C'

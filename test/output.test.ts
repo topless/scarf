@@ -107,7 +107,7 @@ test('a timed game reads as the spec writes it', () => {
     'DTEND:20261116T214500Z',
     'SUMMARY:Greece vs Serbia',
     'LOCATION:Panthessaliko Stadium\\, Volos',
-    'DESCRIPTION:UEFA Nations League\\nKickoff 21:45 in Volos\\nTV: Alpha\\, Novasports (Greek TV)\\nTickets: pame-ethniki.gr\\n\\nKept up to date by scarf · topless.github.io/scarf/greece/football',
+    'DESCRIPTION:UEFA Nations League\\nKickoff 21:45 in Volos\\nTV: Alpha\\, Novasports (Greek TV)\\nTickets: pame-ethniki.gr\\n\\nKept up to date by scarf · scarf.fan/greece/football',
     'BEGIN:VALARM',
     'ACTION:DISPLAY',
     'TRIGGER:-PT1H',
@@ -127,8 +127,8 @@ test('a game without a time is an all-day placeholder that names the federation'
     'X-MICROSOFT-CDO-ALLDAYEVENT:TRUE',
     'X-MICROSOFT-MSNCALENDAR-ALLDAYEVENT:TRUE',
     'SUMMARY:Greece vs Ukraine · time not announced',
-    "DESCRIPTION:FIBA Basketball World Cup 2027 European Qualifiers\\nVenue not announced\\nWe'll fill in the time and arena as soon as FIBA publishes them.\\n\\nKept up to date by scarf · topless.github.io/scarf/greece/basketball",
-    'URL;VALUE=URI:https://topless.github.io/scarf/greece/basketball/',
+    "DESCRIPTION:FIBA Basketball World Cup 2027 European Qualifiers\\nVenue not announced\\nWe'll fill in the time and arena as soon as FIBA publishes them.\\n\\nKept up to date by scarf · scarf.fan/greece/basketball",
+    'URL;VALUE=URI:https://scarf.fan/greece/basketball/',
     'END:VEVENT',
   ])
 })
@@ -179,7 +179,7 @@ test('a game with an on-sale day and a ticket link gets exactly one extra event,
     'X-MICROSOFT-CDO-ALLDAYEVENT:TRUE',
     'X-MICROSOFT-MSNCALENDAR-ALLDAYEVENT:TRUE',
     'SUMMARY:Tickets on sale · Greece vs Serbia',
-    'DESCRIPTION:Sales open today at pame-ethniki.gr\\nThe game: Mon 16 Nov\\, 21:45 in Volos\\, Panthessaliko Stadium\\n\\nKept up to date by scarf · topless.github.io/scarf/greece/football',
+    'DESCRIPTION:Sales open today at pame-ethniki.gr\\nThe game: Mon 16 Nov\\, 21:45 in Volos\\, Panthessaliko Stadium\\n\\nKept up to date by scarf · scarf.fan/greece/football',
     'BEGIN:VALARM',
     'ACTION:DISPLAY',
     // 09:00 in Volos (UTC+2) as an absolute instant.
@@ -198,14 +198,14 @@ test('the on-sale event of a game without a time says so, names the venue only w
   assert.ok(bare.includes('DTSTART;VALUE=DATE:20270115'))
   assert.ok(
     bare.includes(
-      'DESCRIPTION:Sales open today at ticketmaster.gr\\nThe game: Fri 26 Feb\\, time not announced\\n\\nKept up to date by scarf · topless.github.io/scarf/greece/basketball',
+      'DESCRIPTION:Sales open today at ticketmaster.gr\\nThe game: Fri 26 Feb\\, time not announced\\n\\nKept up to date by scarf · scarf.fan/greece/basketball',
     ),
   )
   // No UTC offset to place 09:00 at the venue, so 09:00 in the reader's own zone.
   assert.ok(bare.includes('TRIGGER;RELATED=START:PT9H'))
   assert.ok(bare.includes('DESCRIPTION:Tickets for Greece vs Ukraine go on sale today · ticketmaster.gr'))
   const arena = sale({ ...ukraine, tickets, onSale: '2027-01-15', venue: 'OAKA' })
-  assert.ok(arena.some((l) => l.endsWith('The game: Fri 26 Feb\\, time not announced\\, OAKA\\n\\nKept up to date by scarf · topless.github.io/scarf/greece/basketball')))
+  assert.ok(arena.some((l) => l.endsWith('The game: Fri 26 Feb\\, time not announced\\, OAKA\\n\\nKept up to date by scarf · scarf.fan/greece/basketball')))
 })
 
 test('removing the on-sale day, or having no ticket link, removes the extra event in place', () => {

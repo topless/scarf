@@ -19,7 +19,8 @@ in your calendar." Principle: fans, not fanatics.
 
 - `/{country}/{sport}.ics` — one feed per team, e.g. `/greece/football.ics`, `/greece/basketball.ics`.
 - `/{country}/{sport}/` — team page; `/{country}/{sport}/share.png` — 1200×630 share image.
-- `/` — landing listing every team. `/CNAME` only once the custom domain exists.
+- `/` — landing listing every team. Served at `https://scarf.fan`: the custom domain is set under
+  Pages in the repo settings, DNS at Cloudflare. Actions deploys need no `/CNAME` file.
 
 ## ICS rules (see docs/calendar-event-spec.md for exact copy)
 

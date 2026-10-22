@@ -5,7 +5,7 @@ import type { Game } from './game.ts'
 const GAME_HOURS = 2
 const REMINDER_HOURS = 1
 const SALE_REMINDER_HOUR = 9 // 09:00 at the venue on the day tickets go on sale
-const DEFAULT_SITE_URL = 'https://topless.github.io/scarf'
+const DEFAULT_SITE_URL = 'https://scarf.fan'
 const FEDERATION = { uefa: 'UEFA', fiba: 'FIBA' } as const
 // "Mon 16 Nov", read in UTC so a venue-local YYYY-MM-DD stays on its own day.
 const DAY = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })

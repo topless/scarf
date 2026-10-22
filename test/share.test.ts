@@ -55,7 +55,7 @@ test('share card footer prints the team page without the scheme, and the federat
   assert.doesNotMatch(football_, /https?:/)
   assert.match(text(renderShareCard(football, timed, `${site}/`, flag)), /example\.github\.io\/scarf\/greece\/football /)
   assert.match(text(renderShareCard(basketball, undefined, site, flag)), /scarf\/greece\/basketball Free · updated daily from FIBA/)
-  assert.match(text(renderShareCard(football, timed)), /topless\.github\.io\/scarf\/greece\/football/)
+  assert.match(text(renderShareCard(football, timed)), /scarf\.fan\/greece\/football/)
 })
 
 test('share card escapes text from the sources', () => {
@@ -95,7 +95,7 @@ test('landing card footer prints the site without the scheme, and every federati
   assert.doesNotMatch(copy, /https?:/)
   assert.match(text(renderLandingShareCard(teams, `${site}/`)), /example\.github\.io\/scarf Free/)
   assert.match(text(renderLandingShareCard([football], site)), /scarf Free · updated daily from UEFA /)
-  assert.match(text(renderLandingShareCard(teams)), /topless\.github\.io\/scarf Free/)
+  assert.match(text(renderLandingShareCard(teams)), /scarf\.fan Free/)
 })
 
 test('share images render as 1200×630 PNGs under the size limit without a browser', async () => {
