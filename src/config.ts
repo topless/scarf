@@ -3,11 +3,15 @@ import type { Details } from './game.ts'
 // Lowercase wordmark, "Scarf" only at the start of a sentence. See docs/brand.md.
 export const siteName = 'scarf'
 
+// The sports scarf covers. The pages speak each sport's language (kickoff or tip-off, stadium or
+// arena; see page.ts), so a new sport is added here and given its words there.
+export type Sport = 'football' | 'basketball'
+
 export interface Team {
   // URL slugs. The path scheme is frozen because subscriptions point at it (see HANDOVER.md):
   // the feed is /{country}/{sport}.ics and the team page /{country}/{sport}/.
   country: string
-  sport: string
+  sport: Sport
   name: string // "Greece football": how the page and the calendar name call the team
   side: string // how the feed description calls the team, in full
   // Stripe colours from the flag or kit; the first one is the calendar colour (docs/brand.md).

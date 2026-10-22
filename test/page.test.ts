@@ -24,6 +24,20 @@ const timed: Game = {
 const unscheduled: Game = { id: 'fiba-2', competition: 'Qualifiers', home: 'Greece', away: 'Georgia', date: '2026-11-26' }
 
 const teamPage = (games: Game[], siteUrl?: string) => renderTeamPage({ team: football, games }, teams, now, siteUrl)
+// What a fan reads: the page without its script and its tags.
+const copy = (html: string) => html.replace(/<script>[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ')
+
+// Every needle is in the html, in the order given.
+function inOrder(html: string, ...needles: string[]): void {
+  const indexes = needles.map((needle) => {
+    const index = html.indexOf(needle)
+    assert.notEqual(index, -1, `missing: ${needle}`)
+    return index
+  })
+  for (let i = 1; i < indexes.length; i++) {
+    assert.ok(indexes[i - 1]! < indexes[i]!, `${needles[i - 1]} should come before ${needles[i]}`)
+  }
+}
 
 test('team page shows venue-local times naming the city, and says when the time is not announced', () => {
   const html = teamPage([timed, unscheduled], site)
@@ -108,7 +122,7 @@ test('landing lists every team with its stripe and a link to its page', () => {
 test('landing tells chat apps its address and its share image', () => {
   const html = renderLanding([{ team: football, games: [timed] }, { team: basketball, games: [] }], now, site)
   assert.match(html, /<meta property="og:title" content="scarf · Your colours, in your calendar">/)
-  assert.match(html, /<meta property="og:description" content="Every game of the national teams we follow in your calendar: kickoff, venue, TV and tickets, updated daily\.">/)
+  assert.match(html, /<meta property="og:description" content="Every game of the national teams we follow in your calendar: kickoff or tip-off, venue, TV and tickets, updated daily\.">/)
   assert.match(html, /<meta property="og:url" content="https:\/\/example\.github\.io\/scarf\/">/)
   assert.match(html, /<meta property="og:image" content="https:\/\/example\.github\.io\/scarf\/share\.png">/)
   assert.match(html, /<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">/)
@@ -123,12 +137,75 @@ test('without a public address the landing leaves out the tags that need an abso
 })
 
 test('nothing a fan reads breaks the voice rules', () => {
-  const pages = [teamPage([timed, unscheduled], site), renderLanding([{ team: football, games: [timed] }], now)]
+  const pages = [
+    teamPage([timed, unscheduled], site),
+    renderTeamPage({ team: basketball, games: [unscheduled] }, teams, now, site),
+    renderLanding([{ team: football, games: [timed] }, { team: basketball, games: [] }], now),
+  ]
   for (const html of pages) {
-    const text = html.replace(/<script>[\s\S]*?<\/script>/g, '').replace(/<[^>]+>/g, ' ')
+    const text = copy(html)
     assert.doesNotMatch(text, /!|event-schedule|Event schedule|\bTBA\b|\bTBC\b|don't miss/i)
     assert.doesNotMatch(text, /\bv\b/)
   }
+})
+
+test('landing groups the teams by sport, football first, and names the sport once over its cards', () => {
+  const html = renderLanding(teams.map((team) => ({ team, games: [] })), now)
+  assert.match(html, /<section class="wrap sport" aria-labelledby="football">\n  <h2 id="football">Football<\/h2>/)
+  assert.match(html, /<section class="wrap sport" aria-labelledby="basketball">\n  <h2 id="basketball">Basketball<\/h2>/)
+  assert.equal(html.match(/<section class="wrap sport"/g)?.length, 2)
+  // Every football card before the basketball heading, every basketball card after it.
+  const [footballSection, basketballSection] = html.split('<h2 id="basketball">')
+  const count = (sport: string) => teams.filter((team) => team.sport === sport).length
+  assert.equal(footballSection!.match(/<a class="card" href="/g)?.length, count('football'))
+  assert.equal(basketballSection!.match(/<a class="card" href="/g)?.length, count('basketball'))
+  inOrder(
+    html,
+    '<h2 id="football">Football</h2>',
+    'href="greece/football/"',
+    'href="spain/football/"',
+    '<h2 id="basketball">Basketball</h2>',
+    'href="greece/basketball/"',
+    'href="germany/basketball/"',
+  )
+  assert.match(html, /<p class="card-meta"><span>Men's national team<\/span><span>From UEFA<\/span><\/p>/)
+  assert.match(html, /<p class="card-meta"><span>Men's national team<\/span><span>From FIBA<\/span><\/p>/)
+  assert.doesNotMatch(html, /National team · Men's/)
+  assert.match(html, /Every kickoff or tip-off, venue, channel and ticket sale/)
+})
+
+test('a basketball page says tip-off and arena, never kickoff or stadium', () => {
+  // Both pages get the game without a venue on purpose: a venue name from the data ("Toumba
+  // Stadium", "Johan Cruijff ArenA") must not trip the word checks, which are about our own copy.
+  const html = renderTeamPage({ team: basketball, games: [unscheduled] }, teams, now, site)
+  assert.match(html, /<meta property="og:description" content="Every game of the Greece men's national basketball team in your calendar: tip-off, venue, TV and tickets, updated daily\.">/)
+  assert.match(html, /Every tip-off, arena, channel and ticket sale for the national team/)
+  assert.match(html, /We nudge you an hour before tip-off\./)
+  assert.match(html, /New games and tip-off times appear a day or two after FIBA announces them\./)
+  assert.match(html, /New games, tip-off times and venues appear on their own/)
+  assert.match(html, /<h3>A nudge an hour before tip-off<\/h3>/)
+  assert.doesNotMatch(copy(html), /kickoff|stadium/i)
+  // The football page keeps football's words.
+  const football_ = teamPage([unscheduled], site)
+  assert.match(football_, /Every kickoff, stadium, channel and ticket sale for the national team/)
+  assert.match(football_, /<h3>A nudge an hour before kickoff<\/h3>/)
+  assert.doesNotMatch(copy(football_), /tip-off|arena/i)
+})
+
+test("the other-teams chips are grouped by sport, the page's own sport first", () => {
+  const basketball_ = renderTeamPage({ team: basketball, games: [] }, teams, now, site)
+  inOrder(
+    basketball_,
+    '<h3>Basketball</h3>',
+    'href="../../greece/basketball/"',
+    'href="../../germany/basketball/"',
+    '<h3>Football</h3>',
+    'href="../../greece/football/"',
+    'href="../../spain/football/"',
+  )
+  assert.equal(basketball_.match(/class="team-chip"/g)?.length, teams.length)
+  const football_ = teamPage([], site)
+  inOrder(football_, '<h3>Football</h3>', 'href="../../spain/football/"', '<h3>Basketball</h3>', 'href="../../greece/basketball/"')
 })
 
 test('landing lists all six teams, each in its own colours', () => {
