@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@resvg/resvg-wasm": "^2.6.2",
+    "flag-icons": "^7.6.0",
     "ical-generator": "^11.1.2",
     "satori": "^0.62.0",
     "satori-html": "^0.3.2"

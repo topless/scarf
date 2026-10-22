@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { existsSync } from 'node:fs'
 import { test } from 'node:test'
 import { feedPath, teams } from '../src/config.ts'
+import { flagFile } from '../src/flags.ts'
 
 test('every team has its own frozen feed path, named after the team', () => {
   assert.deepEqual(
@@ -22,12 +23,12 @@ test('every team has its own frozen feed path, named after the team', () => {
   }
 })
 
-test('every team has two or three stripe colours and a flag file', () => {
+test('every team has two or three stripe colours and a flag that flag-icons ships', () => {
   for (const team of teams) {
     assert.ok(team.colours.length === 2 || team.colours.length === 3, team.name)
     for (const colour of team.colours) assert.match(colour, /^#[0-9A-F]{6}$/, team.name)
-    assert.ok(team.flag, team.name)
-    assert.ok(existsSync(new URL(`../assets/${team.flag}`, import.meta.url)), `${team.name}: assets/${team.flag}`)
+    assert.match(team.flag, /^[a-z]{2}(-[a-z]{2,3})?$/, team.name)
+    assert.ok(existsSync(flagFile(team.flag)), `${team.name}: flag-icons has no flag for the code "${team.flag}"`)
   }
 })
 

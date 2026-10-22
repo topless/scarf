@@ -64,9 +64,12 @@ npm run build
   The id is the first part of the event's `UID` in the calendar file, for example `fiba-127107`.
   Time and venue entered by hand are used only until the official source has its own.
 - **A new team** is one more entry in [src/config.ts](src/config.ts): country and sport slugs, the stripe
-  colours from [docs/brand.md](docs/brand.md), a flag in `assets/`, and a UEFA team id for football or a
-  FIBA event and team code for basketball. A football team costs no extra request; a basketball team in a
-  competition that is already fetched costs none either, and each new basketball competition costs one.
+  colours from [docs/brand.md](docs/brand.md), the flag's code, and a UEFA team id for football or a
+  FIBA event and team code for basketball. The flags come from [flag-icons](https://github.com/lipis/flag-icons)
+  (MIT): the code is the lowercase ISO 3166-1 alpha-2 country code, or one of its sub-national codes
+  such as `gb-eng`, and the build copies the flags it uses to `dist/flags/` with the licence. A football
+  team costs no extra request; a basketball team in a competition that is already fetched costs none
+  either, and each new basketball competition costs one.
 
 ## Keeping it running
 

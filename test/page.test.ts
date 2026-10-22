@@ -145,7 +145,7 @@ test('landing lists all six teams, each in its own colours', () => {
 test('a new team page shows its flag, its own feed and links every other team', () => {
   const spain = teams.find((team) => team.country === 'spain' && team.sport === 'basketball')!
   const html = renderTeamPage({ team: spain, games: [] }, teams, now, site)
-  assert.match(html, /<img src="\.\.\/\.\.\/flag-es\.svg" width="24" height="16" alt="">/)
+  assert.match(html, /<img src="\.\.\/\.\.\/flags\/es\.svg" width="24" height="18" alt="">/)
   assert.match(html, /National team · Men's basketball/)
   assert.match(html, /<h1>Spain basketball, in your calendar\.<\/h1>/)
   assert.match(html, /<a class="btn-primary" href="webcal:\/\/example\.github\.io\/scarf\/spain\/basketball\.ics">/)

@@ -27,7 +27,8 @@ const timed: Game = {
   city: 'Amsterdam',
 }
 const unscheduled: Game = { id: 'fiba-2', competition: 'Qualifiers', home: 'Greece', away: 'Georgia', date: '2026-11-26' }
-const flag = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 18"><rect width="27" height="18" fill="#0D5EAF"/></svg>'
+// A stand-in in the 4:3 shape flag-icons draws, so the card tests do not depend on the package's art.
+const flag = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480"><rect width="640" height="480" fill="#0D5EAF"/></svg>'
 
 const text = (card: string) => card.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ')
 // The SVGs embedded in a card, in order: the brand mark, a flag when there is one, the large mark.
@@ -43,10 +44,10 @@ test('share card names the next game with the venue-local time and its city', ()
 test('share card carries the headline, the eyebrow, the flag and the team colours', () => {
   const card = renderShareCard(football, timed, site, flag)
   assert.match(text(card), /scarf .*National team · Men's football .*Greece football, in your calendar\./)
-  assert.ok(card.includes(`<img src="data:image/svg+xml;base64,${Buffer.from(flag).toString('base64')}" width="30" height="20">`))
+  assert.ok(card.includes(`<img src="data:image/svg+xml;base64,${Buffer.from(flag).toString('base64')}" width="32" height="24">`))
   assert.match(card, /repeating-linear-gradient\(90deg, #0D5EAF 0px 40px, #FFFFFF 40px 80px\)/)
   assert.match(card, /width="340" height="340"/)
-  assert.doesNotMatch(renderShareCard(football, timed, site), /width="30" height="20"/)
+  assert.doesNotMatch(renderShareCard(football, timed, site), /width="32" height="24"/)
 })
 
 test('share card footer prints the team page without the scheme, and the federation of its source', () => {
@@ -98,12 +99,16 @@ test('landing card footer prints the site without the scheme, and every federati
   assert.match(text(renderLandingShareCard(teams)), /scarf\.fan Free/)
 })
 
-test('share images render as 1200×630 PNGs under the size limit without a browser', async () => {
-  for (const png of [await renderShareImage(football, timed, site), await renderLandingShareImage(teams, site)]) {
-    assert.deepEqual([...png.subarray(0, 8)], [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
+test('every team and the landing page render as 1200×630 PNGs under the size limit without a browser', async () => {
+  // Every team's real flag goes through resvg here, so a flag it cannot draw (Spain's carries a
+  // detailed coat of arms) fails the tests rather than the daily build.
+  const pngs: [string, Buffer][] = [['landing', await renderLandingShareImage(teams, site)]]
+  for (const team of teams) pngs.push([team.name, await renderShareImage(team, timed, site)])
+  for (const [name, png] of pngs) {
+    assert.deepEqual([...png.subarray(0, 8)], [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], name)
     // IHDR follows the signature: width and height as big-endian 32-bit integers.
-    assert.equal(png.readUInt32BE(16), shareSize.width)
-    assert.equal(png.readUInt32BE(20), shareSize.height)
-    assert.ok(png.byteLength < SHARE_MAX_BYTES, `${png.byteLength} bytes`)
+    assert.equal(png.readUInt32BE(16), shareSize.width, name)
+    assert.equal(png.readUInt32BE(20), shareSize.height, name)
+    assert.ok(png.byteLength < SHARE_MAX_BYTES, `${name}: ${png.byteLength} bytes`)
   }
 })
