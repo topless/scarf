@@ -1,4 +1,4 @@
-import { feedPath, siteName, type Team } from './config.ts'
+import { feedPath, landingSharePath, sharePath, shareSize, siteName, type Team } from './config.ts'
 import type { Game } from './game.ts'
 
 // Team pages and the landing page, ported from reference/team-page.html. Styles live in
@@ -14,7 +14,8 @@ const WEEKDAY = utc({ weekday: 'short' })
 const DAY_MONTH = utc({ day: 'numeric', month: 'short' })
 const YEAR = utc({ year: 'numeric' })
 const TIME = utc({ hour: '2-digit', minute: '2-digit' })
-const longDate = (d: Date) => `${WEEKDAY.format(d)} ${DAY_MONTH.format(d)} ${YEAR.format(d)}`
+export const shortDate = (d: Date) => `${WEEKDAY.format(d)} ${DAY_MONTH.format(d)}` // "Fri 13 Nov"
+const longDate = (d: Date) => `${shortDate(d)} ${YEAR.format(d)}`
 
 const GOOGLE_NOTE = 'On Google Calendar, set a notification for this calendar once — it applies to every game.'
 
@@ -28,6 +29,9 @@ export function renderTeamPage(section: Section, all: Team[], now: Date, siteUrl
     root: '../../',
     title: `${team.name} · ${siteName}`,
     description: `Every game of the ${team.side} in your calendar: kickoff, venue, TV and tickets, updated daily.`,
+    // The share image sits next to the page; chat apps need both addresses absolute, so a local
+    // build (no public address) leaves them out rather than printing relative ones.
+    share: { url: siteUrl && `${siteUrl}/${team.country}/${team.sport}/`, image: siteUrl && `${siteUrl}/${sharePath(team)}` },
     stripes: team.colours,
     body: `<div class="band"></div>
 ${header('../../', `<nav class="site-nav" aria-label="Page">
@@ -38,7 +42,7 @@ ${header('../../', `<nav class="site-nav" aria-label="Page">
 <main>
 <section class="wrap hero">
   <div class="hero-text">
-    <p class="eyebrow">${team.flag ? `<img src="../../${esc(team.flag)}" width="24" height="16" alt="">` : ''}<span>National team · ${esc(capitalise(`men's ${team.sport}`))}</span></p>
+    <p class="eyebrow">${team.flag ? `<img src="../../${esc(team.flag)}" width="24" height="16" alt="">` : ''}<span>${esc(teamKind(team))}</span></p>
     <h1>${esc(team.name)}, in your calendar.</h1>
     <p class="lede">Every kickoff, stadium, channel and ticket sale for the national team — kept current in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
 ${subscribePanel(team, siteUrl)}
@@ -75,17 +79,19 @@ ${all.map((other) => teamChip(other, other === team)).join('\n')}
   </div>
 </section>
 </main>
-${footer('../../', [from], now)}`,
+${footer('../../', from, now)}`,
     script: COPY_SCRIPT,
   })
 }
 
-export function renderLanding(sections: Section[], now: Date): string {
-  const sources = [...new Set(sections.map(({ team }) => federation(team)))]
+export function renderLanding(sections: Section[], now: Date, siteUrl?: string): string {
+  const teams = sections.map(({ team }) => team)
   return page({
     root: '',
     title: `${siteName} · Your colours, in your calendar`,
     description: 'Every game of the national teams we follow in your calendar: kickoff, venue, TV and tickets, updated daily.',
+    // The landing page's share image sits at the site root, next to it.
+    share: { url: siteUrl && `${siteUrl}/`, image: siteUrl && `${siteUrl}/${landingSharePath}` },
     body: `${header('', '')}
 <main>
 <section class="wrap hero">
@@ -98,11 +104,19 @@ export function renderLanding(sections: Section[], now: Date): string {
 ${sections.map(teamCard).join('\n')}
 </section>
 </main>
-${footer('', sources, now)}`,
+${footer('', federations(teams), now)}`,
   })
 }
 
-function page(p: { root: string; title: string; description: string; body: string; stripes?: string[]; script?: string }): string {
+function page(p: {
+  root: string
+  title: string
+  description: string
+  body: string
+  share?: { url?: string; image?: string }
+  stripes?: string[]
+  script?: string
+}): string {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -110,7 +124,7 @@ function page(p: { root: string; title: string; description: string; body: strin
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(p.title)}</title>
 <meta name="description" content="${esc(p.description)}">
-<link rel="icon" href="${p.root}favicon.svg" type="image/svg+xml">
+${socialMeta(p)}<link rel="icon" href="${p.root}favicon.svg" type="image/svg+xml">
 <link rel="icon" href="${p.root}icon-512.png" type="image/png" sizes="512x512">
 <link rel="apple-touch-icon" href="${p.root}apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -136,6 +150,25 @@ ${p.body}
 `
 }
 
+// What a chat app shows when a fan pastes the page's address: the title, the description and the
+// 1200×630 share card the build renders next to the page.
+function socialMeta(p: { title: string; description: string; share?: { url?: string; image?: string } }): string {
+  const tags = [
+    ['og:title', p.title],
+    ['og:description', p.description],
+    ['og:url', p.share?.url],
+    ['og:image', p.share?.image],
+    ['og:image:width', p.share?.image && String(shareSize.width)],
+    ['og:image:height', p.share?.image && String(shareSize.height)],
+    ['twitter:card', p.share && 'summary_large_image'],
+  ]
+  // Open Graph tags go by "property", Twitter's by "name".
+  return tags
+    .filter(([, content]) => content)
+    .map(([key, content]) => `<meta ${key!.startsWith('twitter:') ? 'name' : 'property'}="${key}" content="${esc(content!)}">\n`)
+    .join('')
+}
+
 const COPY_SCRIPT = `
   for (const button of document.querySelectorAll('button[data-copy]')) {
     button.addEventListener('click', () => {
@@ -152,10 +185,10 @@ function header(root: string, nav: string): string {
 </header>`
 }
 
-function footer(root: string, sources: string[], now: Date): string {
+function footer(root: string, sources: string, now: Date): string {
   return `<footer class="wrap site-footer">
   <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Fans, not fanatics.</span></div>
-  <p>Updated daily from ${sources.join(' and ')} · last run ${longDate(now)}, ${TIME.format(now)} UTC</p>
+  <p>Updated daily from ${sources} · last run ${longDate(now)}, ${TIME.format(now)} UTC</p>
 </footer>`
 }
 
@@ -233,7 +266,7 @@ function teamCard({ team, games }: Section): string {
   return `  <a class="card" href="${team.country}/${team.sport}/" style="${stripeVars(team.colours)}">
     <div class="card-stripe"></div>
     <div class="card-body">
-      <p class="card-meta"><span>National team · ${esc(capitalise(`men's ${team.sport}`))}</span><span>From ${federation(team)}</span></p>
+      <p class="card-meta"><span>${esc(teamKind(team))}</span><span>From ${federation(team)}</span></p>
       <p class="card-title">${esc(team.name)}</p>
       <p>${next ? `Next: ${matchTitle(next)}<br><span class="num">${when(next, 'long')}</span>` : 'No games announced yet.'}</p>
       <span class="card-cta">See the games and subscribe</span>
@@ -243,25 +276,38 @@ function teamCard({ team, games }: Section): string {
 
 const matchTitle = (game: Game) => `${esc(game.home)} vs ${esc(game.away)}`
 const place = (game: Game) => [game.venue, game.city].filter(Boolean).join(', ') || 'Venue not announced'
-const federation = (team: Team) => team.source.kind.toUpperCase()
+export const federation = (team: Team) => team.source.kind.toUpperCase()
+// "UEFA and FIBA", "football, basketball and handball".
+const and = (items: string[]) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`)
+// "UEFA and FIBA": every source behind a list of teams, once each, in the teams' order.
+export const federations = (teams: Team[]) => and([...new Set(teams.map(federation))])
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
+// "National team · Men's football": the eyebrow over a team's name on its page, card and share image.
+export const teamKind = (team: Team) => `National team · ${capitalise(`men's ${team.sport}`)}`
+// "National teams · Football and basketball": the same over the landing page's share image.
+export const landingKind = (teams: Team[]) => `National teams · ${capitalise(and([...new Set(teams.map((team) => team.sport))]))}`
 
 // The kickoff as a clock at the venue reads it.
 const shift = (game: Game) => new Date(new Date(game.kickoff!).getTime() + game.utcOffsetHours! * 60 * 60 * 1000)
 
-// Venue time with the city, so "20:45 in Amsterdam" cannot be mistaken for the reader's own time;
-// the script adds the reader's time when their zone differs. "long" carries the full date,
-// "short" only the weekday, for rows that show the date beside it.
-function when(game: Game, length: 'long' | 'short'): string {
-  const date = (d: Date) => (length === 'long' ? longDate(d) : WEEKDAY.format(d))
+// Venue time with the city, so "20:45 in Amsterdam" cannot be mistaken for the reader's own time.
+// The caller picks how the date part reads; the time part is the clock at the venue with its
+// city, the UTC time when the venue's offset is unknown, or "time not announced".
+export function kickoffText(game: Game, date: (d: Date) => string): string {
   if (!game.kickoff) return `${date(new Date(game.date))} · time not announced`
   const kickoff = new Date(game.kickoff)
-  if (game.utcOffsetHours === undefined) {
-    return `<time datetime="${esc(game.kickoff)}">${date(kickoff)} · ${TIME.format(kickoff)} UTC</time>`
-  }
+  if (game.utcOffsetHours === undefined) return `${date(kickoff)} · ${TIME.format(kickoff)} UTC`
   const local = shift(game)
-  const where = game.city ? `in ${esc(game.city)}` : 'at the venue'
-  return `<time datetime="${esc(game.kickoff)}" data-offset="${game.utcOffsetHours}">${date(local)} · ${TIME.format(local)} ${where}</time>`
+  return `${date(local)} · ${TIME.format(local)} ${game.city ? `in ${game.city}` : 'at the venue'}`
+}
+
+// Same, marked up so the page's script can add the reader's own time when their zone differs.
+// "long" carries the full date, "short" only the weekday, for rows that show the date beside it.
+function when(game: Game, length: 'long' | 'short'): string {
+  const text = esc(kickoffText(game, length === 'long' ? longDate : WEEKDAY.format))
+  if (!game.kickoff) return text
+  const offset = game.utcOffsetHours === undefined ? '' : ` data-offset="${game.utcOffsetHours}"`
+  return `<time datetime="${esc(game.kickoff)}"${offset}>${text}</time>`
 }
 
 // Hard-stop stripes per docs/brand.md: 18 px per colour in a card header, 24 px in the page band,

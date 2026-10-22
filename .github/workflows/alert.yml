@@ -1,0 +1,41 @@
+# Called with `if: failure()` by publish.yml and check-feeds.yml. Opens an issue labelled "ops"
+# titled "<workflow> failed", or adds a comment to the one already open with that title, so a
+# failed daily build or a stale feed reaches Chris as an issue even if GitHub's own run
+# notifications are off (README "Keeping it running" has both settings).
+name: Alert on failure
+
+on:
+  workflow_call:
+
+jobs:
+  issue:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/github-script@v9
+        with:
+          script: |
+            // In a called workflow, `context` belongs to the caller: its name and run id.
+            const title = `${context.workflow} failed`
+            const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            const when = new Date().toISOString().slice(0, 16).replace('T', ' ')
+            const line = `${context.workflow} failed at ${when} UTC: ${run}`
+            // Listing open "ops" issues, not the search API, which can lag behind by minutes.
+            const { data: open } = await github.rest.issues.listForRepo({
+              ...context.repo, state: 'open', labels: 'ops', per_page: 100,
+            })
+            const existing = open.find((issue) => issue.title === title)
+            if (existing) {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: existing.number, body: line })
+              core.info(`Commented on #${existing.number}, which is still open`)
+              return
+            }
+            const body = [
+              line,
+              '',
+              'Open the run, read the failed step and fix the cause, then close this issue.',
+              'While it stays open, further failures are added here as comments instead of new issues.',
+            ].join('\n')
+            const { data: issue } = await github.rest.issues.create({ ...context.repo, title, body, labels: ['ops'] })
+            core.info(`Opened #${issue.number}`)

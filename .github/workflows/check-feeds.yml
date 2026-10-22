@@ -1,0 +1,65 @@
+# Does the published site carry today's build? src/ics.ts stamps every event with the build time
+# (DTSTAMP), so the newest DTSTAMP in the live feeds says when the last successful build was
+# published. A run that is disabled, failing or stuck leaves the feeds stale, and this check fails
+# loudly through the same alert path as the build. It reads our own GitHub Pages output, not a
+# data source, so it does not count against the one-request-per-source rule.
+name: Check feeds
+
+on:
+  schedule:
+    - cron: '23 10 * * *' # six hours after the build's slot; both may start hours late
+  workflow_dispatch:
+    inputs:
+      max_age_hours:
+        description: Fail when the newest DTSTAMP is older than this many hours. 0 forces a failure to test the alert.
+        default: '36'
+        type: string
+
+permissions: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compare the feeds' DTSTAMP with the clock
+        env:
+          MAX_AGE_HOURS: ${{ inputs.max_age_hours || '36' }}
+        run: |
+          node --input-type=module - <<'EOF'
+          const site = 'https://scarf.fan'
+          const feeds = ['greece/football', 'greece/basketball']
+          const maxAgeHours = Number(process.env.MAX_AGE_HOURS)
+          const fail = (message) => {
+            console.log(`::error::${message}`)
+            process.exit(1)
+          }
+          if (!Number.isFinite(maxAgeHours) || maxAgeHours < 0) fail(`max_age_hours must be a number of hours, not "${process.env.MAX_AGE_HOURS}"`)
+          const now = Date.now()
+          let newest = 0
+          for (const feed of feeds) {
+            const url = `${site}/${feed}.ics`
+            const response = await fetch(url)
+            if (!response.ok) fail(`${url} answered ${response.status}`)
+            const stamps = [...(await response.text()).matchAll(/^DTSTAMP:(\d{4})(\d\d)(\d\d)T(\d\d)(\d\d)(\d\d)Z\r?$/gm)]
+              .map(([, year, month, day, hour, minute, second]) => Date.UTC(year, month - 1, day, hour, minute, second))
+            if (stamps.length === 0) {
+              console.log(`${feed}.ics lists no games, so it carries no DTSTAMP`)
+              continue
+            }
+            const built = Math.max(...stamps)
+            console.log(`${feed}.ics was built ${((now - built) / 3600000).toFixed(1)} h ago (${new Date(built).toISOString()})`)
+            newest = Math.max(newest, built)
+          }
+          if (newest === 0) fail('No feed carries a DTSTAMP, so the time of the last build is unknown')
+          const ageHours = (now - newest) / 3600000
+          if (ageHours > maxAgeHours) fail(`The newest feed was built ${ageHours.toFixed(1)} h ago, more than ${maxAgeHours} h: the daily build has not published`)
+          console.log(`Fresh: the newest feed was built ${ageHours.toFixed(1)} h ago, within ${maxAgeHours} h`)
+          EOF
+
+  # Same alert path as the build: an "ops" issue, opened or commented on.
+  alert:
+    needs: check
+    if: failure()
+    permissions:
+      issues: write
+    uses: ./.github/workflows/alert.yml

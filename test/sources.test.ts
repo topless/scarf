@@ -4,36 +4,44 @@ import { test } from 'node:test'
 import { parseFibaGames } from '../src/fiba.ts'
 import { parseUefaMatches } from '../src/uefa.ts'
 
-// Both fixtures are cut down from real responses fetched on 2026-10-02.
+// Both fixtures are cut down from real responses: the UEFA one from the single batched probe of
+// 2026-10-17 (teamId=49,122,35), the FIBA one from the 2027 qualifiers page on 2026-10-02.
 const fixture = (name: string) => readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8')
+const uefa = () => JSON.parse(fixture('uefa-matches.json'))
+const ids = (games: { id: string }[]) => games.map((g) => g.id)
+
+test('one UEFA response holds several teams, and each team gets only its own matches', () => {
+  assert.deepEqual(ids(parseUefaMatches(uefa(), 49)), ['uefa-2047886', 'uefa-2047912'])
+  assert.deepEqual(ids(parseUefaMatches(uefa(), 122)), ['uefa-2047872', 'uefa-2047904'])
+  assert.deepEqual(ids(parseUefaMatches(uefa(), 35)), ['uefa-2047892', 'uefa-2047919'])
+  // A team with nothing scheduled gets an empty feed, not a failed build.
+  assert.deepEqual(parseUefaMatches(uefa(), 1), [])
+})
 
 test('UEFA matches become games with kickoff and venue', () => {
-  const games = parseUefaMatches(JSON.parse(fixture('uefa-matches.json')))
-  assert.equal(games.length, 3)
-  assert.deepEqual(games[1], {
-    id: 'uefa-2047926',
+  assert.deepEqual(parseUefaMatches(uefa(), 49)[1], {
+    id: 'uefa-2047912',
     competition: 'UEFA Nations League',
     home: 'Greece',
-    away: 'Germany',
-    date: '2026-10-04',
-    kickoff: '2026-10-04T18:45:00Z',
-    utcOffsetHours: 3,
-    venue: 'Toumba Stadium',
-    city: 'Thessaloniki',
+    away: 'Serbia',
+    date: '2026-11-16',
+    kickoff: '2026-11-16T19:45:00Z',
+    utcOffsetHours: 2,
+    venue: 'Panthessaliko',
+    city: 'Volos',
   })
 })
 
 test('a changed UEFA format fails loudly', () => {
-  const [match] = JSON.parse(fixture('uefa-matches.json'))
-  assert.throws(() => parseUefaMatches([{ ...match, kickOffTime: {} }]), /format changed/)
+  const [match] = uefa()
+  assert.throws(() => parseUefaMatches([{ ...match, kickOffTime: {} }], 122), /format changed/)
+  // Without team ids no team could pick out its matches, and every feed would silently empty.
+  assert.throws(() => parseUefaMatches([{ ...match, homeTeam: { internationalName: 'Czechia' } }], 122), /format changed/)
 })
 
 test('FIBA page yields only the requested team, with time and venue once announced', () => {
   const games = parseFibaGames(fixture('fiba-games.html'), 'GRE')
-  assert.deepEqual(
-    games.map((g) => g.id),
-    ['fiba-127101', 'fiba-127114', 'fiba-127107'],
-  )
+  assert.deepEqual(ids(games), ['fiba-127101', 'fiba-127114', 'fiba-127107'])
   assert.deepEqual(games[0], {
     id: 'fiba-127101',
     competition: 'FIBA Basketball World Cup 2027 European Qualifiers',
@@ -45,6 +53,17 @@ test('FIBA page yields only the requested team, with time and venue once announc
     venue: 'Telekom Center Athens',
     city: 'Athens',
   })
+})
+
+test('the same FIBA page serves every team in the competition', () => {
+  const html = fixture('fiba-games.html')
+  assert.deepEqual(ids(parseFibaGames(html, 'ESP')), ['fiba-127101', 'fiba-127107', 'fiba-127005'])
+  const [denmark] = parseFibaGames(html, 'DEN')
+  assert.equal(denmark.id, 'fiba-127005')
+  assert.equal(denmark.home, 'Denmark')
+  assert.equal(denmark.away, 'Spain')
+  assert.equal(denmark.venue, 'Farum Arena')
+  assert.equal(denmark.city, 'Farum') // the page says "Farum "
 })
 
 test('FIBA game without an announced time has no kickoff or venue', () => {

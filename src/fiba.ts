@@ -1,7 +1,8 @@
 import { fetchText, type Game } from './game.ts'
 
 // FIBA has no public API. The games page of an event embeds every game of that event as JSON
-// inside the page's Next.js data, so one request per competition is enough.
+// inside the page's Next.js data, so one request per competition is enough: the page is fetched
+// once and parsed for each team playing in it.
 
 interface FibaGame {
   gameId: number
@@ -16,9 +17,8 @@ interface FibaGame {
   hostCity: string | null
 }
 
-export async function fetchFibaGames(event: string, teamCode: string): Promise<Game[]> {
-  const html = await fetchText(`https://www.fiba.basketball/en/events/${event}/games`)
-  return parseFibaGames(html, teamCode)
+export function fetchFibaPage(event: string): Promise<string> {
+  return fetchText(`https://www.fiba.basketball/en/events/${event}/games`)
 }
 
 export function parseFibaGames(html: string, teamCode: string): Game[] {
@@ -40,8 +40,8 @@ export function parseFibaGames(html: string, teamCode: string): Game[] {
       date: g.gameDateTime?.slice(0, 10),
       kickoff: g.hasTimeGameDateTime ? `${g.gameDateTimeUTC}Z` : undefined,
       utcOffsetHours: g.hasTimeGameDateTime ? (g.utcOffset ?? undefined) : undefined,
-      venue: g.venueName ?? undefined,
-      city: g.hostCity ?? undefined,
+      venue: g.venueName?.trim() || undefined,
+      city: g.hostCity?.trim() || undefined, // the page has "Farum " for Denmark's home games
     }
     if (!game.competition || !/^\d{4}-\d{2}-\d{2}$/.test(game.date)) {
       throw new Error(`FIBA game format changed: ${JSON.stringify(game)}`)

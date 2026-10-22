@@ -41,3 +41,34 @@ jobs:
           path: dist
       - id: deploy
         uses: actions/deploy-pages@v5
+
+  # GitHub disables a scheduled workflow after 60 days without repository activity, and this
+  # repository only changes when a game's details do. Re-enabling the scheduled workflows through
+  # the Actions API counts as activity and restarts that clock (GitHub does not document this;
+  # the widely used keepalive actions rely on it, and README "Keeping it running" says what to
+  # watch for). Nothing is committed: the "protect-main" ruleset only accepts pull requests on
+  # main, so a stamp commit pushed with GITHUB_TOKEN would be rejected. A push is activity by
+  # itself, so this job only runs on the schedule and on a manual run. It does not depend on
+  # the build, so a broken source keeps the schedule, and with it the failure alerts, alive.
+  keepalive:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Re-enable the scheduled workflows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for workflow in publish.yml check-feeds.yml; do
+            gh workflow enable "$workflow" --repo "$GITHUB_REPOSITORY"
+            echo "$workflow is enabled; GitHub's 60-day inactivity clock starts again today"
+          done
+
+  # A failed run opens (or comments on) an "ops" issue; see alert.yml and the README.
+  alert:
+    needs: [publish, keepalive]
+    if: failure()
+    permissions:
+      issues: write
+    uses: ./.github/workflows/alert.yml

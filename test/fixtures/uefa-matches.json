@@ -1,46 +1,14 @@
 [
   {
-    "id": "2047951",
-    "status": "FINISHED",
-    "homeTeam": {
-      "internationalName": "Greece"
-    },
-    "awayTeam": {
-      "internationalName": "Netherlands"
-    },
-    "competition": {
-      "metaData": {
-        "name": "UEFA Nations League"
-      }
-    },
-    "kickOffTime": {
-      "date": "2026-10-01",
-      "dateTime": "2026-10-01T18:45:00Z",
-      "utcOffsetInHours": 3
-    },
-    "stadium": {
-      "translations": {
-        "officialName": {
-          "EN": "Toumba Stadium"
-        }
-      },
-      "city": {
-        "translations": {
-          "name": {
-            "EN": "Thessaloniki"
-          }
-        }
-      }
-    }
-  },
-  {
-    "id": "2047926",
+    "id": "2047872",
     "status": "UPCOMING",
     "homeTeam": {
-      "internationalName": "Greece"
+      "id": "58837",
+      "internationalName": "Czechia"
     },
     "awayTeam": {
-      "internationalName": "Germany"
+      "id": "122",
+      "internationalName": "Spain"
     },
     "competition": {
       "metaData": {
@@ -48,20 +16,20 @@
       }
     },
     "kickOffTime": {
-      "date": "2026-10-04",
-      "dateTime": "2026-10-04T18:45:00Z",
-      "utcOffsetInHours": 3
+      "date": "2026-11-12",
+      "dateTime": "2026-11-12T19:45:00Z",
+      "utcOffsetInHours": 1
     },
     "stadium": {
       "translations": {
         "officialName": {
-          "EN": "Toumba Stadium"
+          "EN": "Stadion Letná"
         }
       },
       "city": {
         "translations": {
           "name": {
-            "EN": "Thessaloniki"
+            "EN": "Prague"
           }
         }
       }
@@ -71,9 +39,11 @@
     "id": "2047886",
     "status": "UPCOMING",
     "homeTeam": {
+      "id": "95",
       "internationalName": "Netherlands"
     },
     "awayTeam": {
+      "id": "49",
       "internationalName": "Greece"
     },
     "competition": {
@@ -96,6 +66,150 @@
         "translations": {
           "name": {
             "EN": "Amsterdam"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047892",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "110",
+      "internationalName": "Portugal"
+    },
+    "awayTeam": {
+      "id": "35",
+      "internationalName": "Denmark"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-14",
+      "dateTime": "2026-11-14T19:45:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estádio Municipal de Braga"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Braga"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047904",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "122",
+      "internationalName": "Spain"
+    },
+    "awayTeam": {
+      "id": "39",
+      "internationalName": "England"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-15",
+      "dateTime": "2026-11-15T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio Metropolitano"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Madrid"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047912",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "49",
+      "internationalName": "Greece"
+    },
+    "awayTeam": {
+      "id": "147",
+      "internationalName": "Serbia"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-16",
+      "dateTime": "2026-11-16T19:45:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Panthessaliko"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Volos"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047919",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "35",
+      "internationalName": "Denmark"
+    },
+    "awayTeam": {
+      "id": "101",
+      "internationalName": "Norway"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-17",
+      "dateTime": "2026-11-17T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Parken"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Copenhagen"
           }
         }
       }
