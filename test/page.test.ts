@@ -62,18 +62,37 @@ test('team page escapes text from the sources', () => {
 test('subscribe links point at the feed the build writes, on the public address', () => {
   const html = teamPage([timed], site)
   const webcal = 'webcal://example.github.io/scarf/greece/football.ics'
-  assert.match(html, new RegExp(`<a class="btn-primary" href="${webcal}">Add to my calendar</a>`))
-  assert.match(html, new RegExp(`<a class="btn-secondary" href="${webcal}">Apple</a>`))
-  assert.ok(html.includes(`href="https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}">Google</a>`))
-  assert.ok(html.includes(`addfromweb?url=${encodeURIComponent(`${site}/greece/football.ics`)}&amp;`))
-  assert.match(html, /<input id="feed-url" type="text" readonly value="https:\/\/example\.github\.io\/scarf\/greece\/football\.ics">/)
+  assert.match(html, new RegExp(`<a class="btn-primary" href="${webcal}" data-alerts="[^"]+">Add to my calendar</a>`))
+  assert.match(html, new RegExp(`<a class="btn-secondary" href="${webcal}" data-alerts="[^"]+">Apple</a>`))
+  assert.ok(html.includes(`href="https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}" data-alerts=`))
+  assert.ok(html.includes(`addfromweb?url=${encodeURIComponent(`${site}/greece/football.ics`)}&amp;name=${encodeURIComponent('Greece football · scarf')}"`))
+  assert.match(html, /<input id="feed-url" type="text" readonly value="https:\/\/example\.github\.io\/scarf\/greece\/football\.ics" data-alerts="[^"]+">/)
   assert.match(html, /<button class="btn-secondary" type="button" data-copy="feed-url">Copy<\/button>/)
   assert.match(html, /On Google Calendar, set a notification for this calendar once — it applies to every game\./)
 })
 
+test('a checkbox offers the alerts feed: every link and the paste field carry its address', () => {
+  const html = teamPage([timed], site)
+  const alerts = 'webcal://example.github.io/scarf/greece/football-alerts.ics'
+  assert.match(
+    html,
+    /<label class="alerts-toggle" hidden><input type="checkbox" id="alerts-toggle" autocomplete="off"><span>Also tell me when a new game is announced<span class="small">An extra all-day entry on the day a new game is announced\. The game itself is in your calendar either way\.<\/span><\/span><\/label>/,
+  )
+  assert.match(html, new RegExp(`<a class="btn-primary" href="[^"]+" data-alerts="${alerts}">Add to my calendar</a>`))
+  assert.match(html, new RegExp(`<a class="btn-secondary" href="[^"]+" data-alerts="${alerts}">Apple</a>`))
+  assert.ok(html.includes(`data-alerts="https://calendar.google.com/calendar/render?cid=${encodeURIComponent(alerts)}">Google</a>`))
+  const outlook = `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(`${site}/greece/football-alerts.ics`)}&amp;name=${encodeURIComponent('Greece football + alerts · scarf')}`
+  assert.ok(html.includes(`data-alerts="${outlook}">Outlook</a>`))
+  assert.match(html, /<input id="feed-url" type="text" readonly value="[^"]+" data-alerts="https:\/\/example\.github\.io\/scarf\/greece\/football-alerts\.ics">/)
+  // The script reveals the box and swaps the links; without it a plain link still reaches the variant.
+  assert.match(html, /getElementById\('alerts-toggle'\)/)
+  assert.match(html, new RegExp(`<noscript><p class="small">Want to hear when a new game is announced\\? <a href="${alerts}">Add the feed with alerts</a> instead\\.</p></noscript>`))
+})
+
 test('without a public address the page links the feed relative to /greece/football/', () => {
   const html = teamPage([timed])
-  assert.match(html, /<a class="btn-primary" href="\.\.\/football\.ics">/)
+  assert.match(html, /<a class="btn-primary" href="\.\.\/football\.ics" data-alerts="\.\.\/football-alerts\.ics">/)
+  assert.match(html, /<a class="btn-secondary" href="\.\.\/football\.ics" data-alerts="\.\.\/football-alerts\.ics">Calendar file<\/a>/)
   assert.doesNotMatch(html, /webcal:|calendar\.google\.com|outlook|feed-url/)
 })
 
@@ -233,7 +252,7 @@ test('a new team page shows its flag, its own feed and links every other team', 
   assert.match(html, /<img src="\.\.\/\.\.\/flags\/es\.svg" width="24" height="18" alt="">/)
   assert.match(html, /National team · Men's basketball/)
   assert.match(html, /<h1>Spain basketball, in your calendar\.<\/h1>/)
-  assert.match(html, /<a class="btn-primary" href="webcal:\/\/example\.github\.io\/scarf\/spain\/basketball\.ics">/)
+  assert.match(html, /<a class="btn-primary" href="webcal:\/\/example\.github\.io\/scarf\/spain\/basketball\.ics" data-alerts="webcal:\/\/example\.github\.io\/scarf\/spain\/basketball-alerts\.ics">/)
   assert.equal(html.match(/class="team-chip"/g)?.length, teams.length)
   assert.match(html, /href="\.\.\/\.\.\/spain\/basketball\/" style="[^"]*#AA151B[^"]*" aria-current="page"/)
   assert.match(html, /href="\.\.\/\.\.\/germany\/basketball\/" style="[^"]*#000000 0px 18px, #DD0000 18px 36px, #FFCC00 36px 54px[^"]*"/)

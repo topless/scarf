@@ -1,4 +1,4 @@
-import { feedPath, landingSharePath, sharePath, shareSize, siteName, type Sport, type Team } from './config.ts'
+import { alertsFeedPath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, type Sport, type Team } from './config.ts'
 import { flagPath } from './flags.ts'
 import type { Game } from './game.ts'
 
@@ -87,7 +87,7 @@ ${teamChips(all, team)}
 </section>
 </main>
 ${footer()}`,
-    script: COPY_SCRIPT,
+    script: COPY_SCRIPT + ALERTS_SCRIPT,
   })
 }
 
@@ -191,6 +191,26 @@ const COPY_SCRIPT = `
     })
   }`
 
+// Ticking the box points every subscribe link and the paste field at the -alerts feed. Without
+// JavaScript the box stays hidden and the default links stand (a noscript line links the variant).
+const ALERTS_SCRIPT = `
+  const alertsToggle = document.getElementById('alerts-toggle')
+  if (alertsToggle) {
+    const targets = [...document.querySelectorAll('[data-alerts]')]
+    for (const el of targets) el.dataset.feed = el.tagName === 'INPUT' ? el.value : el.getAttribute('href')
+    const apply = () => {
+      for (const el of targets) {
+        const address = alertsToggle.checked ? el.dataset.alerts : el.dataset.feed
+        if (el.tagName === 'INPUT') el.value = address
+        else el.setAttribute('href', address)
+      }
+      for (const button of document.querySelectorAll('button[data-copy]')) button.textContent = 'Copy'
+    }
+    alertsToggle.addEventListener('change', apply)
+    apply()
+    alertsToggle.closest('label').hidden = false
+  }`
+
 function header(root: string, nav: string): string {
   return `<header class="wrap site-header">
   <a class="brand" href="${root || './'}">${mark(38)}<span class="wordmark">${siteName}</span></a>
@@ -204,31 +224,56 @@ function footer(): string {
 </footer>`
 }
 
+const ALERTS_LABEL = 'Also tell me when a new game is announced'
+const ALERTS_NOTE = 'An extra all-day entry on the day a new game is announced. The game itself is in your calendar either way.'
+
 function subscribePanel(team: Team, siteUrl?: string): string {
-  const https = siteUrl ? `${siteUrl}/${feedPath(team)}` : undefined
-  // The page sits at /{country}/{sport}/, the feed next to that folder at /{country}/{sport}.ics.
-  const webcal = https ? https.replace(/^https?:/, 'webcal:') : `../${team.sport}.ics`
-  const name = encodeURIComponent(`${team.name} · ${siteName}`)
-  const secondary = https
-    ? `<a class="btn-secondary" href="${esc(webcal)}">Apple</a>
-      <a class="btn-secondary" href="https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}">Google</a>
-      <a class="btn-secondary" href="https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(https)}&amp;name=${name}">Outlook</a>`
-    : `<a class="btn-secondary" href="${esc(webcal)}">Calendar file</a>`
+  const feed = feedLinks(team, false, siteUrl)
+  const alerts = feedLinks(team, true, siteUrl)
+  // Every link carries the -alerts address as well; ALERTS_SCRIPT swaps them when the box is ticked.
+  const link = (cls: string, href: string, alt: string, text: string) =>
+    `<a class="${cls}" href="${esc(href)}" data-alerts="${esc(alt)}">${text}</a>`
+  const secondary =
+    feed.apps && alerts.apps
+      ? `${link('btn-secondary', feed.webcal, alerts.webcal, 'Apple')}
+      ${link('btn-secondary', feed.apps.google, alerts.apps.google, 'Google')}
+      ${link('btn-secondary', feed.apps.outlook, alerts.apps.outlook, 'Outlook')}`
+      : link('btn-secondary', feed.webcal, alerts.webcal, 'Calendar file')
   return `    <div class="subscribe" id="subscribe">
-      <a class="btn-primary" href="${esc(webcal)}">Add to my calendar</a>
+      ${link('btn-primary', feed.webcal, alerts.webcal, 'Add to my calendar')}
       <div class="apps">
       ${secondary}
       </div>
+      <label class="alerts-toggle" hidden><input type="checkbox" id="alerts-toggle" autocomplete="off"><span>${ALERTS_LABEL}<span class="small">${ALERTS_NOTE}</span></span></label>
+      <noscript><p class="small">Want to hear when a new game is announced? <a href="${esc(alerts.webcal)}">Add the feed with alerts</a> instead.</p></noscript>
 ${
-  https
+  feed.https && alerts.https
     ? `      <div class="paste">
         <label for="feed-url">Or paste into any calendar app</label>
-        <div class="paste-row"><input id="feed-url" type="text" readonly value="${esc(https)}"><button class="btn-secondary" type="button" data-copy="feed-url">Copy</button></div>
+        <div class="paste-row"><input id="feed-url" type="text" readonly value="${esc(feed.https)}" data-alerts="${esc(alerts.https)}"><button class="btn-secondary" type="button" data-copy="feed-url">Copy</button></div>
       </div>
 `
     : ''
 }      <p class="small">Free. Updated daily from ${federation(team)}. Leave any time by deleting the calendar. ${GOOGLE_NOTE}</p>
     </div>`
+}
+
+// The addresses of one feed, default or -alerts. The page sits at /{country}/{sport}/ and the
+// feeds next to that folder, so without a public address the link is relative and the app links,
+// which need one, are left out.
+function feedLinks(team: Team, alerts: boolean, siteUrl?: string): { webcal: string; https?: string; apps?: { google: string; outlook: string } } {
+  const path = alerts ? alertsFeedPath(team) : feedPath(team)
+  if (!siteUrl) return { webcal: path.replace(/^.*\//, '../') }
+  const https = `${siteUrl}/${path}`
+  const webcal = https.replace(/^https?:/, 'webcal:')
+  return {
+    webcal,
+    https,
+    apps: {
+      google: `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}`,
+      outlook: `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(https)}&name=${encodeURIComponent(feedName(team, alerts))}`,
+    },
+  }
 }
 
 function nextGameCard(team: Team, game?: Game): string {

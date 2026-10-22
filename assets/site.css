@@ -38,6 +38,10 @@ h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(44px, 
 .paste-row { display: flex; gap: 8px; }
 .paste input { flex: 1; min-width: 0; height: 46px; box-sizing: border-box; padding: 0 12px; border: var(--border) solid var(--chalk); border-radius: var(--radius-input); background: var(--white); color: var(--ink); font: 400 14px var(--font-body); }
 .paste button { flex: none; padding: 0 16px; }
+/* The alerts toggle is hidden until the script that makes it work has run. */
+.alerts-toggle:not([hidden]) { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; font-weight: 600; line-height: 1.4; cursor: pointer; }
+.alerts-toggle input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--terrace); cursor: pointer; }
+.alerts-toggle .small { display: block; margin-top: 2px; font-weight: 400; }
 
 /* Cards */
 .card { display: flex; flex-direction: column; }

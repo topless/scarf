@@ -26,6 +26,10 @@ export interface Team {
 }
 
 export const feedPath = (team: Team): string => `${team.country}/${team.sport}.ics`
+// The optional variant with a "New game" entry on the day a game is announced; frozen once published.
+export const alertsFeedPath = (team: Team): string => `${team.country}/${team.sport}-alerts.ics`
+// The calendar name: team first, brand last. The variant says so, so a fan can tell the two apart.
+export const feedName = (team: Team, alerts = false): string => `${team.name}${alerts ? ' + alerts' : ''} · ${siteName}`
 export const sharePath = (team: Team): string => `${team.country}/${team.sport}/share.png`
 export const landingSharePath = 'share.png' // the landing page's, at the site root
 export const shareSize = { width: 1200, height: 630 } // the share image, the size chat apps expect

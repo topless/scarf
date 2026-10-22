@@ -1,5 +1,5 @@
-import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar } from 'ical-generator'
-import { siteName, type Team } from './config.ts'
+import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar, type ICalEventData } from 'ical-generator'
+import { feedName, siteName, type Sport, type Team } from './config.ts'
 import type { Game } from './game.ts'
 
 const GAME_HOURS = 2
@@ -9,16 +9,27 @@ const DEFAULT_SITE_URL = 'https://scarf.fan'
 const FEDERATION = { uefa: 'UEFA', fiba: 'FIBA' } as const
 // "Mon 16 Nov", read in UTC so a venue-local YYYY-MM-DD stays on its own day.
 const DAY = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
+const DAY_MONTH_YEAR = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' })
+// The ground each sport is played on, as the pages say it (WORDS in page.ts).
+const GROUND: Record<Sport, string> = { football: 'stadium', basketball: 'arena' }
+
+// Game id → the day (YYYY-MM-DD) the build first saw it, for games announced after scarf started
+// watching the team (src/known-games.ts).
+export type Announced = Record<string, string>
 
 // Event copy follows docs/calendar-event-spec.md, with "vs" between the teams.
-export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SITE_URL): string {
+// With `alerts` this is the -alerts variant: the same events under their own calendar name, plus
+// one all-day "New game" entry per announced game (spec § 4). The default feed never carries those.
+export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SITE_URL, alerts?: Announced): string {
   const teamPage = `${siteUrl}/${team.country}/${team.sport}`
   const footer = `Kept up to date by ${siteName} · ${teamPage.replace(/^https?:\/\//, '')}`
   // Header fields: team first, brand last, the team's colour.
   const calendar = ical({
     prodId: { company: siteName, product: 'feeds', language: 'EN' },
-    name: `${team.name} · ${siteName}`,
-    description: `Every game of the ${team.side} — kickoff, venue, TV, tickets. Kept up to date by ${siteName}.`,
+    name: feedName(team, alerts !== undefined),
+    description: alerts
+      ? `Every game of the ${team.side} — kickoff, venue, TV, tickets — and a note on the day a new game is announced. Kept up to date by ${siteName}.`
+      : `Every game of the ${team.side} — kickoff, venue, TV, tickets. Kept up to date by ${siteName}.`,
     color: team.colours[0],
     ttl: 12 * 60 * 60,
   })
@@ -71,7 +82,29 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
     // drops past games before they reach here, and a sale day with no game has nothing to sell.
     if (game.onSale && game.tickets) ticketSaleEvent(calendar, game, now, footer)
   }
+  // Only games still in the feed are announced, so an alert leaves with its game.
+  for (const game of games) {
+    const firstSeen = alerts?.[game.id]
+    if (firstSeen) calendar.createEvent(newGameEvent(team, game, firstSeen, now, teamPage, footer))
+  }
   return calendar.toString()
+}
+
+// An all-day entry on the day the build first saw the game. It says what is still to come; the
+// game itself sits in the same calendar under its own UID.
+function newGameEvent(team: Team, game: Game, firstSeen: string, now: Date, teamPage: string, footer: string): ICalEventData {
+  const federation = FEDERATION[team.source.kind]
+  const ground = GROUND[team.sport]
+  const toFollow = game.kickoff ? undefined : game.venue ? 'time to follow' : `time and ${ground} to follow`
+  return {
+    id: `${game.id}-new@${siteName}`,
+    stamp: now,
+    start: new Date(firstSeen),
+    allDay: true,
+    summary: `New game · ${game.home} vs ${game.away}, ${DAY_MONTH_YEAR.format(new Date(game.date))}`,
+    description: lines([`Just announced by ${federation}. It's already in this calendar${toFollow ? ` — ${toFollow}` : ''}.`, '', footer]),
+    url: `${teamPage}/`,
+  }
 }
 
 // Venue-local time with the city, so the copy never pretends to be the reader's time; "at the

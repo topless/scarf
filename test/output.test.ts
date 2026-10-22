@@ -143,6 +143,52 @@ test('unknown lines drop out, and the footer and team page follow the site URL',
   assert.ok(lines.includes('URL;VALUE=URI:https://example.github.io/scarf/greece/football/'))
 })
 
+// Spec § 4: the -alerts variant carries the default feed plus one all-day entry per newly seen game.
+const announced = { 'fiba-127100': '2026-10-20' }
+
+test('the alerts variant announces a newly seen game; the default feed never does', () => {
+  const alerts = toIcs(basketball, [ukraine], now, undefined, announced)
+  const lines = icsLines(alerts)
+  assert.ok(lines.includes('X-WR-CALNAME:Greece basketball + alerts · scarf'))
+  assert.ok(lines.includes('X-APPLE-CALENDAR-COLOR:#0D5EAF'))
+  assert.ok(lines.includes('UID:fiba-127100@scarf'))
+  assert.equal(lines.filter((l) => l === 'BEGIN:VEVENT').length, 2)
+  assert.deepEqual(vevent(alerts, 'fiba-127100-new@scarf'), [
+    'BEGIN:VEVENT',
+    'UID:fiba-127100-new@scarf',
+    'SEQUENCE:0',
+    'DTSTART;VALUE=DATE:20261020',
+    'X-MICROSOFT-CDO-ALLDAYEVENT:TRUE',
+    'X-MICROSOFT-MSNCALENDAR-ALLDAYEVENT:TRUE',
+    'SUMMARY:New game · Greece vs Ukraine\\, 26 Feb 2027',
+    "DESCRIPTION:Just announced by FIBA. It's already in this calendar — time and arena to follow.\\n\\nKept up to date by scarf · scarf.fan/greece/basketball",
+    'URL;VALUE=URI:https://scarf.fan/greece/basketball/',
+    'END:VEVENT',
+  ])
+
+  const plain = toIcs(basketball, [ukraine], now)
+  assert.ok(icsLines(plain).includes('X-WR-CALNAME:Greece basketball · scarf'))
+  assert.doesNotMatch(plain, /-new@scarf|New game|alerts/)
+
+  // A game the first build seeded is not announced, even in the variant.
+  const quiet = icsLines(toIcs(basketball, [ukraine], now, undefined, {}))
+  assert.ok(quiet.includes('X-WR-CALNAME:Greece basketball + alerts · scarf'))
+  assert.equal(quiet.filter((l) => l === 'BEGIN:VEVENT').length, 1)
+})
+
+test('a new game already timed gets the short line; football has a stadium, not an arena', () => {
+  const alert = (game: Game) => vevent(toIcs(football, [game], now, undefined, { 'uefa-2047926': '2026-10-20' }), 'uefa-2047926-new@scarf')
+  const footer = 'Kept up to date by scarf · scarf.fan/greece/football'
+  const timedAlert = alert(serbia)
+  assert.ok(timedAlert.includes('SUMMARY:New game · Greece vs Serbia\\, 16 Nov 2026'))
+  assert.ok(timedAlert.includes(`DESCRIPTION:Just announced by UEFA. It's already in this calendar.\\n\\n${footer}`))
+  assert.ok(alert({ ...serbia, kickoff: undefined, venue: undefined }).includes(`DESCRIPTION:Just announced by UEFA. It's already in this calendar — time and stadium to follow.\\n\\n${footer}`))
+  assert.ok(alert({ ...serbia, kickoff: undefined }).includes(`DESCRIPTION:Just announced by UEFA. It's already in this calendar — time to follow.\\n\\n${footer}`))
+  // The game page is the link; the game's own entry carries the ticket link.
+  assert.ok(timedAlert.includes('URL;VALUE=URI:https://scarf.fan/greece/football/'))
+  assert.ok(!timedAlert.includes('BEGIN:VALARM'))
+})
+
 test('a kickoff without a city reads "at the venue", as on the page', () => {
   const lines = vevent(toIcs(football, [noCity], now), 'uefa-3@scarf')
   assert.ok(
@@ -152,19 +198,31 @@ test('a kickoff without a city reads "at the venue", as on the page', () => {
   )
 })
 
-test('feed copy passes the voice checks', () => {
+test('feed copy passes the voice checks, in the default feed and the alerts variant', () => {
   // Every sample once; the spec's game, a no-time game and a no-city game each with a sale day.
   const games = [timed, unscheduled, onSale, { ...ukraine, tickets: 'https://tickets.example/u', onSale: '2027-01-15' }, { ...noCity, onSale: '2026-11-02' }]
-  const ics = toIcs(football, games, now).replaceAll(/\r\n[ \t]/g, '')
-  assert.doesNotMatch(ics, /!/)
-  assert.doesNotMatch(ics, /\p{Extended_Pictographic}/u)
-  assert.doesNotMatch(ics, /notification|don't miss|\bTBA\b|\bTBC\b|\bTBD\b/i)
-  const kickoffs = [...ics.matchAll(/Kickoff \d{2}:\d{2}(.{0,13})/g)]
-  assert.equal(kickoffs.length, 3)
-  for (const [, after] of kickoffs) assert.match(after, /^( in \S| at the venue)/)
-  // The sale event's game line reads its time the same way, or says the time is not announced.
-  const gameLines = [...ics.matchAll(/The game: (.*?)\\n/g)].map(([, line]) => line)
-  assert.deepEqual(gameLines, ['Mon 16 Nov\\, 21:45 in Volos\\, Panthessaliko Stadium', 'Fri 26 Feb\\, time not announced', 'Mon 16 Nov\\, 21:45 at the venue'])
+  // The variant announces every one of them, so each "New game" wording is checked too.
+  const everyGameNew = Object.fromEntries(games.map((game) => [game.id, '2026-10-01']))
+  for (const feed of [toIcs(football, games, now), toIcs(football, games, now, undefined, everyGameNew)]) {
+    const ics = feed.replaceAll(/\r\n[ \t]/g, '')
+    assert.doesNotMatch(ics, /!/)
+    assert.doesNotMatch(ics, /\p{Extended_Pictographic}/u)
+    assert.doesNotMatch(ics, /notification|don't miss|\bTBA\b|\bTBC\b|\bTBD\b/i)
+    const kickoffs = [...ics.matchAll(/Kickoff \d{2}:\d{2}(.{0,13})/g)]
+    assert.equal(kickoffs.length, 3)
+    for (const [, after] of kickoffs) assert.match(after, /^( in \S| at the venue)/)
+    // The sale event's game line reads its time the same way, or says the time is not announced.
+    const gameLines = [...ics.matchAll(/The game: (.*?)\\n/g)].map(([, line]) => line)
+    assert.deepEqual(gameLines, ['Mon 16 Nov\\, 21:45 in Volos\\, Panthessaliko Stadium', 'Fri 26 Feb\\, time not announced', 'Mon 16 Nov\\, 21:45 at the venue'])
+  }
+})
+
+test('the alerts variant carries every event of the default feed, sale days included', () => {
+  const games = [timed, unscheduled, onSale]
+  const uids = (ics: string) => icsLines(ics).filter((line) => line.startsWith('UID:'))
+  const plain = uids(toIcs(football, games, now))
+  assert.ok(plain.includes('UID:uefa-2047926-tickets@scarf'))
+  assert.deepEqual(uids(toIcs(football, games, now, undefined, { 'fiba-2': '2026-10-01' })), [...plain, 'UID:fiba-2-new@scarf'])
 })
 
 test('nothing a fan reads carries the working title or a TBA', () => {

@@ -1,10 +1,11 @@
-import { cp, mkdir, writeFile } from 'node:fs/promises'
+import { cp, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { setTimeout as pause } from 'node:timers/promises'
-import { feedPath, landingSharePath, sharePath, teams, type Team } from './config.ts'
+import { alertsFeedPath, feedPath, landingSharePath, sharePath, teams, type Team } from './config.ts'
 import { fetchFibaPage, parseFibaGames } from './fiba.ts'
 import { flagFile, flagLicenseFile, flagPath } from './flags.ts'
 import { byStart, withDetails, type Game } from './game.ts'
 import { toIcs } from './ics.ts'
+import { announced, recordSeen, type KnownGames } from './known-games.ts'
 import { manual } from './manual.ts'
 import { renderLanding, renderTeamPage, type Section } from './page.ts'
 import { renderLandingShareImage, renderShareImage } from './share.ts'
@@ -21,6 +22,17 @@ import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
 const now = new Date()
 const today = now.toISOString().slice(0, 10)
 const siteUrl = process.env.SITE_URL?.replace(/\/$/, '')
+
+// The games earlier builds saw, so this one can tell a newly announced game from an old one for
+// the -alerts feeds. Not in git: the Actions job keeps it in its cache (.github/workflows/publish.yml).
+// Missing on the first build, or once the cache is lost, which seeds it again and announces nothing.
+const KNOWN_GAMES = 'known-games.json'
+const known = JSON.parse(
+  await readFile(KNOWN_GAMES, 'utf8').catch((error: NodeJS.ErrnoException) => {
+    if (error.code === 'ENOENT') return '{}'
+    throw error
+  }),
+) as KnownGames
 
 const uefaTeamIds = teams.flatMap(({ source }) => (source.kind === 'uefa' ? [source.teamId] : []))
 const uefaMatches = uefaTeamIds.length ? await fetchUefaMatches(uefaTeamIds, today) : []
@@ -44,10 +56,14 @@ for (const team of teams) {
     .filter((game) => game.date >= today)
     .map((game) => withDetails(game, team.defaults, manual[game.id]))
     .sort(byStart)
+  const key = `${team.country}/${team.sport}`
+  const seen = recordSeen(known[key], games.map((game) => game.id), today)
+  known[key] = seen.feed
   await mkdir(`dist/${team.country}/${team.sport}`, { recursive: true })
   await writeFile(`dist/${feedPath(team)}`, toIcs(team, games, now, siteUrl))
+  await writeFile(`dist/${alertsFeedPath(team)}`, toIcs(team, games, now, siteUrl, announced(seen.feed)))
   sections.push({ team, games })
-  console.log(`${team.name}: ${games.length} upcoming games`)
+  console.log(`${team.name}: ${games.length} upcoming games, ${seen.fresh.length} new`)
 }
 for (const section of sections) {
   const { team, games } = section
@@ -61,3 +77,5 @@ await cp('assets', 'dist', { recursive: true })
 // MIT asks. Every flag was already read for its share image, so a wrong code failed before this.
 for (const code of new Set(teams.map((team) => team.flag))) await cp(flagFile(code), `dist/${flagPath(code)}`)
 await cp(flagLicenseFile(), 'dist/flags/LICENSE')
+// Last, so a build that fails part-way leaves the file as it was; the job caches it after the deploy.
+await writeFile(KNOWN_GAMES, JSON.stringify(known, null, 2) + '\n')
