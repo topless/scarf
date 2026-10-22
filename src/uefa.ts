@@ -23,6 +23,8 @@ export async function fetchUefaMatches(teamIds: number[], today: string): Promis
   const url = `https://match.uefa.com/v5/matches?teamId=${teamIds.join(',')}&fromDate=${today}&toDate=${to}&limit=${LIMIT}&offset=0&order=ASC`
   const matches = JSON.parse(await fetchText(url)) as UefaMatch[]
   if (!Array.isArray(matches)) throw new Error('UEFA response format changed: not a list of matches')
+  // One team may have nothing scheduled; no match for any team means the request stopped working.
+  if (matches.length === 0) throw new Error(`UEFA returned no matches at all for teamId=${teamIds.join(',')}: the request may have stopped working`)
   if (matches.length >= LIMIT) throw new Error(`UEFA returned ${LIMIT} matches; paging is needed`)
   return matches
 }
