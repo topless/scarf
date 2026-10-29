@@ -15,6 +15,14 @@ in your calendar." Principle: fans, not fanatics.
 - Manual data: `src/config.ts` (teams, ids, TV, ticket URLs), `src/manual.ts` (per-game overrides
   keyed by source id, e.g. `fiba-127107`). Hand-entered time/venue yield to the official source.
 
+## Workflow
+
+- Every change request, however small, goes through the `feature` skill (`/feature <request or #issue>`,
+  `.claude/skills/feature/SKILL.md`): issue with acceptance criteria → plan as a comment on the issue →
+  branch → implement with tests → review (`scripts/preflight.sh`, `/code-review`) → verify each criterion
+  → PR that closes the issue → check the deploy. No PR without an issue; merging is Chris's call.
+- Issue and PR shapes live in `.github/ISSUE_TEMPLATE/feature.md` and `.github/pull_request_template.md`.
+
 ## Paths (frozen — fans' subscriptions point here)
 
 - `/{country}/{sport}.ics` — one feed per team, e.g. `/greece/football.ics`, `/greece/basketball.ics`.
