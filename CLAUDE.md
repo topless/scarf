@@ -28,10 +28,12 @@ in your calendar." Motto: "Wrapped up in the game."
 - UIDs come from source ids and never change. Updates must land in place, never duplicate.
 - `SUMMARY`: `Home vs Away` as the federation lists it; no competition, sport or emoji.
   All-day placeholder while kickoff is unknown: `Home vs Away · time not announced`.
-- `DESCRIPTION`: competition · "Kickoff HH:MM in City" · "TV: …" · "Tickets: …" · blank line ·
+- Each sport's own words, the same in the feed as on its page (`WORDS` in `src/page.ts`): kickoff,
+  kicks off, stadium for football; tip-off, tips off, arena for basketball.
+- `DESCRIPTION`: competition · "Kickoff HH:MM in City" (or "Tip-off …") · "TV: …" · "Tickets: …" · blank line ·
   "Kept up to date by scarf · {canonical}/{country}/{sport}". Six lines max.
 - `LOCATION`: full venue, city, country. `DURATION`: 2 h. `URL`: ticket link while on sale, else team page.
-- `VALARM` 60 min before, description `"{Home} vs {Away} kicks off in an hour · {TV}"`.
+- `VALARM` 60 min before, description `"{Home} vs {Away} kicks off in an hour · {TV}"` ("tips off" for basketball).
 - Header: `X-WR-CALNAME:{Team} {sport} · scarf`, `X-APPLE-CALENDAR-COLOR` = team's first stripe colour.
 
 ## Voice (applies to every string a fan can read)
@@ -46,6 +48,7 @@ in your calendar." Motto: "Wrapped up in the game."
 
 - Wool `#FBF8F2` ground · Ink `#17171C` text · Terrace red `#D7263D` actions · Stand `#6B675F`
   captions · Chalk `#E6E1D8` rules. Team stripes carry the colour; the brand itself stays neutral.
+  One exception: the basketball icon is the ball's own orange `#D9600F` (docs/brand.md).
 - Type: Bricolage Grotesque (display, 700–800, tight tracking), Albert Sans (UI/body). Google Fonts.
 - Wordmark is lowercase `scarf`. Mark: the striped scarf (`assets/scarf-mark.svg`), recoloured per
   team on team surfaces (`assets/scarf-mark-greece.svg`).

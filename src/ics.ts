@@ -1,6 +1,7 @@
 import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar, type ICalEventData } from 'ical-generator'
-import { feedName, siteName, type Sport, type Team } from './config.ts'
+import { feedName, siteName, type Team } from './config.ts'
 import type { Game } from './game.ts'
+import { capitalise, WORDS } from './page.ts'
 
 const GAME_HOURS = 2
 const REMINDER_HOURS = 1
@@ -10,17 +11,17 @@ const FEDERATION = { uefa: 'UEFA', fiba: 'FIBA' } as const
 // "Mon 16 Nov", read in UTC so a venue-local YYYY-MM-DD stays on its own day.
 const DAY = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
 const DAY_MONTH_YEAR = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' })
-// The ground each sport is played on, as the pages say it (WORDS in page.ts).
-const GROUND: Record<Sport, string> = { football: 'stadium', basketball: 'arena' }
 
 // Game id → the day (YYYY-MM-DD) the build first saw it, for games announced after scarf started
 // watching the team (src/known-games.ts).
 export type Announced = Record<string, string>
 
-// Event copy follows docs/calendar-event-spec.md, with "vs" between the teams.
+// Event copy follows docs/calendar-event-spec.md, with "vs" between the teams and each sport's own
+// words, the same as on its page (WORDS in page.ts).
 // With `alerts` this is the -alerts variant: the same events under their own calendar name, plus
 // one all-day "New game" entry per announced game (spec § 4). The default feed never carries those.
 export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SITE_URL, alerts?: Announced): string {
+  const words = WORDS[team.sport]
   const teamPage = `${siteUrl}/${team.country}/${team.sport}`
   const footer = `Kept up to date by ${siteName} · ${teamPage.replace(/^https?:\/\//, '')}`
   // Header fields: team first, brand last, the team's colour.
@@ -28,8 +29,8 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
     prodId: { company: siteName, product: 'feeds', language: 'EN' },
     name: feedName(team, alerts !== undefined),
     description: alerts
-      ? `Every game of the ${team.side} — kickoff, venue, TV, tickets — and a note on the day a new game is announced. Kept up to date by ${siteName}.`
-      : `Every game of the ${team.side} — kickoff, venue, TV, tickets. Kept up to date by ${siteName}.`,
+      ? `Every game of the ${team.side} — ${words.start}, venue, TV, tickets — and a note on the day a new game is announced. Kept up to date by ${siteName}.`
+      : `Every game of the ${team.side} — ${words.start}, venue, TV, tickets. Kept up to date by ${siteName}.`,
     color: team.colours[0],
     ttl: 12 * 60 * 60,
   })
@@ -49,7 +50,7 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
       const end = new Date(start.getTime() + GAME_HOURS * 60 * 60 * 1000)
       const description = [
         game.competition,
-        kickoffLine(game, city),
+        kickoffLine(game, city, words.start),
         game.tv ? `TV: ${game.tv}` : undefined,
         game.tickets ? `Tickets: ${ticketHost(game.tickets)}` : undefined,
         '',
@@ -62,14 +63,14 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
       event.createAlarm({
         type: ICalAlarmType.display,
         trigger: REMINDER_HOURS * 60 * 60,
-        description: [`${title} kicks off in an hour`, tv].filter(Boolean).join(' · '),
+        description: [`${title} ${words.starts} in an hour`, tv].filter(Boolean).join(' · '),
       })
     } else {
       // All-day placeholder until the time is announced; the same UID later becomes a timed event.
       const federation = FEDERATION[team.source.kind]
       const description = game.venue
         ? [game.competition, `We'll fill in the time as soon as ${federation} publishes it.`, '', footer]
-        : [game.competition, 'Venue not announced', `We'll fill in the time and arena as soon as ${federation} publishes them.`, '', footer]
+        : [game.competition, 'Venue not announced', `We'll fill in the time and ${words.ground} as soon as ${federation} publishes them.`, '', footer]
       calendar.createEvent({
         ...details,
         summary: `${title} · time not announced`,
@@ -94,7 +95,7 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
 // game itself sits in the same calendar under its own UID.
 function newGameEvent(team: Team, game: Game, firstSeen: string, now: Date, teamPage: string, footer: string): ICalEventData {
   const federation = FEDERATION[team.source.kind]
-  const ground = GROUND[team.sport]
+  const { ground } = WORDS[team.sport]
   const toFollow = game.kickoff ? undefined : game.venue ? 'time to follow' : `time and ${ground} to follow`
   return {
     id: `${game.id}-new@${siteName}`,
@@ -107,12 +108,13 @@ function newGameEvent(team: Team, game: Game, firstSeen: string, now: Date, team
   }
 }
 
-// Venue-local time with the city, so the copy never pretends to be the reader's time; "at the
-// venue" until the city is known, as on the page. Dropped while the venue's offset is unknown;
-// the calendar still shows the kickoff in the reader's own zone.
-function kickoffLine(game: Game, city: string | undefined): string | undefined {
+// "Kickoff 21:45 in Volos", "Tip-off 20:00 in Athens": venue-local time with the city, so the copy
+// never pretends to be the reader's time; "at the venue" until the city is known, as on the page.
+// Dropped while the venue's offset is unknown; the calendar still shows the start in the reader's
+// own zone.
+function kickoffLine(game: Game, city: string | undefined, start: string): string | undefined {
   const time = localTime(game, city)
-  return time && `Kickoff ${time}`
+  return time && `${capitalise(start)} ${time}`
 }
 
 // "21:45 in Volos", "21:45 at the venue" while the city is unknown, or undefined while the kickoff
