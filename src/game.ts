@@ -13,6 +13,7 @@ export interface Game {
   tv?: string
   tickets?: string
   note?: string
+  onSale?: string // YYYY-MM-DD at the venue: the day tickets go on sale, kept by hand in manual.ts
 }
 
 // What the sources don't provide, kept by hand in config.ts and manual.ts.
@@ -24,6 +25,7 @@ export interface Details {
   tv?: string
   tickets?: string
   note?: string
+  onSale?: string
 }
 
 // The source wins for time and place once it has them; hand-kept values only fill the gaps.
@@ -37,6 +39,7 @@ export function withDetails(game: Game, teamDefaults: Details, manual: Details =
     tv: manual.tv ?? teamDefaults.tv,
     tickets: manual.tickets ?? teamDefaults.tickets,
     note: manual.note,
+    onSale: manual.onSale ?? game.onSale,
   }
 }
 
@@ -47,6 +50,7 @@ export function byStart(a: Game, b: Game): number {
 export async function fetchText(url: string): Promise<string> {
   const res = await fetch(url, {
     headers: { 'User-Agent': 'scarf/0.1 (personal fixture calendar)' },
+    signal: AbortSignal.timeout(30_000), // fail in 30 s, not after GitHub's six-hour job limit
   })
   if (!res.ok) throw new Error(`${res.status} ${res.statusText} for ${url}`)
   return res.text()

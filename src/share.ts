@@ -3,6 +3,7 @@ import { Resvg, initWasm } from '@resvg/resvg-wasm'
 import satori from 'satori'
 import { html } from 'satori-html'
 import { shareSize, siteName, type Team } from './config.ts'
+import { readFlag } from './flags.ts'
 import type { Game } from './game.ts'
 import { federation, federations, kickoffText, landingKind, shortDate, teamKind } from './page.ts'
 
@@ -15,9 +16,8 @@ import { federation, federations, kickoffText, landingKind, shortDate, teamKind 
 const { width: WIDTH, height: HEIGHT } = shareSize
 export const SHARE_MAX_BYTES = 300 * 1024
 
-// The site's address without the scheme, as printed in a card's footer. The default host is the
-// GitHub Pages one until the custom domain exists (see HANDOVER.md).
-const DEFAULT_HOST = 'topless.github.io/scarf'
+// The site's address without the scheme, as printed in a card's footer.
+const DEFAULT_HOST = 'scarf.fan'
 
 const WOOL = '#FBF8F2'
 const INK = '#17171C'
@@ -25,10 +25,9 @@ const RED = '#D7263D'
 const STAND = '#6B675F'
 const DISPLAY = "'Bricolage Grotesque', sans-serif"
 
-// The card for a team and its next game as a PNG, the flag read from the team's asset.
+// The card for a team and its next game as a PNG, the flag read from flag-icons.
 export async function renderShareImage(team: Team, next: Game | undefined, siteUrl?: string): Promise<Buffer> {
-  const flag = team.flag ? await readFile(new URL(`../assets/${team.flag}`, import.meta.url), 'utf8') : undefined
-  return renderSharePng(renderShareCard(team, next, siteUrl, flag))
+  return renderSharePng(renderShareCard(team, next, siteUrl, await readFlag(team)))
 }
 
 // The card for the landing page as a PNG.
@@ -37,13 +36,14 @@ export function renderLandingShareImage(teams: Team[], siteUrl?: string): Promis
 }
 
 // A team's card: its stripe across the top, its flag and kind over the headline, the large mark
-// in its colours, and its next game under a NEXT pill.
+// in its colours, and its next game under a NEXT pill. The flag is optional so a card can be laid
+// out without one; the build always passes it, in the 4:3 box flag-icons draws for.
 export function renderShareCard(team: Team, next: Game | undefined, siteUrl?: string, flagSvg?: string): string {
   const [band, ...stripes] = team.colours
   return card(
     {
       band: stripeBand(team.colours),
-      eyebrow: `${flagSvg ? image(flagSvg, 30, 20) : ''}<span>${esc(teamKind(team))}</span>`,
+      eyebrow: `${flagSvg ? image(flagSvg, 32, 24) : ''}<span>${esc(teamKind(team))}</span>`,
       headline: `${team.name}, in your calendar.`,
       label: 'NEXT',
       labelColour: RED,

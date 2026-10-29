@@ -7,7 +7,7 @@ card header, the share image and the recoloured mark.
 
 - Name: **scarf** — lowercase wordmark, always. "Scarf" only at the start of a sentence.
 - Line: **Your colours, in your calendar.**
-- Principle: **Fans, not fanatics.**
+- Motto: **Wrapped up in the game.**
 
 ## Colour tokens
 
@@ -42,7 +42,25 @@ Each team has an ordered colour list taken from its flag or kit. Render as hard-
 | A club | from its kit; placeholder stripes `#E6E1D8` / `#FBF8F2` until set | — |
 
 Stripe sizes: 12–14 px band as a card header (with a 1.5 px ink border below), 24–28 px band at the
-top of a page or share card, 12 px × 28–30 px pill inside a chip, 5 px stripes in that pill.
+top of a page or share card.
+
+## Countries and sports
+
+**Colour says who, lines say what.** Stripes alone collide (England and Switzerland are both red and
+white), so a country is its flag (from flag-icons), its name and its stripes. A sport never takes a
+team colour: it is a ball icon, a line drawing of the pitch or court, and its own words (kickoff and
+stadium, tip-off and arena). The icons and drawings live with each sport's words in `src/page.ts`.
+
+- Ball icons: stroke SVG like the other icons. The football is in ink, its pentagons filled (the
+  centre one and the five cut by the rim) so dark and light patches alternate, with its seams at
+  1.4 so the hexagons stay open at 18 px.
+- Drawings: ink lines at 28 % opacity, stroke 1.6, on wool, between a card's stripe and its body.
+  Decoration only: hidden from screen readers, the words do the telling.
+
+**The one exception: the basketball is orange `#D9600F`**, the ball's own colour, used only for the
+basketball icon. It passes the 3:1 that a meaningful graphic needs (3.5:1 on wool, 3.7:1 on white,
+4.8:1 on ink) and sits at hue 24°, well clear of terrace red's 352°, so it never reads as an action.
+The football icon stays ink. Where a sport has no team yet, its icon greys out to Stand like the text.
 
 ## Typography
 
@@ -76,8 +94,11 @@ Never rotate the mark further, never stretch, never add a drop shadow.
 
 - **Primary button** — Terrace red fill, white text, 700, height 52–56 px, radius 12 px.
 - **Secondary button** — transparent, 1.5 px ink border, ink text 600, height 44–48 px, radius 12 px.
-- **Nav pill / chip** — height 44 px (nav) or 34 px (chip), radius 999 px, 1.5 px border; a team chip
-  carries its stripe pill at the left. "Add" chips use a dashed red border.
+- **Nav pill / chip** — height 44 px, radius 999 px, 1.5 px border; a country chip carries its flag
+  (20 × 15 px) at the left. "Add" chips use a dashed red border.
+- **Sport switch** — a white pill holding one 40 px segment per sport (ball icon and name), the
+  current one filled ink. Only on a team page whose country has more than one sport.
+- **Sport tag** — 34 px white pill, 1.5 px ink border, ball icon and "Men's football · UEFA".
 - **Card** — white, 1.5 px ink border, radius 16 px, `overflow: hidden`; team cards open with a 14 px
   stripe header and a 1.5 px ink rule under it. Padding 24–28 px.
 - **Input** — height 44–46 px, 1.5 px chalk border, radius 10 px, white.
@@ -87,9 +108,10 @@ Never rotate the mark further, never stretch, never add a drop shadow.
 
 ## Voice
 
-- Warm, communal, a little cheeky: the friend who always knows when we play.
+- Warm, communal, a little cheeky: the friend who always knows when we play. Cheerful about the
+  team, the players and the game; never preachy.
 - "We" is the team, "you" is the fan. Sentence case. No exclamation marks, no emoji.
 - Times name their city ("21:45 in Volos"). Unknowns are said plainly: "time not announced",
   "venue not announced". Never TBA, TBC, "don't miss out", "notification".
 - Colour comes from the teams, never from us: no gradients, no decorative red fills, one red element
-  per screen is plenty.
+  per screen is plenty. The orange basketball is the one sport colour (see Countries and sports).

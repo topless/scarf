@@ -2,9 +2,10 @@
 
 Your colours, in your calendar. scarf publishes one subscribable calendar feed per national team:
 every game with kickoff, venue, TV channel and ticket link, and a reminder an hour before. Fans
-subscribe once, and the calendar they already use keeps itself up to date. Fans, not fanatics.
+subscribe once, and the calendar they already use keeps itself up to date. Wrapped up in the game.
 
-Teams so far: Greece and Spain (men's football and basketball), France and Germany (men's basketball).
+Teams so far: Greece, Spain and Germany (men's football and basketball), France (men's basketball),
+Switzerland and England (men's football).
 The identity, the exact calendar-event copy and the backlog come from the design handover:
 [HANDOVER.md](HANDOVER.md), [docs/brand.md](docs/brand.md),
 [docs/calendar-event-spec.md](docs/calendar-event-spec.md), [docs/issues.md](docs/issues.md).
@@ -16,11 +17,14 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
 1. fetches the games from the official sources: one UEFA request for every football team, and one FIBA
    page per basketball competition, shared by the teams playing in it;
 2. adds what no source provides (TV channel, ticket link) from [src/config.ts](src/config.ts) and [src/manual.ts](src/manual.ts);
-3. writes one `dist/{country}/{sport}.ics` per team and `dist/index.html`, which GitHub Pages serves;
+3. writes one `dist/{country}/{sport}.ics`, its `-alerts` variant and one team page `dist/{country}/{sport}/index.html`
+   per team, and the landing page `dist/index.html` listing every team, which GitHub Pages serves;
 4. renders a 1200×630 share image per team at `dist/{country}/{sport}/share.png` and one for the landing
    page at `dist/share.png`, the card a chat app shows when someone pastes a page's address, from
    [src/share.ts](src/share.ts): a team's in its colours with its next game, the landing page's in the
-   brand colours with every team's name.
+   brand colours with every team's name;
+5. records the games it saw in `known-games.json`, which the Actions job keeps in its cache between runs
+   (not in git), so the next run can tell a newly announced game from an old one.
 
 If a source cannot be fetched or its format changed, the build fails and the last published files stay online.
 
@@ -29,7 +33,11 @@ If a source cannot be fetched or its format changed, the build fails and the las
 Subscriptions point at these paths, so they are frozen (see [HANDOVER.md](HANDOVER.md)):
 
 - `/{country}/{sport}.ics`: one feed per team, for example `/greece/football.ics` and `/greece/basketball.ics`.
-- `/`: the page listing every team. Team pages at `/{country}/{sport}/` are planned.
+- `/{country}/{sport}-alerts.ics`: the same feed plus an all-day "New game" entry on the day a game is announced,
+  for fans who tick "Also tell me when a new game is announced" on the team page.
+- `/{country}/{sport}/`: the team's page, for example `/greece/football/`, with its share image at
+  `/{country}/{sport}/share.png`.
+- `/`: the page listing every team.
 
 Each event's `UID` is the source's id (`uefa-…`, `fiba-…`) and never changes, so an updated game
 replaces the old entry instead of duplicating it.
@@ -38,6 +46,12 @@ replaces the old entry instead of duplicating it.
 
 The repository must be public (GitHub Pages on a free plan). In the repository settings, under
 Pages, set the source to "GitHub Actions"; the first run fails until that is done.
+
+The site lives at `https://scarf.fan`. The domain's DNS is at Cloudflare: four `A` and four `AAAA`
+records on the apex to GitHub Pages' addresses, and `www` as a `CNAME` to `topless.github.io`, all
+"DNS only" (grey cloud) so GitHub can issue the certificate. Under Pages, the custom domain is
+`scarf.fan` with "Enforce HTTPS" on. The build takes its address from that setting
+(`SITE_URL`), so no `CNAME` file is needed.
 
 ## Running it
 
@@ -51,16 +65,26 @@ npm test
 npm run build
 ```
 
+A local build also writes `known-games.json` in the repository root, which git ignores.
+
 ## Maintaining it by hand
 
 - **TV channel and default ticket link** are per team in [src/config.ts](src/config.ts).
 - **One game's details** (time, venue, tickets, a note) go in [src/manual.ts](src/manual.ts), keyed by the game id.
   The id is the first part of the event's `UID` in the calendar file, for example `fiba-127107`.
   Time and venue entered by hand are used only until the official source has its own.
+- **A ticket sale** is an `onSale` day (`YYYY-MM-DD`, at the venue) next to the ticket link in that game's
+  entry in [src/manual.ts](src/manual.ts). The feed then carries an all-day "Tickets on sale · Greece vs Serbia"
+  event on that day: it links to the ticket page, names the game's date, kickoff and venue, and reminds
+  the fan at 09:00 at the venue. It leaves the calendar together with the game; remove the day to remove
+  it earlier. Skip it for a sale that has already opened, as the event would only sit in the past.
 - **A new team** is one more entry in [src/config.ts](src/config.ts): country and sport slugs, the stripe
-  colours from [docs/brand.md](docs/brand.md), a flag in `assets/`, and a UEFA team id for football or a
-  FIBA event and team code for basketball. A football team costs no extra request; a basketball team in a
-  competition that is already fetched costs none either, and each new basketball competition costs one.
+  colours from [docs/brand.md](docs/brand.md), the flag's code, and a UEFA team id for football or a
+  FIBA event and team code for basketball. The flags come from [flag-icons](https://github.com/lipis/flag-icons)
+  (MIT): the code is the lowercase ISO 3166-1 alpha-2 country code, or one of its sub-national codes
+  such as `gb-eng`, and the build copies the flags it uses to `dist/flags/` with the licence. A football
+  team costs no extra request; a basketball team in a competition that is already fetched costs none
+  either, and each new basketball competition costs one.
 
 ## Keeping it running
 
@@ -99,7 +123,6 @@ The health signals we have today, in the order to check them:
 - **Run status.** The Actions tab lists every run of "Build feeds" and "Check feeds" with its outcome,
   and a failed run is also an open `ops` issue.
 - **Freshness.** The log of a "Check feeds" run prints how many hours old each live feed is.
-- **Last run.** The footer of every page shows the date and time of the build that wrote it.
 
 GitHub Pages keeps no access logs and the site carries no tracking, so how often the feeds are fetched
 (the closest thing to a subscriber count) and how many people visit the pages cannot be seen today.
@@ -119,5 +142,9 @@ of the site.
   is on for the subscription; Google Calendar is believed to ignore embedded reminders, but lets you set a
   notification for the whole calendar in its settings. Outlook is unverified.
 - Games with no announced time appear as all-day entries marked "time not announced".
+- The `-alerts` feeds rely on the `known-games-…` entries under Actions → Caches. GitHub drops a cache
+  unused for 7 days, and the daily run uses it every day. If it is lost anyway, or deleted to start afresh,
+  the next run seeds it again: it announces nothing, the "New game" entries already in the alerts feeds
+  disappear, and only games first seen from the next day on are announced.
 
 Background on the data sources: [docs/research-2026-10-02.md](docs/research-2026-10-02.md).

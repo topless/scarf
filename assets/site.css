@@ -1,11 +1,18 @@
 /* scarf — page layout, ported from reference/team-page.html. Colours and type come from brand-tokens.css;
-   each page or team element sets --stripe, --stripe-wide and --stripe-pill for its own team. */
+   each page or team element sets --stripe and --stripe-wide for its own team. */
 body { margin: 0; background: var(--wool); color: var(--ink); font-family: var(--font-body); }
 a { color: var(--terrace); }
 a:hover { color: var(--ink); }
 h1, h2, h3, p { margin: 0; }
 .num { font-variant-numeric: tabular-nums; }
 .small { font-size: 13px; line-height: 1.5; color: var(--stand); }
+
+/* Colour says who, lines say what: a country is its flag, name and stripes, a sport its ball icon,
+   drawing and words. */
+.flag { display: block; flex: none; border-radius: 3px; box-shadow: 0 0 0 1px rgba(23, 23, 28, 0.2); }
+.country-name { display: flex; align-items: center; gap: 12px; font-family: var(--font-display); font-weight: 700; font-size: 24px; letter-spacing: -0.03em; }
+.country-chip { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px 0 12px; box-sizing: border-box; border: var(--border) solid var(--ink); border-radius: var(--radius-pill); background: var(--white); color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 600; }
+.country-chip:hover { color: var(--ink); background: var(--wool); }
 
 .band { height: 12px; background: var(--stripe-wide); border-bottom: var(--border) solid var(--ink); }
 .wrap { max-width: 1120px; width: 100%; margin: 0 auto; box-sizing: border-box; padding-left: 24px; padding-right: 24px; }
@@ -27,7 +34,12 @@ button { cursor: pointer; }
 /* Hero */
 .hero { padding-top: 32px; padding-bottom: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); gap: 40px; align-items: start; }
 .hero-text { display: flex; flex-direction: column; gap: 22px; }
-.eyebrow { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--stand); }
+/* Team page: the country, its sport switch and the sport tag over the headline */
+.country-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding: 14px 0; border-top: var(--border) solid var(--chalk); border-bottom: var(--border) solid var(--chalk); }
+.switch { display: inline-flex; align-items: center; gap: 4px; padding: 3px; border: var(--border) solid var(--ink); border-radius: var(--radius-pill); background: var(--white); }
+.switch a { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px 0 12px; border-radius: var(--radius-pill); color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 600; }
+.switch a[aria-current] { background: var(--ink); color: var(--wool); font-weight: 700; }
+.sport-tag { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px 0 10px; box-sizing: border-box; border: var(--border) solid var(--ink); border-radius: var(--radius-pill); background: var(--white); font-size: 14px; font-weight: 700; }
 h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(44px, 6vw, 76px); line-height: 0.95; letter-spacing: -0.04em; text-wrap: balance; }
 .lede { font-size: 19px; line-height: 1.5; color: var(--stand); max-width: 560px; }
 
@@ -38,9 +50,14 @@ h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(44px, 
 .paste-row { display: flex; gap: 8px; }
 .paste input { flex: 1; min-width: 0; height: 46px; box-sizing: border-box; padding: 0 12px; border: var(--border) solid var(--chalk); border-radius: var(--radius-input); background: var(--white); color: var(--ink); font: 400 14px var(--font-body); }
 .paste button { flex: none; padding: 0 16px; }
+/* The alerts toggle is hidden until the script that makes it work has run. */
+.alerts-toggle:not([hidden]) { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; font-weight: 600; line-height: 1.4; cursor: pointer; }
+.alerts-toggle input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--terrace); cursor: pointer; }
+.alerts-toggle .small { display: block; margin-top: 2px; font-weight: 400; }
 
 /* Cards */
 .card { display: flex; flex-direction: column; }
+.card-surface { height: 150px; padding: 16px 28px; box-sizing: border-box; background: var(--wool); border-bottom: var(--border) solid var(--chalk); }
 .card-body { padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
 .card-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 600; color: var(--stand); }
 .card-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(32px, 3.4vw, 42px); line-height: 1; letter-spacing: -0.035em; text-wrap: balance; }
@@ -60,7 +77,7 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-h
 .rows { list-style: none; margin: 0; padding: 0; }
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; padding: 20px 0; border-top: var(--border) solid var(--chalk); }
 .row:last-child { border-bottom: var(--border) solid var(--chalk); }
-.row-date { flex: 0 0 170px; display: flex; flex-direction: column; gap: 4px; }
+.row-date { flex: 0 0 200px; display: flex; flex-direction: column; gap: 4px; }
 .row-day { font-family: var(--font-display); font-weight: 800; font-size: 28px; line-height: 1; letter-spacing: -0.03em; }
 .row-time { font-size: 14px; color: var(--stand); }
 .row-main { flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
@@ -83,16 +100,27 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-h
 .teams-text { display: flex; flex-direction: column; gap: 12px; }
 .teams-text p { font-size: 16px; line-height: 1.5; color: var(--ink-muted); max-width: 460px; }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-.team-chip { display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 16px 0 10px; border: var(--border) solid var(--wool); border-radius: var(--radius-pill); color: var(--wool); text-decoration: none; font-size: 14px; font-weight: 600; }
-.team-chip:hover { color: var(--wool); border-color: var(--ink-muted); }
-.team-chip[aria-current] { background: var(--wool); color: var(--ink); }
-.team-stripe { width: 30px; height: 12px; box-sizing: border-box; border-radius: 4px; border: 1px solid currentColor; background: var(--stripe-pill); }
+.teams .country-chip { gap: 10px; border-color: var(--wool); background: transparent; color: var(--wool); font-size: 14px; }
+.teams .country-chip:hover { color: var(--wool); border-color: var(--ink-muted); }
+.teams .country-chip[aria-current] { background: var(--wool); color: var(--ink); }
 
-/* Landing */
-.team-cards { padding-top: 8px; padding-bottom: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 20px; }
-a.card { color: var(--ink); text-decoration: none; }
-a.card:hover .card-cta { color: var(--ink); }
-.card-cta { margin-top: auto; color: var(--terrace); font-weight: 700; }
+/* Landing: one card per country, one cell per sport */
+.countries { padding-bottom: 56px; display: flex; flex-direction: column; gap: 16px; }
+.country-body { padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 16px; }
+.country-body .country-name { align-self: center; gap: 14px; }
+.country-body h2 { font-weight: 800; font-size: 36px; letter-spacing: -0.04em; }
+.cell { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border: var(--border) solid var(--chalk); border-radius: var(--radius-button); background: var(--wool); color: var(--ink); text-decoration: none; }
+a.cell:hover { color: var(--ink); border-color: var(--ink); }
+.cell-sport { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; }
+.cell-sport svg { width: 20px; height: 20px; }
+.cell-sport small { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--stand); }
+.cell-next { display: flex; flex-direction: column; gap: 3px; font-size: 14px; color: var(--stand); }
+.cell-next b { font-size: 16px; font-weight: 600; color: var(--ink); }
+.cell-cta { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; }
+.cell-cta svg { width: 16px; height: 16px; }
+/* A sport the country has no team in: greyed out, the ball too. */
+.cell-empty { justify-content: center; border-style: dashed; background: transparent; color: var(--stand); font-size: 14px; }
+.cell-empty .cell-sport svg { stroke: currentColor; }
 
 /* Footer */
 .site-footer { padding-top: 28px; padding-bottom: 36px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; font-size: 13px; line-height: 1.5; color: var(--stand); }

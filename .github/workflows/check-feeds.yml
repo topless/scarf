@@ -1,8 +1,9 @@
 # Does the published site carry today's build? src/ics.ts stamps every event with the build time
 # (DTSTAMP), so the newest DTSTAMP in the live feeds says when the last successful build was
 # published. A run that is disabled, failing or stuck leaves the feeds stale, and this check fails
-# loudly through the same alert path as the build. It reads our own GitHub Pages output, not a
-# data source, so it does not count against the one-request-per-source rule.
+# loudly through the same alert path as the build. Every team's feed is read, taken from
+# src/config.ts, because an empty feed carries no DTSTAMP. It reads our own GitHub Pages output,
+# not a data source, so it does not count against the one-request-per-source rule.
 name: Check feeds
 
 on:
@@ -15,19 +16,25 @@ on:
         default: '36'
         type: string
 
-permissions: {}
+permissions:
+  contents: read # checkout, for the list of teams
 
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22 # 22.18+ runs src/config.ts directly; it has only a type import
       - name: Compare the feeds' DTSTAMP with the clock
         env:
           MAX_AGE_HOURS: ${{ inputs.max_age_hours || '36' }}
         run: |
           node --input-type=module - <<'EOF'
-          const site = 'https://topless.github.io/scarf'
-          const feeds = ['greece/football', 'greece/basketball']
+          import { feedPath, teams } from './src/config.ts'
+          const site = 'https://scarf.fan'
+          const feeds = teams.map(feedPath)
           const maxAgeHours = Number(process.env.MAX_AGE_HOURS)
           const fail = (message) => {
             console.log(`::error::${message}`)
@@ -37,17 +44,17 @@ jobs:
           const now = Date.now()
           let newest = 0
           for (const feed of feeds) {
-            const url = `${site}/${feed}.ics`
+            const url = `${site}/${feed}`
             const response = await fetch(url)
             if (!response.ok) fail(`${url} answered ${response.status}`)
             const stamps = [...(await response.text()).matchAll(/^DTSTAMP:(\d{4})(\d\d)(\d\d)T(\d\d)(\d\d)(\d\d)Z\r?$/gm)]
               .map(([, year, month, day, hour, minute, second]) => Date.UTC(year, month - 1, day, hour, minute, second))
             if (stamps.length === 0) {
-              console.log(`${feed}.ics lists no games, so it carries no DTSTAMP`)
+              console.log(`${feed} lists no games, so it carries no DTSTAMP`)
               continue
             }
             const built = Math.max(...stamps)
-            console.log(`${feed}.ics was built ${((now - built) / 3600000).toFixed(1)} h ago (${new Date(built).toISOString()})`)
+            console.log(`${feed} was built ${((now - built) / 3600000).toFixed(1)} h ago (${new Date(built).toISOString()})`)
             newest = Math.max(newest, built)
           }
           if (newest === 0) fail('No feed carries a DTSTAMP, so the time of the last build is unknown')

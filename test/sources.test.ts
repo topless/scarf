@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { parseFibaGames } from '../src/fiba.ts'
-import { parseUefaMatches } from '../src/uefa.ts'
+import { fetchUefaMatches, parseUefaMatches } from '../src/uefa.ts'
 
 // Both fixtures are cut down from real responses: the UEFA one from the single batched probe of
 // 2026-10-17 (teamId=49,122,35), the FIBA one from the 2027 qualifiers page on 2026-10-02.
@@ -39,6 +39,12 @@ test('a changed UEFA format fails loudly', () => {
   assert.throws(() => parseUefaMatches([{ ...match, homeTeam: { internationalName: 'Czechia' } }], 122), /format changed/)
 })
 
+test('an empty UEFA response fails loudly instead of emptying every football feed', async (t) => {
+  // Stubbed: the test makes no request to UEFA.
+  t.mock.method(globalThis, 'fetch', async () => new Response('[]'))
+  await assert.rejects(fetchUefaMatches([49, 122], '2026-10-22'), /UEFA returned no matches at all for teamId=49,122/)
+})
+
 test('FIBA page yields only the requested team, with time and venue once announced', () => {
   const games = parseFibaGames(fixture('fiba-games.html'), 'GRE')
   assert.deepEqual(ids(games), ['fiba-127101', 'fiba-127114', 'fiba-127107'])
@@ -71,6 +77,27 @@ test('FIBA game without an announced time has no kickoff or venue', () => {
   assert.equal(game.date, '2026-11-26')
   assert.equal(game.kickoff, undefined)
   assert.equal(game.venue, undefined)
+})
+
+test('a FIBA team not known yet reads "opponent not announced", capitalised when it opens the title', () => {
+  // Game 127114 of the fixture, cut to the fields the parser reads, in a page of its own.
+  const georgia = {
+    gameId: 127114,
+    teamA: { code: 'GRE', officialName: 'Greece' },
+    teamB: { code: 'GEO', officialName: 'Georgia' },
+    competition: { officialName: 'FIBA Basketball World Cup 2027 European Qualifiers' },
+    gameDateTime: '2026-11-26T00:00:00',
+    gameDateTimeUTC: '2026-11-26T00:00:00',
+    hasTimeGameDateTime: false,
+    utcOffset: null,
+    venueName: null,
+    hostCity: null,
+  }
+  const page = (game: object) => `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify(game))}])</script>`
+  const [away] = parseFibaGames(page({ ...georgia, teamB: null }), 'GRE')
+  assert.equal(`${away.home} vs ${away.away}`, 'Greece vs opponent not announced')
+  const [home] = parseFibaGames(page({ ...georgia, teamA: null, teamB: georgia.teamA }), 'GRE')
+  assert.equal(`${home.home} vs ${home.away}`, 'Opponent not announced vs Greece')
 })
 
 test('a FIBA page without games for the team fails loudly instead of emptying the calendar', () => {
