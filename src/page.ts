@@ -20,19 +20,39 @@ const longDate = (d: Date) => `${shortDate(d)} ${YEAR.format(d)}`
 
 const GOOGLE_NOTE = 'On Google Calendar, set a notification for this calendar once — it applies to every game.'
 
+const icon = (paths: string, stroke = 'currentColor') =>
+  `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`
+// A pitch or court in faint ink lines. Decoration only, so screen readers skip it.
+const drawing = (paths: string) =>
+  `<svg viewBox="0 0 300 190" width="100%" height="100%" fill="none" stroke="#17171C" stroke-opacity="0.28" stroke-width="1.6" aria-hidden="true">${paths}</svg>`
+
 // Each sport's own words for the start of a game and the ground it is played on, so a basketball
-// page never promises a kickoff in a stadium. A new sport in config.ts brings its words here.
-const WORDS: Record<Sport, { start: string; ground: string }> = {
-  football: { start: 'kickoff', ground: 'stadium' },
-  basketball: { start: 'tip-off', ground: 'arena' },
+// page never promises a kickoff in a stadium, and its marks: the ball icon and a drawing of the
+// pitch or court. Colour says who, lines say what: the team brings the colour, and the only sport
+// colour is the basketball's own orange (docs/brand.md). A new sport in config.ts brings all of
+// it here; the order here is the order sports are listed in.
+const WORDS: Record<Sport, { start: string; ground: string; ball: string; surface: string }> = {
+  football: {
+    start: 'kickoff',
+    ground: 'stadium',
+    ball: icon('<circle cx="12" cy="12" r="9"/><path d="M12 8.4l3.42 2.49-1.3 4.02H9.88l-1.3-4.02z"/><path d="M12 8.4V3M15.42 10.89l5.14-1.67M14.12 14.91l3.17 4.37M9.88 14.91l-3.17 4.37M8.58 10.89L3.44 9.22"/>'),
+    surface: drawing('<rect x="10" y="10" width="280" height="170" rx="2"/><path d="M150 10v170"/><circle cx="150" cy="95" r="26"/><rect x="10" y="50" width="46" height="90"/><rect x="10" y="72" width="16" height="46"/><path d="M56 74.5A26 26 0 0 1 56 115.5"/><rect x="244" y="50" width="46" height="90"/><rect x="274" y="72" width="16" height="46"/><path d="M244 74.5A26 26 0 0 0 244 115.5"/><rect x="4" y="84" width="6" height="22"/><rect x="290" y="84" width="6" height="22"/>'),
+  },
+  basketball: {
+    start: 'tip-off',
+    ground: 'arena',
+    ball: icon('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M5.64 5.64C9 9 9 15 5.64 18.36M18.36 5.64C15 9 15 15 18.36 18.36"/>', '#D9600F'),
+    surface: drawing('<rect x="10" y="10" width="280" height="170" rx="2"/><path d="M150 10v170"/><circle cx="150" cy="95" r="18"/><rect x="10" y="70" width="58" height="50"/><path d="M68 77A18 18 0 0 1 68 113"/><path d="M10 24H44A74.3 74.3 0 0 1 44 166H10"/><circle cx="22" cy="95" r="4"/><path d="M16 87v16"/><rect x="232" y="70" width="58" height="50"/><path d="M232 77A18 18 0 0 0 232 113"/><path d="M290 24H256A74.3 74.3 0 0 0 256 166H290"/><circle cx="278" cy="95" r="4"/><path d="M284 87v16"/>'),
+  },
 }
+const SPORTS = Object.keys(WORDS) as Sport[]
 
 // siteUrl is the public address of the site; without it (local builds) the subscribe links are
 // relative and the ones that need a public address (Google, Outlook, the paste field) are left out.
 export function renderTeamPage(section: Section, all: Team[], siteUrl?: string): string {
   const { team, games } = section
   const from = federation(team)
-  const { start, ground } = WORDS[team.sport]
+  const { start, ground, ball } = WORDS[team.sport]
   const next = games[0]
   return page({
     root: '../../',
@@ -48,10 +68,11 @@ ${header('../../', `<nav class="site-nav" aria-label="Page">
   <a class="pill" href="#how">How it works</a>
   <a class="pill pill-primary" href="#subscribe">Add to my calendar</a>
 </nav>`)}
+${countryBar(team, all)}
 <main>
 <section class="wrap hero">
   <div class="hero-text">
-    <p class="eyebrow"><img src="../../${flagPath(team.flag)}" width="24" height="18" alt=""><span>${esc(teamKind(team))}</span></p>
+    <p class="sport-tag">${ball}<span>${capitalise(`men's ${team.sport}`)} · ${from}</span></p>
     <h1>${esc(team.name)}, in your calendar.</h1>
     <p class="lede">Every ${start}, ${ground}, channel and ticket sale for the national team — kept current in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
 ${subscribePanel(team, siteUrl)}
@@ -64,7 +85,7 @@ ${nextGameCard(team, next)}
       <h2>Upcoming games</h2>
       ${games.length ? `<p class="aside">${inTheFeed(games.length)}</p>` : ''}
     </div>
-    ${games.length ? `<ul class="rows">\n${games.map(renderRow).join('\n')}\n</ul>` : '<p>No games announced yet.</p>'}
+    ${games.length ? `<ul class="rows">\n${games.map((game) => renderRow(game, start)).join('\n')}\n</ul>` : '<p>No games announced yet.</p>'}
     <p class="small">New games and ${start} times appear a day or two after ${from} announces them. TV channels are the expected broadcasters — we update them closer to the game.</p>
   </div>
 </section>
@@ -92,6 +113,7 @@ ${footer()}`,
 }
 
 export function renderLanding(sections: Section[], siteUrl?: string): string {
+  const countries = byCountry(sections, ({ team }) => team)
   return page({
     root: '',
     title: `${siteName} · Your colours, in your calendar`,
@@ -104,18 +126,14 @@ export function renderLanding(sections: Section[], siteUrl?: string): string {
   <div class="hero-text">
     <h1>Your colours, in your calendar.</h1>
     <p class="lede">Pick your team and subscribe once. Every kickoff or tip-off, venue, channel and ticket sale lands in the calendar you already use, with a nudge an hour before the game. Nothing to install.</p>
+    <nav class="chips" aria-label="Countries">
+${countries.map((group) => countryChip(group[0]!.team, '', `#${group[0]!.team.country}`)).join('\n')}
+    </nav>
   </div>
 </section>
-${bySport(sections, ({ team }) => team.sport)
-  .map(
-    ([sport, group]) => `<section class="wrap sport" aria-labelledby="${sport}">
-  <h2 id="${sport}">${capitalise(sport)}</h2>
-  <div class="team-cards">
-${group.map(teamCard).join('\n')}
-  </div>
-</section>`,
-  )
-  .join('\n')}
+<section class="wrap countries" aria-label="Teams by country">
+${countries.map(countryCard).join('\n')}
+</section>
 </main>
 ${footer()}`,
   })
@@ -276,11 +294,26 @@ function feedLinks(team: Team, alerts: boolean, siteUrl?: string): { webcal: str
   }
 }
 
+// The country under the header, with a switch to its other sports when it has more than one.
+function countryBar(team: Team, all: Team[]): string {
+  const name = esc(countryName(team))
+  const sports = SPORTS.flatMap((sport) => all.filter((other) => other.country === team.country && other.sport === sport))
+  const link = (other: Team) =>
+    `<a href="../../${other.country}/${other.sport}/"${other === team ? ' aria-current="page"' : ''}>${WORDS[other.sport].ball}${capitalise(other.sport)}</a>`
+  return `<div class="wrap">
+  <div class="country-bar">
+    <p class="country-name"><img class="flag" src="../../${flagPath(team.flag)}" width="32" height="24" alt="">${name}</p>
+    ${sports.length > 1 ? `<nav class="switch" aria-label="${name} teams">${sports.map(link).join('')}</nav>` : ''}
+  </div>
+</div>`
+}
+
 function nextGameCard(team: Team, game?: Game): string {
-  const { start } = WORDS[team.sport]
+  const { start, surface } = WORDS[team.sport]
   if (!game) {
     return `  <div class="card">
     <div class="card-stripe"></div>
+    <div class="card-surface">${surface}</div>
     <div class="card-body">
       <p class="card-meta"><span>Next game</span></p>
       <p class="card-title">No games announced yet.</p>
@@ -290,11 +323,12 @@ function nextGameCard(team: Team, game?: Game): string {
   }
   return `  <div class="card">
     <div class="card-stripe"></div>
+    <div class="card-surface">${surface}</div>
     <div class="card-body">
       <p class="card-meta"><span>Next game</span><span>${esc(game.competition)}</span></p>
       <p class="card-title">${matchTitle(game)}</p>
       <ul class="facts">
-        <li>${ICON.date}<span class="num">${when(game, 'long')}</span></li>
+        <li>${ICON.date}<span class="num">${when(game, longDate, start)}</span></li>
         <li>${ICON.place}<span>${esc(place(game))}</span></li>
         ${game.tv ? `<li>${ICON.tv}<span>${esc(game.tv)}</span></li>` : ''}
         ${game.tickets ? `<li>${ICON.ticket}<a href="${esc(game.tickets)}">Tickets</a></li>` : ''}
@@ -305,50 +339,60 @@ function nextGameCard(team: Team, game?: Game): string {
   </div>`
 }
 
-function renderRow(game: Game): string {
+function renderRow(game: Game, start: string): string {
   const day = new Date(game.kickoff && game.utcOffsetHours !== undefined ? shift(game) : game.kickoff ?? game.date)
   const meta = [game.competition, place(game), game.tv].filter(Boolean).map((s) => esc(s!)).join(' · ')
   return `<li class="row">
-  <div class="row-date"><span class="row-day">${DAY_MONTH.format(day)}</span><span class="row-time num">${when(game, 'short')}</span></div>
+  <div class="row-date"><span class="row-day">${DAY_MONTH.format(day)}</span><span class="row-time num">${when(game, WEEKDAY.format, start)}</span></div>
   <div class="row-main"><span class="row-title">${matchTitle(game)}</span><span class="row-meta">${meta}</span>${game.note ? `<span class="row-meta">${esc(game.note)}</span>` : ''}</div>
   ${game.tickets ? `<a class="row-tickets" href="${esc(game.tickets)}">Tickets</a>` : ''}
 </li>`
 }
 
-// Every team as a chip, grouped by sport with the page's own sport first, so a basketball fan
-// sees the other basketball sides before the football ones.
+// One chip per country, the same chips as on the landing. Each opens that country in the sport
+// of this page, or in its other sport when it has no team in this one.
 function teamChips(all: Team[], current: Team): string {
-  return `    <div class="chip-groups">
-${bySport(all, (team) => team.sport, current.sport)
-  .map(
-    ([sport, group]) => `      <div class="chip-group">
-        <h3>${capitalise(sport)}</h3>
-        <div class="chips">
-${group.map((team) => teamChip(team, team === current)).join('\n')}
-        </div>
-      </div>`,
-  )
-  .join('\n')}
+  const chip = (group: Team[]) => {
+    const team = group.find((other) => other.sport === current.sport) ?? group[0]!
+    return countryChip(team, '../../', `../../${team.country}/${team.sport}/`, team === current)
+  }
+  return `    <div class="chips">
+${byCountry(all, (team) => team).map(chip).join('\n')}
     </div>`
 }
 
-function teamChip(team: Team, current: boolean): string {
-  return `      <a class="team-chip" href="../../${team.country}/${team.sport}/" style="${stripeVars(team.colours)}"${current ? ' aria-current="page"' : ''}><span class="team-stripe"></span>${esc(team.name)}</a>`
+// A country's flag and name. root is the way from the page to the site root, for the flag.
+function countryChip(team: Team, root: string, href: string, current = false): string {
+  return `      <a class="country-chip" href="${href}"${current ? ' aria-current="page"' : ''}><img class="flag" src="${root}${flagPath(team.flag)}" width="20" height="15" alt="">${esc(countryName(team))}</a>`
 }
 
-// A team's card on the landing page. It sits under its sport's heading, so the eyebrow names
-// only the side and the source.
-function teamCard({ team, games }: Section): string {
-  const next = games[0]
-  return `  <a class="card" href="${team.country}/${team.sport}/" style="${stripeVars(team.colours)}">
+// A country's card on the landing page: its stripes, flag and name, then one cell per sport. The
+// country's teams share their stripes (they come from the flag), so the first team's stand for all.
+function countryCard(group: Section[]): string {
+  const { team } = group[0]!
+  return `  <article class="card country" id="${team.country}" aria-labelledby="c-${team.country}" style="${stripeVars(team.colours)}">
     <div class="card-stripe"></div>
-    <div class="card-body">
-      <p class="card-meta"><span>Men's national team</span><span>From ${federation(team)}</span></p>
-      <p class="card-title">${esc(team.name)}</p>
-      <p>${next ? `Next: ${matchTitle(next)}<br><span class="num">${when(next, 'long')}</span>` : 'No games announced yet.'}</p>
-      <span class="card-cta">See the games and subscribe</span>
+    <div class="country-body">
+      <div class="country-name"><img class="flag" src="${flagPath(team.flag)}" width="44" height="33" alt=""><h2 id="c-${team.country}">${esc(countryName(team))}</h2></div>
+${SPORTS.map((sport) => sportCell(sport, group.find((section) => section.team.sport === sport))).join('\n')}
     </div>
-  </a>`
+  </article>`
+}
+
+// One sport of a country: its next game and a link to the team page, or a placeholder when the
+// country has no team in that sport.
+function sportCell(sport: Sport, section?: Section): string {
+  const { ball, start } = WORDS[sport]
+  if (!section) {
+    return `      <div class="cell cell-empty"><span class="cell-sport">${ball}${capitalise(sport)}</span><span>Not on scarf yet</span></div>`
+  }
+  const { team, games } = section
+  const next = games[0]
+  return `      <a class="cell" href="${team.country}/${team.sport}/">
+        <span class="cell-sport">${ball}${capitalise(sport)}<small>${federation(team)}</small></span>
+        <span class="cell-next">${next ? `<b>${matchTitle(next)}</b><span class="num">${when(next, shortDate, start)}</span>` : '<span>No games announced yet.</span>'}</span>
+        <span class="cell-cta">Games and subscribe${ICON.arrow}</span>
+      </a>`
 }
 
 const matchTitle = (game: Game) => `${esc(game.home)} vs ${esc(game.away)}`
@@ -359,48 +403,53 @@ const and = (items: string[]) => (items.length < 2 ? items.join('') : `${items.s
 // "UEFA and FIBA": every source behind a list of teams, once each, in the teams' order.
 export const federations = (teams: Team[]) => and([...new Set(teams.map(federation))])
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
-// "National team · Men's football": the eyebrow over a team's name on its page and share image.
+// "National team · Men's football": the eyebrow over a team's name on its share image.
 export const teamKind = (team: Team) => `National team · ${capitalise(`men's ${team.sport}`)}`
 // "National teams · Football and basketball": the same over the landing page's share image.
 export const landingKind = (teams: Team[]) => `National teams · ${capitalise(and([...new Set(teams.map((team) => team.sport))]))}`
 
-// Items split by sport, the sports in the order they first appear (football before basketball,
-// as config.ts lists the teams), or with one sport moved to the front.
-function bySport<T>(items: T[], sportOf: (item: T) => Sport, first?: Sport): [Sport, T[]][] {
-  const seen = [...new Set(items.map(sportOf))]
-  const sports = first ? [first, ...seen.filter((sport) => sport !== first)] : seen
-  return sports.map((sport) => [sport, items.filter((item) => sportOf(item) === sport)])
+// "Greece" from "Greece football".
+// shortcut: assumes every team name is "{Country} {sport}", as config.ts names them; give Team a
+// country name of its own when a team is named otherwise.
+const countryName = (team: Team) => team.name.slice(0, -team.sport.length - 1)
+
+// Items grouped by country, the countries in alphabetical order of their names.
+function byCountry<T>(items: T[], teamOf: (item: T) => Team): T[][] {
+  const countries = [...new Set(items.map((item) => teamOf(item).country))]
+  return countries
+    .map((country) => items.filter((item) => teamOf(item).country === country))
+    .sort((a, b) => countryName(teamOf(a[0]!)).localeCompare(countryName(teamOf(b[0]!))))
 }
 
 // The kickoff as a clock at the venue reads it.
 const shift = (game: Game) => new Date(new Date(game.kickoff!).getTime() + game.utcOffsetHours! * 60 * 60 * 1000)
 
 // Venue time with the city, so "20:45 in Amsterdam" cannot be mistaken for the reader's own time.
-// The caller picks how the date part reads; the time part is the clock at the venue with its
-// city, the UTC time when the venue's offset is unknown, or "time not announced".
-export function kickoffText(game: Game, date: (d: Date) => string): string {
+// The caller picks how the date part reads, and may name the sport's start before the clock
+// ("Kickoff 20:45 in Amsterdam"); the time part is the clock at the venue with its city, the UTC
+// time when the venue's offset is unknown, or "time not announced".
+export function kickoffText(game: Game, date: (d: Date) => string, start?: string): string {
   if (!game.kickoff) return `${date(new Date(game.date))} · time not announced`
+  const label = start ? `${capitalise(start)} ` : ''
   const kickoff = new Date(game.kickoff)
-  if (game.utcOffsetHours === undefined) return `${date(kickoff)} · ${TIME.format(kickoff)} UTC`
+  if (game.utcOffsetHours === undefined) return `${date(kickoff)} · ${label}${TIME.format(kickoff)} UTC`
   const local = shift(game)
-  return `${date(local)} · ${TIME.format(local)} ${game.city ? `in ${game.city}` : 'at the venue'}`
+  return `${date(local)} · ${label}${TIME.format(local)} ${game.city ? `in ${game.city}` : 'at the venue'}`
 }
 
 // Same, marked up so the page's script can add the reader's own time when their zone differs.
-// "long" carries the full date, "short" only the weekday, for rows that show the date beside it.
-function when(game: Game, length: 'long' | 'short'): string {
-  const text = esc(kickoffText(game, length === 'long' ? longDate : WEEKDAY.format))
+function when(game: Game, date: (d: Date) => string, start: string): string {
+  const text = esc(kickoffText(game, date, start))
   if (!game.kickoff) return text
   const offset = game.utcOffsetHours === undefined ? '' : ` data-offset="${game.utcOffsetHours}"`
   return `<time datetime="${esc(game.kickoff)}"${offset}>${text}</time>`
 }
 
-// Hard-stop stripes per docs/brand.md: 18 px per colour in a card header, 24 px in the page band,
-// 5 px in a chip's pill.
+// Hard-stop stripes per docs/brand.md: 18 px per colour in a card header, 24 px in the page band.
 function stripeVars(colours: string[]): string {
   const stripe = (width: number) =>
     `repeating-linear-gradient(90deg, ${colours.map((c, i) => `${c} ${i * width}px ${(i + 1) * width}px`).join(', ')})`
-  return `--stripe: ${stripe(18)}; --stripe-wide: ${stripe(24)}; --stripe-pill: ${stripe(5)}`
+  return `--stripe: ${stripe(18)}; --stripe-wide: ${stripe(24)}`
 }
 
 function inTheFeed(count: number): string {
@@ -413,9 +462,8 @@ function mark(size: number): string {
   return `<svg viewBox="0 0 64 64" width="${size}" height="${size}" fill="none" aria-hidden="true"><g transform="rotate(-14 32 32)"><rect x="8" y="22" width="48" height="20" rx="7" fill="#D7263D"/><rect x="17" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="29" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="41" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="8" y="22" width="48" height="20" rx="7" stroke="#17171C" stroke-width="3"/><path d="M8 27H2M8 32H2M8 37H2M56 27h6M56 32h6M56 37h6" stroke="#17171C" stroke-width="3" stroke-linecap="round"/></g></svg>`
 }
 
-const icon = (paths: string) =>
-  `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`
 const ICON = {
+  arrow: icon('<path d="M5 12h14M13 6l6 6-6 6"/>'),
   date: icon('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'),
   place: icon('<path d="M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/>'),
   tv: icon('<rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 3l4 4 4-4"/>'),

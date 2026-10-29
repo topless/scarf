@@ -38,10 +38,10 @@ function inOrder(html: string, ...needles: string[]): void {
   }
 }
 
-test('team page shows venue-local times naming the city, and says when the time is not announced', () => {
+test('team page shows venue-local times naming the start and the city, and says when the time is not announced', () => {
   const html = teamPage([timed, unscheduled], site)
-  assert.match(html, /<time datetime="2026-10-04T18:45:00Z" data-offset="3">Sun 4 Oct 2026 · 21:45 in Thessaloniki<\/time>/)
-  assert.match(html, /<time datetime="2026-10-04T18:45:00Z" data-offset="3">Sun · 21:45 in Thessaloniki<\/time>/)
+  assert.match(html, /<time datetime="2026-10-04T18:45:00Z" data-offset="3">Sun 4 Oct 2026 · Kickoff 21:45 in Thessaloniki<\/time>/)
+  assert.match(html, /<time datetime="2026-10-04T18:45:00Z" data-offset="3">Sun · Kickoff 21:45 in Thessaloniki<\/time>/)
   assert.match(html, /Thu · time not announced/)
   assert.match(html, /Venue not announced/)
   assert.match(html, /Greece vs Germany/)
@@ -50,7 +50,7 @@ test('team page shows venue-local times naming the city, and says when the time 
 
 test('a kickoff without a city reads "at the venue", as in the feed', () => {
   const html = teamPage([{ ...timed, venue: undefined, city: undefined }], site)
-  assert.match(html, /<time datetime="2026-10-04T18:45:00Z" data-offset="3">Sun 4 Oct 2026 · 21:45 at the venue<\/time>/)
+  assert.match(html, /<time datetime="2026-10-04T18:45:00Z" data-offset="3">Sun 4 Oct 2026 · Kickoff 21:45 at the venue<\/time>/)
 })
 
 test('team page escapes text from the sources', () => {
@@ -102,7 +102,7 @@ test('team page names the federation of its source, and links every team', () =>
   assert.match(football_, /Updated daily from UEFA\./)
   assert.doesNotMatch(football_, /last run/)
   assert.match(basketball_, /Updated daily from FIBA\./)
-  assert.match(football_, /<a class="team-chip" href="\.\.\/\.\.\/greece\/football\/" style="[^"]*#0D5EAF[^"]*" aria-current="page">/)
+  assert.match(football_, /<a class="country-chip" href="\.\.\/\.\.\/greece\/football\/" aria-current="page"><img class="flag" src="\.\.\/\.\.\/flags\/gr\.svg"/)
   assert.match(football_, /href="\.\.\/\.\.\/greece\/basketball\/"/)
   assert.match(football_, /<link rel="stylesheet" href="\.\.\/\.\.\/brand-tokens\.css">/)
   assert.match(football_, /<link rel="apple-touch-icon" href="\.\.\/\.\.\/apple-touch-icon\.png">/)
@@ -132,14 +132,15 @@ test('team page says so when no games are announced', () => {
   assert.doesNotMatch(html, /<ul class="rows">/)
 })
 
-test('landing lists every team with its stripe and a link to its page', () => {
+test("landing shows a country in its stripes, with a cell per sport that links the team's page", () => {
   const html = renderLanding([{ team: football, games: [timed] }, { team: basketball, games: [] }])
-  assert.match(html, /<a class="card" href="greece\/football\/" style="--stripe: repeating-linear-gradient\(90deg, #0D5EAF 0px 18px, #FFFFFF 18px 36px\)/)
-  assert.match(html, /<a class="card" href="greece\/basketball\/"/)
-  assert.match(html, /Next: Greece vs Germany/)
+  assert.match(html, /<article class="card country" id="greece" aria-labelledby="c-greece" style="--stripe: repeating-linear-gradient\(90deg, #0D5EAF 0px 18px, #FFFFFF 18px 36px\)/)
+  assert.match(html, /<img class="flag" src="flags\/gr\.svg" width="44" height="33" alt=""><h2 id="c-greece">Greece<\/h2>/)
+  assert.match(html, /<a class="cell" href="greece\/football\/">\n\s*<span class="cell-sport"><svg[^>]*>.*?<\/svg>Football<small>UEFA<\/small><\/span>/)
+  assert.match(html, /<a class="cell" href="greece\/basketball\/">\n\s*<span class="cell-sport"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>Basketball<small>FIBA<\/small><\/span>/)
+  // The next game with its date but no year, the sport's start and the city.
+  assert.match(html, /<b>Greece vs Germany<\/b><span class="num"><time datetime="2026-10-04T18:45:00Z" data-offset="3">Sun 4 Oct · Kickoff 21:45 in Thessaloniki<\/time><\/span>/)
   assert.match(html, /No games announced yet/)
-  assert.match(html, /<span>From UEFA<\/span>/)
-  assert.match(html, /<span>From FIBA<\/span>/)
   assert.doesNotMatch(html, /Updated daily from UEFA and FIBA|last run/)
   assert.match(html, /<link rel="icon" href="favicon\.svg" type="image\/svg\+xml">/)
 })
@@ -174,28 +175,25 @@ test('nothing a fan reads breaks the voice rules', () => {
   }
 })
 
-test('landing groups the teams by sport, football first, and names the sport once over its cards', () => {
+test('landing has one card per country in alphabetical order, each with a cell per sport, football first', () => {
   const html = renderLanding(teams.map((team) => ({ team, games: [] })))
-  assert.match(html, /<section class="wrap sport" aria-labelledby="football">\n  <h2 id="football">Football<\/h2>/)
-  assert.match(html, /<section class="wrap sport" aria-labelledby="basketball">\n  <h2 id="basketball">Basketball<\/h2>/)
-  assert.equal(html.match(/<section class="wrap sport"/g)?.length, 2)
-  // Every football card before the basketball heading, every basketball card after it.
-  const [footballSection, basketballSection] = html.split('<h2 id="basketball">')
-  const count = (sport: string) => teams.filter((team) => team.sport === sport).length
-  assert.equal(footballSection!.match(/<a class="card" href="/g)?.length, count('football'))
-  assert.equal(basketballSection!.match(/<a class="card" href="/g)?.length, count('basketball'))
-  inOrder(
-    html,
-    '<h2 id="football">Football</h2>',
-    'href="greece/football/"',
-    'href="spain/football/"',
-    '<h2 id="basketball">Basketball</h2>',
-    'href="greece/basketball/"',
-    'href="germany/basketball/"',
-  )
-  assert.match(html, /<p class="card-meta"><span>Men's national team<\/span><span>From UEFA<\/span><\/p>/)
-  assert.match(html, /<p class="card-meta"><span>Men's national team<\/span><span>From FIBA<\/span><\/p>/)
-  assert.doesNotMatch(html, /National team · Men's/)
+  const countries = ['england', 'france', 'germany', 'greece', 'spain', 'switzerland']
+  assert.equal(html.match(/<article class="card country"/g)?.length, new Set(teams.map((team) => team.country)).size)
+  inOrder(html, ...countries.map((country) => `<article class="card country" id="${country}"`))
+  // Under the lede, a chip per country that jumps to its card, in the same order.
+  inOrder(html, '<p class="lede">', '<nav class="chips" aria-label="Countries">', ...countries.map((country) => `href="#${country}"`), '<article')
+  assert.match(html, /<a class="country-chip" href="#england"><img class="flag" src="flags\/gb-eng\.svg" width="20" height="15" alt="">England<\/a>/)
+  // Every team has its cell; a sport a country has no team in says so, football before basketball.
+  assert.equal(html.match(/<a class="cell" href="/g)?.length, teams.length)
+  for (const team of teams) assert.ok(html.includes(`<a class="cell" href="${team.country}/${team.sport}/">`), team.name)
+  const england = html.slice(html.indexOf('id="england"'), html.indexOf('id="france"'))
+  inOrder(england, 'href="england/football/"', '<div class="cell cell-empty">')
+  assert.match(england, /<div class="cell cell-empty"><span class="cell-sport"><svg[^>]*>.*?<\/svg>Basketball<\/span><span>Not on scarf yet<\/span><\/div>/)
+  const france = html.slice(html.indexOf('id="france"'), html.indexOf('id="germany"'))
+  inOrder(france, '<div class="cell cell-empty"><span class="cell-sport"><svg', 'Football</span><span>Not on scarf yet</span>', 'href="france/basketball/"')
+  // Germany lists basketball first in config.ts; its card still puts football first.
+  const germany = html.slice(html.indexOf('id="germany"'), html.indexOf('id="greece"'))
+  inOrder(germany, 'href="germany/football/"', 'href="germany/basketball/"')
   assert.match(html, /Every kickoff or tip-off, venue, channel and ticket sale/)
 })
 
@@ -210,6 +208,10 @@ test('a basketball page says tip-off and arena, never kickoff or stadium', () =>
   assert.match(html, /New games, tip-off times and venues appear on their own/)
   assert.match(html, /<h3>A nudge an hour before tip-off<\/h3>/)
   assert.doesNotMatch(copy(html), /kickoff|stadium/i)
+  const timedCourt = renderTeamPage({ team: basketball, games: [{ ...timed, venue: undefined }] }, teams, site)
+  assert.match(timedCourt, />Sun 4 Oct 2026 · Tip-off 21:45 in Thessaloniki<\/time>/)
+  assert.match(timedCourt, />Sun · Tip-off 21:45 in Thessaloniki<\/time>/)
+  assert.doesNotMatch(copy(timedCourt), /kickoff|stadium/i)
   // The football page keeps football's words.
   const football_ = teamPage([unscheduled], site)
   assert.match(football_, /Every kickoff, stadium, channel and ticket sale for the national team/)
@@ -217,45 +219,82 @@ test('a basketball page says tip-off and arena, never kickoff or stadium', () =>
   assert.doesNotMatch(copy(football_), /tip-off|arena/i)
 })
 
-test("the other-teams chips are grouped by sport, the page's own sport first", () => {
-  const basketball_ = renderTeamPage({ team: basketball, games: [] }, teams, site)
+test("the other-teams chips are one per country, each opening this page's sport or the country's other one", () => {
+  const countries = new Set(teams.map((team) => team.country)).size
+  const chips = (html: string) => html.slice(html.indexOf('id="teams"'))
+  const basketball_ = chips(renderTeamPage({ team: basketball, games: [] }, teams, site))
+  assert.equal(basketball_.match(/class="country-chip"/g)?.length, countries)
   inOrder(
     basketball_,
-    '<h3>Basketball</h3>',
-    'href="../../greece/basketball/"',
-    'href="../../germany/basketball/"',
-    '<h3>Football</h3>',
-    'href="../../greece/football/"',
-    'href="../../spain/football/"',
+    '<a class="country-chip" href="../../england/football/">',
+    '<a class="country-chip" href="../../france/basketball/">',
+    '<a class="country-chip" href="../../germany/basketball/">',
+    '<a class="country-chip" href="../../greece/basketball/" aria-current="page">',
+    '<a class="country-chip" href="../../spain/basketball/">',
+    '<a class="country-chip" href="../../switzerland/football/">',
   )
-  assert.equal(basketball_.match(/class="team-chip"/g)?.length, teams.length)
-  const football_ = teamPage([], site)
-  inOrder(football_, '<h3>Football</h3>', 'href="../../spain/football/"', '<h3>Basketball</h3>', 'href="../../greece/basketball/"')
+  const football_ = chips(teamPage([], site))
+  assert.equal(football_.match(/class="country-chip"/g)?.length, countries)
+  inOrder(
+    football_,
+    'href="../../england/football/"',
+    'href="../../france/basketball/"',
+    'href="../../germany/football/"',
+    'href="../../greece/football/" aria-current="page"',
+    'href="../../spain/football/"',
+    'href="../../switzerland/football/"',
+  )
+  assert.doesNotMatch(football_, /<h3>/)
 })
 
-test('landing lists every team, each in its own colours', () => {
+test('a team page names its country and switches sport only when the country has more than one', () => {
+  const html = teamPage([timed], site)
+  assert.match(html, /<p class="country-name"><img class="flag" src="\.\.\/\.\.\/flags\/gr\.svg" width="32" height="24" alt="">Greece<\/p>/)
+  assert.match(
+    html,
+    /<nav class="switch" aria-label="Greece teams"><a href="\.\.\/\.\.\/greece\/football\/" aria-current="page"><svg[^>]*>.*?<\/svg>Football<\/a><a href="\.\.\/\.\.\/greece\/basketball\/"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>Basketball<\/a><\/nav>/,
+  )
+  inOrder(html, '<header', '<div class="country-bar">', '<main>')
+  // Germany lists basketball first in config.ts; the switch still reads football, then basketball.
+  const germany = teams.find((team) => team.country === 'germany' && team.sport === 'basketball')!
+  inOrder(renderTeamPage({ team: germany, games: [] }, teams, site), '<nav class="switch"', '>Football</a>', '>Basketball</a>')
+  const england = teams.find((team) => team.country === 'england')!
+  const english = renderTeamPage({ team: england, games: [] }, teams, site)
+  assert.match(english, /<p class="country-name"><img class="flag" src="\.\.\/\.\.\/flags\/gb-eng\.svg" width="32" height="24" alt="">England<\/p>/)
+  assert.doesNotMatch(english, /class="switch"/)
+})
+
+test("the next-game card carries the sport's drawing, hidden from screen readers", () => {
+  for (const html of [teamPage([timed], site), teamPage([], site)]) {
+    inOrder(html, '<div class="card-stripe"></div>', '<div class="card-surface"><svg viewBox="0 0 300 190"', 'aria-hidden="true"><rect x="10" y="10" width="280" height="170" rx="2"/><path d="M150 10v170"/><circle cx="150" cy="95" r="26"/>', '<div class="card-body">')
+  }
+  const court = renderTeamPage({ team: basketball, games: [] }, teams, site)
+  assert.match(court, /<div class="card-surface"><svg viewBox="0 0 300 190"[^>]*aria-hidden="true"><rect x="10" y="10" width="280" height="170" rx="2"\/><path d="M150 10v170"\/><circle cx="150" cy="95" r="18"\/>/)
+})
+
+test('landing shows every country in its own colours', () => {
   const html = renderLanding(teams.map((team) => ({ team, games: [] })))
-  assert.equal(html.match(/<a class="card" href="/g)?.length, teams.length)
   for (const team of teams) {
     const [first, second] = team.colours
-    assert.match(html, new RegExp(`<a class="card" href="${team.country}/${team.sport}/" style="--stripe: repeating-linear-gradient\\(90deg, ${first} 0px 18px, ${second} 18px 36px`))
-    assert.ok(html.includes(`<p class="card-title">${team.name}</p>`), team.name)
+    assert.match(html, new RegExp(`<article class="card country" id="${team.country}" aria-labelledby="c-${team.country}" style="--stripe: repeating-linear-gradient\\(90deg, ${first} 0px 18px, ${second} 18px 36px`))
   }
-  assert.match(html, /<span>From UEFA<\/span>/)
-  assert.match(html, /<span>From FIBA<\/span>/)
+  assert.match(html, /<h2 id="c-switzerland">Switzerland<\/h2>/)
+  assert.match(html, /<small>UEFA<\/small>/)
+  assert.match(html, /<small>FIBA<\/small>/)
   assert.doesNotMatch(html, /last run/)
 })
 
 test('a new team page shows its flag, its own feed and links every other team', () => {
   const spain = teams.find((team) => team.country === 'spain' && team.sport === 'basketball')!
   const html = renderTeamPage({ team: spain, games: [] }, teams, site)
-  assert.match(html, /<img src="\.\.\/\.\.\/flags\/es\.svg" width="24" height="18" alt="">/)
-  assert.match(html, /National team · Men's basketball/)
+  assert.match(html, /<img class="flag" src="\.\.\/\.\.\/flags\/es\.svg" width="32" height="24" alt="">Spain<\/p>/)
+  assert.match(html, /<p class="sport-tag"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg><span>Men's basketball · FIBA<\/span><\/p>/)
   assert.match(html, /<h1>Spain basketball, in your calendar\.<\/h1>/)
   assert.match(html, /<a class="btn-primary" href="webcal:\/\/example\.github\.io\/scarf\/spain\/basketball\.ics" data-alerts="webcal:\/\/example\.github\.io\/scarf\/spain\/basketball-alerts\.ics">/)
-  assert.equal(html.match(/class="team-chip"/g)?.length, teams.length)
-  assert.match(html, /href="\.\.\/\.\.\/spain\/basketball\/" style="[^"]*#AA151B[^"]*" aria-current="page"/)
-  assert.match(html, /href="\.\.\/\.\.\/germany\/basketball\/" style="[^"]*#000000 0px 18px, #DD0000 18px 36px, #FFCC00 36px 54px[^"]*"/)
+  assert.match(html, /<a class="country-chip" href="\.\.\/\.\.\/spain\/basketball\/" aria-current="page">/)
+  assert.match(html, /<a class="country-chip" href="\.\.\/\.\.\/germany\/basketball\/"><img class="flag" src="\.\.\/\.\.\/flags\/de\.svg"/)
+  // The page band keeps the team's stripes.
+  assert.match(html, /<body style="--stripe: repeating-linear-gradient\(90deg, #AA151B 0px 18px, #F1BF00 18px 36px\)/)
   assert.match(html, /Updated daily from FIBA\./)
 })
 
