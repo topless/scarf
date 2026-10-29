@@ -30,7 +30,7 @@ echo "branch"
 if [ "$branch" = "main" ]; then
   fail "on main; the protect-main ruleset only accepts pull requests"
 else
-  ok "$branch, $(git rev-list --count "$base..HEAD") commit(s) over $base_ref"
+  ok "$branch, $(git rev-list --no-merges --count "$base..HEAD") commit(s) over $base_ref"
 fi
 if [ -n "$(git status --porcelain)" ]; then
   note "uncommitted changes; the checks below read them too"
@@ -44,7 +44,7 @@ while IFS= read -r subject; do
   else
     fail "not a Conventional Commit: $subject"
   fi
-done <<<"$(git log --format=%s "$base..HEAD")"
+done <<<"$(git log --no-merges --format=%s "$base..HEAD")"  # merges from syncing with main are squashed away
 
 echo "tests"
 if ! npm ls --depth=0 >/dev/null 2>&1; then

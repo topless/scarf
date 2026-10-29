@@ -16,12 +16,13 @@ directory and strips the types.
 OUT=<scratchpad>/out node --input-type=module - <<'JS'
 import { cp, mkdir, writeFile } from 'node:fs/promises'
 import { teams } from './src/config.ts'
+import { flagFile, flagPath } from './src/flags.ts'
 import { toIcs } from './src/ics.ts'
 import { renderLanding, renderTeamPage } from './src/page.ts'
 import { renderShareImage } from './src/share.ts'
 
 const now = new Date()
-const site = 'https://topless.github.io/scarf'
+const site = 'https://scarf.fan'
 const [football] = teams
 const timed = { id: 'uefa-1', competition: 'UEFA Nations League', home: 'Greece', away: 'Germany',
   date: '2026-10-04', kickoff: '2026-10-04T18:45:00Z', utcOffsetHours: 3, venue: 'Toumba Stadium',
@@ -31,8 +32,9 @@ const unscheduled = { id: 'fiba-2', competition: 'Qualifiers', home: 'Greece', a
 const out = process.env.OUT
 await mkdir(`${out}/greece/football`, { recursive: true })
 await cp('assets', out, { recursive: true })
-await writeFile(`${out}/greece/football/index.html`, renderTeamPage({ team: football, games: [timed, unscheduled] }, teams, now, site))
-await writeFile(`${out}/index.html`, renderLanding(teams.map((team) => ({ team, games: [timed] })), now, site))
+for (const code of new Set(teams.map((team) => team.flag))) await cp(flagFile(code), `${out}/${flagPath(code)}`)
+await writeFile(`${out}/greece/football/index.html`, renderTeamPage({ team: football, games: [timed, unscheduled] }, teams, site))
+await writeFile(`${out}/index.html`, renderLanding(teams.map((team) => ({ team, games: [timed] })), site))
 await writeFile(`${out}/greece/football/share.png`, await renderShareImage(football, timed, site))
 await writeFile(`${out}/greece/football.ics`, toIcs(football, [timed, unscheduled], now, site))
 JS
@@ -40,7 +42,7 @@ JS
 
 Adapt the team, the games and the renderer to the change (a team with no games, a three-colour team,
 a FIBA game, whatever the acceptance criteria name). The calls above match the signatures in `src/` on
-2026-10-17; when one fails to run, read the export in `src/page.ts`, `src/share.ts` or `src/ics.ts` and
+2026-10-30; when one fails to run, read the export in `src/page.ts`, `src/share.ts` or `src/ics.ts` and
 fix the recipe in the same PR that changed it.
 
 ## Pages (`src/page.ts`, `assets/site.css`)
@@ -91,13 +93,13 @@ grep -c $'\r$' "$f"   # equals the line count when every line ends in CRLF
   and not a source request:
 
 ```bash
-curl -s https://topless.github.io/scarf/greece/football.ics | grep '^UID:' | sort
+curl -s https://scarf.fan/greece/football.ics | grep '^UID:' | sort
 ```
 
 - A client check (Apple Calendar, Google Calendar) cannot run here; it becomes a "Verify after
   merging" step with the exact subscribe URL and what to look for.
 
-## Data and teams (`src/config.ts`, `src/manual.ts`, `assets/flag-*.svg`)
+## Data and teams (`src/config.ts`, `src/manual.ts`, `src/flags.ts`)
 
 - `test/config.test.ts` holds the invariants (unique frozen paths, two or three hex colours, flag
   files exist, https ticket links); run it and extend it for a new field.
@@ -105,11 +107,12 @@ curl -s https://topless.github.io/scarf/greece/football.ics | grep '^UID:' | sor
   URL and the date as a comment next to the value, the way `src/config.ts` already does.
 - A new football team is free (UEFA answers for every team id in one call). A new FIBA competition is
   a new page per run: say so in the plan and get the maintainer's yes before adding it.
-- The first stripe colour becomes the calendar colour; a flag file is added to `assets/`.
+- The first stripe colour becomes the calendar colour. The flag is the flag-icons code in `Team.flag`
+  (`'gr'`, `'gb-eng'`); a code the package lacks fails the build, so no flag file is added by hand.
 - This is the one area where a real build is usually warranted, once:
 
 ```bash
-SITE_URL=https://topless.github.io/scarf npm run build
+SITE_URL=https://scarf.fan npm run build
 ```
 
   Read the console lines (`Greece football: 2 upcoming games`), spot-check two strings in the new

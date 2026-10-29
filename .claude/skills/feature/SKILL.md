@@ -222,7 +222,7 @@ Afterwards:
 ```bash
 gh run list --workflow "Build feeds" --limit 1
 gh run watch "$(gh run list --workflow 'Build feeds' --limit 1 --json databaseId --jq '.[0].databaseId')"
-curl -sI https://topless.github.io/scarf/<path> | head -1     # our own output, not a source
+curl -sI https://scarf.fan/<path> | head -1     # our own output, not a source
 ```
 
 Reading the live site is not a source request. Check the paths the PR touched; for a feed, that the
