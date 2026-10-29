@@ -37,7 +37,9 @@ export const WORDS: Record<Sport, { start: string; starts: string; ground: strin
     start: 'kickoff',
     starts: 'kicks off',
     ground: 'stadium',
-    ball: icon('<circle cx="12" cy="12" r="9"/><path d="M12 8.4l3.42 2.49-1.3 4.02H9.88l-1.3-4.02z"/><path d="M12 8.4V3M15.42 10.89l5.14-1.67M14.12 14.91l3.17 4.37M9.88 14.91l-3.17 4.37M8.58 10.89L3.44 9.22"/>'),
+    // The black centre pentagon and the hexagons around it; the seams are thinner than the outline
+    // so the hexagons stay open at 18 px.
+    ball: icon('<circle cx="12" cy="12" r="9"/><path d="M12 8.2L15.61 10.83L14.23 15.07L9.77 15.07L8.39 10.83z" fill="currentColor" stroke="none"/><path d="M12 8.2V5.8M15.61 10.83L17.9 10.08M14.23 15.07L15.64 17.02M9.77 15.07L8.36 17.02M8.39 10.83L6.1 10.08M8.34 3.78L12 5.8L15.66 3.78M18.69 5.98L17.9 10.08L20.95 12.94M19.79 16.5L15.64 17.02L13.87 20.8M10.13 20.8L8.36 17.02L4.21 16.5M3.05 12.94L6.1 10.08L5.31 5.98" stroke-width="1.4"/>'),
     surface: drawing('<rect x="10" y="10" width="280" height="170" rx="2"/><path d="M150 10v170"/><circle cx="150" cy="95" r="26"/><rect x="10" y="50" width="46" height="90"/><rect x="10" y="72" width="16" height="46"/><path d="M56 74.5A26 26 0 0 1 56 115.5"/><rect x="244" y="50" width="46" height="90"/><rect x="274" y="72" width="16" height="46"/><path d="M244 74.5A26 26 0 0 0 244 115.5"/><rect x="4" y="84" width="6" height="22"/><rect x="290" y="84" width="6" height="22"/>'),
   },
   basketball: {
