@@ -37,9 +37,9 @@ export const WORDS: Record<Sport, { start: string; starts: string; ground: strin
     start: 'kickoff',
     starts: 'kicks off',
     ground: 'stadium',
-    // The black centre pentagon and the hexagons around it; the seams are thinner than the outline
-    // so the hexagons stay open at 18 px.
-    ball: icon('<circle cx="12" cy="12" r="9"/><path d="M12 8.2L15.61 10.83L14.23 15.07L9.77 15.07L8.39 10.83z" fill="currentColor" stroke="none"/><path d="M12 8.2V5.8M15.61 10.83L17.9 10.08M14.23 15.07L15.64 17.02M9.77 15.07L8.36 17.02M8.39 10.83L6.1 10.08M8.34 3.78L12 5.8L15.66 3.78M18.69 5.98L17.9 10.08L20.95 12.94M19.79 16.5L15.64 17.02L13.87 20.8M10.13 20.8L8.36 17.02L4.21 16.5M3.05 12.94L6.1 10.08L5.31 5.98" stroke-width="1.4"/>'),
+    // Dark pentagons (the centre one and the five cut by the rim) alternating with light hexagons;
+    // the seams are thinner than the outline so the hexagons stay open at 18 px.
+    ball: icon('<circle cx="12" cy="12" r="9"/><path d="M12 8.2L15.61 10.83L14.23 15.07L9.77 15.07L8.39 10.83zM12 5.8L8.34 3.78A9 9 0 0 1 15.66 3.78zM17.9 10.08L18.69 5.98A9 9 0 0 1 20.95 12.94zM15.64 17.02L19.79 16.5A9 9 0 0 1 13.87 20.8zM8.36 17.02L10.13 20.8A9 9 0 0 1 4.21 16.5zM6.1 10.08L3.05 12.94A9 9 0 0 1 5.31 5.98z" fill="currentColor" stroke="none"/><path d="M12 8.2V5.8M15.61 10.83L17.9 10.08M14.23 15.07L15.64 17.02M9.77 15.07L8.36 17.02M8.39 10.83L6.1 10.08M8.34 3.78L12 5.8L15.66 3.78M18.69 5.98L17.9 10.08L20.95 12.94M19.79 16.5L15.64 17.02L13.87 20.8M10.13 20.8L8.36 17.02L4.21 16.5M3.05 12.94L6.1 10.08L5.31 5.98" stroke-width="1.4"/>'),
     surface: drawing('<rect x="10" y="10" width="280" height="170" rx="2"/><path d="M150 10v170"/><circle cx="150" cy="95" r="26"/><rect x="10" y="50" width="46" height="90"/><rect x="10" y="72" width="16" height="46"/><path d="M56 74.5A26 26 0 0 1 56 115.5"/><rect x="244" y="50" width="46" height="90"/><rect x="274" y="72" width="16" height="46"/><path d="M244 74.5A26 26 0 0 0 244 115.5"/><rect x="4" y="84" width="6" height="22"/><rect x="290" y="84" width="6" height="22"/>'),
   },
   basketball: {

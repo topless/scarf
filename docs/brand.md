@@ -51,8 +51,9 @@ white), so a country is its flag (from flag-icons), its name and its stripes. A 
 team colour: it is a ball icon, a line drawing of the pitch or court, and its own words (kickoff and
 stadium, tip-off and arena). The icons and drawings live with each sport's words in `src/page.ts`.
 
-- Ball icons: stroke SVG like the other icons. The football is in ink with its centre pentagon
-  filled and its seams at 1.4, so the hexagons around it stay open at 18 px.
+- Ball icons: stroke SVG like the other icons. The football is in ink, its pentagons filled (the
+  centre one and the five cut by the rim) so dark and light patches alternate, with its seams at
+  1.4 so the hexagons stay open at 18 px.
 - Drawings: ink lines at 28 % opacity, stroke 1.6, on wool, between a card's stripe and its body.
   Decoration only: hidden from screen readers, the words do the telling.
 
