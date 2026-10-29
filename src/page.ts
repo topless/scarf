@@ -26,20 +26,23 @@ const icon = (paths: string, stroke = 'currentColor') =>
 const drawing = (paths: string) =>
   `<svg viewBox="0 0 300 190" width="100%" height="100%" fill="none" stroke="#17171C" stroke-opacity="0.28" stroke-width="1.6" aria-hidden="true">${paths}</svg>`
 
-// Each sport's own words for the start of a game and the ground it is played on, so a basketball
-// page never promises a kickoff in a stadium, and its marks: the ball icon and a drawing of the
-// pitch or court. Colour says who, lines say what: the team brings the colour, and the only sport
-// colour is the basketball's own orange (docs/brand.md). A new sport in config.ts brings all of
-// it here; the order here is the order sports are listed in.
-const WORDS: Record<Sport, { start: string; ground: string; ball: string; surface: string }> = {
+// Each sport's own words for the start of a game, the verb for it and the ground it is played on,
+// so neither a basketball page nor a basketball calendar promises a kickoff in a stadium (the feeds
+// in ics.ts read them from here), and its marks: the ball icon and a drawing of the pitch or court.
+// Colour says who, lines say what: the team brings the colour, and the only sport colour is the
+// basketball's own orange (docs/brand.md). A new sport in config.ts brings all of it here; the
+// order here is the order sports are listed in.
+export const WORDS: Record<Sport, { start: string; starts: string; ground: string; ball: string; surface: string }> = {
   football: {
     start: 'kickoff',
+    starts: 'kicks off',
     ground: 'stadium',
     ball: icon('<circle cx="12" cy="12" r="9"/><path d="M12 8.4l3.42 2.49-1.3 4.02H9.88l-1.3-4.02z"/><path d="M12 8.4V3M15.42 10.89l5.14-1.67M14.12 14.91l3.17 4.37M9.88 14.91l-3.17 4.37M8.58 10.89L3.44 9.22"/>'),
     surface: drawing('<rect x="10" y="10" width="280" height="170" rx="2"/><path d="M150 10v170"/><circle cx="150" cy="95" r="26"/><rect x="10" y="50" width="46" height="90"/><rect x="10" y="72" width="16" height="46"/><path d="M56 74.5A26 26 0 0 1 56 115.5"/><rect x="244" y="50" width="46" height="90"/><rect x="274" y="72" width="16" height="46"/><path d="M244 74.5A26 26 0 0 0 244 115.5"/><rect x="4" y="84" width="6" height="22"/><rect x="290" y="84" width="6" height="22"/>'),
   },
   basketball: {
     start: 'tip-off',
+    starts: 'tips off',
     ground: 'arena',
     ball: icon('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M5.64 5.64C9 9 9 15 5.64 18.36M18.36 5.64C15 9 15 15 18.36 18.36"/>', '#D9600F'),
     surface: drawing('<rect x="10" y="10" width="280" height="170" rx="2"/><path d="M150 10v170"/><circle cx="150" cy="95" r="18"/><rect x="10" y="70" width="58" height="50"/><path d="M68 77A18 18 0 0 1 68 113"/><path d="M10 24H44A74.3 74.3 0 0 1 44 166H10"/><circle cx="22" cy="95" r="4"/><path d="M16 87v16"/><rect x="232" y="70" width="58" height="50"/><path d="M232 77A18 18 0 0 0 232 113"/><path d="M290 24H256A74.3 74.3 0 0 0 256 166H290"/><circle cx="278" cy="95" r="4"/><path d="M284 87v16"/>'),
@@ -402,7 +405,7 @@ export const federation = (team: Team) => team.source.kind.toUpperCase()
 const and = (items: string[]) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`)
 // "UEFA and FIBA": every source behind a list of teams, once each, in the teams' order.
 export const federations = (teams: Team[]) => and([...new Set(teams.map(federation))])
-const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
+export const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
 // "National team · Men's football": the eyebrow over a team's name on its share image.
 export const teamKind = (team: Team) => `National team · ${capitalise(`men's ${team.sport}`)}`
 // "National teams · Football and basketball": the same over the landing page's share image.

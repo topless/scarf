@@ -189,6 +189,23 @@ test('a new game already timed gets the short line; football has a stadium, not 
   assert.ok(!timedAlert.includes('BEGIN:VALARM'))
 })
 
+test('a basketball calendar says tip-off and arena, as its page does', () => {
+  const athens: Game = { ...ukraine, kickoff: '2027-02-26T18:00:00Z', utcOffsetHours: 2, venue: 'OAKA', city: 'Athens', tv: 'ERT (Greek TV)' }
+  const ics = toIcs(basketball, [athens], now)
+  const lines = icsLines(ics)
+  assert.ok(lines.includes("X-WR-CALDESC:Every game of the Greece men's national basketball team — tip-off, venue, TV, tickets. Kept up to date by scarf."))
+  const event = vevent(ics, 'fiba-127100@scarf')
+  assert.ok(event.includes('DESCRIPTION:FIBA Basketball World Cup 2027 European Qualifiers\\nTip-off 20:00 in Athens\\nTV: ERT (Greek TV)\\n\\nKept up to date by scarf · scarf.fan/greece/basketball'))
+  assert.ok(event.includes('DESCRIPTION:Greece vs Ukraine tips off in an hour · ERT'))
+  assert.ok(icsLines(toIcs(basketball, [athens], now, undefined, {})).some((l) => l.includes('— tip-off, venue, TV, tickets — and a note')))
+  assert.doesNotMatch(ics.replaceAll(/\r\n[ \t]/g, ''), /kick|stadium/i)
+})
+
+test('a football placeholder waits for a stadium, not an arena', () => {
+  const event = vevent(toIcs(football, [{ ...serbia, kickoff: undefined, venue: undefined, city: undefined }], now), 'uefa-2047926@scarf')
+  assert.ok(event.includes("DESCRIPTION:UEFA Nations League\\nVenue not announced\\nWe'll fill in the time and stadium as soon as UEFA publishes them.\\n\\nKept up to date by scarf · scarf.fan/greece/football"))
+})
+
 test('a kickoff without a city reads "at the venue", as on the page', () => {
   const lines = vevent(toIcs(football, [noCity], now), 'uefa-3@scarf')
   assert.ok(
