@@ -105,8 +105,8 @@ A Grafana Cloud dashboard on the free tier reads `scarf_events` through the Anal
 with a read-only token. Panels: subscribers per team by app, with Google and Outlook.com apart as "at
 least"; refresh rate per app; update reach; page views, visitors, referring sites and countries;
 subscribe clicks per team and app, and per hundred page views; feed requests per day against the free
-plan's 100,000. Its JSON lives in the repository, and the README's "What we can see" lists every
-signal. Analytics Engine keeps three months.
+plan's 100,000. Its JSON lives in the repository, and "What we can see" in docs/development.md lists
+every signal. Analytics Engine keeps three months.
 
 ## Privacy
 

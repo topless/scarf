@@ -105,12 +105,12 @@ own domain limits the damage to "re-point the route", so the worker should never
 - **Custom domain.** The site is served at `https://scarf.fan` (#44), and both print absolute URLs
   from the build's `SITE_URL` the way the team pages do. (a) works there as soon as it ships. (b)
   can share the feeds' host only with the Cloudflare proxy turned on for `scarf.fan`; today every
-  record is "DNS only" so GitHub can issue the certificate (README, "One-time setup").
+  record is "DNS only" so GitHub can issue the certificate (docs/development.md, "One-time setup").
 - **Observability (#24).** Once Cloudflare is in front, both show up in the zone analytics with no
   script and no cookie: (a) as requests per `/my/…` path, (b) as requests per query. Either way a
-  one-of-a-kind combination is one fan's calendar polling, which is worth a line in the README's
-  "What we can see" section. Without Cloudflare, (a) is as blind as the rest of the site today and
-  (b) has the Workers dashboard (requests, errors, CPU time).
+  one-of-a-kind combination is one fan's calendar polling, which is worth a line in the
+  "What we can see" section of docs/development.md. Without Cloudflare, (a) is as blind as the
+  rest of the site today and (b) has the Workers dashboard (requests, errors, CPU time).
 
 ## Recommendation
 

@@ -1,7 +1,7 @@
 # Called with `if: failure()` by publish.yml and check-feeds.yml. Opens an issue labelled "ops"
 # titled "<workflow> failed", or adds a comment to the one already open with that title, so a
 # failed daily build or a stale feed reaches Chris as an issue even if GitHub's own run
-# notifications are off (README "Keeping it running" has both settings).
+# notifications are off (docs/development.md "Keeping it running" has both settings).
 name: Alert on failure
 
 on:
