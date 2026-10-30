@@ -7,13 +7,14 @@ import { byStart, withDetails, type Game } from './game.ts'
 import { toIcs } from './ics.ts'
 import { announced, recordSeen, type KnownGames } from './known-games.ts'
 import { manual } from './manual.ts'
-import { renderCountryPage, renderLanding, renderTeamPage, type Section } from './page.ts'
+import { renderCountryPage, renderKit, renderLanding, renderTeamPage, type Section } from './page.ts'
 import { renderCountryShareImage, renderLandingShareImage, renderShareImage } from './share.ts'
 import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
 
 // Fetches every team's upcoming games and writes one calendar feed, one page and one share image
-// per team, the landing page with its own share image, and next to them the brand assets
-// (stylesheets, icons) and the flags the teams use, copied out of flag-icons with its licence.
+// per team, the landing page with its own share image, the unlisted identity kit at /kit/, and
+// next to them the brand assets (stylesheets, icons) and the flags the teams use, copied out of
+// flag-icons with its licence.
 // Each country gets a page and a share image of its own too, listing its teams.
 // Requests stay minimal: UEFA answers for every football team in one call, and a FIBA page is
 // fetched once per competition and shared by the teams playing in it (Greece and Spain are in
@@ -78,6 +79,8 @@ for (const country of new Set(teams.map((team) => team.country))) {
 }
 await writeFile('dist/index.html', renderLanding(sections, siteUrl))
 await writeFile(`dist/${landingSharePath}`, await renderLandingShareImage(teams, siteUrl))
+await mkdir('dist/kit', { recursive: true })
+await writeFile('dist/kit/index.html', renderKit(teams))
 await cp('assets', 'dist', { recursive: true })
 // Only the flags a team uses, never the whole package; the licence sits next to the copies, as
 // MIT asks. Every flag was already read for its share image, so a wrong code failed before this.

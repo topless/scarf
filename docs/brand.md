@@ -50,6 +50,8 @@ top of a page or share card.
 white), so a country is its flag (from flag-icons), its name and its stripes. A sport never takes a
 team colour: it is a ball icon, a line drawing of the pitch or court, and its own words (kickoff and
 stadium, tip-off and arena). The icons and drawings live with each sport's words in `src/page.ts`.
+The identity kit at `/kit/` (unlisted, `noindex`) shows every country, sport and team card side by
+side: check it after adding a team or a sport.
 
 - Ball icons: stroke SVG like the other icons. The football is in ink, its pentagons filled (the
   centre one and the five cut by the rim) so dark and light patches alternate, with its seams at
