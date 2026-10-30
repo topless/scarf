@@ -34,6 +34,15 @@ jobs:
           path: known-games.json
           key: known-games-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: known-games-
+      # The sources' answers earlier runs saved (answers/, src/build.ts). A build on a push reuses
+      # those less than a day old instead of asking UEFA and FIBA again; the daily run and a manual
+      # run always ask afresh, so only a push restores them.
+      - if: github.event_name == 'push'
+        uses: actions/cache/restore@v6
+        with:
+          path: answers
+          key: answers-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: answers-
       # A failed fetch stops here, so the last published calendars stay online.
       - run: npm run build
         env:
@@ -52,6 +61,11 @@ jobs:
         with:
           path: known-games.json
           key: known-games-${{ github.run_id }}-${{ github.run_attempt }}
+      # The answers the build used, saved the same way: what a push reused, plus anything it fetched.
+      - uses: actions/cache/save@v6
+        with:
+          path: answers
+          key: answers-${{ github.run_id }}-${{ github.run_attempt }}
 
   # GitHub disables a scheduled workflow after 60 days without repository activity, and this
   # repository only changes when a game's details do. Re-enabling the scheduled workflows through

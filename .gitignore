@@ -4,3 +4,4 @@ dist/
 .DS_Store
 known-games.json
 *.swp
+answers/

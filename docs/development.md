@@ -19,7 +19,8 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
    its next game, a country's in its colours with its teams' names, the landing page's in the brand
    colours with every team's name;
 5. records the games it saw in `known-games.json`, which the Actions job keeps in its cache between runs
-   (not in git), so the next run can tell a newly announced game from an old one.
+   (not in git), so the next run can tell a newly announced game from an old one, and saves the sources'
+   answers in `answers/`, cached the same way, for the builds on a push to `main` (see "Known limits").
 
 If a source cannot be fetched or its format changed, the build fails and the last published files stay online.
 
@@ -69,7 +70,8 @@ npm test
 npm run build
 ```
 
-A local build also writes `known-games.json` in the repository root, which git ignores.
+A local build also writes `known-games.json` and `answers/` in the repository root, which git ignores. It
+always asks the sources afresh: only a build on a push to `main` reuses saved answers.
 
 `npm run build` asks UEFA and FIBA for live data. To check a page change without asking them, build
 from the test fixtures and serve `dist/` the way scarf.fan does:
@@ -128,7 +130,7 @@ publishing without anyone pushing a commit:
   than 36 hours the check fails and the alert above fires. This is what catches a build that was
   disabled, skipped or stuck rather than one that failed.
 
-To force a build: Actions → Build feeds → Run workflow. To test that a failure reaches you: Actions →
+To force a build: Actions → Build feeds → Run workflow; like the daily run, it asks the sources afresh. To test that a failure reaches you: Actions →
 Check feeds → Run workflow with `max_age_hours` set to `0`. Within a few minutes an issue "Check feeds
 failed" appears and lands in your inbox; close it once seen, and the next real failure opens a new one.
 
@@ -152,9 +154,12 @@ docs/observability.md is the plan for counting subscribers, visitors and subscri
 ## Known limits
 
 - The UEFA endpoint and the FIBA page are undocumented and can change without notice. Their terms do not
-  allow automated collection, so this stays a small friends-only tool: per run (the daily run, plus one
-  run per push to `main`) one UEFA request for all football teams together and one FIBA request per
-  basketball competition.
+  allow automated collection, so this stays a small friends-only tool: the daily run makes one UEFA request
+  for all football teams together and one FIBA request per basketball competition. A run on a push to
+  `main` reuses the answers an earlier run saved while they are less than a day old, and asks only for what
+  they don't cover: after a football team is added, one UEFA request for all of them; after a competition
+  is added, one FIBA request for its page. With no saved answers, or older ones, it asks like the daily run.
+  The run's summary says which answers were reused.
 - Calendar apps refresh subscribed feeds on their own schedule; Google Calendar can take a day. On a Mac,
   choose "Every day" for auto-refresh when subscribing; the default is reportedly weekly.
 - Subscribing in Google Calendar only works in a computer browser, not in the phone app.
