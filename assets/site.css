@@ -155,3 +155,7 @@ a.cell:hover { color: var(--ink); border-color: var(--ink); }
 .site-footer { padding-top: 28px; padding-bottom: 36px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; font-size: 13px; line-height: 1.5; color: var(--stand); }
 .footer-brand { display: flex; align-items: center; gap: 10px; }
 .footer-brand .wordmark { font-size: 20px; color: var(--ink); }
+/* Quiet links in the footer's own grey; each wraps whole, and the row gap keeps them apart to tap. */
+.footer-links { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.footer-links a { color: inherit; text-underline-offset: 3px; }
+.footer-links a:hover { color: var(--ink); }

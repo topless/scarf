@@ -342,10 +342,19 @@ test('a new team page shows its flag, its own feed and links every other team', 
   assert.match(html, /Updated daily from FIBA\./)
 })
 
-test('every footer carries the motto', () => {
-  const pages = [teamPage([timed], site), renderLanding([{ team: football, games: [timed] }]), renderCountryPage([{ team: football, games: [timed] }])]
+test('every footer carries the motto and links the repository and its issues', () => {
+  const pages = [
+    teamPage([timed], site),
+    renderLanding([{ team: football, games: [timed] }]),
+    renderCountryPage([{ team: football, games: [timed] }]),
+    renderHowItWorks([{ team: football, games: [timed] }]),
+    renderKit(teams),
+  ]
   for (const html of pages) {
-    assert.match(html, /<span>· Wrapped up in the game\.<\/span>/)
+    const footer = html.slice(html.indexOf('<footer'), html.indexOf('</footer>'))
+    assert.match(footer, /<span>· Wrapped up in the game\.<\/span>/)
+    assert.ok(footer.includes('<a href="https://github.com/topless/scarf/issues/new/choose">Report a bug or suggest a feature</a>'))
+    assert.ok(footer.includes('<a href="https://github.com/topless/scarf">scarf on GitHub</a>'))
   }
 })
 

@@ -389,9 +389,11 @@ function header(root: string, nav = ''): string {
 </header>`
 }
 
+// Every page's footer: the motto, and where a fan reports a wrong kickoff or asks for a team.
 function footer(): string {
   return `<footer class="wrap site-footer">
   <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Wrapped up in the game.</span></div>
+  <div class="footer-links"><a href="https://github.com/topless/scarf/issues/new/choose">Report a bug or suggest a feature</a><a href="https://github.com/topless/scarf">scarf on GitHub</a></div>
 </footer>`
 }
 
