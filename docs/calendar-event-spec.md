@@ -1,4 +1,4 @@
-# The calendar event — copy spec
+# The calendar event · copy spec
 
 Team names are joined with "vs" ("Greece vs Serbia"): decided by Chris on 2026-10-17; the design
 originally wrote "v".
@@ -22,7 +22,7 @@ Each sport speaks its own words, the same in the feed as on its team page (`WORD
 ```
 PRODID:-//scarf//feeds//EN
 X-WR-CALNAME:Greece football · scarf
-X-WR-CALDESC:Every game of the Greece men's national football team — kickoff, venue, TV, tickets. Kept up to date by scarf.
+X-WR-CALDESC:Every game of the Greece men's national football team: kickoff, venue, TV, tickets. Kept up to date by scarf.
 X-APPLE-CALENDAR-COLOR:#0D5EAF
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
@@ -34,10 +34,10 @@ Calendar name: team first, brand last, lowercase. Colour: the team's first strip
 
 | Field | Value |
 |---|---|
-| `UID` | source id, e.g. `uefa-<matchId>@scarf` — never changes |
-| `SUMMARY` | `Greece vs Serbia` — home team first as the federation lists it; no competition, sport or emoji |
+| `UID` | source id that never changes, e.g. `uefa-<matchId>@scarf` |
+| `SUMMARY` | `Greece vs Serbia`: home team first as the federation lists it; no competition, sport or emoji |
 | `DTSTART`/`DTEND` | UTC; duration 2 h (football and basketball alike) |
-| `LOCATION` | `Panthessaliko Stadium, Volos, Greece` — full venue, city, country |
+| `LOCATION` | `Panthessaliko Stadium, Volos, Greece`: full venue, city, country |
 | `URL` | ticket link while on sale, else the team page |
 | `DESCRIPTION` | template below |
 | `VALARM` | `TRIGGER:-PT60M`, `DESCRIPTION:Greece vs Serbia kicks off in an hour · Alpha, Novasports` |
@@ -81,7 +81,7 @@ Kept up to date by scarf · {canonical}/greece/basketball
 A football placeholder waits for the time and the stadium: `We'll fill in the time and stadium as
 soon as UEFA publishes them.`
 
-## 3 · Tickets on sale (alert event — repo issue #2)
+## 3 · Tickets on sale (alert event, repo issue #2)
 
 All-day event on the day sales open, driven by a manual `onSale` date in `src/manual.ts`.
 
@@ -127,7 +127,7 @@ All-day event on the day the build first sees a new `UID`. Only in the `-alerts`
 | `SUMMARY` | `New game · Georgia vs Greece, 1 Mar 2027` |
 
 ```
-Just announced by FIBA. It's already in this calendar — time and arena to follow.
+Just announced by FIBA. It's already in this calendar, with time and arena to follow.
 
 Kept up to date by scarf · {canonical}/greece/basketball
 ```
@@ -136,10 +136,10 @@ Kept up to date by scarf · {canonical}/greece/basketball
 
 Apple Calendar and Outlook honour `VALARM` from a subscribed feed; Google Calendar ignores it and
 uses the user's default notification for that calendar. The team page says so in one line:
-"On Google Calendar, set a notification for this calendar once — it applies to every game."
+"On Google Calendar, set a notification for this calendar once. It applies to every game."
 
 ## Voice checks (test these as string assertions)
 
-- No `!`, no emoji, no "notification", no "TBA"/"TBC"/"TBD", no "don't miss".
+- No `!`, no em dash, no emoji, no "notification", no "TBA"/"TBC"/"TBD", no "don't miss".
 - Every time is followed by ` in <City>`, or ` at the venue` until the city is announced.
 - Summary never contains the competition or the sport (except the ` · football` suffix in a combined feed).
