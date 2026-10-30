@@ -1,5 +1,6 @@
-import { cp, mkdir, readFile, writeFile } from 'node:fs/promises'
+import { appendFile, cp, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { setTimeout as pause } from 'node:timers/promises'
+import { feedChanges } from './changes.ts'
 import { alertsFeedPath, countrySharePath, feedPath, landingSharePath, sharePath, teams, type Team } from './config.ts'
 import { fetchFibaPage, parseFibaGames } from './fiba.ts'
 import { flagFile, flagLicenseFile, flagPath } from './flags.ts'
@@ -53,7 +54,16 @@ async function gamesOf(team: Team): Promise<Game[]> {
   return parseFibaGames(page, source.teamCode)
 }
 
+// The feed fans have now, to tell what this build changes (src/changes.ts). Our own site, not a
+// source, so it does not count against the one-request-per-source rule.
+async function liveFeed(team: Team): Promise<string> {
+  const response = await fetch(`${siteUrl}/${feedPath(team)}`, { signal: AbortSignal.timeout(10_000) })
+  if (!response.ok) throw new Error(`answered ${response.status}`)
+  return response.text()
+}
+
 const sections: Section[] = []
+const changes: string[] = [] // a Markdown block per team whose feed changed, for the run summary
 for (const team of teams) {
   const games = (await gamesOf(team))
     .filter((game) => game.date >= today)
@@ -63,10 +73,18 @@ for (const team of teams) {
   const seen = recordSeen(known[key], games.map((game) => game.id), today)
   known[key] = seen.feed
   await mkdir(`dist/${team.country}/${team.sport}`, { recursive: true })
-  await writeFile(`dist/${feedPath(team)}`, toIcs(team, games, now, siteUrl))
+  const ics = toIcs(team, games, now, siteUrl)
+  await writeFile(`dist/${feedPath(team)}`, ics)
   await writeFile(`dist/${alertsFeedPath(team)}`, toIcs(team, games, now, siteUrl, announced(seen.feed)))
   sections.push({ team, games })
   console.log(`${team.name}: ${games.length} upcoming games, ${seen.fresh.length} new`)
+  if (siteUrl) {
+    const lines = await liveFeed(team).then(
+      (live) => feedChanges(live, ics, today),
+      (error: Error) => [`Couldn't read the live feed: ${error.message}`],
+    )
+    if (lines.length) changes.push(`**${team.name}**`, ...lines.map((line) => `- ${line}`), '')
+  }
 }
 for (const section of sections) {
   const { team, games } = section
@@ -89,5 +107,24 @@ await cp('assets', 'dist', { recursive: true })
 // MIT asks. Every flag was already read for its share image, so a wrong code failed before this.
 for (const code of new Set(teams.map((team) => team.flag))) await cp(flagFile(code), `dist/${flagPath(code)}`)
 await cp(flagLicenseFile(), 'dist/flags/LICENSE')
+// On the run's page in Actions (GITHUB_STEP_SUMMARY), printed elsewhere. A local build has no
+// SITE_URL, so nothing to compare with and no summary.
+if (siteUrl) {
+  const sources = [
+    uefaTeamIds.length && `UEFA answered one request for ${uefaTeamIds.length} football teams`,
+    fibaPages.size && `FIBA answered ${fibaPages.size} competition ${fibaPages.size === 1 ? 'page' : 'pages'}`,
+  ].filter(Boolean)
+  const counts = sections.map(({ team, games }) => `${team.name} ${games.length}`).join(' · ')
+  const report = [
+    '## What this build changed',
+    '',
+    `${sources.join(' · ')}. Upcoming games: ${counts}.`,
+    '',
+    ...(changes.length ? changes : ['No game changed in any feed.']),
+  ]
+  const summaryFile = process.env.GITHUB_STEP_SUMMARY
+  if (summaryFile) await appendFile(summaryFile, report.join('\n') + '\n')
+  else console.log(report.join('\n'))
+}
 // Last, so a build that fails part-way leaves the file as it was; the job caches it after the deploy.
 await writeFile(KNOWN_GAMES, JSON.stringify(known, null, 2) + '\n')
