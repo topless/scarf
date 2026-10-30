@@ -19,7 +19,7 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
 2. adds what no source provides (TV channel, ticket link) from [src/config.ts](src/config.ts) and [src/manual.ts](src/manual.ts);
 3. writes one `dist/{country}/{sport}.ics`, its `-alerts` variant and one team page `dist/{country}/{sport}/index.html`
    per team, one country page `dist/{country}/index.html` listing that country's teams, and the landing page
-   `dist/index.html` listing every team, which GitHub Pages serves;
+   `dist/index.html` listing every team, which a Cloudflare Worker serves at scarf.fan;
 4. renders a 1200×630 share image per team at `dist/{country}/{sport}/share.png`, one per country at
    `dist/{country}/share.png` and one for the landing page at `dist/share.png`, the card a chat app shows
    when someone pastes a page's address, from [src/share.ts](src/share.ts): a team's in its colours with
@@ -46,29 +46,23 @@ Subscriptions point at these paths, so they are frozen (see [HANDOVER.md](HANDOV
 Each event's `UID` is the source's id (`uefa-…`, `fiba-…`) and never changes, so an updated game
 replaces the old entry instead of duplicating it.
 
-## One-time setup on GitHub
+## One-time setup
 
-The repository must be public (GitHub Pages on a free plan). In the repository settings, under
-Pages, set the source to "GitHub Actions"; the first run fails until that is done.
+The site at `https://scarf.fan` is `dist/` served as static assets by the Cloudflare Worker `scarf`
+([wrangler.jsonc](wrangler.jsonc)); "Build feeds" deploys it with Wrangler. The build's `SITE_URL`
+is set in the workflow.
 
-The site lives at `https://scarf.fan`. The domain's DNS is at Cloudflare: four `A` and four `AAAA`
-records on the apex to GitHub Pages' addresses, and `www` as a `CNAME` to `topless.github.io`, all
-"DNS only" (grey cloud) so GitHub can issue the certificate. Under Pages, the custom domain is
-`scarf.fan` with "Enforce HTTPS" on. The build takes its address from that setting
-(`SITE_URL`), so no `CNAME` file is needed.
-
-### Cloudflare Workers, side by side (#43)
-
-The same files are also deployed to Cloudflare Workers ([wrangler.jsonc](wrangler.jsonc)), answering
-at `https://scarf.topless.workers.dev` until scarf.fan moves there (docs/observability.md, "Hosting").
-The deploy step in "Build feeds" is skipped until the token exists:
-
-1. In the Cloudflare dashboard, My Profile → API Tokens → Create Token, template "Edit Cloudflare
-   Workers", limited to this account.
-2. Store it in the repository: `gh secret set CLOUDFLARE_API_TOKEN --repo topless/scarf` and paste
-   the token when asked.
-3. Run "Build feeds" (Actions → Run workflow). Its last step, "Deploy to Cloudflare Workers", prints
-   the `workers.dev` address.
+- **Token.** One repository secret, `CLOUDFLARE_API_TOKEN`. In the Cloudflare dashboard, My Profile →
+  API Tokens → Create Token, template "Edit Cloudflare Workers", limited to this account and the
+  scarf.fan zone; then `gh secret set CLOUDFLARE_API_TOKEN --repo topless/scarf` and paste it.
+- **DNS** is at Cloudflare. `scarf.fan` is the Worker's custom domain (the `routes` entry in
+  wrangler.jsonc), so Cloudflare keeps its record and certificate. `www` is a proxied placeholder
+  record (`AAAA 100::`) with a redirect rule that sends every request to `https://scarf.fan` with the
+  same path. "Always Use HTTPS" is on, so a calendar that asks over `http://` ends on https.
+- **GitHub Pages** stays on, with the custom domain `scarf.fan` and its last deployment, only so the
+  addresses from before 22 October 2026 (`topless.github.io/scarf/…`) keep redirecting to scarf.fan.
+  That needs the repository public (GitHub Pages on a free plan), and the
+  `_github-pages-challenge-topless` TXT record keeps the domain verified to this GitHub account.
 
 ## Running it
 
@@ -144,9 +138,11 @@ The health signals we have today, in the order to check them:
   changed (with the old and new value) and removed in each feed, compared with what scarf.fan served
   just before the run, and how many played games left the feeds.
 
-GitHub Pages keeps no access logs and the site carries no tracking, so how often the feeds are fetched
-(the closest thing to a subscriber count) and how many people visit the pages cannot be seen today.
-docs/observability.md is the plan for both, plus subscribe clicks (#24).
+- **Requests.** Cloudflare counts every request to scarf.fan, by path, browser or calendar app,
+  country and status, 30 days back: dashboard → scarf.fan → Analytics → Traffic. How often the feeds
+  are fetched is the closest thing to a subscriber count.
+
+docs/observability.md is the plan for counting subscribers, visitors and subscribe clicks (#24).
 
 ## Known limits
 
