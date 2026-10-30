@@ -344,10 +344,18 @@ test('a new team page shows its flag, its own feed and links every other team', 
   assert.match(html, /Updated daily from FIBA\./)
 })
 
-test('every footer carries the motto', () => {
-  const pages = [teamPage([timed], site), renderLanding([{ team: football, games: [timed] }]), renderCountryPage([{ team: football, games: [timed] }])]
+test('every footer carries the motto and a link to suggest a team or report a bug', () => {
+  const pages = [
+    teamPage([timed], site),
+    renderLanding([{ team: football, games: [timed] }]),
+    renderCountryPage([{ team: football, games: [timed] }]),
+    renderHowItWorks([{ team: football, games: [timed] }]),
+    renderKit(teams),
+  ]
   for (const html of pages) {
-    assert.match(html, /<span>· Wrapped up in the game\.<\/span>/)
+    const footer = html.slice(html.indexOf('<footer'), html.indexOf('</footer>'))
+    assert.match(footer, /<span>· Wrapped up in the game\.<\/span>/)
+    assert.match(footer, /<a class="footer-link" href="https:\/\/github\.com\/topless\/scarf\/issues\/new\/choose"><svg [^>]*aria-hidden="true">.*<\/svg>Suggest a team or report a bug<\/a>/)
   }
 })
 

@@ -155,3 +155,7 @@ a.cell:hover { color: var(--ink); border-color: var(--ink); }
 .site-footer { padding-top: 28px; padding-bottom: 36px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; font-size: 13px; line-height: 1.5; color: var(--stand); }
 .footer-brand { display: flex; align-items: center; gap: 10px; }
 .footer-brand .wordmark { font-size: 20px; color: var(--ink); }
+/* A quiet link in the footer's own grey; the GitHub mark sits on the text's baseline and follows its colour. */
+.footer-link { color: inherit; text-underline-offset: 3px; }
+.footer-link:hover { color: var(--ink); }
+.footer-link svg { vertical-align: -3px; margin-right: 6px; }
