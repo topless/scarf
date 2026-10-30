@@ -1,4 +1,4 @@
-import { alertsFeedPath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, type Sport, type Team } from './config.ts'
+import { alertsFeedPath, countrySharePath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, type Sport, type Team } from './config.ts'
 import { flagPath } from './flags.ts'
 import type { Game } from './game.ts'
 
@@ -50,7 +50,7 @@ export const WORDS: Record<Sport, { start: string; starts: string; ground: strin
     surface: drawing('<rect x="10" y="10" width="280" height="170" rx="2"/><path d="M150 10v170"/><circle cx="150" cy="95" r="18"/><rect x="10" y="70" width="58" height="50"/><path d="M68 77A18 18 0 0 1 68 113"/><path d="M10 24H44A74.3 74.3 0 0 1 44 166H10"/><circle cx="22" cy="95" r="4"/><path d="M16 87v16"/><rect x="232" y="70" width="58" height="50"/><path d="M232 77A18 18 0 0 0 232 113"/><path d="M290 24H256A74.3 74.3 0 0 0 256 166H290"/><circle cx="278" cy="95" r="4"/><path d="M284 87v16"/>'),
   },
 }
-const SPORTS = Object.keys(WORDS) as Sport[]
+export const SPORTS = Object.keys(WORDS) as Sport[]
 
 // The reminder a timed game carries in its feed (ics.ts) and shows in its How it works step: an
 // hour before the start, the game and the channels. The channel names are enough there; the
@@ -135,6 +135,38 @@ ${countries.map((group) => countryChip(group[0]!.team, '', `#${group[0]!.team.co
 </section>
 <section class="wrap countries" aria-label="Teams by country">
 ${countries.map((group) => countryCard(group)).join('\n')}
+</section>
+</main>
+${footer()}`,
+  })
+}
+
+// A country's page at /{country}/: its teams on the same card as on the landing, under the
+// country's stripes. Room for its clubs later, so the landing keeps one card per country.
+export function renderCountryPage(group: Section[], siteUrl?: string): string {
+  const { team } = group[0]!
+  const name = esc(countryName(team))
+  // "kickoff or tip-off", or only the words of the sports the country has a team in.
+  const starts = SPORTS.filter((sport) => group.some((section) => section.team.sport === sport))
+    .map((sport) => WORDS[sport].start)
+    .join(' or ')
+  return page({
+    root: '../',
+    title: `${countryName(team)} · ${siteName}`,
+    description: `Every ${countryName(team)} game in your calendar: ${starts}, venue, TV and tickets, updated daily.`,
+    share: { url: siteUrl && `${siteUrl}/${team.country}/`, image: siteUrl && `${siteUrl}/${countrySharePath(team)}` },
+    stripes: team.colours,
+    body: `<div class="band"></div>
+${header('../', '')}
+<main>
+<section class="wrap hero">
+  <div class="hero-text">
+    <h1>${name}, in your calendar.</h1>
+    <p class="lede">Pick a team and subscribe once. Every ${starts}, venue, channel and ticket sale lands in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
+  </div>
+</section>
+<section class="wrap countries" aria-label="${name} teams">
+${countryCard(group, '../', true)}
 </section>
 </main>
 ${footer()}`,
@@ -427,7 +459,7 @@ function countryBar(team: Team, all: Team[]): string {
     `<a href="../../${other.country}/${other.sport}/"${other === team ? ' aria-current="page"' : ''}>${WORDS[other.sport].ball}${capitalise(other.sport)}</a>`
   return `<div class="wrap">
   <div class="country-bar">
-    <p class="country-name"><img class="flag" src="../../${flagPath(team.flag)}" width="32" height="24" alt="">${name}</p>
+    <a class="country-name" href="../"><img class="flag" src="../../${flagPath(team.flag)}" width="32" height="24" alt="">${name}</a>
     ${sports.length > 1 ? `<nav class="switch" aria-label="${name} teams">${sports.map(link).join('')}</nav>` : ''}
   </div>
 </div>`
@@ -493,13 +525,15 @@ function countryChip(team: Team, root: string, href: string, current = false): s
 
 // A country's card on the landing page: its stripes, flag and name, then one cell per sport. The
 // country's teams share their stripes (they come from the flag), so the first team's stand for all.
-// root is the way from the page to the site root, for the flag and the team links.
-function countryCard(group: Section[], root = ''): string {
+// root is the way from the page to the site root, for the flag and the team links. The flag and
+// name link to the country's page, except on that page itself (current).
+function countryCard(group: Section[], root = '', current = false): string {
   const { team } = group[0]!
+  const heading = `<img class="flag" src="${root}${flagPath(team.flag)}" width="44" height="33" alt=""><h2 id="c-${team.country}">${esc(countryName(team))}</h2>`
   return `  <article class="card country" id="${team.country}" aria-labelledby="c-${team.country}" style="${stripeVars(team.colours)}">
     <div class="card-stripe"></div>
     <div class="country-body">
-      <div class="country-name"><img class="flag" src="${root}${flagPath(team.flag)}" width="44" height="33" alt=""><h2 id="c-${team.country}">${esc(countryName(team))}</h2></div>
+      ${current ? `<div class="country-name">${heading}</div>` : `<a class="country-name" href="${root}${team.country}/">${heading}${ICON.arrow}</a>`}
 ${SPORTS.map((sport) => sportCell(sport, group.find((section) => section.team.sport === sport), root)).join('\n')}
     </div>
   </article>`
@@ -537,7 +571,7 @@ export const landingKind = (teams: Team[]) => `National teams · ${capitalise(an
 // "Greece" from "Greece football".
 // shortcut: assumes every team name is "{Country} {sport}", as config.ts names them; give Team a
 // country name of its own when a team is named otherwise.
-const countryName = (team: Team) => team.name.slice(0, -team.sport.length - 1)
+export const countryName = (team: Team) => team.name.slice(0, -team.sport.length - 1)
 
 // Items grouped by country, the countries in alphabetical order of their names.
 function byCountry<T>(items: T[], teamOf: (item: T) => Team): T[][] {

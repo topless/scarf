@@ -1,32 +1,25 @@
 <!--
-Title: a Conventional Commit, e.g. feat(pages): group teams by sport. The bullets below are the
-release notes and the squash commit's body: one per change a fan or the maintainer notices, files in
-backticks. Delete a section that has nothing to say.
+Title: a Conventional Commit, e.g. feat(pages): group teams by sport. The bullets are the release
+notes and the squash commit's body: one short line per change a fan or the maintainer notices.
+Keep it short. CI shows tests and builds, the diff shows files. Delete any section with nothing to say.
 -->
 
 -
 
-## Verification
+## Screenshots
 
-<!-- Each acceptance criterion from the issue with its evidence: test count and what the new tests
-protect, what a render or a real build produced, spot checks quoting the strings. Say how many live
-requests to UEFA and FIBA this work made, probes included. -->
+<!-- For a change a fan can see: the page before and after, at phone width. Drag the images in. -->
 
 ## Assumptions
 
-<!-- Decisions taken without asking, and why each seemed safe. -->
+<!-- Decisions taken without asking, one line each. -->
 
 ## Noticed, not changed
 
-<!-- Smells and stale docs seen on the way, left for their own issue or PR. -->
+<!-- Problems seen on the way, left for their own issue, one line each. -->
 
-## Overlaps with other PRs
+## After merging
 
-<!-- Open PRs touching the same files and where the hunks collide. -->
-
-## Verify after merging
-
-<!-- Only when workflows or Pages settings change: GitHub runs them from main, so list the manual
-pass as numbered steps with the log line or issue to expect. -->
+<!-- Only when workflows or Pages settings change: the manual check to run. -->
 
 Closes #

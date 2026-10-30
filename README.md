@@ -18,12 +18,14 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
    page per basketball competition, shared by the teams playing in it;
 2. adds what no source provides (TV channel, ticket link) from [src/config.ts](src/config.ts) and [src/manual.ts](src/manual.ts);
 3. writes one `dist/{country}/{sport}.ics`, its `-alerts` variant and one team page `dist/{country}/{sport}/index.html`
-   per team, the landing page `dist/index.html` listing every team and the How it works page
-   `dist/how-it-works/index.html`, which GitHub Pages serves;
-4. renders a 1200×630 share image per team at `dist/{country}/{sport}/share.png` and one for the landing
-   page at `dist/share.png`, the card a chat app shows when someone pastes a page's address, from
-   [src/share.ts](src/share.ts): a team's in its colours with its next game, the landing page's in the
-   brand colours with every team's name;
+   per team, one country page `dist/{country}/index.html` listing that country's teams, the landing page
+   `dist/index.html` listing every team and the How it works page `dist/how-it-works/index.html`, which
+   GitHub Pages serves;
+4. renders a 1200×630 share image per team at `dist/{country}/{sport}/share.png`, one per country at
+   `dist/{country}/share.png` and one for the landing page at `dist/share.png`, the card a chat app shows
+   when someone pastes a page's address, from [src/share.ts](src/share.ts): a team's in its colours with
+   its next game, a country's in its colours with its teams' names, the landing page's in the brand
+   colours with every team's name;
 5. records the games it saw in `known-games.json`, which the Actions job keeps in its cache between runs
    (not in git), so the next run can tell a newly announced game from an old one.
 
@@ -38,6 +40,8 @@ Subscriptions point at these paths, so they are frozen (see [HANDOVER.md](HANDOV
   for fans who pick "Games and announcements" on the team page.
 - `/{country}/{sport}/`: the team's page, for example `/greece/football/`, with its share image at
   `/{country}/{sport}/share.png`.
+- `/{country}/`: the country's page listing its teams, for example `/greece/`, with its share image at
+  `/{country}/share.png`.
 - `/`: the page listing every team.
 
 Each event's `UID` is the source's id (`uefa-…`, `fiba-…`) and never changes, so an updated game
@@ -127,8 +131,8 @@ The health signals we have today, in the order to check them:
 
 GitHub Pages keeps no access logs and the site carries no tracking, so how often the feeds are fetched
 (the closest thing to a subscriber count) and how many people visit the pages cannot be seen today.
-That is left for #24, which proposes reading both from Cloudflare once the custom domain is in front
-of the site.
+docs/observability.md is the plan for both, plus subscribe clicks and a per-build change summary
+(#24).
 
 ## Known limits
 
