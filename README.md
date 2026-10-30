@@ -130,8 +130,8 @@ The health signals we have today, in the order to check them:
 
 GitHub Pages keeps no access logs and the site carries no tracking, so how often the feeds are fetched
 (the closest thing to a subscriber count) and how many people visit the pages cannot be seen today.
-That is left for #24, which proposes reading both from Cloudflare once the custom domain is in front
-of the site.
+docs/observability.md is the plan for both, plus subscribe clicks and a per-build change summary
+(#24).
 
 ## Known limits
 

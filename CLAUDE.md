@@ -57,4 +57,5 @@ in your calendar." Motto: "Wrapped up in the game."
 
 - Don't add a request to a source "just to check". Don't scrape anything new without an issue first.
 - Don't change feed paths or UIDs. Don't print the secondary domain anywhere.
-- Don't add accounts, logins or tracking to the static site.
+- Don't add accounts, logins, cookies or third-party tracking to the static site. First-party,
+  cookie-free counting is fine, within docs/observability.md's privacy rules.
