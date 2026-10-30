@@ -1,7 +1,6 @@
 # Development
 
-How scarf is built, set up, run and kept running. The [README](../README.md) says what it is and
-which paths it serves.
+How scarf is built, set up, run and kept running. The [README](../README.md) says what it is.
 
 ## How it works
 
@@ -23,6 +22,22 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
    (not in git), so the next run can tell a newly announced game from an old one.
 
 If a source cannot be fetched or its format changed, the build fails and the last published files stay online.
+
+## Paths
+
+Subscriptions point at these paths, so they are frozen (see [HANDOVER.md](../HANDOVER.md)):
+
+- `/{country}/{sport}.ics`: one feed per team, for example `/greece/football.ics` and `/greece/basketball.ics`.
+- `/{country}/{sport}-alerts.ics`: the same feed plus an all-day "New game" entry on the day a game is announced,
+  for fans who pick "Games and announcements" on the team page.
+- `/{country}/{sport}/`: the team's page, for example `/greece/football/`, with its share image at
+  `/{country}/{sport}/share.png`.
+- `/{country}/`: the country's page listing its teams, for example `/greece/`, with its share image at
+  `/{country}/share.png`.
+- `/`: the page listing every team.
+
+Each event's `UID` is the source's id (`uefa-…`, `fiba-…`) and never changes, so an updated game
+replaces the old entry instead of duplicating it.
 
 ## One-time setup
 

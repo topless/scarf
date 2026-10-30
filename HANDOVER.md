@@ -21,7 +21,7 @@ Pages URL. Recommended purchase when ready: `scarf.fan` (canonical) + `scarfcal.
 | `CLAUDE.md` | Drop into the repo root as the coding agent's context file. |
 | `docs/brand.md` | Identity spec: tokens, type, logo, team-stripe system, components, voice. |
 | `docs/calendar-event-spec.md` | Exact copy and ICS fields for the event, reminder and the four event types. |
-| `docs/issues.md` | Points to the GitHub issues, which replaced the first drafts on 2026-10-17. |
+| [GitHub issues](https://github.com/topless/scarf/issues) | The backlog. The first drafts became #6–#21 on 2026-10-17 and are in the history of the removed `docs/issues.md`. |
 | `assets/` | `scarf-mark.svg`, `scarf-mark-greece.svg`, `flag-gr.svg`, `brand-tokens.css`. |
 | `reference/team-page.html` | Working, responsive reference of the team page (`/greece/football`). Port, don't redesign. |
 | `reference/share-card.html` | 1200×630 share card reference; render it to PNG at build time. |
