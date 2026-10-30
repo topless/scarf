@@ -8,8 +8,8 @@ Your colours, in your calendar. scarf publishes one subscribable calendar feed p
 every game with kickoff, venue, TV channel and ticket link, and a reminder an hour before. Fans
 subscribe once, and the calendar they already use keeps itself up to date. Wrapped up in the game.
 
-Teams so far: Greece, Spain and Germany (men's football and basketball), France (men's basketball),
-Switzerland and England (men's football). Pick your team at https://scarf.fan.
+Teams so far: men's football for all 54 UEFA nations in the Nations League, and men's basketball for
+the 24 teams still in the FIBA World Cup 2027 European qualifiers. Pick your team at https://scarf.fan.
 
 ## Docs
 

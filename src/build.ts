@@ -29,7 +29,7 @@ import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
 
 const fixtures = process.argv.includes('--fixtures')
 // A fixture build is dated on the day the newer fixture was saved, so the fixtures' games stay upcoming.
-const now = fixtures ? new Date('2026-10-17') : new Date()
+const now = fixtures ? new Date('2026-10-30') : new Date()
 const today = now.toISOString().slice(0, 10)
 const siteUrl = process.env.SITE_URL?.replace(/\/$/, '')
 
