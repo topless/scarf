@@ -34,6 +34,8 @@ replaces the old entry instead of duplicating it.
 - [docs/research-2026-10-02.md](docs/research-2026-10-02.md): background on the data sources.
 - [docs/spike-team-picker.md](docs/spike-team-picker.md): the spike on a team picker and one feed for
   several teams (#17).
-- [docs/issues.md](docs/issues.md): the backlog.
+- [docs/spike-build-platform.md](docs/spike-build-platform.md): the spike on where the build runs and
+  what would make scarf faster (#93).
+- [GitHub issues](https://github.com/topless/scarf/issues): the backlog.
 - [HANDOVER.md](HANDOVER.md): the design handover, where the identity, the exact calendar-event copy
   and the backlog come from.
