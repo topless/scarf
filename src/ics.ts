@@ -1,22 +1,22 @@
 import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar, type ICalEventData } from 'ical-generator'
-import { defaultSiteUrl, federation, feedName, siteName, WORDS, type Team } from './config.ts'
+import { defaultSiteUrl, feedName, siteName, type Team } from './config.ts'
 import type { Game } from './game.ts'
+import { capitalise, federation, reminder, REMINDER_HOURS, shortDate, WORDS } from './page.ts'
 
 const GAME_HOURS = 2
-const REMINDER_HOURS = 1
 const SALE_REMINDER_HOUR = 9 // 09:00 at the venue on the day tickets go on sale
-// "Mon 16 Nov", read in UTC so a venue-local YYYY-MM-DD stays on its own day.
-const DAY = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
 const DAY_MONTH_YEAR = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' })
 
 // Game id → the day (YYYY-MM-DD) the build first saw it, for games announced after scarf started
 // watching the team (src/known-games.ts).
 export type Announced = Record<string, string>
 
-// Event copy follows docs/calendar-event-spec.md, with "vs" between the teams.
+// Event copy follows docs/calendar-event-spec.md, with "vs" between the teams and each sport's own
+// words, the same as on its page (WORDS in page.ts).
 // With `alerts` this is the -alerts variant: the same events under their own calendar name, plus
 // one all-day "New game" entry per announced game (spec § 4). The default feed never carries those.
 export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSiteUrl, alerts?: Announced): string {
+  const words = WORDS[team.sport]
   const teamPage = `${siteUrl}/${team.country}/${team.sport}`
   const footer = `Kept up to date by ${siteName} · ${teamPage.replace(/^https?:\/\//, '')}`
   // Header fields: team first, brand last, the team's colour.
@@ -24,8 +24,8 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
     prodId: { company: siteName, product: 'feeds', language: 'EN' },
     name: feedName(team, alerts !== undefined),
     description: alerts
-      ? `Every game of the ${team.side} — kickoff, venue, TV, tickets — and a note on the day a new game is announced. Kept up to date by ${siteName}.`
-      : `Every game of the ${team.side} — kickoff, venue, TV, tickets. Kept up to date by ${siteName}.`,
+      ? `Every game of the ${team.side} — ${words.start}, venue, TV, tickets — and a note on the day a new game is announced. Kept up to date by ${siteName}.`
+      : `Every game of the ${team.side} — ${words.start}, venue, TV, tickets. Kept up to date by ${siteName}.`,
     color: team.colours[0],
     ttl: 12 * 60 * 60,
   })
@@ -45,7 +45,7 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
       const end = new Date(start.getTime() + GAME_HOURS * 60 * 60 * 1000)
       const description = [
         game.competition,
-        kickoffLine(game, city),
+        kickoffLine(game, city, words.start),
         game.tv ? `TV: ${game.tv}` : undefined,
         game.tickets ? `Tickets: ${ticketHost(game.tickets)}` : undefined,
         '',
@@ -53,18 +53,18 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
       ]
       const event = calendar.createEvent({ ...details, summary: title, start, end, description: lines(description) })
       // A reminder on the device; Apple honours it, Google is believed to ignore it (see README).
-      // The channel names are enough here; the "(Greek TV)" hint stays in the description.
-      const tv = game.tv?.replace(/\s*\(.*\)$/, '')
+      // Its words are shared with the page (reminder in page.ts).
+      const alarm = reminder(game, team.sport)
       event.createAlarm({
         type: ICalAlarmType.display,
         trigger: REMINDER_HOURS * 60 * 60,
-        description: [`${title} kicks off in an hour`, tv].filter(Boolean).join(' · '),
+        description: [alarm.text, alarm.tv].filter(Boolean).join(' · '),
       })
     } else {
       // All-day placeholder until the time is announced; the same UID later becomes a timed event.
       const description = game.venue
         ? [game.competition, `We'll fill in the time as soon as ${federation(team)} publishes it.`, '', footer]
-        : [game.competition, 'Venue not announced', `We'll fill in the time and arena as soon as ${federation(team)} publishes them.`, '', footer]
+        : [game.competition, 'Venue not announced', `We'll fill in the time and ${words.ground} as soon as ${federation(team)} publishes them.`, '', footer]
       calendar.createEvent({
         ...details,
         summary: `${title} · time not announced`,
@@ -101,12 +101,13 @@ function newGameEvent(team: Team, game: Game, firstSeen: string, now: Date, team
   }
 }
 
-// Venue-local time with the city, so the copy never pretends to be the reader's time; "at the
-// venue" until the city is known, as on the page. Dropped while the venue's offset is unknown;
-// the calendar still shows the kickoff in the reader's own zone.
-function kickoffLine(game: Game, city: string | undefined): string | undefined {
+// "Kickoff 21:45 in Volos", "Tip-off 20:00 in Athens": venue-local time with the city, so the copy
+// never pretends to be the reader's time; "at the venue" until the city is known, as on the page.
+// Dropped while the venue's offset is unknown; the calendar still shows the start in the reader's
+// own zone.
+function kickoffLine(game: Game, city: string | undefined, start: string): string | undefined {
   const time = localTime(game, city)
-  return time && `Kickoff ${time}`
+  return time && `${capitalise(start)} ${time}`
 }
 
 // "21:45 in Volos", "21:45 at the venue" while the city is unknown, or undefined while the kickoff
@@ -150,7 +151,7 @@ function ticketSaleEvent(calendar: ICalCalendar, game: Game, now: Date, footer: 
 // line; "time not announced" while there is none; the venue only when known.
 function gameLine(game: Game): string {
   const time = game.kickoff ? localTime(game, game.city?.trim()) : 'time not announced'
-  return `The game: ${[DAY.format(new Date(game.date)), time, game.venue].filter(Boolean).join(', ')}`
+  return `The game: ${[shortDate(new Date(game.date)), time, game.venue].filter(Boolean).join(', ')}`
 }
 
 // "pame-ethniki.gr": the ticket seller as a fan would say it.

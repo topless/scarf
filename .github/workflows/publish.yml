@@ -9,19 +9,14 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: deploy
   cancel-in-progress: false
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -30,8 +25,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
-      - id: pages
-        uses: actions/configure-pages@v6
       # The games earlier runs saw, so the build can tell a newly announced game from an old one for
       # the -alerts feeds (src/known-games.ts). They live in the Actions cache because the
       # protect-main ruleset rejects a commit back to main. With no cache (the first run, or GitHub
@@ -44,12 +37,14 @@ jobs:
       # A failed fetch stops here, so the last published calendars stay online.
       - run: npm run build
         env:
-          SITE_URL: ${{ steps.pages.outputs.base_url }}
-      - uses: actions/upload-pages-artifact@v5
-        with:
-          path: dist
-      - id: deploy
-        uses: actions/deploy-pages@v5
+          SITE_URL: https://scarf.fan
+      # dist/ as static assets on the Cloudflare Worker "scarf", which answers at scarf.fan
+      # (wrangler.jsonc, README "One-time setup").
+      - name: Deploy to Cloudflare Workers
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          WRANGLER_SEND_METRICS: 'false'
+        run: npx --yes wrangler@4.151.0 deploy
       # Saved only once the feeds are live, so a failed run leaves the known games as they were. A
       # cache entry cannot be overwritten: each run saves its own, and restore-keys above picks the
       # newest. The concurrency group keeps two runs from interleaving.

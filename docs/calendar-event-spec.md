@@ -7,6 +7,16 @@ This is the surface every subscriber sees, every match week. No logo lives here;
 team's colour and the voice. All strings below are exact. `{canonical}` is the canonical domain,
 `scarf.fan`.
 
+Each sport speaks its own words, the same in the feed as on its team page (`WORDS` in
+`src/page.ts`). The samples below are football unless they say otherwise; a basketball feed reads:
+
+| Football | Basketball |
+|---|---|
+| `kickoff` (feed header) | `tip-off` |
+| `Kickoff 21:45 in Volos` | `Tip-off 20:00 in Athens` |
+| `Greece vs Serbia kicks off in an hour` | `Greece vs Ukraine tips off in an hour` |
+| `time and stadium` (placeholder, new game) | `time and arena` |
+
 ## Feed header
 
 ```
@@ -67,6 +77,9 @@ We'll fill in the time and arena as soon as FIBA publishes them.
 
 Kept up to date by scarf · {canonical}/greece/basketball
 ```
+
+A football placeholder waits for the time and the stadium: `We'll fill in the time and stadium as
+soon as UEFA publishes them.`
 
 ## 3 · Tickets on sale (alert event — repo issue #2)
 

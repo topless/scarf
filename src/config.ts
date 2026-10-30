@@ -5,16 +5,9 @@ export const siteName = 'scarf'
 // The public address when the build is given none (SITE_URL), as feeds and share cards print it.
 export const defaultSiteUrl = 'https://scarf.fan'
 
-// The sports scarf covers. The pages and feeds speak each sport's language, so a new sport is
-// added here with its words.
+// The sports scarf covers. The pages speak each sport's language (kickoff or tip-off, stadium or
+// arena; see page.ts), so a new sport is added here and given its words there.
 export type Sport = 'football' | 'basketball'
-
-// Each sport's own words for the start of a game and the ground it is played on, so a basketball
-// page never promises a kickoff in a stadium.
-export const WORDS: Record<Sport, { start: string; ground: string }> = {
-  football: { start: 'kickoff', ground: 'stadium' },
-  basketball: { start: 'tip-off', ground: 'arena' },
-}
 
 export interface Team {
   // URL slugs. The path scheme is frozen because subscriptions point at it (see HANDOVER.md):
@@ -34,15 +27,14 @@ export interface Team {
   defaults: Pick<Details, 'tv' | 'tickets'>
 }
 
-// "UEFA", "FIBA": who publishes a team's games, as the pages and feeds name it.
-export const federation = (team: Team): string => team.source.kind.toUpperCase()
-
 export const feedPath = (team: Team): string => `${team.country}/${team.sport}.ics`
 // The optional variant with a "New game" entry on the day a game is announced; frozen once published.
 export const alertsFeedPath = (team: Team): string => `${team.country}/${team.sport}-alerts.ics`
 // The calendar name: team first, brand last. The variant says so, so a fan can tell the two apart.
 export const feedName = (team: Team, alerts = false): string => `${team.name}${alerts ? ' + alerts' : ''} · ${siteName}`
 export const sharePath = (team: Team): string => `${team.country}/${team.sport}/share.png`
+// The country page at /{country}/ lists the country's teams; its share image sits next to it.
+export const countrySharePath = (team: Team): string => `${team.country}/share.png`
 export const landingSharePath = 'share.png' // the landing page's, at the site root
 export const shareSize = { width: 1200, height: 630 } // the share image, the size chat apps expect
 
