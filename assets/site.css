@@ -50,10 +50,13 @@ h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(44px, 
 .paste-row { display: flex; gap: 8px; }
 .paste input { flex: 1; min-width: 0; height: 46px; box-sizing: border-box; padding: 0 12px; border: var(--border) solid var(--chalk); border-radius: var(--radius-input); background: var(--white); color: var(--ink); font: 400 14px var(--font-body); }
 .paste button { flex: none; padding: 0 16px; }
-/* The alerts toggle is hidden until the script that makes it work has run. */
-.alerts-toggle:not([hidden]) { display: flex; gap: 12px; align-items: flex-start; font-size: 15px; font-weight: 600; line-height: 1.4; cursor: pointer; }
-.alerts-toggle input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--terrace); cursor: pointer; }
-.alerts-toggle .small { display: block; margin-top: 2px; font-weight: 400; }
+/* The feed choice is hidden until the script that makes it work has run. */
+.feed-choice:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 10px; margin: 0; padding: 0; border: 0; }
+.feed-choice legend { padding: 0; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--stand); }
+.feed-choice label { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: var(--border) solid var(--chalk); border-radius: var(--radius-input); background: var(--white); font-size: 15px; font-weight: 600; line-height: 1.4; cursor: pointer; }
+.feed-choice label:has(:checked) { border-color: var(--ink); }
+.feed-choice input { flex: none; width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--terrace); cursor: pointer; }
+.feed-choice .small { display: block; margin-top: 2px; font-weight: 400; }
 
 /* Cards */
 .card { display: flex; flex-direction: column; }
@@ -134,6 +137,14 @@ a.cell:hover { color: var(--ink); border-color: var(--ink); }
 /* A sport the country has no team in: greyed out, the ball too. */
 .cell-empty { justify-content: center; border-style: dashed; background: transparent; color: var(--stand); font-size: 14px; }
 .cell-empty .cell-sport svg { stroke: currentColor; }
+
+/* Identity kit (/kit/): every country, sport and team card side by side */
+.kit { padding-bottom: 56px; display: flex; flex-direction: column; gap: 16px; }
+.kit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; align-items: start; }
+.kit-team { display: flex; flex-direction: column; gap: 8px; }
+.kit-words { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 0; font-size: 15px; }
+.kit-words dt { color: var(--stand); }
+.kit-words dd { margin: 0; font-weight: 600; }
 
 /* Footer */
 .site-footer { padding-top: 28px; padding-bottom: 36px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; font-size: 13px; line-height: 1.5; color: var(--stand); }

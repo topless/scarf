@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { teams } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
-import { renderLanding, renderTeamPage } from '../src/page.ts'
+import { renderKit, renderLanding, renderTeamPage, WORDS } from '../src/page.ts'
 
 const [football, basketball] = teams
 const site = 'https://example.github.io/scarf'
@@ -71,22 +71,25 @@ test('subscribe links point at the feed the build writes, on the public address'
   assert.match(html, /On Google Calendar, set a notification for this calendar once — it applies to every game\./)
 })
 
-test('a checkbox offers the alerts feed: every link and the paste field carry its address', () => {
+test('a choice before the buttons offers the alerts feed: every link and the paste field carry its address', () => {
   const html = teamPage([timed], site)
   const alerts = 'webcal://example.github.io/scarf/greece/football-alerts.ics'
+  assert.match(html, /<fieldset class="feed-choice" hidden><legend>Pick your calendar<\/legend>/)
+  assert.match(html, /<input type="radio" name="feed-choice" checked autocomplete="off"><span>Games<span class="small">Every game, with a nudge an hour before\.<\/span>/)
   assert.match(
     html,
-    /<label class="alerts-toggle" hidden><input type="checkbox" id="alerts-toggle" autocomplete="off"><span>Also tell me when a new game is announced<span class="small">An extra all-day entry on the day a new game is announced\. The game itself is in your calendar either way\.<\/span><\/span><\/label>/,
+    /<input type="radio" name="feed-choice" id="alerts-toggle" autocomplete="off"><span>Games and announcements<span class="small">The same games, plus an all-day “New game” entry on the day each one is announced\.<\/span>/,
   )
+  inOrder(html, 'Pick your calendar', '<a class="btn-primary"')
   assert.match(html, new RegExp(`<a class="btn-primary" href="[^"]+" data-alerts="${alerts}">Add to my calendar</a>`))
   assert.match(html, new RegExp(`<a class="btn-secondary" href="[^"]+" data-alerts="${alerts}">Apple</a>`))
   assert.ok(html.includes(`data-alerts="https://calendar.google.com/calendar/render?cid=${encodeURIComponent(alerts)}">Google</a>`))
   const outlook = `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(`${site}/greece/football-alerts.ics`)}&amp;name=${encodeURIComponent('Greece football + alerts · scarf')}`
   assert.ok(html.includes(`data-alerts="${outlook}">Outlook</a>`))
   assert.match(html, /<input id="feed-url" type="text" readonly value="[^"]+" data-alerts="https:\/\/example\.github\.io\/scarf\/greece\/football-alerts\.ics">/)
-  // The script reveals the box and swaps the links; without it a plain link still reaches the variant.
+  // The script reveals the choice and swaps the links; without it a plain link still reaches the variant.
   assert.match(html, /getElementById\('alerts-toggle'\)/)
-  assert.match(html, new RegExp(`<noscript><p class="small">Want to hear when a new game is announced\\? <a href="${alerts}">Add the feed with alerts</a> instead\\.</p></noscript>`))
+  assert.match(html, new RegExp(`<noscript><p class="small">Want a “New game” entry on the day each game is announced too\\? <a href="${alerts}">Add games and announcements</a> instead\\.</p></noscript>`))
 })
 
 test('without a public address the page links the feed relative to /greece/football/', () => {
@@ -167,6 +170,7 @@ test('nothing a fan reads breaks the voice rules', () => {
     teamPage([timed, unscheduled], site),
     renderTeamPage({ team: basketball, games: [unscheduled] }, teams, site),
     renderLanding([{ team: football, games: [timed] }, { team: basketball, games: [] }]),
+    renderKit(teams),
   ]
   for (const html of pages) {
     const text = copy(html)
@@ -325,4 +329,22 @@ test('both footers carry the motto', () => {
   for (const html of pages) {
     assert.match(html, /<span>· Wrapped up in the game\.<\/span>/)
   }
+})
+
+test('the kit shows every team and sport, unlisted and out of search engines', () => {
+  const html = renderKit(teams)
+  assert.match(html, /<meta name="robots" content="noindex">/)
+  assert.doesNotMatch(renderLanding(teams.map((team) => ({ team, games: [] }))), /noindex|kit\//)
+  for (const team of teams) {
+    // The country card's flag and team link resolve from /kit/, and the team card names its stripes.
+    assert.ok(html.includes(`<img class="flag" src="../flags/${team.flag}.svg" width="44" height="33" alt="">`), team.name)
+    assert.ok(html.includes(`<a class="cell" href="../${team.country}/${team.sport}/">`), team.name)
+    assert.ok(html.includes(`<p class="small">${team.name} · <span class="num">${team.colours.join(' · ')}</span></p>`), team.name)
+  }
+  for (const [sport, words] of Object.entries(WORDS)) {
+    assert.ok(html.includes(words.ball) && html.includes(words.surface), sport)
+    assert.ok(html.includes(`<dt>Start</dt><dd>${words.start}</dd><dt>Verb</dt><dd>${words.starts}</dd><dt>Ground</dt><dd>${words.ground}</dd>`), sport)
+  }
+  assert.match(html, /<dt>Source<\/dt><dd>UEFA<\/dd>/)
+  assert.match(html, /<dt>Source<\/dt><dd>FIBA<\/dd>/)
 })
