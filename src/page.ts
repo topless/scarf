@@ -429,7 +429,7 @@ ${
       </div>
 `
     : ''
-}      <p class="small">Free. Updated daily from ${federation(team)}. Leave any time by deleting the calendar. On iPhone, set Settings › Apps › Calendar › Default Alert Times › Events to 1 hour before — it covers every timed event, games included. <a href="../../how-it-works/#see-it">See it on an iPhone</a>. ${GOOGLE_NOTE}</p>
+}      <p class="small">Free. Updated daily from ${federation(team)}. Leave any time by deleting the calendar. In your iPhone's Calendar settings, set Default Alert Times › Events to 1 hour before — it covers every timed event, games included. <a href="../../how-it-works/#see-it">See it on an iPhone</a>. ${GOOGLE_NOTE}</p>
     </div>`
 }
 

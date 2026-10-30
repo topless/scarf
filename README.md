@@ -156,8 +156,9 @@ docs/observability.md is the plan for counting subscribers, visitors and subscri
 - Subscribing in Google Calendar only works in a computer browser, not in the phone app.
 - Each timed game carries a reminder one hour before kickoff. iPhone Calendar ignores it: tested in the
   iOS Simulator (iOS 17.5 and 18, subscription stored "On My iPhone"), games show "Alert: None" and no
-  reminder fires, even with "Event Alerts" on. The workaround is Settings › Apps › Calendar › Default Alert
-  Times › Events › 1 hour before, which applies to every timed event, not only scarf's. Not yet checked on a
+  reminder fires, even with "Event Alerts" on. The workaround, confirmed on iOS 18, is Default Alert Times ›
+  Events › 1 hour before in Calendar's settings (Settings › Apps › Calendar on iOS 18 and later, Settings ›
+  Calendar on iOS 17), which applies to every timed event, not only scarf's. Not yet checked on a
   real iPhone, an iCloud-stored subscription or a Mac. Google Calendar is believed to ignore embedded
   reminders, but lets you set a notification for the whole calendar in its settings. Outlook is unverified.
 - Games with no announced time appear as all-day entries marked "time not announced".
