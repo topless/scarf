@@ -1,5 +1,7 @@
 # Spike: where the build runs, and what would make scarf faster (#93)
 
+**Date.** 30 October 2026. The figures and the Cloudflare plans are as of that day.
+
 **Scope.** The card asks how to build scarf for better maintainability, clarity, efficiency,
 performance and developer experience, now that it runs on Cloudflare. What moved on 30 October is
 the hosting (#82, #83). The build still runs on GitHub Actions, as docs/observability.md decided. So
