@@ -325,8 +325,10 @@ test('every team page ends its country bar with a Share button for its own addre
   for (const team of teams) {
     const html = renderTeamPage({ team, games: [] }, teams, site)
     const bar = html.slice(html.indexOf('<div class="country-bar">'), html.indexOf('<main>'))
-    const button = `<button class="btn-secondary share" type="button" data-share="${site}/${team.country}/${team.sport}/" data-text="${team.name} in your calendar · scarf" aria-live="polite" hidden>Share</button>`
-    assert.ok(bar.includes(`${button}\n  </div>`), `${team.name}: ${bar}`)
+    const button = `<button class="btn-secondary share" type="button" data-share="${site}/${team.country}/${team.sport}/" data-text="${team.name} in your calendar · scarf" aria-live="polite" hidden><svg `
+    assert.ok(bar.includes(button), `${team.name}: ${bar}`)
+    assert.ok(bar.includes('aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4"/>'), `${team.name}: the share glyph, hidden from screen readers`)
+    assert.ok(bar.includes('</svg>Share</button>\n  </div>'), `${team.name}: Share ends the bar`)
   }
   assert.doesNotMatch(teamPage([timed]), /<button class="btn-secondary share"/)
 })
@@ -337,7 +339,7 @@ async function pressShare(navigator: object) {
   const button = {
     dataset: { share: 'https://scarf.fan/greece/football/', text: 'Greece football in your calendar · scarf' },
     hidden: true,
-    textContent: 'Share',
+    lastChild: { textContent: 'Share' }, // the word after the icon
     addEventListener: (_: string, listener: () => void) => (press = listener),
   }
   new Function('document', 'navigator', SHARE_SCRIPT)({ title: 'Greece football · scarf', querySelector: () => button }, navigator)
@@ -354,10 +356,10 @@ test('Share opens the share sheet with the team page, or copies its address wher
   const copied: string[] = []
   const copy = await pressShare({ clipboard: { writeText: async (text: string) => void copied.push(text) } })
   assert.deepEqual(copied, ['https://scarf.fan/greece/football/'])
-  assert.equal(copy.textContent, 'Copied')
+  assert.equal(copy.lastChild.textContent, 'Copied')
   // A fan who closes the share sheet sees no error and no change.
   const closed = await pressShare({ share: async () => Promise.reject(new DOMException('', 'AbortError')) })
-  assert.equal(closed.textContent, 'Share')
+  assert.equal(closed.lastChild.textContent, 'Share')
   assert.equal((await pressShare({})).hidden, true)
 })
 

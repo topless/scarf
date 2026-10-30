@@ -371,7 +371,7 @@ export const SHARE_SCRIPT = `
     share.addEventListener('click', () => {
       const url = share.dataset.share
       if (navigator.share) navigator.share({ title: document.title, text: share.dataset.text, url }).catch(() => {})
-      else navigator.clipboard.writeText(url).then(() => { share.textContent = 'Copied' }, () => {})
+      else navigator.clipboard.writeText(url).then(() => { share.lastChild.textContent = 'Copied' }, () => {}) // the word, not the icon
     })
     share.hidden = false
   }`
@@ -486,7 +486,7 @@ function countryBar(team: Team, all: Team[], url?: string): string {
   <div class="country-bar">
     <a class="country-name" href="../"><img class="flag" src="../../${flagPath(team.flag)}" width="32" height="24" alt="">${name}</a>
     ${sports.length > 1 ? `<nav class="switch" aria-label="${name} teams">${sports.map(link).join('')}</nav>` : ''}
-    ${url ? `<button class="btn-secondary share" type="button" data-share="${esc(url)}" data-text="${esc(`${team.name} in your calendar · ${siteName}`)}" aria-live="polite" hidden>Share</button>` : ''}
+    ${url ? `<button class="btn-secondary share" type="button" data-share="${esc(url)}" data-text="${esc(`${team.name} in your calendar · ${siteName}`)}" aria-live="polite" hidden>${ICON.share}Share</button>` : ''}
   </div>
 </div>`
 }
@@ -658,6 +658,8 @@ const ICON = {
   place: icon('<path d="M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/>'),
   tv: icon('<rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 3l4 4 4-4"/>'),
   ticket: icon('<path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4V7z"/><path d="M10 7v10" stroke-dasharray="2 2"/>'),
+  // The share glyph phones and Macs use: an arrow rising out of an open box.
+  share: icon('<path d="M12 3v12M8 7l4-4 4 4"/><path d="M8 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-2"/>'),
 }
 
 export function esc(text: string): string {
