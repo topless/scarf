@@ -61,17 +61,19 @@ Three small changes are worth more, and they work where we are:
   from GitHub's is unknown, and finding out would take a request we don't make.
 - **Unchanged by every option:** feed paths, UIDs, no cookies, and what the files say.
 
-## Follow-up issues (proposed, not created)
+## Follow-up issues
 
-1. **Build the site from the test fixtures, with no source requests.** A fixture mode writes `dist/`
+Chris opened all three on 30 October 2026: #98, #99 (after #98) and #100.
+
+1. **Build the site from the test fixtures, with no source requests (#98).** A fixture mode writes `dist/`
    from `test/fixtures/`, dated on the fixtures' own day so their games never age out, and a page
    change can be checked with `npx wrangler dev`. It is the first piece of #85, and nothing blocks it:
    #50 already put all fetching in one place.
-2. **Push builds reuse the day's source answers.** The scheduled build saves UEFA's and FIBA's raw
+2. **Push builds reuse the day's source answers (#99).** The scheduled build saves UEFA's and FIBA's raw
    answers next to `known-games.json` in the Actions cache; a build on a push to main reads them
    while they are less than a day old and fetches only what they don't cover, such as a newly added
    competition.
-3. **Serve the brand fonts from scarf.fan.** WOFF2 files under `assets/` instead of Google Fonts, so
+3. **Serve the brand fonts from scarf.fan (#100).** WOFF2 files under `assets/` instead of Google Fonts, so
    a page needs one origin instead of three. docs/brand.md and CLAUDE.md name Google Fonts, so the
    wording there changes too.
 
