@@ -24,7 +24,15 @@ const DISPLAY = "'Bricolage Grotesque', sans-serif"
 
 // The card for a team and its next game as a PNG, the flag read from flag-icons.
 export async function renderShareImage(team: Team, next: Game | undefined, siteUrl?: string): Promise<Buffer> {
-  return renderSharePng(renderShareCard(team, next, siteUrl, await readFlag(team)))
+  return renderSharePng(renderShareCard(team, next, siteUrl, await flagImage(team)))
+}
+
+// A team's flag as a PNG data URL, drawn by resvg at twice the size a card shows it. Inlined as SVG,
+// a detailed flag kept satori-html busy for seconds per card (Serbia's coat of arms is 181 KB).
+async function flagImage(team: Team): Promise<string> {
+  await wasm()
+  const png = new Resvg(await readFlag(team), { fitTo: { mode: 'width', value: 64 } }).render().asPng()
+  return `data:image/png;base64,${Buffer.from(png).toString('base64')}`
 }
 
 // The card for the landing page as a PNG.
@@ -33,14 +41,14 @@ export function renderLandingShareImage(teams: Team[], siteUrl?: string): Promis
 }
 
 // A team's card: its stripe across the top, its flag and kind over the headline, the large mark
-// in its colours, and its next game under a NEXT pill. The flag is optional so a card can be laid
-// out without one; the build always passes it, in the 4:3 box flag-icons draws for.
-export function renderShareCard(team: Team, next: Game | undefined, siteUrl?: string, flagSvg?: string): string {
+// in its colours, and its next game under a NEXT pill. The flag (an image URL) is optional so a card
+// can be laid out without one; the build always passes it, in the 4:3 box flag-icons draws for.
+export function renderShareCard(team: Team, next: Game | undefined, siteUrl?: string, flag?: string): string {
   const [band, ...rest] = team.colours
   return card(
     {
       band: stripes(team.colours, 80), // 40 px per colour for two, as in the reference card
-      eyebrow: `${flagSvg ? image(flagSvg, 32, 24) : ''}<span>${esc(teamKind(team))}</span>`,
+      eyebrow: `${flag ? flagTag(flag) : ''}<span>${esc(teamKind(team))}</span>`,
       headline: `${team.name}, in your calendar.`,
       label: 'NEXT',
       labelColour: RED,
@@ -55,7 +63,7 @@ export function renderShareCard(team: Team, next: Game | undefined, siteUrl?: st
 
 // The landing page's card: the same layout in the brand's own colours, so the two read as one
 // family. An ink band where a team's stripe would be, the large mark in terrace red and wool, the
-// brand line as the headline, and every team by name where a team's card has its next game.
+// brand line as the headline, and how many teams each sport has where a team's card has its next game.
 export function renderLandingShareCard(teams: Team[], siteUrl?: string): string {
   return card(
     {
@@ -64,7 +72,7 @@ export function renderLandingShareCard(teams: Team[], siteUrl?: string): string 
       headline: 'Your colours, in your calendar.',
       label: 'TEAMS',
       labelColour: INK,
-      line: teamsLine(teams),
+      line: sportsLine(teams),
       mark: teamMark(RED, [WOOL]),
       path: '',
       source: federations(teams),
@@ -75,13 +83,13 @@ export function renderLandingShareCard(teams: Team[], siteUrl?: string): string 
 
 // The card for a country's page as a PNG, the flag read from flag-icons.
 export async function renderCountryShareImage(teams: Team[], siteUrl?: string): Promise<Buffer> {
-  return renderSharePng(renderCountryShareCard(teams, siteUrl, await readFlag(teams[0]!)))
+  return renderSharePng(renderCountryShareCard(teams, siteUrl, await flagImage(teams[0]!)))
 }
 
 // A country's card: a team's card in the country's stripes and flag, with its teams by name where
-// a team's card has its next game, as on the landing's card. teams are the country's, which share
-// their colours (they come from the flag).
-export function renderCountryShareCard(countryTeams: Team[], siteUrl?: string, flagSvg?: string): string {
+// a team's card has its next game. teams are the country's, which share their colours (they come
+// from the flag).
+export function renderCountryShareCard(countryTeams: Team[], siteUrl?: string, flag?: string): string {
   // Football first, as on the page's card, whatever order config.ts lists the teams in.
   const teams = SPORTS.flatMap((sport) => countryTeams.filter((team) => team.sport === sport))
   const [team] = teams as [Team]
@@ -89,7 +97,7 @@ export function renderCountryShareCard(countryTeams: Team[], siteUrl?: string, f
   return card(
     {
       band: stripes(team.colours, 80), // 40 px per colour for two, as in the reference card
-      eyebrow: `${flagSvg ? image(flagSvg, 32, 24) : ''}<span>${esc(teams.length > 1 ? landingKind(teams) : teamKind(team))}</span>`,
+      eyebrow: `${flag ? flagTag(flag) : ''}<span>${esc(teams.length > 1 ? landingKind(teams) : teamKind(team))}</span>`,
       headline: `${countryName(team)}, in your calendar.`,
       label: 'TEAMS',
       labelColour: INK,
@@ -104,6 +112,13 @@ export function renderCountryShareCard(countryTeams: Team[], siteUrl?: string, f
 
 // "Greece football · Greece basketball"
 export const teamsLine = (teams: Team[]): string => teams.map((team) => team.name).join(' · ')
+
+// "54 in football · 24 in basketball": the landing card's teams, too many to name on one card.
+export const sportsLine = (teams: Team[]): string =>
+  SPORTS.map((sport) => [sport, teams.filter((team) => team.sport === sport).length] as const)
+    .filter(([, count]) => count > 0)
+    .map(([sport, count]) => `${count} in ${sport}`)
+    .join(' · ')
 
 // "Netherlands vs Greece · Fri 13 Nov · 20:45 in Amsterdam", or "… · time not announced".
 export function nextGameLine(game?: Game): string {
@@ -150,7 +165,7 @@ function card(c: Card, siteUrl?: string): string {
       </div>
       <div style="display: flex; flex-direction: column; gap: 16px">
         <div style="display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 600; color: ${STAND}">${c.eyebrow}</div>
-        <div style="font-family: ${DISPLAY}; font-weight: 800; font-size: 84px; line-height: 0.92; letter-spacing: -0.045em; max-width: 720px">${esc(c.headline)}</div>
+        <div style="font-family: ${DISPLAY}; font-weight: 800; font-size: ${headlineSize(c.headline)}px; line-height: 0.92; letter-spacing: -0.045em; max-width: 720px">${esc(c.headline)}</div>
       </div>
       <div style="display: flex; align-items: flex-start; gap: 14px; font-size: 22px; font-weight: 600">
         <span style="display: flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 999px; background: ${c.labelColour}; color: #FFFFFF; font-size: 15px; font-weight: 700; letter-spacing: 0.04em">${c.label}</span>
@@ -178,6 +193,13 @@ function teamMark(band: string, stripes: string[]): string {
     `<rect x="${x}" y="22" width="${width}" height="20" fill="${stripes[i % stripes.length]}"/>`
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none"><g transform="rotate(-24 32 32)"><rect x="4" y="22" width="56" height="20" rx="7" fill="${band}"/>${stripe(13, 7, 0)}${stripe(25, 7, 1)}${stripe(37, 7, 2)}${stripe(49, 5, 3)}<rect x="4" y="22" width="56" height="20" rx="7" stroke="${INK}" stroke-width="2"/><path d="M4 27H0M4 32H0M4 37H0M60 27h4M60 32h4M60 37h4" stroke="${INK}" stroke-width="2" stroke-linecap="round"/></g></svg>`
 }
+
+// At 84 px a headline over 48 characters ("Bosnia and Herzegovina basketball, in your calendar.") takes
+// four lines and pushes the band off the card; one size down it fits.
+// shortcut: counts characters, not width; measure the text if a longer name ever overflows anyway.
+export const headlineSize = (headline: string): number => (headline.length > 48 ? 68 : 84)
+
+const flagTag = (src: string) => `<img src="${src}" width="32" height="24">`
 
 function image(svg: string, width: number, height: number): string {
   return `<img src="data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}" width="${width}" height="${height}">`

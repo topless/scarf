@@ -4,9 +4,12 @@ import { test } from 'node:test'
 import { parseFibaGames } from '../src/fiba.ts'
 import { fetchUefaMatches, parseUefaMatches } from '../src/uefa.ts'
 
-// Both fixtures are cut down from real responses: the UEFA one from the single batched probe of
-// 2026-10-17 (teamId=49,122,35), the FIBA one from the 2027 qualifiers page on 2026-10-02. Its last
-// game, France v Germany (id 1), is made up, so the fixture build has a game for every basketball team.
+// Both fixtures are cut down from the answers of 2026-10-30 (#76), so every team has a game in them.
+// The UEFA one is the 52 matches still to come in the one probe's answer (competitionId=2014, every
+// member's Nations League games), cut to the fields the parser reads; the six of the first probe
+// (teamId=49,122,35, 2026-10-17) are among them, unchanged. The FIBA one is the qualifiers page's games
+// still to come, plus Greece v Spain (played, with time and venue) and Denmark v Spain (its city ends
+// in a space), whole, its data split over two chunks inside a game as the page of 2 October was.
 const fixture = (name: string) => readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8')
 const uefa = () => JSON.parse(fixture('uefa-matches.json'))
 const ids = (games: { id: string }[]) => games.map((g) => g.id)
@@ -34,7 +37,7 @@ test('UEFA matches become games with kickoff and venue', () => {
 })
 
 test('a changed UEFA format fails loudly', () => {
-  const [match] = uefa()
+  const match = uefa().find((m: { id: string }) => m.id === '2047872') // Czechia v Spain
   assert.throws(() => parseUefaMatches([{ ...match, kickOffTime: {} }], 122), /format changed/)
   // Without team ids no team could pick out its matches, and every feed would silently empty.
   assert.throws(() => parseUefaMatches([{ ...match, homeTeam: { internationalName: 'Czechia' } }], 122), /format changed/)
@@ -48,7 +51,7 @@ test('an empty UEFA response fails loudly instead of emptying every football fee
 
 test('FIBA page yields only the requested team, with time and venue once announced', () => {
   const games = parseFibaGames(fixture('fiba-games.html'), 'GRE')
-  assert.deepEqual(ids(games), ['fiba-127101', 'fiba-127114', 'fiba-127107'])
+  assert.deepEqual(ids(games), ['fiba-127101', 'fiba-127114', 'fiba-127107', 'fiba-127111', 'fiba-127097'])
   assert.deepEqual(games[0], {
     id: 'fiba-127101',
     competition: 'FIBA Basketball World Cup 2027 European Qualifiers',
@@ -64,7 +67,7 @@ test('FIBA page yields only the requested team, with time and venue once announc
 
 test('the same FIBA page serves every team in the competition', () => {
   const html = fixture('fiba-games.html')
-  assert.deepEqual(ids(parseFibaGames(html, 'ESP')), ['fiba-127101', 'fiba-127107', 'fiba-127005'])
+  assert.deepEqual(ids(parseFibaGames(html, 'ESP')), ['fiba-127005', 'fiba-127101', 'fiba-127104', 'fiba-127107', 'fiba-127110', 'fiba-127113'])
   const [denmark] = parseFibaGames(html, 'DEN')
   assert.equal(denmark.id, 'fiba-127005')
   assert.equal(denmark.home, 'Denmark')
@@ -74,14 +77,15 @@ test('the same FIBA page serves every team in the competition', () => {
 })
 
 test('FIBA game without an announced time has no kickoff or venue', () => {
-  const game = parseFibaGames(fixture('fiba-games.html'), 'GRE')[1]
-  assert.equal(game.date, '2026-11-26')
+  const game = parseFibaGames(fixture('fiba-games.html'), 'GRE')[3] // Greece v Ukraine
+  assert.equal(game.date, '2027-02-26')
   assert.equal(game.kickoff, undefined)
   assert.equal(game.venue, undefined)
 })
 
 test('a FIBA team not known yet reads "opponent not announced", capitalised when it opens the title', () => {
-  // Game 127114 of the fixture, cut to the fields the parser reads, in a page of its own.
+  // Game 127114 as the page of 2 October had it, before its time was out, cut to the fields the
+  // parser reads, in a page of its own.
   const georgia = {
     gameId: 127114,
     teamA: { code: 'GRE', officialName: 'Greece' },
@@ -104,4 +108,10 @@ test('a FIBA team not known yet reads "opponent not announced", capitalised when
 test('a FIBA page without games for the team fails loudly instead of emptying the calendar', () => {
   assert.throws(() => parseFibaGames('<html><body>Just a moment...</body></html>', 'GRE'), /format changed/)
   assert.throws(() => parseFibaGames(fixture('fiba-games.html'), 'GRC'), /no games found for GRC/)
+})
+
+test("UEFA's Türkiye loses the stray dot over its i", () => {
+  const games = parseUefaMatches(uefa(), 135)
+  assert.ok(games.length > 0)
+  for (const game of games) assert.ok([game.home, game.away].includes('Türkiye'), `${game.home} vs ${game.away}`)
 })

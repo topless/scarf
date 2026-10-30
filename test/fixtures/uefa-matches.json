@@ -1,5 +1,77 @@
 [
   {
+    "id": "2047873",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "135",
+      "internationalName": "Türki̇ye"
+    },
+    "awayTeam": {
+      "id": "13",
+      "internationalName": "Belgium"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-12",
+      "dateTime": "2026-11-12T17:00:00Z",
+      "utcOffsetInHours": 3
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Gürsel Aksel Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Izmir"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047876",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "57419",
+      "internationalName": "Armenia"
+    },
+    "awayTeam": {
+      "id": "33",
+      "internationalName": "Cyprus"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-12",
+      "dateTime": "2026-11-12T17:00:00Z",
+      "utcOffsetInHours": 4
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Republican Stadium after Vazgen Sargsyan"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Yerevan"
+          }
+        }
+      }
+    }
+  },
+  {
     "id": "2047872",
     "status": "UPCOMING",
     "homeTeam": {
@@ -30,6 +102,402 @@
         "translations": {
           "name": {
             "EN": "Prague"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047874",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "2",
+      "internationalName": "Albania"
+    },
+    "awayTeam": {
+      "id": "42",
+      "internationalName": "Finland"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-12",
+      "dateTime": "2026-11-12T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Arena Kombëtare"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Tirana"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047875",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "92853",
+      "internationalName": "Montenegro"
+    },
+    "awayTeam": {
+      "id": "56558",
+      "internationalName": "Latvia"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-12",
+      "dateTime": "2026-11-12T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Gradski Stadion Podgorica"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Podgorica"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047877",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50168",
+      "internationalName": "San Marino"
+    },
+    "awayTeam": {
+      "id": "57155",
+      "internationalName": "Belarus"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-12",
+      "dateTime": "2026-11-12T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "San Marino Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Serravalle"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047878",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "66",
+      "internationalName": "Italy"
+    },
+    "awayTeam": {
+      "id": "43",
+      "internationalName": "France"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-12",
+      "dateTime": "2026-11-12T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio San Siro"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Milan"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047879",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "39",
+      "internationalName": "England"
+    },
+    "awayTeam": {
+      "id": "56370",
+      "internationalName": "Croatia"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-12",
+      "dateTime": "2026-11-12T19:45:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Wembley Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "London"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047883",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "57160",
+      "internationalName": "Moldova"
+    },
+    "awayTeam": {
+      "id": "65146",
+      "internationalName": "Kazakhstan"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-13",
+      "dateTime": "2026-11-13T17:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadionul Zimbru"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Chisinau"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047880",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "58836",
+      "internationalName": "Slovakia"
+    },
+    "awayTeam": {
+      "id": "51218",
+      "internationalName": "Faroe Islands"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-13",
+      "dateTime": "2026-11-13T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Košická futbalová aréna"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Košice"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047881",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "82",
+      "internationalName": "Luxembourg"
+    },
+    "awayTeam": {
+      "id": "56556",
+      "internationalName": "Estonia"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-13",
+      "dateTime": "2026-11-13T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stade de Luxembourg"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Luxembourg"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047882",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "20",
+      "internationalName": "Bulgaria"
+    },
+    "awayTeam": {
+      "id": "58",
+      "internationalName": "Iceland"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-13",
+      "dateTime": "2026-11-13T19:45:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Hristo Botev Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Plovdiv"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047884",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "60618",
+      "internationalName": "Andorra"
+    },
+    "awayTeam": {
+      "id": "94080",
+      "internationalName": "Gibraltar"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-13",
+      "dateTime": "2026-11-13T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadi FAF"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Encamp"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047885",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "81",
+      "internationalName": "Liechtenstein"
+    },
+    "awayTeam": {
+      "id": "57154",
+      "internationalName": "Azerbaijan"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-13",
+      "dateTime": "2026-11-13T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Rheinpark Stadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Vaduz"
           }
         }
       }
@@ -72,6 +540,294 @@
     }
   },
   {
+    "id": "2047887",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "147",
+      "internationalName": "Serbia"
+    },
+    "awayTeam": {
+      "id": "47",
+      "internationalName": "Germany"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-13",
+      "dateTime": "2026-11-13T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadion Rajko Mitić"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Belgrade"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047888",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "117",
+      "internationalName": "Scotland"
+    },
+    "awayTeam": {
+      "id": "59205",
+      "internationalName": "North Macedonia"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-13",
+      "dateTime": "2026-11-13T19:45:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Hampden Park"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Glasgow"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047889",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "57163",
+      "internationalName": "Slovenia"
+    },
+    "awayTeam": {
+      "id": "128",
+      "internationalName": "Switzerland"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-13",
+      "dateTime": "2026-11-13T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadion Ljudski vrt"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Maribor"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047896",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "2608110",
+      "internationalName": "Kosovo"
+    },
+    "awayTeam": {
+      "id": "65",
+      "internationalName": "Israel"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-14",
+      "dateTime": "2026-11-14T14:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadiumi Fadil Vokrri"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Pristina"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047893",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "101",
+      "internationalName": "Norway"
+    },
+    "awayTeam": {
+      "id": "144",
+      "internationalName": "Wales"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-14",
+      "dateTime": "2026-11-14T17:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Ullevaal Stadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Oslo"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047895",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "57157",
+      "internationalName": "Georgia"
+    },
+    "awayTeam": {
+      "id": "57",
+      "internationalName": "Hungary"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-14",
+      "dateTime": "2026-11-14T17:00:00Z",
+      "utcOffsetInHours": 4
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Mikheil Meskhi I Stadium "
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Tbilisi"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047890",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "127",
+      "internationalName": "Sweden"
+    },
+    "awayTeam": {
+      "id": "60094",
+      "internationalName": "Bosnia and Herzegovina"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-14",
+      "dateTime": "2026-11-14T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Strawberry Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Solna"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047891",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "113",
+      "internationalName": "Romania"
+    },
+    "awayTeam": {
+      "id": "109",
+      "internationalName": "Poland"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-14",
+      "dateTime": "2026-11-14T19:45:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "National Arena Bucharest"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bucharest"
+          }
+        }
+      }
+    }
+  },
+  {
     "id": "2047892",
     "status": "UPCOMING",
     "homeTeam": {
@@ -102,6 +858,330 @@
         "translations": {
           "name": {
             "EN": "Braga"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047894",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "8",
+      "internationalName": "Austria"
+    },
+    "awayTeam": {
+      "id": "64",
+      "internationalName": "Republic of Ireland"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-14",
+      "dateTime": "2026-11-14T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Oberösterreich Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Linz"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047897",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "63",
+      "internationalName": "Northern Ireland"
+    },
+    "awayTeam": {
+      "id": "57166",
+      "internationalName": "Ukraine"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-14",
+      "dateTime": "2026-11-14T19:45:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "National Football Stadium at Windsor Park"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Belfast"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047899",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "56558",
+      "internationalName": "Latvia"
+    },
+    "awayTeam": {
+      "id": "57419",
+      "internationalName": "Armenia"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-15",
+      "dateTime": "2026-11-15T14:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Skonto Stadions"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Riga"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047903",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "33",
+      "internationalName": "Cyprus"
+    },
+    "awayTeam": {
+      "id": "92853",
+      "internationalName": "Montenegro"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-15",
+      "dateTime": "2026-11-15T14:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Limassol Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Limassol"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047901",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "42",
+      "internationalName": "Finland"
+    },
+    "awayTeam": {
+      "id": "50168",
+      "internationalName": "San Marino"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-15",
+      "dateTime": "2026-11-15T17:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Helsinki Football Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Helsinki"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047905",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "57155",
+      "internationalName": "Belarus"
+    },
+    "awayTeam": {
+      "id": "2",
+      "internationalName": "Albania"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-15",
+      "dateTime": "2026-11-15T17:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Illovszky Rudolf Stadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Budapest"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047898",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "43",
+      "internationalName": "France"
+    },
+    "awayTeam": {
+      "id": "135",
+      "internationalName": "Türki̇ye"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-15",
+      "dateTime": "2026-11-15T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stade de Bordeaux"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bordeaux"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047900",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "13",
+      "internationalName": "Belgium"
+    },
+    "awayTeam": {
+      "id": "66",
+      "internationalName": "Italy"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-15",
+      "dateTime": "2026-11-15T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "King Baudouin Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Brussels"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047902",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "56370",
+      "internationalName": "Croatia"
+    },
+    "awayTeam": {
+      "id": "58837",
+      "internationalName": "Czechia"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-15",
+      "dateTime": "2026-11-15T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Opus Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Osijek"
           }
         }
       }
@@ -144,6 +1224,258 @@
     }
   },
   {
+    "id": "2047910",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "51218",
+      "internationalName": "Faroe Islands"
+    },
+    "awayTeam": {
+      "id": "57160",
+      "internationalName": "Moldova"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-16",
+      "dateTime": "2026-11-16T15:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Tórsvøllur"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Tórshavn"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047913",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "65146",
+      "internationalName": "Kazakhstan"
+    },
+    "awayTeam": {
+      "id": "58836",
+      "internationalName": "Slovakia"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-16",
+      "dateTime": "2026-11-16T15:00:00Z",
+      "utcOffsetInHours": 5
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Astana Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Astana"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047906",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "58",
+      "internationalName": "Iceland"
+    },
+    "awayTeam": {
+      "id": "82",
+      "internationalName": "Luxembourg"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-16",
+      "dateTime": "2026-11-16T17:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Laugardalsvöllur"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Reykjavik"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047907",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "56556",
+      "internationalName": "Estonia"
+    },
+    "awayTeam": {
+      "id": "20",
+      "internationalName": "Bulgaria"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-16",
+      "dateTime": "2026-11-16T17:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Lilleküla Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Tallinn"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047911",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "56557",
+      "internationalName": "Lithuania"
+    },
+    "awayTeam": {
+      "id": "81",
+      "internationalName": "Liechtenstein"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-16",
+      "dateTime": "2026-11-16T17:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Dariaus ir Girėno Stadionas"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Kaunas"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047908",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "94080",
+      "internationalName": "Gibraltar"
+    },
+    "awayTeam": {
+      "id": "88",
+      "internationalName": "Malta"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-16",
+      "dateTime": "2026-11-16T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Europa Point Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Gibraltar"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047909",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "47",
+      "internationalName": "Germany"
+    },
+    "awayTeam": {
+      "id": "95",
+      "internationalName": "Netherlands"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-16",
+      "dateTime": "2026-11-16T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Olympiastadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Berlin"
+          }
+        }
+      }
+    }
+  },
+  {
     "id": "2047912",
     "status": "UPCOMING",
     "homeTeam": {
@@ -180,6 +1512,186 @@
     }
   },
   {
+    "id": "2047914",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "128",
+      "internationalName": "Switzerland"
+    },
+    "awayTeam": {
+      "id": "117",
+      "internationalName": "Scotland"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-16",
+      "dateTime": "2026-11-16T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Sitterstadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "St.Gallen"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047915",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "59205",
+      "internationalName": "North Macedonia"
+    },
+    "awayTeam": {
+      "id": "57163",
+      "internationalName": "Slovenia"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-16",
+      "dateTime": "2026-11-16T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "National Arena Todor Proeski "
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Skopje"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047916",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "65",
+      "internationalName": "Israel"
+    },
+    "awayTeam": {
+      "id": "8",
+      "internationalName": "Austria"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-17",
+      "dateTime": "2026-11-17T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Nagyerdei Stadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Debrecen"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047917",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "60094",
+      "internationalName": "Bosnia and Herzegovina"
+    },
+    "awayTeam": {
+      "id": "113",
+      "internationalName": "Romania"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-17",
+      "dateTime": "2026-11-17T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadion Bilino Polje"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Zenica"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047918",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "57166",
+      "internationalName": "Ukraine"
+    },
+    "awayTeam": {
+      "id": "57157",
+      "internationalName": "Georgia"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-17",
+      "dateTime": "2026-11-17T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Košická futbalová aréna"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Košice"
+          }
+        }
+      }
+    }
+  },
+  {
     "id": "2047919",
     "status": "UPCOMING",
     "homeTeam": {
@@ -210,6 +1722,150 @@
         "translations": {
           "name": {
             "EN": "Copenhagen"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047920",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "144",
+      "internationalName": "Wales"
+    },
+    "awayTeam": {
+      "id": "110",
+      "internationalName": "Portugal"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-17",
+      "dateTime": "2026-11-17T19:45:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Cardiff City Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Cardiff"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047921",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "57",
+      "internationalName": "Hungary"
+    },
+    "awayTeam": {
+      "id": "63",
+      "internationalName": "Northern Ireland"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-17",
+      "dateTime": "2026-11-17T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Puskás Aréna"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Budapest"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047922",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "109",
+      "internationalName": "Poland"
+    },
+    "awayTeam": {
+      "id": "127",
+      "internationalName": "Sweden"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-17",
+      "dateTime": "2026-11-17T19:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadion Miejski we Wrocławiu"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Wroclaw"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2047923",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "64",
+      "internationalName": "Republic of Ireland"
+    },
+    "awayTeam": {
+      "id": "2608110",
+      "internationalName": "Kosovo"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Nations League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-17",
+      "dateTime": "2026-11-17T19:45:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Aviva Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Dublin"
           }
         }
       }

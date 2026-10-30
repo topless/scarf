@@ -92,7 +92,7 @@ own domain limits the damage to "re-point the route", so the worker should never
   plays the same sport, so a feed never changes shape when a fan swaps a team. The reminder text and
   the description stay as they are; each event keeps its own team's page in `URL` and in the footer.
 - **Calendar name and colour.** `X-WR-CALNAME:My teams · scarf`; the fan can rename it in their app,
-  and the description names the teams: `Every game of Greece football and Greece basketball —
+  and the description names the teams: `Every game of Greece football and Greece basketball:
   kickoff, venue, TV, tickets. Kept up to date by scarf.` Colour: Terrace red `#D7263D`, the one
   colour the brand owns and no team does; it reads as a deliberate colour in every calendar app,
   where Ink `#17171C` would look like a default. Alternative if red feels like a claim: Ink.

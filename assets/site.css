@@ -1,4 +1,4 @@
-/* scarf — page layout, ported from reference/team-page.html. Colours and type come from brand-tokens.css;
+/* scarf page layout, ported from reference/team-page.html. Colours and type come from brand-tokens.css;
    each page or team element sets --stripe and --stripe-wide for its own team. */
 
 /* The brand faces from our own site: the variable files Google Fonts sends a current browser, latin
@@ -130,9 +130,16 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-h
 .nudge-time svg { width: 16px; height: 16px; }
 .cal-event b, .nudge b { font-size: 15px; color: var(--ink); }
 
-/* Other teams */
+/* Find your country: hidden until the script that filters the countries has run. A filtered-out
+   chip or card is hidden too, over its own display. 16 px text, so phones do not zoom on focus. */
+.find:not([hidden]) { display: flex; flex-direction: column; gap: 6px; max-width: 360px; font-size: 13px; font-weight: 600; color: var(--stand); }
+.find input { height: 46px; box-sizing: border-box; padding: 0 12px; border: var(--border) solid var(--chalk); border-radius: var(--radius-input); background: var(--white); color: var(--ink); font: 400 16px var(--font-body); }
+.country-chip[hidden], .card[hidden] { display: none; }
+
+/* Other teams: the text, then every country's chip across the full width */
 .teams { background: var(--ink); color: var(--wool); }
-.teams > .wrap { padding-top: 56px; padding-bottom: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); gap: 32px; align-items: center; }
+.teams > .wrap { padding-top: 56px; padding-bottom: 56px; display: flex; flex-direction: column; gap: 28px; }
+.teams .find:not([hidden]), .teams .find .small { color: var(--ink-muted); }
 .teams-text { display: flex; flex-direction: column; gap: 12px; }
 .teams-text p { font-size: 16px; line-height: 1.5; color: var(--ink-muted); max-width: 460px; }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
