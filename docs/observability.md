@@ -7,8 +7,8 @@ visits, which subscribe buttons get pressed, and what each daily build changed. 
 ## Decisions
 
 - **First-party, cookie-free counting.** A small script on our own pages may report to our own
-  Worker. No cookies, no browser storage, no stored IP addresses, no third-party trackers. The site
-  does not mention the counting.
+  Worker. No cookies, no browser storage, no stored IP addresses, no third-party trackers. The pages
+  carry no notice about it; one separate privacy page describes it (#78).
 - **Hosting moves to Cloudflare Workers** with static assets, on the Workers Paid plan once the Worker
   counts feeds. The build stays in GitHub Actions.
 - **Four signals:** feed subscribers, page visitors, subscribe clicks, build and data changes.
@@ -120,4 +120,4 @@ months.
 
 ## Order
 
-#70 now, then #43, #71, #72, and #73 once a week of data exists.
+#70 now, then #43, #71 together with the privacy page (#78), #72, and #73 once a week of data exists.
