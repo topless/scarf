@@ -1,5 +1,7 @@
 import { appendFile, cp, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { setTimeout as pause } from 'node:timers/promises'
+import { pathToFileURL } from 'node:url'
+import { reusable, reusedNote, type SavedAnswers } from './answers.ts'
 import { feedChanges } from './changes.ts'
 import { alertsFeedPath, countrySharePath, feedPath, landingSharePath, sharePath, teams, type Team } from './config.ts'
 import { fetchFibaPage, parseFibaGames } from './fiba.ts'
@@ -20,31 +22,64 @@ import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
 // Each country gets a page and a share image of its own too, listing its teams.
 // Requests stay minimal: UEFA answers for every football team in one call, and a FIBA page is
 // fetched once per competition and shared by the teams playing in it (Greece and Spain are in
-// the same qualifiers). Any failure aborts the whole build, so the previously published files
-// stay in place.
+// the same qualifiers); a build on a push to main reuses the answers an earlier build saved less
+// than a day ago. Any failure aborts the whole build, so the previously published files stay in place.
+// With --fixtures (npm run build:fixtures) it builds the same site from the sources' answers saved
+// in test/fixtures/ and makes no request at all: none to the sources, none to the live feeds.
 
-const now = new Date()
+const fixtures = process.argv.includes('--fixtures')
+// A fixture build is dated on the day the newer fixture was saved, so the fixtures' games stay upcoming.
+const now = fixtures ? new Date('2026-10-17') : new Date()
 const today = now.toISOString().slice(0, 10)
 const siteUrl = process.env.SITE_URL?.replace(/\/$/, '')
+
+// A JSON file an earlier build left, or {} when there is none yet.
+const readSaved = async (file: string) =>
+  JSON.parse(
+    await readFile(file, 'utf8').catch((error: NodeJS.ErrnoException) => {
+      if (error.code === 'ENOENT') return '{}'
+      throw error
+    }),
+  )
 
 // The games earlier builds saw, so this one can tell a newly announced game from an old one for
 // the -alerts feeds. Not in git: the Actions job keeps it in its cache (.github/workflows/publish.yml).
 // Missing on the first build, or once the cache is lost, which seeds it again and announces nothing.
+// A fixture build starts from none and saves none, so the developer's own file stays as it was.
 const KNOWN_GAMES = 'known-games.json'
-const known = JSON.parse(
-  await readFile(KNOWN_GAMES, 'utf8').catch((error: NodeJS.ErrnoException) => {
-    if (error.code === 'ENOENT') return '{}'
-    throw error
-  }),
-) as KnownGames
+const known: KnownGames = fixtures ? {} : await readSaved(KNOWN_GAMES)
+
+// The sources' answers, which every build but a fixture build saves in source-answers/ with what each
+// covers and when it was fetched (src/answers.ts). Not in git: the Actions job keeps the folder in its
+// cache next to known-games.json and restores it only for a push to main, whose build reuses the
+// answers that are less than a day old. The daily, manual and local builds always ask the sources.
+const ANSWERS = 'source-answers'
+const earlier: SavedAnswers = !fixtures && process.env.GITHUB_EVENT_NAME === 'push' ? await readSaved(`${ANSWERS}/index.json`) : {}
+const answers: SavedAnswers = {} // the ones this build uses, by file name, saved last for the next build
+
+// Where a source's answer comes from: in a fixture build that file in test/fixtures/; else an earlier
+// build's while it is less than a day old and covers the request, or none, and it is fetched now.
+// Outside a fixture build either one is noted in `answers`, to be saved.
+function saved(fixture: string, file: string, teamIds?: number[]): URL | undefined {
+  if (fixtures) return new URL(`../test/fixtures/${fixture}`, import.meta.url)
+  const answer = earlier[file]
+  if (reusable(answer, now, teamIds)) {
+    answers[file] = answer
+    return pathToFileURL(`${ANSWERS}/${file}`)
+  }
+  answers[file] = { fetched: now.toISOString(), teamIds }
+  return undefined
+}
 
 const uefaTeamIds = teams.flatMap(({ source }) => (source.kind === 'uefa' ? [source.teamId] : []))
-const uefaMatches = uefaTeamIds.length ? await fetchUefaMatches(uefaTeamIds, today) : []
+const uefaMatches = uefaTeamIds.length ? await fetchUefaMatches(uefaTeamIds, today, saved('uefa-matches.json', 'uefa.json', uefaTeamIds)) : []
 const fibaPages = new Map<string, string>()
 
 for (const event of new Set(teams.flatMap(({ source }) => (source.kind === 'fiba' ? [source.event] : [])))) {
-  if (fibaPages.size > 0) await pause(5000) // a breath between two pages of the same site
-  fibaPages.set(event, await fetchFibaPage(event))
+  // shortcut: one fixture page answers for every FIBA competition; give each its own file once there are two.
+  const savedPage = saved('fiba-games.html', `${event}.html`)
+  if (fibaPages.size > 0 && !savedPage) await pause(5000) // a breath before asking the same site for another page
+  fibaPages.set(event, await fetchFibaPage(event, savedPage))
 }
 
 const gamesOf = ({ source }: Team): Game[] =>
@@ -74,7 +109,7 @@ for (const team of teams) {
   await writeFile(`dist/${alertsFeedPath(team)}`, toIcs(team, games, now, siteUrl, announced(seen.feed)))
   sections.push({ team, games })
   console.log(`${team.name}: ${games.length} upcoming games, ${seen.fresh.length} new`)
-  if (siteUrl) {
+  if (siteUrl && !fixtures) {
     const lines = await liveFeed(team).then(
       (live) => feedChanges(live, ics, today),
       (error: Error) => [`Couldn't read the live feed: ${error.message}`],
@@ -98,17 +133,18 @@ await mkdir('dist/how-it-works', { recursive: true })
 await writeFile('dist/how-it-works/index.html', renderHowItWorks(sections, siteUrl))
 await mkdir('dist/kit', { recursive: true })
 await writeFile('dist/kit/index.html', renderKit(teams))
-await cp('assets', 'dist', { recursive: true })
+await cp(new URL('../assets', import.meta.url), 'dist', { recursive: true }) // found from any working folder
 // Only the flags a team uses, never the whole package; the licence sits next to the copies, as
 // MIT asks. Every flag was already read for its share image, so a wrong code failed before this.
 for (const code of new Set(teams.map((team) => team.flag))) await cp(flagFile(code), `dist/${flagPath(code)}`)
 await cp(flagLicenseFile(), 'dist/flags/LICENSE')
 // On the run's page in Actions (GITHUB_STEP_SUMMARY), printed elsewhere. A local build has no
-// SITE_URL, so nothing to compare with and no summary.
-if (siteUrl) {
+// SITE_URL, so nothing to compare with and no summary; nor has a fixture build, whatever its SITE_URL.
+if (siteUrl && !fixtures) {
+  const fibaAnswers = [...fibaPages.keys()].map((event) => answers[`${event}.html`])
   const sources = [
-    uefaTeamIds.length && `UEFA answered one request for ${uefaTeamIds.length} football teams`,
-    fibaPages.size && `FIBA answered ${fibaPages.size} competition ${fibaPages.size === 1 ? 'page' : 'pages'}`,
+    uefaTeamIds.length && `UEFA answered one request for ${uefaTeamIds.length} football teams${reusedNote([answers['uefa.json']], now)}`,
+    fibaPages.size && `FIBA answered ${fibaPages.size} competition ${fibaPages.size === 1 ? 'page' : 'pages'}${reusedNote(fibaAnswers, now)}`,
   ].filter(Boolean)
   const counts = sections.map(({ team, games }) => `${team.name} ${games.length}`).join(' · ')
   const report = [
@@ -122,5 +158,12 @@ if (siteUrl) {
   if (summaryFile) await appendFile(summaryFile, report.join('\n') + '\n')
   else console.log(report.join('\n'))
 }
-// Last, so a build that fails part-way leaves the file as it was; the job caches it after the deploy.
-await writeFile(KNOWN_GAMES, JSON.stringify(known, null, 2) + '\n')
+// Last, so a build that fails part-way leaves the files as they were; the job caches them after the deploy.
+if (!fixtures) {
+  await writeFile(KNOWN_GAMES, JSON.stringify(known, null, 2) + '\n')
+  // Every answer this build used, for a push build to reuse; a reused one keeps the time it was fetched.
+  await mkdir(ANSWERS, { recursive: true })
+  if (uefaTeamIds.length) await writeFile(`${ANSWERS}/uefa.json`, JSON.stringify(uefaMatches))
+  for (const [event, page] of fibaPages) await writeFile(`${ANSWERS}/${event}.html`, page)
+  await writeFile(`${ANSWERS}/index.json`, JSON.stringify(answers, null, 2) + '\n')
+}

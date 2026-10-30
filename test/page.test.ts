@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { existsSync, readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { teams } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
@@ -109,7 +110,19 @@ test('team page names the federation of its source, and links every team', () =>
   assert.match(football_, /href="\.\.\/\.\.\/greece\/basketball\/"/)
   assert.match(football_, /<link rel="stylesheet" href="\.\.\/\.\.\/brand-tokens\.css">/)
   assert.match(football_, /<link rel="apple-touch-icon" href="\.\.\/\.\.\/apple-touch-icon\.png">/)
-  assert.match(football_, /fonts\.googleapis\.com\/css2\?family=Albert\+Sans[^"]*Bricolage\+Grotesque[^"]*display=swap/)
+  assert.match(football_, /<link rel="preload" href="\.\.\/\.\.\/fonts\/BricolageGrotesque-latin\.woff2" as="font" crossorigin>/)
+  assert.doesNotMatch(football_, /fonts\.googleapis\.com|fonts\.gstatic\.com/)
+})
+
+test('every font site.css declares is in assets/, and the pages preload only those', () => {
+  const css = readFileSync(new URL('../assets/site.css', import.meta.url), 'utf8')
+  const declared = Array.from(css.matchAll(/url\((fonts\/[^)]+\.woff2)\)/g), (m) => m[1]!)
+  assert.equal(declared.length, 4)
+  for (const file of declared) assert.ok(existsSync(new URL(`../assets/${file}`, import.meta.url)), `assets/${file} is missing`)
+  // site.css sits at the root, like the landing page, so the same relative path means the same file.
+  const preloaded = Array.from(renderLanding([], site).matchAll(/<link rel="preload" href="([^"]+)" as="font" crossorigin>/g), (m) => m[1]!)
+  assert.equal(preloaded.length, 2)
+  for (const href of preloaded) assert.ok(declared.includes(href), `${href} is preloaded but site.css never uses it`)
 })
 
 test('team page tells chat apps its title, description and share image', () => {

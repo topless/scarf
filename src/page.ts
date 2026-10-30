@@ -299,6 +299,10 @@ function page(p: {
   script?: string
   noindex?: boolean
 }): string {
+  // The latin font files every page uses are preloaded: found only after site.css, they would arrive
+  // after the first paint, even on a repeat view, where every file is revalidated.
+  // shortcut: latin-ext letters (Š, ć) still swap in a moment after the first paint; a long cache
+  // lifetime for fonts/ would fix that, if it ever shows.
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -309,9 +313,8 @@ function page(p: {
 ${p.noindex ? '<meta name="robots" content="noindex">\n' : ''}${socialMeta(p)}<link rel="icon" href="${p.root}favicon.svg" type="image/svg+xml">
 <link rel="icon" href="${p.root}icon-512.png" type="image/png" sizes="512x512">
 <link rel="apple-touch-icon" href="${p.root}apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&amp;family=Bricolage+Grotesque:opsz,wght@12..96,300..800&amp;display=swap">
+<link rel="preload" href="${p.root}fonts/BricolageGrotesque-latin.woff2" as="font" crossorigin>
+<link rel="preload" href="${p.root}fonts/AlbertSans-latin.woff2" as="font" crossorigin>
 <link rel="stylesheet" href="${p.root}brand-tokens.css">
 <link rel="stylesheet" href="${p.root}site.css">
 </head>

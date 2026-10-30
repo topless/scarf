@@ -52,7 +52,7 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
         footer,
       ]
       const event = calendar.createEvent({ ...details, summary: title, start, end, description: lines(description) })
-      // A reminder on the device; Apple honours it, Google is believed to ignore it (see README).
+      // A reminder on the device; Apple honours it, Google is believed to ignore it (see docs/development.md).
       // Its words are shared with the page (reminder in page.ts).
       const alarm = reminder(game, team.sport)
       event.createAlarm({

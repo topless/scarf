@@ -34,12 +34,22 @@ jobs:
           path: known-games.json
           key: known-games-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: known-games-
+      # The sources' answers the last run used, so a push reuses the day's instead of asking UEFA and
+      # FIBA again (src/answers.ts); the daily and manual runs always ask. A cache of its own: a path
+      # added to the one above would change its version and lose the known games. As for any cache,
+      # main restores only what main's own runs saved, never a pull request's.
+      - uses: actions/cache/restore@v6
+        if: github.event_name == 'push'
+        with:
+          path: source-answers
+          key: source-answers-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: source-answers-
       # A failed fetch stops here, so the last published calendars stay online.
       - run: npm run build
         env:
           SITE_URL: https://scarf.fan
       # dist/ as static assets on the Cloudflare Worker "scarf", which answers at scarf.fan
-      # (wrangler.jsonc, README "One-time setup").
+      # (wrangler.jsonc, docs/development.md "One-time setup").
       - name: Deploy to Cloudflare Workers
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -52,11 +62,16 @@ jobs:
         with:
           path: known-games.json
           key: known-games-${{ github.run_id }}-${{ github.run_attempt }}
+      # Every run saves the answers it used, a push too, so a push that had to ask spares the next one.
+      - uses: actions/cache/save@v6
+        with:
+          path: source-answers
+          key: source-answers-${{ github.run_id }}-${{ github.run_attempt }}
 
   # GitHub disables a scheduled workflow after 60 days without repository activity, and this
   # repository only changes when a game's details do. Re-enabling the scheduled workflows through
   # the Actions API counts as activity and restarts that clock (GitHub does not document this;
-  # the widely used keepalive actions rely on it, and README "Keeping it running" says what to
+  # the widely used keepalive actions rely on it, and docs/development.md "Keeping it running" says what to
   # watch for). Nothing is committed: the "protect-main" ruleset only accepts pull requests on
   # main, so a stamp commit pushed with GITHUB_TOKEN would be rejected. A push is activity by
   # itself, so this job only runs on the schedule and on a manual run. It does not depend on
@@ -76,7 +91,7 @@ jobs:
             echo "$workflow is enabled; GitHub's 60-day inactivity clock starts again today"
           done
 
-  # A failed run opens (or comments on) an "ops" issue; see alert.yml and the README.
+  # A failed run opens (or comments on) an "ops" issue; see alert.yml and docs/development.md.
   alert:
     needs: [publish, keepalive]
     if: failure()

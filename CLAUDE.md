@@ -50,7 +50,8 @@ colours, in your calendar." Motto: "Wrapped up in the game."
 - Wool `#FBF8F2` ground · Ink `#17171C` text · Terrace red `#D7263D` actions · Stand `#6B675F`
   captions · Chalk `#E6E1D8` rules. Team stripes carry the colour; the brand itself stays neutral.
   One exception: the basketball icon is the ball's own orange `#D9600F` (docs/brand.md).
-- Type: Bricolage Grotesque (display, 700–800, tight tracking), Albert Sans (UI/body). Google Fonts.
+- Type: Bricolage Grotesque (display, 700–800, tight tracking), Albert Sans (UI/body). Served from
+  scarf.fan (`assets/fonts/`), not Google Fonts.
 - Wordmark is lowercase `scarf`. Mark: the striped scarf (`assets/scarf-mark.svg`), recoloured per
   team on team surfaces (`assets/scarf-mark-greece.svg`).
 
