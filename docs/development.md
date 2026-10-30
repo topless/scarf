@@ -18,8 +18,9 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
    when someone pastes a page's address, from [src/share.ts](../src/share.ts): a team's in its colours with
    its next game, a country's in its colours with its teams' names, the landing page's in the brand
    colours with every team's name;
-5. records the games it saw in `known-games.json`, which the Actions job keeps in its cache between runs
-   (not in git), so the next run can tell a newly announced game from an old one.
+5. records the games it saw in `known-games.json` and the sources' answers in `source-answers/`, which the
+   Actions job keeps in its cache between runs (not in git), so the next run can tell a newly announced game
+   from an old one, and a run on a push to `main` can reuse the day's answers instead of asking again.
 
 If a source cannot be fetched or its format changed, the build fails and the last published files stay online.
 
@@ -69,7 +70,7 @@ npm test
 npm run build
 ```
 
-A local build also writes `known-games.json` in the repository root, which git ignores.
+A local build also writes `known-games.json` and `source-answers/` in the repository root, which git ignores.
 
 `npm run build` asks UEFA and FIBA for live data. To check a page change without asking them, build
 from the test fixtures and serve `dist/` the way scarf.fan does:
@@ -81,7 +82,7 @@ npx wrangler dev
 
 then open http://localhost:8787/greece/football/. The fixture build reads the sources' answers saved in
 [test/fixtures/](../test/fixtures/), dated on the day they were saved so their games stay upcoming. It
-makes no request at all and leaves `known-games.json` alone.
+makes no request at all and leaves `known-games.json` and `source-answers/` alone.
 
 ## Maintaining it by hand
 
@@ -152,9 +153,10 @@ docs/observability.md is the plan for counting subscribers, visitors and subscri
 ## Known limits
 
 - The UEFA endpoint and the FIBA page are undocumented and can change without notice. Their terms do not
-  allow automated collection, so this stays a small friends-only tool: per run (the daily run, plus one
-  run per push to `main`) one UEFA request for all football teams together and one FIBA request per
-  basketball competition.
+  allow automated collection, so this stays a small friends-only tool: the daily run, and a manual one, make
+  one UEFA request for all football teams together and one FIBA request per basketball competition. A run
+  on a push to `main` reuses the answers the last run saved while they are less than a day old, and asks
+  only for what they don't cover: UEFA again for a new football team, FIBA for a new competition's page.
 - Calendar apps refresh subscribed feeds on their own schedule; Google Calendar can take a day. On a Mac,
   choose "Every day" for auto-refresh when subscribing; the default is reportedly weekly.
 - Subscribing in Google Calendar only works in a computer browser, not in the phone app.
