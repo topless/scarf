@@ -154,9 +154,12 @@ docs/observability.md is the plan for counting subscribers, visitors and subscri
 - Calendar apps refresh subscribed feeds on their own schedule; Google Calendar can take a day. On a Mac,
   choose "Every day" for auto-refresh when subscribing; the default is reportedly weekly.
 - Subscribing in Google Calendar only works in a computer browser, not in the phone app.
-- Each timed game carries a reminder one hour before kickoff. Apple Calendar shows it unless "Remove alarms"
-  is on for the subscription; Google Calendar is believed to ignore embedded reminders, but lets you set a
-  notification for the whole calendar in its settings. Outlook is unverified.
+- Each timed game carries a reminder one hour before kickoff. iPhone Calendar ignores it: tested in the
+  iOS Simulator (iOS 17.5 and 18, subscription stored "On My iPhone"), games show "Alert: None" and no
+  reminder fires, even with "Event Alerts" on. The workaround is Settings › Apps › Calendar › Default Alert
+  Times › Events › 1 hour before, which applies to every timed event, not only scarf's. Not yet checked on a
+  real iPhone, an iCloud-stored subscription or a Mac. Google Calendar is believed to ignore embedded
+  reminders, but lets you set a notification for the whole calendar in its settings. Outlook is unverified.
 - Games with no announced time appear as all-day entries marked "time not announced".
 - The `-alerts` feeds rely on the `known-games-…` entries under Actions → Caches. GitHub drops a cache
   unused for 7 days, and the daily run uses it every day. If it is lost anyway, or deleted to start afresh,

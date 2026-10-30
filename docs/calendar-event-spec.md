@@ -134,8 +134,12 @@ Kept up to date by scarf · {canonical}/greece/basketball
 
 ## Reminder behaviour to document on the team page
 
-Apple Calendar and Outlook honour `VALARM` from a subscribed feed; Google Calendar ignores it and
-uses the user's default notification for that calendar. The team page says so in one line:
+Outlook honours `VALARM` from a subscribed feed. iPhone Calendar stores it but never schedules it
+(iOS 17.5 and 18 in the Simulator; see README), so iPhone users need Default Alert Times. Google
+Calendar ignores it and uses the user's default notification for that calendar. The team page says
+so next to the subscribe buttons, one line each:
+"On iPhone, set Settings › Apps › Calendar › Default Alert Times › Events to 1 hour before — it covers
+every timed event, games included. See it on an iPhone." (linking to `/how-it-works/#see-it`) and
 "On Google Calendar, set a notification for this calendar once — it applies to every game."
 
 ## Voice checks (test these as string assertions)

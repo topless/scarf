@@ -68,6 +68,7 @@ test('subscribe links point at the feed the build writes, on the public address'
   assert.ok(html.includes(`addfromweb?url=${encodeURIComponent(`${site}/greece/football.ics`)}&amp;name=${encodeURIComponent('Greece football · scarf')}"`))
   assert.match(html, /<input id="feed-url" type="text" readonly value="https:\/\/example\.github\.io\/scarf\/greece\/football\.ics" data-alerts="[^"]+">/)
   assert.match(html, /<button class="btn-secondary" type="button" data-copy="feed-url">Copy<\/button>/)
+  assert.match(html, /On iPhone, set Settings › Apps › Calendar › Default Alert Times › Events to 1 hour before — it covers every timed event, games included\. <a href="\.\.\/\.\.\/how-it-works\/#see-it">See it on an iPhone<\/a>\./)
   assert.match(html, /On Google Calendar, set a notification for this calendar once — it applies to every game\./)
 })
 
