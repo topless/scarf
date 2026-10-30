@@ -71,6 +71,18 @@ npm run build
 
 A local build also writes `known-games.json` in the repository root, which git ignores.
 
+`npm run build` asks UEFA and FIBA for live data. To check a page change without asking them, build
+from the test fixtures and serve `dist/` the way scarf.fan does:
+
+```bash
+npm run build:fixtures
+npx wrangler dev
+```
+
+then open http://localhost:8787/greece/football/. The fixture build reads the sources' answers saved in
+[test/fixtures/](../test/fixtures/), dated on the day they were saved so their games stay upcoming. It
+makes no request at all and leaves `known-games.json` alone.
+
 ## Maintaining it by hand
 
 - **TV channel and default ticket link** are per team in [src/config.ts](../src/config.ts).

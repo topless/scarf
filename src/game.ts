@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises'
+
 export interface Game {
   // Stable id from the source, e.g. "uefa-2047926". Used as the calendar event UID,
   // so a changed kickoff time replaces the event instead of duplicating it.
@@ -38,7 +40,10 @@ export function byStart(a: Game, b: Game): number {
   return (a.kickoff ?? a.date).localeCompare(b.kickoff ?? b.date)
 }
 
-export async function fetchText(url: string): Promise<string> {
+// A source's answer: read from `saved`, an answer saved earlier, which makes no request (a fixture
+// build reads test/fixtures/), or else fetched from `url`.
+export async function fetchText(url: string, saved?: URL): Promise<string> {
+  if (saved) return readFile(saved, 'utf8')
   const res = await fetch(url, {
     headers: { 'User-Agent': 'scarf/0.1 (personal fixture calendar)' },
     signal: AbortSignal.timeout(30_000), // fail in 30 s, not after GitHub's six-hour job limit

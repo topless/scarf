@@ -5,7 +5,8 @@ import { parseFibaGames } from '../src/fiba.ts'
 import { fetchUefaMatches, parseUefaMatches } from '../src/uefa.ts'
 
 // Both fixtures are cut down from real responses: the UEFA one from the single batched probe of
-// 2026-10-17 (teamId=49,122,35), the FIBA one from the 2027 qualifiers page on 2026-10-02.
+// 2026-10-17 (teamId=49,122,35), the FIBA one from the 2027 qualifiers page on 2026-10-02. Its last
+// game, France v Germany (id 1), is made up, so the fixture build has a game for every basketball team.
 const fixture = (name: string) => readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8')
 const uefa = () => JSON.parse(fixture('uefa-matches.json'))
 const ids = (games: { id: string }[]) => games.map((g) => g.id)
