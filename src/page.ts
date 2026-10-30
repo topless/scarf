@@ -94,14 +94,7 @@ ${nextGameCard(team, next)}
     <p class="small">New games and ${start} times appear a day or two after ${from} announces them. TV channels are the expected broadcasters — we update them closer to the game.</p>
   </div>
 </section>
-<section class="wrap how" id="how">
-  <h2>How it works</h2>
-  <ol class="steps">
-    <li class="step"><span class="step-num">1</span><h3>Subscribe once</h3><p>Tap Add to my calendar and pick your app. That is the whole setup — no account, no download.</p></li>
-    <li class="step"><span class="step-num">2</span><h3>Your calendar keeps itself current</h3><p>We rebuild the feed every day from ${from}. New games, ${start} times and venues appear on their own, in your time zone.</p></li>
-    <li class="step"><span class="step-num">3</span><h3>A nudge an hour before ${start}</h3><p>Channel and ticket link live inside the event, so nobody is hunting for them at 20:40.</p></li>
-  </ol>
-</section>
+${howItWorks(team, games.find((game) => game.kickoff))}
 <section class="teams" id="teams">
   <div class="wrap">
     <div class="teams-text">
@@ -342,6 +335,29 @@ function nextGameCard(team: Team, game?: Game): string {
       <p class="card-foot">In your calendar it shows in your own time zone. We nudge you an hour before ${start}.</p>
     </div>
   </div>`
+}
+
+// Three steps in the sport's words, each over a picture of what the fan gets: the button, the
+// game's event replacing its placeholder, and the reminder as the feed words it (ics.ts). The
+// pictures use the first game with a time; until there is one, the steps go without them.
+function howItWorks(team: Team, game?: Game): string {
+  const { start, starts } = WORDS[team.sport]
+  const scenes = game
+    ? [
+        `<div class="scene"><a class="btn-primary" href="#subscribe">Add to my calendar</a><span class="scene-apps" aria-hidden="true"><span>Apple</span><span>Google</span><span>Outlook</span></span></div>`,
+        `<div class="scene" aria-hidden="true"><span class="cal-old">${matchTitle(game)} · time not announced</span><span class="cal-event"><b>${matchTitle(game)}</b><span>${esc(kickoffText(game, shortDate, start))}</span><span>${esc(place(game))}</span></span></div>`,
+        `<div class="scene" aria-hidden="true"><span class="nudge"><span class="nudge-time">${ICON.date}${esc(kickoffText({ ...game, kickoff: new Date(Date.parse(game.kickoff!) - 60 * 60 * 1000).toISOString() }, shortDate))}</span><b>${matchTitle(game)} ${starts} in an hour</b>${game.tv ? `<span>${esc(game.tv.replace(/\s*\(.*\)$/, ''))}</span>` : ''}</span></div>`,
+      ]
+    : ['', '', '']
+  const step = (n: number, body: string) => `    <li class="step">${scenes[n - 1]}<div class="step-body"><span class="step-num">${n}</span>${body}</div></li>`
+  return `<section class="wrap how" id="how">
+  <div class="section-head"><h2>How it works</h2><p class="aside">Set it up once. The calendar does the rest.</p></div>
+  <ol class="steps">
+${step(1, '<h3>Subscribe once</h3><p>Tap Add to my calendar and pick your app. That is the whole setup: no account, no download.</p>')}
+${step(2, `<h3>Your calendar keeps itself current</h3><p>We rebuild the feed every day from ${federation(team)}. New games, ${start} times and venues land in place, in your time zone.</p>`)}
+${step(3, `<h3>A nudge an hour before ${start}</h3><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>On Google Calendar, set a notification for this calendar once. It applies to every game.</p>`)}
+  </ol>
+</section>`
 }
 
 function renderRow(game: Game, start: string): string {

@@ -197,6 +197,28 @@ test('landing has one card per country in alphabetical order, each with a cell p
   assert.match(html, /Every kickoff or tip-off, venue, channel and ticket sale/)
 })
 
+test('how it works pictures the first timed game, and every time in it names its city', () => {
+  const how = (html: string) => html.slice(html.indexOf('id="how"'), html.indexOf('id="teams"'))
+  // The first game has no time yet, so the pictures come from the second.
+  const football_ = how(teamPage([unscheduled, { ...timed, tv: 'Alpha (Greek TV)' }], site))
+  assert.match(football_, /<a class="btn-primary" href="#subscribe">Add to my calendar<\/a>/)
+  inOrder(football_, 'Greece vs Germany · time not announced', 'Sun 4 Oct · Kickoff 21:45 in Thessaloniki', 'Toumba Stadium, Thessaloniki')
+  // The reminder as the feed words it: an hour before, at the venue's clock, without the TV hint.
+  inOrder(football_, 'Sun 4 Oct · 20:45 in Thessaloniki', 'Greece vs Germany kicks off in an hour', '<span>Alpha</span>')
+  assert.doesNotMatch(football_, /Greek TV/)
+  assert.doesNotMatch(copy(football_), /\d\d:\d\d(?! in )/)
+  // A nudge before midnight falls on the day before.
+  const late = how(teamPage([{ ...timed, kickoff: '2026-10-04T21:15:00Z' }], site))
+  inOrder(late, 'Mon 5 Oct · Kickoff 00:15 in Thessaloniki', 'Sun 4 Oct · 23:15 in Thessaloniki')
+  const basketball_ = how(renderTeamPage({ team: basketball, games: [timed] }, teams, site))
+  inOrder(basketball_, 'Tip-off 21:45 in Thessaloniki', 'Greece vs Germany tips off in an hour')
+  // Without a timed game the steps go without pictures.
+  const plain = how(teamPage([unscheduled], site))
+  assert.equal(plain.match(/<li class="step">/g)?.length, 3)
+  assert.doesNotMatch(plain, /class="scene"/)
+  assert.match(plain, /On Google Calendar, set a notification for this calendar once\. It applies to every game\./)
+})
+
 test('a basketball page says tip-off and arena, never kickoff or stadium', () => {
   // Both pages get the game without a venue on purpose: a venue name from the data ("Toumba
   // Stadium", "Johan Cruijff ArenA") must not trip the word checks, which are about our own copy.
@@ -205,7 +227,7 @@ test('a basketball page says tip-off and arena, never kickoff or stadium', () =>
   assert.match(html, /Every tip-off, arena, channel and ticket sale for the national team/)
   assert.match(html, /We nudge you an hour before tip-off\./)
   assert.match(html, /New games and tip-off times appear a day or two after FIBA announces them\./)
-  assert.match(html, /New games, tip-off times and venues appear on their own/)
+  assert.match(html, /New games, tip-off times and venues land in place/)
   assert.match(html, /<h3>A nudge an hour before tip-off<\/h3>/)
   assert.doesNotMatch(copy(html), /kickoff|stadium/i)
   const timedCourt = renderTeamPage({ team: basketball, games: [{ ...timed, venue: undefined }] }, teams, site)
