@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { teams } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
-import { renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderTeamPage, WORDS } from '../src/page.ts'
+import { renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderTeamPage, SHARE_SCRIPT, WORDS } from '../src/page.ts'
 
 const [football, basketball] = teams
 const site = 'https://example.github.io/scarf'
@@ -306,6 +306,46 @@ test('a team page names its country, linking its page, and switches sport only w
   const english = renderTeamPage({ team: england, games: [] }, teams, site)
   assert.match(english, /<a class="country-name" href="\.\.\/"><img class="flag" src="\.\.\/\.\.\/flags\/gb-eng\.svg" width="32" height="24" alt="">England<\/a>/)
   assert.doesNotMatch(english, /class="switch"/)
+})
+
+test('every team page ends its country bar with a Share button for its own address, only with a public address', () => {
+  for (const team of teams) {
+    const html = renderTeamPage({ team, games: [] }, teams, site)
+    const bar = html.slice(html.indexOf('<div class="country-bar">'), html.indexOf('<main>'))
+    const button = `<button class="btn-secondary share" type="button" data-share="${site}/${team.country}/${team.sport}/" data-text="${team.name} in your calendar · scarf" aria-live="polite" hidden>Share</button>`
+    assert.ok(bar.includes(`${button}\n  </div>`), `${team.name}: ${bar}`)
+  }
+  assert.doesNotMatch(teamPage([timed]), /<button class="btn-secondary share"/)
+})
+
+// Runs SHARE_SCRIPT against a stub page and browser, presses Share and returns the button.
+async function pressShare(navigator: object) {
+  let press = () => {}
+  const button = {
+    dataset: { share: 'https://scarf.fan/greece/football/', text: 'Greece football in your calendar · scarf' },
+    hidden: true,
+    textContent: 'Share',
+    addEventListener: (_: string, listener: () => void) => (press = listener),
+  }
+  new Function('document', 'navigator', SHARE_SCRIPT)({ title: 'Greece football · scarf', querySelector: () => button }, navigator)
+  press()
+  await new Promise(setImmediate)
+  return button
+}
+
+test('Share opens the share sheet with the team page, or copies its address where there is none', async () => {
+  const shared: object[] = []
+  const sheet = await pressShare({ share: async (data: object) => void shared.push(data) })
+  assert.deepEqual(shared, [{ title: 'Greece football · scarf', text: 'Greece football in your calendar · scarf', url: 'https://scarf.fan/greece/football/' }])
+  assert.equal(sheet.hidden, false)
+  const copied: string[] = []
+  const copy = await pressShare({ clipboard: { writeText: async (text: string) => void copied.push(text) } })
+  assert.deepEqual(copied, ['https://scarf.fan/greece/football/'])
+  assert.equal(copy.textContent, 'Copied')
+  // A fan who closes the share sheet sees no error and no change.
+  const closed = await pressShare({ share: async () => Promise.reject(new DOMException('', 'AbortError')) })
+  assert.equal(closed.textContent, 'Share')
+  assert.equal((await pressShare({})).hidden, true)
 })
 
 test("the next-game card carries the sport's drawing, hidden from screen readers", () => {

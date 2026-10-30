@@ -69,17 +69,18 @@ export function renderTeamPage(section: Section, all: Team[], siteUrl?: string):
   const from = federation(team)
   const { start, ground, ball } = WORDS[team.sport]
   const next = games[0]
+  const url = siteUrl && `${siteUrl}/${team.country}/${team.sport}/`
   return page({
     root: '../../',
     title: `${team.name} · ${siteName}`,
     description: `Every game of the ${team.side} in your calendar: ${start}, venue, TV and tickets, updated daily.`,
     // The share image sits next to the page; chat apps need both addresses absolute, so a local
     // build (no public address) leaves them out rather than printing relative ones.
-    share: { url: siteUrl && `${siteUrl}/${team.country}/${team.sport}/`, image: siteUrl && `${siteUrl}/${sharePath(team)}` },
+    share: { url, image: siteUrl && `${siteUrl}/${sharePath(team)}` },
     stripes: team.colours,
     body: `<div class="band"></div>
 ${header('../../', '<a class="pill pill-primary" href="#subscribe">Add to my calendar</a>')}
-${countryBar(team, all)}
+${countryBar(team, all, url)}
 <main>
 <section class="wrap hero">
   <div class="hero-text">
@@ -111,7 +112,7 @@ ${teamChips(all, team)}
 </section>
 </main>
 ${footer()}`,
-    script: COPY_SCRIPT + ALERTS_SCRIPT,
+    script: COPY_SCRIPT + ALERTS_SCRIPT + SHARE_SCRIPT,
   })
 }
 
@@ -359,6 +360,19 @@ const COPY_SCRIPT = `
     })
   }`
 
+// Share opens the phone's share sheet with the team page; where there is none it copies the address.
+// The button stays hidden in a browser that can do neither.
+export const SHARE_SCRIPT = `
+  const share = document.querySelector('button[data-share]')
+  if (share && (navigator.share || navigator.clipboard)) {
+    share.addEventListener('click', () => {
+      const url = share.dataset.share
+      if (navigator.share) navigator.share({ title: document.title, text: share.dataset.text, url }).catch(() => {})
+      else navigator.clipboard.writeText(url).then(() => { share.textContent = 'Copied' }, () => {})
+    })
+    share.hidden = false
+  }`
+
 // Picking "Games and announcements" points every subscribe link and the paste field at the -alerts
 // feed. Without JavaScript the choice stays hidden and the default links stand (a noscript line
 // links the variant).
@@ -458,7 +472,9 @@ function feedLinks(team: Team, alerts: boolean, siteUrl?: string): { webcal: str
 }
 
 // The country under the header, with a switch to its other sports when it has more than one.
-function countryBar(team: Team, all: Team[]): string {
+// url is the team page's public address, which the Share button sends; local builds have none and
+// leave the button out.
+function countryBar(team: Team, all: Team[], url?: string): string {
   const name = esc(countryName(team))
   const sports = SPORTS.flatMap((sport) => all.filter((other) => other.country === team.country && other.sport === sport))
   const link = (other: Team) =>
@@ -467,6 +483,7 @@ function countryBar(team: Team, all: Team[]): string {
   <div class="country-bar">
     <a class="country-name" href="../"><img class="flag" src="../../${flagPath(team.flag)}" width="32" height="24" alt="">${name}</a>
     ${sports.length > 1 ? `<nav class="switch" aria-label="${name} teams">${sports.map(link).join('')}</nav>` : ''}
+    ${url ? `<button class="btn-secondary share" type="button" data-share="${esc(url)}" data-text="${esc(`${team.name} in your calendar · ${siteName}`)}" aria-live="polite" hidden>Share</button>` : ''}
   </div>
 </div>`
 }
