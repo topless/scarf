@@ -95,10 +95,8 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-h
 .step-num { font-family: var(--font-display); font-weight: 800; font-size: 32px; line-height: 1; letter-spacing: -0.04em; }
 .step h3 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
 .step p { font-size: 15px; line-height: 1.5; color: var(--stand); }
-.scene { height: 168px; box-sizing: border-box; padding: 20px 24px; display: flex; flex-direction: column; justify-content: center; gap: 10px; background: var(--wool); border-bottom: var(--border) solid var(--chalk); font-size: 13px; color: var(--stand); }
+.scene { min-height: 168px; box-sizing: border-box; padding: 20px 24px; display: flex; flex-direction: column; justify-content: center; gap: 10px; background: var(--wool); border-bottom: var(--border) solid var(--chalk); font-size: 13px; color: var(--stand); }
 .scene .btn-primary { height: 48px; font-size: 16px; }
-.scene-apps { display: flex; gap: 6px; }
-.scene-apps span { flex: 1; display: flex; align-items: center; justify-content: center; height: 34px; border: var(--border) solid var(--ink); border-radius: var(--radius-input); color: var(--ink); font-weight: 600; }
 .cal-old { align-self: flex-start; padding: 4px 10px; border: var(--border) dashed var(--chalk); border-radius: 6px; font-size: 12px; text-decoration: line-through; }
 .cal-event, .nudge { display: flex; flex-direction: column; gap: 2px; background: var(--white); border: var(--border) solid var(--chalk); }
 /* The bar is the team's calendar colour: 6 px of the stripe is its first colour. */

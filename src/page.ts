@@ -52,6 +52,15 @@ export const WORDS: Record<Sport, { start: string; starts: string; ground: strin
 }
 const SPORTS = Object.keys(WORDS) as Sport[]
 
+// The reminder a timed game carries in its feed (ics.ts) and shows in its How it works step: an
+// hour before the start, the game and the channels. The channel names are enough there; the
+// "(Greek TV)" hint stays in the event's description.
+export const REMINDER_HOURS = 1
+export const reminder = (game: Game, sport: Sport) => ({
+  text: `${game.home} vs ${game.away} ${WORDS[sport].starts} in an hour`,
+  tv: game.tv?.replace(/\s*\(.*\)$/, ''),
+})
+
 // siteUrl is the public address of the site; without it (local builds) the subscribe links are
 // relative and the ones that need a public address (Google, Outlook, the paste field) are left out.
 export function renderTeamPage(section: Section, all: Team[], siteUrl?: string): string {
@@ -338,17 +347,21 @@ function nextGameCard(team: Team, game?: Game): string {
 }
 
 // Three steps in the sport's words, each over a picture of what the fan gets: the button, the
-// game's event replacing its placeholder, and the reminder as the feed words it (ics.ts). The
-// pictures use the first game with a time; until there is one, the steps go without them.
+// game's event replacing its placeholder, and its reminder. The pictures use the first game with
+// a time; until there is one, the steps go without them.
 function howItWorks(team: Team, game?: Game): string {
-  const { start, starts } = WORDS[team.sport]
-  const scenes = game
-    ? [
-        `<div class="scene"><a class="btn-primary" href="#subscribe">Add to my calendar</a><span class="scene-apps" aria-hidden="true"><span>Apple</span><span>Google</span><span>Outlook</span></span></div>`,
-        `<div class="scene" aria-hidden="true"><span class="cal-old">${matchTitle(game)} · time not announced</span><span class="cal-event"><b>${matchTitle(game)}</b><span>${esc(kickoffText(game, shortDate, start))}</span><span>${esc(place(game))}</span></span></div>`,
-        `<div class="scene" aria-hidden="true"><span class="nudge"><span class="nudge-time">${ICON.date}${esc(kickoffText({ ...game, kickoff: new Date(Date.parse(game.kickoff!) - 60 * 60 * 1000).toISOString() }, shortDate))}</span><b>${matchTitle(game)} ${starts} in an hour</b>${game.tv ? `<span>${esc(game.tv.replace(/\s*\(.*\)$/, ''))}</span>` : ''}</span></div>`,
-      ]
-    : ['', '', '']
+  const { start } = WORDS[team.sport]
+  let scenes = ['', '', '']
+  if (game) {
+    const alarm = reminder(game, team.sport)
+    // When the reminder goes off, read like a kickoff: at the venue's clock, with its city.
+    const alarmAt = kickoffText({ ...game, kickoff: new Date(Date.parse(game.kickoff!) - REMINDER_HOURS * 60 * 60 * 1000).toISOString() }, shortDate)
+    scenes = [
+      `<div class="scene"><a class="btn-primary" href="#subscribe">Add to my calendar</a></div>`,
+      `<div class="scene" aria-hidden="true"><span class="cal-old">${matchTitle(game)} · time not announced</span><span class="cal-event"><b>${matchTitle(game)}</b><span>${esc(kickoffText(game, shortDate, start))}</span><span>${esc(place(game))}</span></span></div>`,
+      `<div class="scene" aria-hidden="true"><span class="nudge"><span class="nudge-time">${ICON.date}${esc(alarmAt)}</span><b>${esc(alarm.text)}</b>${alarm.tv ? `<span>${esc(alarm.tv)}</span>` : ''}</span></div>`,
+    ]
+  }
   const step = (n: number, body: string) => `    <li class="step">${scenes[n - 1]}<div class="step-body"><span class="step-num">${n}</span>${body}</div></li>`
   return `<section class="wrap how" id="how">
   <div class="section-head"><h2>How it works</h2><p class="aside">Set it up once. The calendar does the rest.</p></div>
