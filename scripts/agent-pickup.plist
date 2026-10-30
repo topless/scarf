@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- launchd job for agent-pickup.sh; install and remove with the commands at the top of that script. -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>fan.scarf.agent-pickup</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/chris/Work/scarf/scripts/agent-pickup.sh</string>
+  </array>
+  <key>StartInterval</key><integer>600</integer>
+  <key>RunAtLoad</key><true/>
+  <!-- Agents outlive this 10-minute check; without this launchd kills them when it exits. -->
+  <key>AbandonProcessGroup</key><true/>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <!-- shortcut: pinned to nvm's node v22.23.2; update after switching node versions. -->
+    <key>PATH</key><string>/Users/chris/.nvm/versions/node/v22.23.2/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  <key>StandardOutPath</key><string>/Users/chris/Library/Logs/scarf-agent/pickup.log</string>
+  <key>StandardErrorPath</key><string>/Users/chris/Library/Logs/scarf-agent/pickup.log</string>
+</dict>
+</plist>
