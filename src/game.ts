@@ -17,16 +17,7 @@ export interface Game {
 }
 
 // What the sources don't provide, kept by hand in config.ts and manual.ts.
-export interface Details {
-  kickoff?: string
-  utcOffsetHours?: number
-  venue?: string
-  city?: string
-  tv?: string
-  tickets?: string
-  note?: string
-  onSale?: string
-}
+export type Details = Pick<Game, 'kickoff' | 'utcOffsetHours' | 'venue' | 'city' | 'tv' | 'tickets' | 'note' | 'onSale'>
 
 // The source wins for time and place once it has them; hand-kept values only fill the gaps.
 export function withDetails(game: Game, teamDefaults: Details, manual: Details = {}): Game {

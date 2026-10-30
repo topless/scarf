@@ -1,17 +1,13 @@
 import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar, type ICalEventData } from 'ical-generator'
-import { feedName, siteName, type Sport, type Team } from './config.ts'
+import { defaultSiteUrl, federation, feedName, siteName, WORDS, type Team } from './config.ts'
 import type { Game } from './game.ts'
 
 const GAME_HOURS = 2
 const REMINDER_HOURS = 1
 const SALE_REMINDER_HOUR = 9 // 09:00 at the venue on the day tickets go on sale
-const DEFAULT_SITE_URL = 'https://scarf.fan'
-const FEDERATION = { uefa: 'UEFA', fiba: 'FIBA' } as const
 // "Mon 16 Nov", read in UTC so a venue-local YYYY-MM-DD stays on its own day.
 const DAY = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
 const DAY_MONTH_YEAR = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' })
-// The ground each sport is played on, as the pages say it (WORDS in page.ts).
-const GROUND: Record<Sport, string> = { football: 'stadium', basketball: 'arena' }
 
 // Game id → the day (YYYY-MM-DD) the build first saw it, for games announced after scarf started
 // watching the team (src/known-games.ts).
@@ -20,7 +16,7 @@ export type Announced = Record<string, string>
 // Event copy follows docs/calendar-event-spec.md, with "vs" between the teams.
 // With `alerts` this is the -alerts variant: the same events under their own calendar name, plus
 // one all-day "New game" entry per announced game (spec § 4). The default feed never carries those.
-export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SITE_URL, alerts?: Announced): string {
+export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSiteUrl, alerts?: Announced): string {
   const teamPage = `${siteUrl}/${team.country}/${team.sport}`
   const footer = `Kept up to date by ${siteName} · ${teamPage.replace(/^https?:\/\//, '')}`
   // Header fields: team first, brand last, the team's colour.
@@ -66,10 +62,9 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
       })
     } else {
       // All-day placeholder until the time is announced; the same UID later becomes a timed event.
-      const federation = FEDERATION[team.source.kind]
       const description = game.venue
-        ? [game.competition, `We'll fill in the time as soon as ${federation} publishes it.`, '', footer]
-        : [game.competition, 'Venue not announced', `We'll fill in the time and arena as soon as ${federation} publishes them.`, '', footer]
+        ? [game.competition, `We'll fill in the time as soon as ${federation(team)} publishes it.`, '', footer]
+        : [game.competition, 'Venue not announced', `We'll fill in the time and arena as soon as ${federation(team)} publishes them.`, '', footer]
       calendar.createEvent({
         ...details,
         summary: `${title} · time not announced`,
@@ -93,8 +88,7 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
 // An all-day entry on the day the build first saw the game. It says what is still to come; the
 // game itself sits in the same calendar under its own UID.
 function newGameEvent(team: Team, game: Game, firstSeen: string, now: Date, teamPage: string, footer: string): ICalEventData {
-  const federation = FEDERATION[team.source.kind]
-  const ground = GROUND[team.sport]
+  const { ground } = WORDS[team.sport]
   const toFollow = game.kickoff ? undefined : game.venue ? 'time to follow' : `time and ${ground} to follow`
   return {
     id: `${game.id}-new@${siteName}`,
@@ -102,7 +96,7 @@ function newGameEvent(team: Team, game: Game, firstSeen: string, now: Date, team
     start: new Date(firstSeen),
     allDay: true,
     summary: `New game · ${game.home} vs ${game.away}, ${DAY_MONTH_YEAR.format(new Date(game.date))}`,
-    description: lines([`Just announced by ${federation}. It's already in this calendar${toFollow ? ` — ${toFollow}` : ''}.`, '', footer]),
+    description: lines([`Just announced by ${federation(team)}. It's already in this calendar${toFollow ? ` — ${toFollow}` : ''}.`, '', footer]),
     url: `${teamPage}/`,
   }
 }

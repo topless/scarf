@@ -2,10 +2,19 @@ import type { Details } from './game.ts'
 
 // Lowercase wordmark, "Scarf" only at the start of a sentence. See docs/brand.md.
 export const siteName = 'scarf'
+// The public address when the build is given none (SITE_URL), as feeds and share cards print it.
+export const defaultSiteUrl = 'https://scarf.fan'
 
-// The sports scarf covers. The pages speak each sport's language (kickoff or tip-off, stadium or
-// arena; see page.ts), so a new sport is added here and given its words there.
+// The sports scarf covers. The pages and feeds speak each sport's language, so a new sport is
+// added here with its words.
 export type Sport = 'football' | 'basketball'
+
+// Each sport's own words for the start of a game and the ground it is played on, so a basketball
+// page never promises a kickoff in a stadium.
+export const WORDS: Record<Sport, { start: string; ground: string }> = {
+  football: { start: 'kickoff', ground: 'stadium' },
+  basketball: { start: 'tip-off', ground: 'arena' },
+}
 
 export interface Team {
   // URL slugs. The path scheme is frozen because subscriptions point at it (see HANDOVER.md):
@@ -24,6 +33,9 @@ export interface Team {
   // kept here per team; see docs/research-2026-10-02.md.
   defaults: Pick<Details, 'tv' | 'tickets'>
 }
+
+// "UEFA", "FIBA": who publishes a team's games, as the pages and feeds name it.
+export const federation = (team: Team): string => team.source.kind.toUpperCase()
 
 export const feedPath = (team: Team): string => `${team.country}/${team.sport}.ics`
 // The optional variant with a "New game" entry on the day a game is announced; frozen once published.

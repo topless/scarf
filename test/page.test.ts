@@ -237,8 +237,10 @@ test('landing lists every team, each in its own colours', () => {
   const html = renderLanding(teams.map((team) => ({ team, games: [] })))
   assert.equal(html.match(/<a class="card" href="/g)?.length, teams.length)
   for (const team of teams) {
-    const [first, second] = team.colours
-    assert.match(html, new RegExp(`<a class="card" href="${team.country}/${team.sport}/" style="--stripe: repeating-linear-gradient\\(90deg, ${first} 0px 18px, ${second} 18px 36px`))
+    // One 36 px repeat however many colours (docs/brand.md).
+    const [first, second, third] = team.colours
+    const stops = third ? `${first} 0px 12px, ${second} 12px 24px, ${third} 24px 36px` : `${first} 0px 18px, ${second} 18px 36px`
+    assert.match(html, new RegExp(`<a class="card" href="${team.country}/${team.sport}/" style="--stripe: repeating-linear-gradient\\(90deg, ${stops}\\)`))
     assert.ok(html.includes(`<p class="card-title">${team.name}</p>`), team.name)
   }
   assert.match(html, /<span>From UEFA<\/span>/)
@@ -255,7 +257,9 @@ test('a new team page shows its flag, its own feed and links every other team', 
   assert.match(html, /<a class="btn-primary" href="webcal:\/\/example\.github\.io\/scarf\/spain\/basketball\.ics" data-alerts="webcal:\/\/example\.github\.io\/scarf\/spain\/basketball-alerts\.ics">/)
   assert.equal(html.match(/class="team-chip"/g)?.length, teams.length)
   assert.match(html, /href="\.\.\/\.\.\/spain\/basketball\/" style="[^"]*#AA151B[^"]*" aria-current="page"/)
-  assert.match(html, /href="\.\.\/\.\.\/germany\/basketball\/" style="[^"]*#000000 0px 18px, #DD0000 18px 36px, #FFCC00 36px 54px[^"]*"/)
+  assert.match(html, /href="\.\.\/\.\.\/germany\/basketball\/" style="[^"]*#000000 0px 12px, #DD0000 12px 24px, #FFCC00 24px 36px[^"]*"/)
+  // The pill's 10 px repeat does not split in three, so its stops round to whole pixels.
+  assert.match(html, /href="\.\.\/\.\.\/germany\/basketball\/" style="[^"]*--stripe-pill: repeating-linear-gradient\(90deg, #000000 0px 3px, #DD0000 3px 7px, #FFCC00 7px 10px\)"/)
   assert.match(html, /Updated daily from FIBA\./)
 })
 
