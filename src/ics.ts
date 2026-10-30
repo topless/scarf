@@ -24,8 +24,8 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
     prodId: { company: siteName, product: 'feeds', language: 'EN' },
     name: feedName(team, alerts !== undefined),
     description: alerts
-      ? `Every game of the ${team.side} — ${words.start}, venue, TV, tickets — and a note on the day a new game is announced. Kept up to date by ${siteName}.`
-      : `Every game of the ${team.side} — ${words.start}, venue, TV, tickets. Kept up to date by ${siteName}.`,
+      ? `Every game of the ${team.side}: ${words.start}, venue, TV, tickets, and a note on the day a new game is announced. Kept up to date by ${siteName}.`
+      : `Every game of the ${team.side}: ${words.start}, venue, TV, tickets. Kept up to date by ${siteName}.`,
     color: team.colours[0],
     ttl: 12 * 60 * 60,
   })
@@ -96,7 +96,7 @@ function newGameEvent(team: Team, game: Game, firstSeen: string, now: Date, team
     start: new Date(firstSeen),
     allDay: true,
     summary: `New game · ${game.home} vs ${game.away}, ${DAY_MONTH_YEAR.format(new Date(game.date))}`,
-    description: lines([`Just announced by ${federation(team)}. It's already in this calendar${toFollow ? ` — ${toFollow}` : ''}.`, '', footer]),
+    description: lines([`Just announced by ${federation(team)}. It's already in this calendar${toFollow ? `, with ${toFollow}` : ''}.`, '', footer]),
     url: `${teamPage}/`,
   }
 }

@@ -68,7 +68,7 @@ test('subscribe links point at the feed the build writes, on the public address'
   assert.ok(html.includes(`addfromweb?url=${encodeURIComponent(`${site}/greece/football.ics`)}&amp;name=${encodeURIComponent('Greece football · scarf')}"`))
   assert.match(html, /<input id="feed-url" type="text" readonly value="https:\/\/example\.github\.io\/scarf\/greece\/football\.ics" data-alerts="[^"]+">/)
   assert.match(html, /<button class="btn-secondary" type="button" data-copy="feed-url">Copy<\/button>/)
-  assert.match(html, /On Google Calendar, set a notification for this calendar once — it applies to every game\./)
+  assert.match(html, /On Google Calendar, set a notification for this calendar once\. It applies to every game\./)
 })
 
 test('a choice before the buttons offers the alerts feed: every link and the paste field carry its address', () => {
@@ -175,7 +175,7 @@ test('nothing a fan reads breaks the voice rules', () => {
   ]
   for (const html of pages) {
     const text = copy(html)
-    assert.doesNotMatch(text, /!|event-schedule|Event schedule|\bTBA\b|\bTBC\b|\bTBD\b|don't miss/i)
+    assert.doesNotMatch(text, /!|\u2014|event-schedule|Event schedule|\bTBA\b|\bTBC\b|\bTBD\b|don't miss/i)
     assert.doesNotMatch(text, /\bv\b/)
   }
 })
