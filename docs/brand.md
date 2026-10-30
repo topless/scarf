@@ -39,7 +39,7 @@ Each team has an ordered colour list taken from its flag or kit. Render as hard-
 | Spain | `#AA151B`, `#F1BF00` | `#AA151B` |
 | Denmark | `#C60C30`, `#FFFFFF` | `#C60C30` |
 | Serbia | `#C6363C`, `#0C4076`, `#FFFFFF` | `#C6363C` |
-| A club | from its kit; placeholder stripes `#E6E1D8` / `#FBF8F2` until set | not set |
+| A club | from its kit; placeholder stripes `#E6E1D8` / `#FBF8F2` until set | — |
 
 Stripe sizes: 12–14 px band as a card header (with a 1.5 px ink border below), 24–28 px band at the
 top of a page or share card.
