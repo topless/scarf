@@ -30,6 +30,7 @@ test('the fixture build writes every feed, page and share image without a single
   ]
   for (const file of files) assert.ok(existsSync(join(dir, 'dist', file)), file)
   assert.ok(!existsSync(join(dir, 'known-games.json')))
+  assert.ok(!existsSync(join(dir, 'source-answers')))
   // Dated on the fixtures' own day, so their games are still upcoming: Greece v Serbia, 16 Nov 2026.
   assert.match(await readFile(join(dir, 'dist', 'greece/football.ics'), 'utf8'), /^UID:uefa-2047912@scarf\r$/m)
 })
