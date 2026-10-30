@@ -55,7 +55,8 @@ h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(44px, 
 .paste button { flex: none; padding: 0 16px; }
 /* The feed choice is hidden until the script that makes it work has run. */
 .feed-choice:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 10px; margin: 0; padding: 0; border: 0; }
-.feed-choice legend { padding: 0; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--stand); }
+/* Safari sizes a grid fieldset's legend against zero width, which wrapped it one word per line. */
+.feed-choice legend { padding: 0; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--stand); white-space: nowrap; }
 .feed-choice label { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: var(--border) solid var(--chalk); border-radius: var(--radius-input); background: var(--white); font-size: 15px; font-weight: 600; line-height: 1.4; cursor: pointer; }
 .feed-choice label:has(:checked) { border-color: var(--ink); }
 .feed-choice input { flex: none; width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--terrace); cursor: pointer; }
