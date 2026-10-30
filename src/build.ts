@@ -42,17 +42,13 @@ const uefaTeamIds = teams.flatMap(({ source }) => (source.kind === 'uefa' ? [sou
 const uefaMatches = uefaTeamIds.length ? await fetchUefaMatches(uefaTeamIds, today) : []
 const fibaPages = new Map<string, string>()
 
-async function gamesOf(team: Team): Promise<Game[]> {
-  const { source } = team
-  if (source.kind === 'uefa') return parseUefaMatches(uefaMatches, source.teamId)
-  let page = fibaPages.get(source.event)
-  if (page === undefined) {
-    if (fibaPages.size > 0) await pause(5000) // a breath between two pages of the same site
-    page = await fetchFibaPage(source.event)
-    fibaPages.set(source.event, page)
-  }
-  return parseFibaGames(page, source.teamCode)
+for (const event of new Set(teams.flatMap(({ source }) => (source.kind === 'fiba' ? [source.event] : [])))) {
+  if (fibaPages.size > 0) await pause(5000) // a breath between two pages of the same site
+  fibaPages.set(event, await fetchFibaPage(event))
 }
+
+const gamesOf = ({ source }: Team): Game[] =>
+  source.kind === 'uefa' ? parseUefaMatches(uefaMatches, source.teamId) : parseFibaGames(fibaPages.get(source.event)!, source.teamCode)
 
 // The feed fans have now, to tell what this build changes (src/changes.ts). Our own site, not a
 // source, so it does not count against the one-request-per-source rule.
@@ -65,7 +61,7 @@ async function liveFeed(team: Team): Promise<string> {
 const sections: Section[] = []
 const changes: string[] = [] // a Markdown block per team whose feed changed, for the run summary
 for (const team of teams) {
-  const games = (await gamesOf(team))
+  const games = gamesOf(team)
     .filter((game) => game.date >= today)
     .map((game) => withDetails(game, team.defaults, manual[game.id]))
     .sort(byStart)

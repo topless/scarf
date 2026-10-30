@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { alertsFeedPath, countrySharePath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, type Sport, type Team } from './config.ts'
 import { flagPath } from './flags.ts'
 import type { Game } from './game.ts'
@@ -605,12 +606,15 @@ function when(game: Game, date: (d: Date) => string, start: string): string {
   return `<time datetime="${esc(game.kickoff)}"${offset}>${text}</time>`
 }
 
-// Hard-stop stripes per docs/brand.md: 18 px per colour in a card header, 24 px in the page band.
-function stripeVars(colours: string[]): string {
-  const stripe = (width: number) =>
-    `repeating-linear-gradient(90deg, ${colours.map((c, i) => `${c} ${i * width}px ${(i + 1) * width}px`).join(', ')})`
-  return `--stripe: ${stripe(18)}; --stripe-wide: ${stripe(24)}`
+// Hard-stop stripes per docs/brand.md: one repeat is a fixed length shared by the colours, so a
+// card header gives two colours 18 px each and three 12 px. Stops round to whole pixels.
+export function stripes(colours: string[], repeat: number): string {
+  const stop = (i: number) => `${Math.round((i * repeat) / colours.length)}px`
+  return `repeating-linear-gradient(90deg, ${colours.map((c, i) => `${c} ${stop(i)} ${stop(i + 1)}`).join(', ')})`
 }
+
+// The card header and the page band.
+const stripeVars = (colours: string[]) => `--stripe: ${stripes(colours, 36)}; --stripe-wide: ${stripes(colours, 48)}`
 
 function inTheFeed(count: number): string {
   if (count === 1) return 'Already in the feed'
@@ -618,9 +622,10 @@ function inTheFeed(count: number): string {
   return `All ${count} are already in the feed`
 }
 
-function mark(size: number): string {
-  return `<svg viewBox="0 0 64 64" width="${size}" height="${size}" fill="none" aria-hidden="true"><g transform="rotate(-14 32 32)"><rect x="8" y="22" width="48" height="20" rx="7" fill="#D7263D"/><rect x="17" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="29" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="41" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="8" y="22" width="48" height="20" rx="7" stroke="#17171C" stroke-width="3"/><path d="M8 27H2M8 32H2M8 37H2M56 27h6M56 32h6M56 37h6" stroke="#17171C" stroke-width="3" stroke-linecap="round"/></g></svg>`
-}
+// The brand mark's drawing, from its one copy in assets/; share.ts draws it on the cards too.
+export const markDrawing = readFileSync(new URL('../assets/scarf-mark.svg', import.meta.url), 'utf8').match(/<g.*<\/g>/s)![0]
+
+const mark = (size: number) => `<svg viewBox="0 0 64 64" width="${size}" height="${size}" fill="none" aria-hidden="true">${markDrawing}</svg>`
 
 const ICON = {
   arrow: icon('<path d="M5 12h14M13 6l6 6-6 6"/>'),
@@ -630,7 +635,7 @@ const ICON = {
   ticket: icon('<path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4V7z"/><path d="M10 7v10" stroke-dasharray="2 2"/>'),
 }
 
-function esc(text: string): string {
+export function esc(text: string): string {
   return text
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')

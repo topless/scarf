@@ -1,14 +1,10 @@
 import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar, type ICalEventData } from 'ical-generator'
-import { feedName, siteName, type Team } from './config.ts'
+import { defaultSiteUrl, feedName, siteName, type Team } from './config.ts'
 import type { Game } from './game.ts'
-import { capitalise, reminder, REMINDER_HOURS, WORDS } from './page.ts'
+import { capitalise, federation, reminder, REMINDER_HOURS, shortDate, WORDS } from './page.ts'
 
 const GAME_HOURS = 2
 const SALE_REMINDER_HOUR = 9 // 09:00 at the venue on the day tickets go on sale
-const DEFAULT_SITE_URL = 'https://scarf.fan'
-const FEDERATION = { uefa: 'UEFA', fiba: 'FIBA' } as const
-// "Mon 16 Nov", read in UTC so a venue-local YYYY-MM-DD stays on its own day.
-const DAY = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' })
 const DAY_MONTH_YEAR = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' })
 
 // Game id → the day (YYYY-MM-DD) the build first saw it, for games announced after scarf started
@@ -19,7 +15,7 @@ export type Announced = Record<string, string>
 // words, the same as on its page (WORDS in page.ts).
 // With `alerts` this is the -alerts variant: the same events under their own calendar name, plus
 // one all-day "New game" entry per announced game (spec § 4). The default feed never carries those.
-export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SITE_URL, alerts?: Announced): string {
+export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSiteUrl, alerts?: Announced): string {
   const words = WORDS[team.sport]
   const teamPage = `${siteUrl}/${team.country}/${team.sport}`
   const footer = `Kept up to date by ${siteName} · ${teamPage.replace(/^https?:\/\//, '')}`
@@ -66,10 +62,9 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
       })
     } else {
       // All-day placeholder until the time is announced; the same UID later becomes a timed event.
-      const federation = FEDERATION[team.source.kind]
       const description = game.venue
-        ? [game.competition, `We'll fill in the time as soon as ${federation} publishes it.`, '', footer]
-        : [game.competition, 'Venue not announced', `We'll fill in the time and ${words.ground} as soon as ${federation} publishes them.`, '', footer]
+        ? [game.competition, `We'll fill in the time as soon as ${federation(team)} publishes it.`, '', footer]
+        : [game.competition, 'Venue not announced', `We'll fill in the time and ${words.ground} as soon as ${federation(team)} publishes them.`, '', footer]
       calendar.createEvent({
         ...details,
         summary: `${title} · time not announced`,
@@ -93,7 +88,6 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
 // An all-day entry on the day the build first saw the game. It says what is still to come; the
 // game itself sits in the same calendar under its own UID.
 function newGameEvent(team: Team, game: Game, firstSeen: string, now: Date, teamPage: string, footer: string): ICalEventData {
-  const federation = FEDERATION[team.source.kind]
   const { ground } = WORDS[team.sport]
   const toFollow = game.kickoff ? undefined : game.venue ? 'time to follow' : `time and ${ground} to follow`
   return {
@@ -102,7 +96,7 @@ function newGameEvent(team: Team, game: Game, firstSeen: string, now: Date, team
     start: new Date(firstSeen),
     allDay: true,
     summary: `New game · ${game.home} vs ${game.away}, ${DAY_MONTH_YEAR.format(new Date(game.date))}`,
-    description: lines([`Just announced by ${federation}. It's already in this calendar${toFollow ? ` — ${toFollow}` : ''}.`, '', footer]),
+    description: lines([`Just announced by ${federation(team)}. It's already in this calendar${toFollow ? ` — ${toFollow}` : ''}.`, '', footer]),
     url: `${teamPage}/`,
   }
 }
@@ -157,7 +151,7 @@ function ticketSaleEvent(calendar: ICalCalendar, game: Game, now: Date, footer: 
 // line; "time not announced" while there is none; the venue only when known.
 function gameLine(game: Game): string {
   const time = game.kickoff ? localTime(game, game.city?.trim()) : 'time not announced'
-  return `The game: ${[DAY.format(new Date(game.date)), time, game.venue].filter(Boolean).join(', ')}`
+  return `The game: ${[shortDate(new Date(game.date)), time, game.venue].filter(Boolean).join(', ')}`
 }
 
 // "pame-ethniki.gr": the ticket seller as a fan would say it.

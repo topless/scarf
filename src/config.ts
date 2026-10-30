@@ -2,6 +2,8 @@ import type { Details } from './game.ts'
 
 // Lowercase wordmark, "Scarf" only at the start of a sentence. See docs/brand.md.
 export const siteName = 'scarf'
+// The public address when the build is given none (SITE_URL), as feeds and share cards print it.
+export const defaultSiteUrl = 'https://scarf.fan'
 
 // The sports scarf covers. The pages speak each sport's language (kickoff or tip-off, stadium or
 // arena; see page.ts), so a new sport is added here and given its words there.

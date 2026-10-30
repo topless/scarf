@@ -319,8 +319,10 @@ test("the next-game card carries the sport's drawing, hidden from screen readers
 test('landing shows every country in its own colours', () => {
   const html = renderLanding(teams.map((team) => ({ team, games: [] })))
   for (const team of teams) {
-    const [first, second] = team.colours
-    assert.match(html, new RegExp(`<article class="card country" id="${team.country}" aria-labelledby="c-${team.country}" style="--stripe: repeating-linear-gradient\\(90deg, ${first} 0px 18px, ${second} 18px 36px`))
+    // One 36 px repeat however many colours (docs/brand.md).
+    const [first, second, third] = team.colours
+    const stops = third ? `${first} 0px 12px, ${second} 12px 24px, ${third} 24px 36px` : `${first} 0px 18px, ${second} 18px 36px`
+    assert.match(html, new RegExp(`<article class="card country" id="${team.country}" aria-labelledby="c-${team.country}" style="--stripe: repeating-linear-gradient\\(90deg, ${stops}\\)`))
   }
   assert.match(html, /<h2 id="c-switzerland">Switzerland<\/h2>/)
   assert.match(html, /<small>UEFA<\/small>/)

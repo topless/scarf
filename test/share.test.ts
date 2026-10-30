@@ -51,6 +51,9 @@ test('share card carries the headline, the eyebrow, the flag and the team colour
   assert.match(text(card), /scarf .*National team · Men's football .*Greece football, in your calendar\./)
   assert.ok(card.includes(`<img src="data:image/svg+xml;base64,${Buffer.from(flag).toString('base64')}" width="32" height="24">`))
   assert.match(card, /repeating-linear-gradient\(90deg, #0D5EAF 0px 40px, #FFFFFF 40px 80px\)/)
+  // Three colours share the same 80 px repeat, which does not split in three: stops round to whole pixels.
+  const germany = teams.find((team) => team.country === 'germany')!
+  assert.match(renderShareCard(germany, timed, site, flag), /repeating-linear-gradient\(90deg, #000000 0px 27px, #DD0000 27px 53px, #FFCC00 53px 80px\)/)
   assert.match(card, /width="340" height="340"/)
   assert.doesNotMatch(renderShareCard(football, timed, site), /width="32" height="24"/)
 })

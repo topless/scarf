@@ -2,10 +2,10 @@ import { readFile } from 'node:fs/promises'
 import { Resvg, initWasm } from '@resvg/resvg-wasm'
 import satori from 'satori'
 import { html } from 'satori-html'
-import { shareSize, siteName, type Team } from './config.ts'
+import { defaultSiteUrl, shareSize, siteName, type Team } from './config.ts'
 import { readFlag } from './flags.ts'
 import type { Game } from './game.ts'
-import { countryName, federation, federations, kickoffText, landingKind, shortDate, SPORTS, teamKind } from './page.ts'
+import { countryName, esc, federation, federations, kickoffText, landingKind, markDrawing, shortDate, SPORTS, stripes, teamKind } from './page.ts'
 
 // The 1200×630 share images behind the pages' og:image, ported from reference/share-card.html:
 // one per team, and a neutral one for the landing page in the same layout. A card is HTML with
@@ -15,9 +15,6 @@ import { countryName, federation, federations, kickoffText, landingKind, shortDa
 
 const { width: WIDTH, height: HEIGHT } = shareSize
 export const SHARE_MAX_BYTES = 300 * 1024
-
-// The site's address without the scheme, as printed in a card's footer.
-const DEFAULT_HOST = 'scarf.fan'
 
 const WOOL = '#FBF8F2'
 const INK = '#17171C'
@@ -39,16 +36,16 @@ export function renderLandingShareImage(teams: Team[], siteUrl?: string): Promis
 // in its colours, and its next game under a NEXT pill. The flag is optional so a card can be laid
 // out without one; the build always passes it, in the 4:3 box flag-icons draws for.
 export function renderShareCard(team: Team, next: Game | undefined, siteUrl?: string, flagSvg?: string): string {
-  const [band, ...stripes] = team.colours
+  const [band, ...rest] = team.colours
   return card(
     {
-      band: stripeBand(team.colours),
+      band: stripes(team.colours, 80), // 40 px per colour for two, as in the reference card
       eyebrow: `${flagSvg ? image(flagSvg, 32, 24) : ''}<span>${esc(teamKind(team))}</span>`,
       headline: `${team.name}, in your calendar.`,
       label: 'NEXT',
       labelColour: RED,
       line: nextGameLine(next),
-      mark: teamMark(band, stripes),
+      mark: teamMark(band, rest),
       path: `/${team.country}/${team.sport}`,
       source: federation(team),
     },
@@ -88,16 +85,16 @@ export function renderCountryShareCard(countryTeams: Team[], siteUrl?: string, f
   // Football first, as on the page's card, whatever order config.ts lists the teams in.
   const teams = SPORTS.flatMap((sport) => countryTeams.filter((team) => team.sport === sport))
   const [team] = teams as [Team]
-  const [band, ...stripes] = team.colours
+  const [band, ...rest] = team.colours
   return card(
     {
-      band: stripeBand(team.colours),
+      band: stripes(team.colours, 80), // 40 px per colour for two, as in the reference card
       eyebrow: `${flagSvg ? image(flagSvg, 32, 24) : ''}<span>${esc(teams.length > 1 ? landingKind(teams) : teamKind(team))}</span>`,
       headline: `${countryName(team)}, in your calendar.`,
       label: 'TEAMS',
       labelColour: INK,
       line: teamsLine(teams),
-      mark: teamMark(band, stripes),
+      mark: teamMark(band, rest),
       path: `/${team.country}`,
       source: federations(teams),
     },
@@ -142,13 +139,13 @@ interface Card {
 // the SVGs (brand mark, flag, large mark) are embedded as images. The last line wraps under its
 // pill when it is long, each line as tall as the pill.
 function card(c: Card, siteUrl?: string): string {
-  const host = (siteUrl ?? DEFAULT_HOST).replace(/^https?:\/\//, '').replace(/\/$/, '')
+  const host = (siteUrl ?? defaultSiteUrl).replace(/^https?:\/\//, '').replace(/\/$/, '')
   return `<div style="display: flex; flex-direction: column; width: ${WIDTH}px; height: ${HEIGHT}px; background: ${WOOL}; color: ${INK}; font-family: 'Albert Sans', sans-serif">
   <div style="height: 28px; background: ${c.band}; border-bottom: 2.5px solid ${INK}"></div>
   <div style="flex: 1; display: flex; gap: 40px; padding: 48px 64px 40px">
     <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 24px">
       <div style="display: flex; align-items: center; gap: 12px">
-        ${image(brandMark(), 48, 48)}
+        ${image(brandMark, 48, 48)}
         <span style="font-family: ${DISPLAY}; font-weight: 800; font-size: 40px; line-height: 1; letter-spacing: -0.045em">${siteName}</span>
       </div>
       <div style="display: flex; flex-direction: column; gap: 16px">
@@ -171,15 +168,8 @@ function card(c: Card, siteUrl?: string): string {
 </div>`
 }
 
-// Hard-stop stripes, 40 px per colour as in the reference card (the page uses 18 and 24).
-function stripeBand(colours: string[]): string {
-  return `repeating-linear-gradient(90deg, ${colours.map((c, i) => `${c} ${i * 40}px ${(i + 1) * 40}px`).join(', ')})`
-}
-
-// The brand mark, as in assets/scarf-mark.svg.
-function brandMark(): string {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none"><g transform="rotate(-14 32 32)"><rect x="8" y="22" width="48" height="20" rx="7" fill="${RED}"/><rect x="17" y="22" width="7" height="20" fill="${WOOL}"/><rect x="29" y="22" width="7" height="20" fill="${WOOL}"/><rect x="41" y="22" width="7" height="20" fill="${WOOL}"/><rect x="8" y="22" width="48" height="20" rx="7" stroke="${INK}" stroke-width="3"/><path d="M8 27H2M8 32H2M8 37H2M56 27h6M56 32h6M56 37h6" stroke="${INK}" stroke-width="3" stroke-linecap="round"/></g></svg>`
-}
+// The brand mark beside the wordmark, drawn from assets/scarf-mark.svg.
+const brandMark = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">${markDrawing}</svg>`
 
 // The large mark on the right of a card: the band in the first colour, the knitted stripes
 // cycling through the rest. A team's colours on its card, terrace red and wool on the landing one.
@@ -191,10 +181,6 @@ function teamMark(band: string, stripes: string[]): string {
 
 function image(svg: string, width: number, height: number): string {
   return `<img src="data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}" width="${width}" height="${height}">`
-}
-
-function esc(text: string): string {
-  return text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;')
 }
 
 // Static instances of the brand faces (docs/brand.md), read once; Satori reads TrueType, not the
