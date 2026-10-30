@@ -66,7 +66,10 @@ The football icon stays ink. Where a sport has no team yet, its icon greys out t
 
 ## Typography
 
-Google Fonts: `https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,300..800&display=swap`
+Served from scarf.fan, not Google Fonts: variable WOFF2 files in `assets/fonts/` (latin and latin-ext,
+with their SIL Open Font License), declared in `assets/site.css`. They are the files Google Fonts sends a
+current browser for `family=Albert+Sans:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,300..800`;
+a new weight or script is taken from that stylesheet the same way. The share images use static TTFs in `fonts/`.
 
 | Role | Face | Size / weight / tracking |
 |---|---|---|

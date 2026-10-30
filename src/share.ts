@@ -184,7 +184,7 @@ function image(svg: string, width: number, height: number): string {
 }
 
 // Static instances of the brand faces (docs/brand.md), read once; Satori reads TrueType, not the
-// variable fonts Google Fonts serves to browsers.
+// variable WOFF2 files the pages load from assets/fonts/.
 const FONT_FILES = [
   { name: 'Bricolage Grotesque', weight: 800, file: 'BricolageGrotesque-ExtraBold.ttf' },
   { name: 'Albert Sans', weight: 400, file: 'AlbertSans-Regular.ttf' },
