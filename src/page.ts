@@ -206,14 +206,25 @@ export function renderHowItWorks(sections: Section[], siteUrl?: string): string 
   <div class="hero-text">
     <h1>How it works</h1>
     <p class="lede">Subscribe once and every kickoff or tip-off, venue, channel and ticket sale lands in the calendar you already use, kept current every day. Nothing to install.</p>
+    <a class="btn-secondary see-it-link" href="#see-it">${ICON.play}See it</a>
   </div>
 </section>
 <section class="wrap how">
   <ol class="steps">
 ${step(1, '<h3>Subscribe once</h3><p>Pick your team, tap Add to my calendar and pick your app. That is the whole setup: no account, no download.</p>')}
 ${step(2, `<h3>Your calendar keeps itself current</h3><p>We rebuild the feeds every day from ${federations(teams)}. New games, times and venues land in place, in your time zone.</p>`)}
-${step(3, '<h3>A nudge an hour before the game</h3><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>On Google Calendar, set a notification for this calendar once. It applies to every game.</p>')}
+${step(3, '<h3>A nudge an hour before the game</h3><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>On iPhone, set Settings › Apps › Calendar › Default Alert Times › Events to 1 hour before. It covers every timed event, games included. <a href="#see-it">See it</a></p><p>On Google Calendar, set a notification for this calendar once. It applies to every game.</p>')}
   </ol>
+</section>
+<section class="wrap see" id="see-it" aria-labelledby="see-it-title">
+  <div class="see-text">
+    <h2 id="see-it-title">See it on an iPhone</h2>
+    <p>Under a minute, from a team's page to the nudge an hour before. No sound; the captions name each step.</p>
+  </div>
+  <video class="see-video" controls playsinline preload="none" poster="see-it.jpg" width="590" height="1280">
+    <source src="see-it.mp4" type="video/mp4">
+    <track kind="captions" src="see-it.vtt" srclang="en" label="English" default>
+  </video>
 </section>
 <section class="teams">
   <div class="wrap">
@@ -628,6 +639,7 @@ const ICON = {
   place: icon('<path d="M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/>'),
   tv: icon('<rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 3l4 4 4-4"/>'),
   ticket: icon('<path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4V7z"/><path d="M10 7v10" stroke-dasharray="2 2"/>'),
+  play: icon('<circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l5.5-3.5z" fill="currentColor"/>'),
 }
 
 function esc(text: string): string {

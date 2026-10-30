@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { existsSync, readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { teams } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
@@ -242,6 +243,21 @@ test('how it works pictures the soonest timed game in its own words, and every t
   assert.equal(plain.match(/<li class="step">/g)?.length, 3)
   assert.doesNotMatch(plain, /class="scene"/)
   assert.match(plain, /On Google Calendar, set a notification for this calendar once\. It applies to every game\./)
+})
+
+test('how it works shows the iPhone recording with its captions, and the iPhone setting it demos', () => {
+  const html = renderHowItWorks([{ team: football, games: [] }])
+  // The hero's See it jumps to the video; step 3 names the iPhone setting and links there too.
+  inOrder(html, '<p class="lede">', '<a class="btn-secondary see-it-link" href="#see-it">', '<ol class="steps">', 'id="see-it"')
+  assert.match(html, /On iPhone, set Settings › Apps › Calendar › Default Alert Times › Events to 1 hour before\. It covers every timed event, games included\. <a href="#see-it">See it<\/a>/)
+  // The files sit next to the page (assets/how-it-works/ is copied into dist/how-it-works/); no autoplay.
+  assert.match(html, /<video class="see-video" controls playsinline preload="none" poster="see-it\.jpg" width="590" height="1280">\s*<source src="see-it\.mp4" type="video\/mp4">\s*<track kind="captions" src="see-it\.vtt" srclang="en" label="English" default>/)
+  assert.doesNotMatch(html, /autoplay/)
+  for (const file of ['see-it.mp4', 'see-it.jpg']) assert.ok(existsSync(`assets/how-it-works/${file}`), file)
+  // The captions are copy a fan reads, so the voice rules hold for them too.
+  const captions = readFileSync('assets/how-it-works/see-it.vtt', 'utf8')
+  assert.match(captions, /^WEBVTT\n/)
+  assert.doesNotMatch(captions, /!|notification|\bTBA\b|\bTBC\b/i)
 })
 
 test('a basketball page says tip-off and arena, never kickoff or stadium', () => {

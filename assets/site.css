@@ -103,6 +103,12 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-h
 .step p { font-size: 15px; line-height: 1.5; color: var(--stand); }
 .scene { min-height: 168px; box-sizing: border-box; padding: 20px 24px; display: flex; flex-direction: column; justify-content: center; gap: 10px; background: var(--wool); border-bottom: var(--border) solid var(--chalk); font-size: 13px; color: var(--stand); }
 .scene .btn-primary { height: 48px; font-size: 16px; }
+/* See it: a screen recording on an iPhone, framed like a phone, with its captions as a text track. */
+.see-it-link { align-self: flex-start; gap: 8px; padding: 0 18px 0 14px; }
+.see { padding-bottom: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 24px 40px; align-items: center; }
+.see-text { display: flex; flex-direction: column; gap: 12px; }
+.see-text p { font-size: 16px; line-height: 1.5; color: var(--stand); max-width: 460px; }
+.see-video { justify-self: center; display: block; width: 100%; max-width: 300px; height: auto; border: var(--border) solid var(--ink); border-radius: 32px; background: var(--ink); }
 .cal-old { align-self: flex-start; padding: 4px 10px; border: var(--border) dashed var(--chalk); border-radius: 6px; font-size: 12px; text-decoration: line-through; }
 .cal-event, .nudge { display: flex; flex-direction: column; gap: 2px; background: var(--white); border: var(--border) solid var(--chalk); }
 /* The bar is the team's calendar colour: 6 px of the stripe is its first colour. */
