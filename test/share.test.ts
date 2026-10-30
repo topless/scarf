@@ -4,6 +4,8 @@ import { shareSize, teams } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
 import {
   nextGameLine,
+  renderCountryShareCard,
+  renderCountryShareImage,
   renderLandingShareCard,
   renderLandingShareImage,
   renderShareCard,
@@ -69,7 +71,7 @@ test('share card escapes text from the sources', () => {
 
 test('nothing on a share card breaks the voice rules', () => {
   const cards = [timed, noCity, unscheduled, undefined].map((game) => renderShareCard(football, game, site, flag))
-  for (const card of [...cards, renderLandingShareCard(teams, site)]) {
+  for (const card of [...cards, renderLandingShareCard(teams, site), renderCountryShareCard([football, basketball], site, flag)]) {
     const copy = text(card)
     assert.doesNotMatch(copy, /!|\bTBA\b|\bTBC\b|\bTBD\b|don't miss|notification/i)
     assert.doesNotMatch(copy, /\bv\b/)
@@ -102,11 +104,29 @@ test('landing card footer prints the site without the scheme, and every federati
   assert.match(text(renderLandingShareCard(teams)), /scarf\.fan Free/)
 })
 
-test('every team and the landing page render as 1200×630 PNGs under the size limit without a browser', async () => {
+test("country card carries the country's stripes, flag and name, and its teams by name", () => {
+  const card = renderCountryShareCard([football, basketball], site, flag)
+  assert.match(text(card), /scarf .*National teams · Football and basketball .*Greece, in your calendar\. .*TEAMS Greece football · Greece basketball/)
+  assert.ok(card.includes(`<img src="data:image/svg+xml;base64,${Buffer.from(flag).toString('base64')}" width="32" height="24">`))
+  assert.match(card, /repeating-linear-gradient\(90deg, #0D5EAF 0px 40px, #FFFFFF 40px 80px\)/)
+  assert.match(svgs(card).at(-1)!, /fill="#0D5EAF"/)
+  assert.match(text(card), /example\.github\.io\/scarf\/greece Free · updated daily from UEFA and FIBA/)
+  // Germany lists basketball first in config.ts; its card still puts football first, as its page does.
+  const germany = teams.filter((team) => team.country === 'germany')
+  assert.match(text(renderCountryShareCard(germany, site, flag)), /National teams · Football and basketball .*TEAMS Germany football · Germany basketball .*updated daily from UEFA and FIBA/)
+  // A country with one team names it as that team's card does.
+  const england = teams.find((team) => team.country === 'england')!
+  assert.match(text(renderCountryShareCard([england], site, flag)), /National team · Men's football .*England, in your calendar\. .*TEAMS England football .*updated daily from UEFA /)
+})
+
+test('every team, country and the landing page render as 1200×630 PNGs under the size limit without a browser', async () => {
   // Every team's real flag goes through resvg here, so a flag it cannot draw (Spain's carries a
   // detailed coat of arms) fails the tests rather than the daily build.
   const pngs: [string, Buffer][] = [['landing', await renderLandingShareImage(teams, site)]]
   for (const team of teams) pngs.push([team.name, await renderShareImage(team, timed, site)])
+  for (const country of new Set(teams.map((team) => team.country))) {
+    pngs.push([country, await renderCountryShareImage(teams.filter((team) => team.country === country), site)])
+  }
   for (const [name, png] of pngs) {
     assert.deepEqual([...png.subarray(0, 8)], [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a], name)
     // IHDR follows the signature: width and height as big-endian 32-bit integers.

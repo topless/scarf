@@ -5,7 +5,7 @@ import { html } from 'satori-html'
 import { shareSize, siteName, type Team } from './config.ts'
 import { readFlag } from './flags.ts'
 import type { Game } from './game.ts'
-import { federation, federations, kickoffText, landingKind, shortDate, teamKind } from './page.ts'
+import { countryName, federation, federations, kickoffText, landingKind, shortDate, SPORTS, teamKind } from './page.ts'
 
 // The 1200×630 share images behind the pages' og:image, ported from reference/share-card.html:
 // one per team, and a neutral one for the landing page in the same layout. A card is HTML with
@@ -70,6 +70,35 @@ export function renderLandingShareCard(teams: Team[], siteUrl?: string): string 
       line: teamsLine(teams),
       mark: teamMark(RED, [WOOL]),
       path: '',
+      source: federations(teams),
+    },
+    siteUrl,
+  )
+}
+
+// The card for a country's page as a PNG, the flag read from flag-icons.
+export async function renderCountryShareImage(teams: Team[], siteUrl?: string): Promise<Buffer> {
+  return renderSharePng(renderCountryShareCard(teams, siteUrl, await readFlag(teams[0]!)))
+}
+
+// A country's card: a team's card in the country's stripes and flag, with its teams by name where
+// a team's card has its next game, as on the landing's card. teams are the country's, which share
+// their colours (they come from the flag).
+export function renderCountryShareCard(countryTeams: Team[], siteUrl?: string, flagSvg?: string): string {
+  // Football first, as on the page's card, whatever order config.ts lists the teams in.
+  const teams = SPORTS.flatMap((sport) => countryTeams.filter((team) => team.sport === sport))
+  const [team] = teams as [Team]
+  const [band, ...stripes] = team.colours
+  return card(
+    {
+      band: stripeBand(team.colours),
+      eyebrow: `${flagSvg ? image(flagSvg, 32, 24) : ''}<span>${esc(teams.length > 1 ? landingKind(teams) : teamKind(team))}</span>`,
+      headline: `${countryName(team)}, in your calendar.`,
+      label: 'TEAMS',
+      labelColour: INK,
+      line: teamsLine(teams),
+      mark: teamMark(band, stripes),
+      path: `/${team.country}`,
       source: federations(teams),
     },
     siteUrl,

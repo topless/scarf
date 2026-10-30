@@ -31,6 +31,8 @@ export const alertsFeedPath = (team: Team): string => `${team.country}/${team.sp
 // The calendar name: team first, brand last. The variant says so, so a fan can tell the two apart.
 export const feedName = (team: Team, alerts = false): string => `${team.name}${alerts ? ' + alerts' : ''} · ${siteName}`
 export const sharePath = (team: Team): string => `${team.country}/${team.sport}/share.png`
+// The country page at /{country}/ lists the country's teams; its share image sits next to it.
+export const countrySharePath = (team: Team): string => `${team.country}/share.png`
 export const landingSharePath = 'share.png' // the landing page's, at the site root
 export const shareSize = { width: 1200, height: 630 } // the share image, the size chat apps expect
 
