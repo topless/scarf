@@ -1,19 +1,20 @@
 import { cp, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { setTimeout as pause } from 'node:timers/promises'
-import { alertsFeedPath, feedPath, landingSharePath, sharePath, teams, type Team } from './config.ts'
+import { alertsFeedPath, countrySharePath, feedPath, landingSharePath, sharePath, teams, type Team } from './config.ts'
 import { fetchFibaPage, parseFibaGames } from './fiba.ts'
 import { flagFile, flagLicenseFile, flagPath } from './flags.ts'
 import { byStart, withDetails, type Game } from './game.ts'
 import { toIcs } from './ics.ts'
 import { announced, recordSeen, type KnownGames } from './known-games.ts'
 import { manual } from './manual.ts'
-import { renderLanding, renderTeamPage, type Section } from './page.ts'
-import { renderLandingShareImage, renderShareImage } from './share.ts'
+import { renderCountryPage, renderLanding, renderTeamPage, type Section } from './page.ts'
+import { renderCountryShareImage, renderLandingShareImage, renderShareImage } from './share.ts'
 import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
 
 // Fetches every team's upcoming games and writes one calendar feed, one page and one share image
 // per team, the landing page with its own share image, and next to them the brand assets
 // (stylesheets, icons) and the flags the teams use, copied out of flag-icons with its licence.
+// Each country gets a page and a share image of its own too, listing its teams.
 // Requests stay minimal: UEFA answers for every football team in one call, and a FIBA page is
 // fetched once per competition and shared by the teams playing in it (Greece and Spain are in
 // the same qualifiers). Any failure aborts the whole build, so the previously published files
@@ -69,6 +70,11 @@ for (const section of sections) {
   const { team, games } = section
   await writeFile(`dist/${team.country}/${team.sport}/index.html`, renderTeamPage(section, teams, siteUrl))
   await writeFile(`dist/${sharePath(team)}`, await renderShareImage(team, games[0], siteUrl))
+}
+for (const country of new Set(teams.map((team) => team.country))) {
+  const group = sections.filter((section) => section.team.country === country)
+  await writeFile(`dist/${country}/index.html`, renderCountryPage(group, siteUrl))
+  await writeFile(`dist/${countrySharePath(group[0]!.team)}`, await renderCountryShareImage(group.map((section) => section.team), siteUrl))
 }
 await writeFile('dist/index.html', renderLanding(sections, siteUrl))
 await writeFile(`dist/${landingSharePath}`, await renderLandingShareImage(teams, siteUrl))
