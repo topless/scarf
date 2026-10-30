@@ -2,8 +2,8 @@
 
 scarf publishes subscribable calendar feeds (.ics) for the national teams fans follow — kickoff,
 venue, TV, tickets, a reminder an hour before — plus one static page per team and a landing page.
-Static output, rebuilt daily by GitHub Actions, served by GitHub Pages. Brand line: "Your colours,
-in your calendar." Motto: "Wrapped up in the game."
+Static output, rebuilt daily by GitHub Actions, served by a Cloudflare Worker. Brand line: "Your
+colours, in your calendar." Motto: "Wrapped up in the game."
 
 ## Stack and commands
 
@@ -20,8 +20,9 @@ in your calendar." Motto: "Wrapped up in the game."
 - `/{country}/{sport}.ics` — one feed per team, e.g. `/greece/football.ics`, `/greece/basketball.ics`.
 - `/{country}/{sport}-alerts.ics` — the same feed plus a "New game" entry per newly announced game.
 - `/{country}/{sport}/` — team page; `/{country}/{sport}/share.png` — 1200×630 share image.
-- `/` — landing listing every team. Served at `https://scarf.fan`: the custom domain is set under
-  Pages in the repo settings, DNS at Cloudflare. Actions deploys need no `/CNAME` file.
+- `/` — landing listing every team. Served at `https://scarf.fan` by the Cloudflare Worker `scarf`
+  (`wrangler.jsonc`), DNS at Cloudflare. GitHub Pages stays on only so that old
+  `topless.github.io/scarf/` addresses redirect.
 
 ## ICS rules (see docs/calendar-event-spec.md for exact copy)
 

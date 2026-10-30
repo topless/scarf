@@ -1,8 +1,11 @@
 // The site on Cloudflare Workers (#43, docs/observability.md "Hosting"): dist/ served as static
-// assets, no Worker script yet. Deployed by the "Build feeds" workflow next to GitHub Pages until
-// scarf.fan moves; until then it answers at scarf.topless.workers.dev.
+// assets at https://scarf.fan, no Worker script yet. The "Build feeds" workflow deploys it.
 {
   "name": "scarf",
   "compatibility_date": "2026-10-30",
-  "assets": { "directory": "./dist" }
+  "assets": { "directory": "./dist" },
+  // Cloudflare keeps the DNS record and certificate for a custom domain itself.
+  "routes": [{ "pattern": "scarf.fan", "custom_domain": true }],
+  // The side-by-side copy at scarf.topless.workers.dev goes once scarf.fan answers here.
+  "workers_dev": false
 }

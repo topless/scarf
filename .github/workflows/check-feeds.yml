@@ -2,7 +2,7 @@
 # (DTSTAMP), so the newest DTSTAMP in the live feeds says when the last successful build was
 # published. A run that is disabled, failing or stuck leaves the feeds stale, and this check fails
 # loudly through the same alert path as the build. Every team's feed is read, taken from
-# src/config.ts, because an empty feed carries no DTSTAMP. It reads our own GitHub Pages output,
+# src/config.ts, because an empty feed carries no DTSTAMP. It reads our own site,
 # not a data source, so it does not count against the one-request-per-source rule.
 name: Check feeds
 
