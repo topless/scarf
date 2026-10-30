@@ -368,14 +368,16 @@ const COPY_SCRIPT = `
     })
   }`
 
-// Share opens the phone's share sheet with the team page; where there is none it copies the address.
-// The button stays hidden in a browser that can do neither.
+// Share opens the share sheet on a touch screen (phones, tablets). A desktop copies the address and
+// says "Copied", even where it has a share menu of its own (Safari and Chrome on a Mac, Windows), as
+// it does where there is no share sheet at all. The button stays hidden in a browser that can do neither.
 export const SHARE_SCRIPT = `
   const share = document.querySelector('button[data-share]')
-  if (share && (navigator.share || navigator.clipboard)) {
+  const shareSheet = navigator.share && matchMedia('(pointer: coarse)').matches
+  if (share && (shareSheet || navigator.clipboard)) {
     share.addEventListener('click', () => {
       const url = share.dataset.share
-      if (navigator.share) navigator.share({ title: document.title, text: share.dataset.text, url }).catch(() => {})
+      if (shareSheet) navigator.share({ title: document.title, text: share.dataset.text, url }).catch(() => {})
       else navigator.clipboard.writeText(url).then(() => { share.lastChild.textContent = 'Copied' }, () => {}) // the word, not the icon
     })
     share.hidden = false

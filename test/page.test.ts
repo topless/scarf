@@ -343,8 +343,9 @@ test('every team page ends its country bar with a Share button for its own addre
   assert.doesNotMatch(teamPage([timed]), /<button class="btn-secondary share"/)
 })
 
-// Runs SHARE_SCRIPT against a stub page and browser, presses Share and returns the button.
-async function pressShare(navigator: object) {
+// Runs SHARE_SCRIPT against a stub page and browser, presses Share and returns the button. touch
+// says whether the screen's main pointer is a finger, as on a phone.
+async function pressShare(navigator: object, touch = true) {
   let press = () => {}
   const button = {
     dataset: { share: 'https://scarf.fan/greece/football/', text: 'Greece football in your calendar · scarf' },
@@ -352,24 +353,37 @@ async function pressShare(navigator: object) {
     lastChild: { textContent: 'Share' }, // the word after the icon
     addEventListener: (_: string, listener: () => void) => (press = listener),
   }
-  new Function('document', 'navigator', SHARE_SCRIPT)({ title: 'Greece football · scarf', querySelector: () => button }, navigator)
+  const matchMedia = (query: string) => ({ matches: query === '(pointer: coarse)' && touch })
+  new Function('document', 'navigator', 'matchMedia', SHARE_SCRIPT)({ title: 'Greece football · scarf', querySelector: () => button }, navigator, matchMedia)
   press()
   await new Promise(setImmediate)
   return button
 }
 
-test('Share opens the share sheet with the team page, or copies its address where there is none', async () => {
+test('Share opens the share sheet on a phone, and copies the address on a desktop or where there is no sheet', async () => {
   const shared: object[] = []
-  const sheet = await pressShare({ share: async (data: object) => void shared.push(data) })
-  assert.deepEqual(shared, [{ title: 'Greece football · scarf', text: 'Greece football in your calendar · scarf', url: 'https://scarf.fan/greece/football/' }])
-  assert.equal(sheet.hidden, false)
   const copied: string[] = []
-  const copy = await pressShare({ clipboard: { writeText: async (text: string) => void copied.push(text) } })
+  const browser = {
+    share: async (data: object) => void shared.push(data),
+    clipboard: { writeText: async (text: string) => void copied.push(text) },
+  }
+  const phone = await pressShare(browser)
+  assert.deepEqual(shared, [{ title: 'Greece football · scarf', text: 'Greece football in your calendar · scarf', url: 'https://scarf.fan/greece/football/' }])
+  assert.deepEqual(copied, [])
+  assert.equal(phone.hidden, false)
+  // Safari and Chrome on a Mac have a share menu too; a desktop copies all the same.
+  const desktop = await pressShare(browser, false)
+  assert.equal(shared.length, 1)
   assert.deepEqual(copied, ['https://scarf.fan/greece/football/'])
-  assert.equal(copy.lastChild.textContent, 'Copied')
+  assert.equal(desktop.lastChild.textContent, 'Copied')
+  const noSheet = await pressShare({ clipboard: browser.clipboard })
+  assert.equal(copied.length, 2)
+  assert.equal(noSheet.lastChild.textContent, 'Copied')
   // A fan who closes the share sheet sees no error and no change.
   const closed = await pressShare({ share: async () => Promise.reject(new DOMException('', 'AbortError')) })
   assert.equal(closed.lastChild.textContent, 'Share')
+  // A desktop without a clipboard cannot copy, so the button stays hidden.
+  assert.equal((await pressShare({ share: browser.share }, false)).hidden, true)
   assert.equal((await pressShare({})).hidden, true)
 })
 
