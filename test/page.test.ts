@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { teams } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
-import { renderKit, renderLanding, renderTeamPage, WORDS } from '../src/page.ts'
+import { renderHowItWorks, renderKit, renderLanding, renderTeamPage, WORDS } from '../src/page.ts'
 
 const [football, basketball] = teams
 const site = 'https://example.github.io/scarf'
@@ -201,23 +201,43 @@ test('landing has one card per country in alphabetical order, each with a cell p
   assert.match(html, /Every kickoff or tip-off, venue, channel and ticket sale/)
 })
 
-test('how it works pictures the first timed game, and every time in it names its city', () => {
-  const how = (html: string) => html.slice(html.indexOf('id="how"'), html.indexOf('id="teams"'))
-  // The first game has no time yet, so the pictures come from the second.
-  const football_ = how(teamPage([unscheduled, { ...timed, tv: 'Alpha (Greek TV)' }], site))
-  assert.match(football_, /<a class="btn-primary" href="#subscribe">Add to my calendar<\/a>/)
-  inOrder(football_, 'Greece vs Germany · time not announced', 'Sun 4 Oct · Kickoff 21:45 in Thessaloniki', 'Toumba Stadium, Thessaloniki')
+test('every top bar has the logo home and How it works; a team page adds only its subscribe button', () => {
+  const nav = (html: string) => html.slice(html.indexOf('<header'), html.indexOf('</header>'))
+  const team = nav(teamPage([timed], site))
+  assert.match(team, /<a class="brand" href="\.\.\/\.\.\/">/)
+  assert.match(team, /<nav class="site-nav" aria-label="Site"><a class="pill" href="\.\.\/\.\.\/how-it-works\/">How it works<\/a><a class="pill pill-primary" href="#subscribe">Add to my calendar<\/a><\/nav>/)
+  assert.doesNotMatch(team, /#teams|#how/)
+  assert.doesNotMatch(teamPage([timed], site), /id="how"/)
+  assert.match(nav(renderLanding([{ team: football, games: [] }])), /<a class="brand" href="\.\/">.*<a class="pill" href="how-it-works\/">How it works<\/a><\/nav>/s)
+  assert.match(nav(renderHowItWorks([{ team: football, games: [] }])), /<a class="brand" href="\.\.\/">.*<a class="pill" href="\.\.\/how-it-works\/">/s)
+})
+
+test('how it works pictures the soonest timed game in its own words, and every time in it names its city', () => {
+  const later = { ...timed, id: 'uefa-9', kickoff: '2026-10-09T18:45:00Z', date: '2026-10-09' }
+  // Basketball's game is sooner; its first game has no time yet, so the pictures come from its second.
+  const html = renderHowItWorks(
+    [
+      { team: football, games: [later] },
+      { team: basketball, games: [unscheduled, { ...timed, tv: 'Alpha (Greek TV)' }] },
+    ],
+    site,
+  )
+  assert.match(html, /<a class="btn-primary" href="\.\.\/">Pick your team<\/a>/)
+  inOrder(html, 'Greece vs Germany · time not announced', 'Sun 4 Oct · Tip-off 21:45 in Thessaloniki', 'Toumba Stadium, Thessaloniki')
   // The reminder as the feed words it: an hour before, at the venue's clock, without the TV hint.
-  inOrder(football_, 'Sun 4 Oct · 20:45 in Thessaloniki', 'Greece vs Germany kicks off in an hour', '<span>Alpha</span>')
-  assert.doesNotMatch(football_, /Greek TV/)
-  assert.doesNotMatch(copy(football_), /\d\d:\d\d(?! in )/)
+  inOrder(html, 'Sun 4 Oct · 20:45 in Thessaloniki', 'Greece vs Germany tips off in an hour', '<span>Alpha</span>')
+  assert.doesNotMatch(html, /Greek TV/)
+  assert.doesNotMatch(copy(html), /\d\d:\d\d(?! in )/)
+  // The steps name both sports and both sources; the chips open the landing's country cards.
+  assert.match(html, /every kickoff or tip-off/)
+  assert.match(html, /We rebuild the feeds every day from UEFA and FIBA\./)
+  assert.match(html, /<h3>A nudge an hour before the game<\/h3>/)
+  assert.match(html, /<a class="country-chip" href="\.\.\/#greece">/)
   // A nudge before midnight falls on the day before.
-  const late = how(teamPage([{ ...timed, kickoff: '2026-10-04T21:15:00Z' }], site))
-  inOrder(late, 'Mon 5 Oct · Kickoff 00:15 in Thessaloniki', 'Sun 4 Oct · 23:15 in Thessaloniki')
-  const basketball_ = how(renderTeamPage({ team: basketball, games: [timed] }, teams, site))
-  inOrder(basketball_, 'Tip-off 21:45 in Thessaloniki', 'Greece vs Germany tips off in an hour')
+  const late = renderHowItWorks([{ team: football, games: [{ ...timed, kickoff: '2026-10-04T21:15:00Z' }] }])
+  inOrder(late, 'Mon 5 Oct · Kickoff 00:15 in Thessaloniki', 'Sun 4 Oct · 23:15 in Thessaloniki', 'Greece vs Germany kicks off in an hour')
   // Without a timed game the steps go without pictures.
-  const plain = how(teamPage([unscheduled], site))
+  const plain = renderHowItWorks([{ team: football, games: [unscheduled] }])
   assert.equal(plain.match(/<li class="step">/g)?.length, 3)
   assert.doesNotMatch(plain, /class="scene"/)
   assert.match(plain, /On Google Calendar, set a notification for this calendar once\. It applies to every game\./)
@@ -231,8 +251,6 @@ test('a basketball page says tip-off and arena, never kickoff or stadium', () =>
   assert.match(html, /Every tip-off, arena, channel and ticket sale for the national team/)
   assert.match(html, /We nudge you an hour before tip-off\./)
   assert.match(html, /New games and tip-off times appear a day or two after FIBA announces them\./)
-  assert.match(html, /New games, tip-off times and venues land in place/)
-  assert.match(html, /<h3>A nudge an hour before tip-off<\/h3>/)
   assert.doesNotMatch(copy(html), /kickoff|stadium/i)
   const timedCourt = renderTeamPage({ team: basketball, games: [{ ...timed, venue: undefined }] }, teams, site)
   assert.match(timedCourt, />Sun 4 Oct 2026 · Tip-off 21:45 in Thessaloniki<\/time>/)
@@ -241,7 +259,6 @@ test('a basketball page says tip-off and arena, never kickoff or stadium', () =>
   // The football page keeps football's words.
   const football_ = teamPage([unscheduled], site)
   assert.match(football_, /Every kickoff, stadium, channel and ticket sale for the national team/)
-  assert.match(football_, /<h3>A nudge an hour before kickoff<\/h3>/)
   assert.doesNotMatch(copy(football_), /tip-off|arena/i)
 })
 

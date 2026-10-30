@@ -91,7 +91,7 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-h
 
 /* How it works: each step is a card with a picture of what the calendar shows on top, like the
    next-game card's drawing. The button is the section's one red. */
-.how { padding-top: 56px; padding-bottom: 56px; display: flex; flex-direction: column; gap: 24px; }
+.how { padding-bottom: 56px; display: flex; flex-direction: column; gap: 24px; }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 20px; }
 .step { background: var(--white); border: var(--border) solid var(--ink); border-radius: var(--radius-card); overflow: hidden; display: flex; flex-direction: column; }
 .step-body { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 12px; }

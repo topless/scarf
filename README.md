@@ -18,7 +18,8 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
    page per basketball competition, shared by the teams playing in it;
 2. adds what no source provides (TV channel, ticket link) from [src/config.ts](src/config.ts) and [src/manual.ts](src/manual.ts);
 3. writes one `dist/{country}/{sport}.ics`, its `-alerts` variant and one team page `dist/{country}/{sport}/index.html`
-   per team, and the landing page `dist/index.html` listing every team, which GitHub Pages serves;
+   per team, the landing page `dist/index.html` listing every team and the How it works page
+   `dist/how-it-works/index.html`, which GitHub Pages serves;
 4. renders a 1200×630 share image per team at `dist/{country}/{sport}/share.png` and one for the landing
    page at `dist/share.png`, the card a chat app shows when someone pastes a page's address, from
    [src/share.ts](src/share.ts): a team's in its colours with its next game, the landing page's in the
