@@ -137,7 +137,63 @@ ${countries.map((group) => countryChip(group[0]!.team, '', `#${group[0]!.team.co
   </div>
 </section>
 <section class="wrap countries" aria-label="Teams by country">
-${countries.map(countryCard).join('\n')}
+${countries.map((group) => countryCard(group)).join('\n')}
+</section>
+</main>
+${footer()}`,
+  })
+}
+
+// The identity kit at /kit/: every country and sport, drawn by the same helpers as the real pages,
+// so a clashing stripe, a missing flag or a missing sport mark shows here first. Unlisted and kept
+// out of search engines: it is a test page for us, not for fans.
+export function renderKit(all: Team[]): string {
+  const countries = byCountry(all.map((team): Section => ({ team, games: [] })), ({ team }) => team)
+  const sport = (name: Sport) => {
+    const { ball, surface, start, starts, ground } = WORDS[name]
+    return `  <div class="card">
+    <div class="card-surface">${surface}</div>
+    <div class="card-body">
+      <p class="cell-sport">${ball}${capitalise(name)}</p>
+      <dl class="kit-words"><dt>Start</dt><dd>${start}</dd><dt>Verb</dt><dd>${starts}</dd><dt>Ground</dt><dd>${ground}</dd><dt>Source</dt><dd>${federations(all.filter((team) => team.sport === name))}</dd></dl>
+    </div>
+  </div>`
+  }
+  const team = ({ team }: Section) => `  <div class="kit-team" style="${stripeVars(team.colours)}">
+    <p class="small">${esc(team.name)} · <span class="num">${team.colours.join(' · ')}</span></p>
+${nextGameCard(team)}
+  </div>`
+  return page({
+    root: '../',
+    title: `Identity kit · ${siteName}`,
+    description: 'Every team and sport on scarf, side by side.',
+    noindex: true,
+    body: `${header('../', '')}
+<main>
+<section class="wrap hero">
+  <div class="hero-text">
+    <h1>Identity kit</h1>
+    <p class="lede">Colour says who, lines say what. A country is its flag, its name and its stripes. A sport never takes a team colour: it is a ball, a drawing of the pitch or court, and its own words. The one exception is the basketball's own orange. Everything here comes from the team list and the code behind the real pages, so a clashing stripe, a missing flag or a missing sport mark shows here first.</p>
+  </div>
+</section>
+<section class="wrap kit" aria-labelledby="kit-countries">
+  <h2 id="kit-countries">Countries</h2>
+  <nav class="chips" aria-label="Countries">
+${countries.map((group) => countryChip(group[0]!.team, '../', `#${group[0]!.team.country}`)).join('\n')}
+  </nav>
+${countries.map((group) => countryCard(group, '../')).join('\n')}
+</section>
+<section class="wrap kit" aria-labelledby="kit-sports">
+  <h2 id="kit-sports">Sports</h2>
+  <div class="kit-grid">
+${SPORTS.map(sport).join('\n')}
+  </div>
+</section>
+<section class="wrap kit" aria-labelledby="kit-teams">
+  <h2 id="kit-teams">Teams</h2>
+  <div class="kit-grid">
+${countries.flatMap((group) => SPORTS.flatMap((sport) => group.filter((section) => section.team.sport === sport))).map(team).join('\n')}
+  </div>
 </section>
 </main>
 ${footer()}`,
@@ -152,6 +208,7 @@ function page(p: {
   share?: { url?: string; image?: string }
   stripes?: string[]
   script?: string
+  noindex?: boolean
 }): string {
   return `<!doctype html>
 <html lang="en">
@@ -160,7 +217,7 @@ function page(p: {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(p.title)}</title>
 <meta name="description" content="${esc(p.description)}">
-${socialMeta(p)}<link rel="icon" href="${p.root}favicon.svg" type="image/svg+xml">
+${p.noindex ? '<meta name="robots" content="noindex">\n' : ''}${socialMeta(p)}<link rel="icon" href="${p.root}favicon.svg" type="image/svg+xml">
 <link rel="icon" href="${p.root}icon-512.png" type="image/png" sizes="512x512">
 <link rel="apple-touch-icon" href="${p.root}apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -373,27 +430,28 @@ function countryChip(team: Team, root: string, href: string, current = false): s
 
 // A country's card on the landing page: its stripes, flag and name, then one cell per sport. The
 // country's teams share their stripes (they come from the flag), so the first team's stand for all.
-function countryCard(group: Section[]): string {
+// root is the way from the page to the site root, for the flag and the team links.
+function countryCard(group: Section[], root = ''): string {
   const { team } = group[0]!
   return `  <article class="card country" id="${team.country}" aria-labelledby="c-${team.country}" style="${stripeVars(team.colours)}">
     <div class="card-stripe"></div>
     <div class="country-body">
-      <div class="country-name"><img class="flag" src="${flagPath(team.flag)}" width="44" height="33" alt=""><h2 id="c-${team.country}">${esc(countryName(team))}</h2></div>
-${SPORTS.map((sport) => sportCell(sport, group.find((section) => section.team.sport === sport))).join('\n')}
+      <div class="country-name"><img class="flag" src="${root}${flagPath(team.flag)}" width="44" height="33" alt=""><h2 id="c-${team.country}">${esc(countryName(team))}</h2></div>
+${SPORTS.map((sport) => sportCell(sport, group.find((section) => section.team.sport === sport), root)).join('\n')}
     </div>
   </article>`
 }
 
 // One sport of a country: its next game and a link to the team page, or a placeholder when the
 // country has no team in that sport.
-function sportCell(sport: Sport, section?: Section): string {
+function sportCell(sport: Sport, section?: Section, root = ''): string {
   const { ball, start } = WORDS[sport]
   if (!section) {
     return `      <div class="cell cell-empty"><span class="cell-sport">${ball}${capitalise(sport)}</span><span>Not on scarf yet</span></div>`
   }
   const { team, games } = section
   const next = games[0]
-  return `      <a class="cell" href="${team.country}/${team.sport}/">
+  return `      <a class="cell" href="${root}${team.country}/${team.sport}/">
         <span class="cell-sport">${ball}${capitalise(sport)}<small>${federation(team)}</small></span>
         <span class="cell-next">${next ? `<b>${matchTitle(next)}</b><span class="num">${when(next, shortDate, start)}</span>` : '<span>No games announced yet.</span>'}</span>
         <span class="cell-cta">Games and subscribe${ICON.arrow}</span>
