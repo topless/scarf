@@ -63,8 +63,8 @@ Three small changes are worth more, and they work where we are:
 
 1. **Build the site from the test fixtures, with no source requests.** A fixture mode writes `dist/`
    from `test/fixtures/`, dated on the fixtures' own day so their games never age out, and a page
-   change can be checked with `npx wrangler dev`. It is the first piece of #85 and fits best after
-   #50, which puts all fetching in one place.
+   change can be checked with `npx wrangler dev`. It is the first piece of #85, and nothing blocks it:
+   #50 already put all fetching in one place.
 2. **Push builds reuse the day's source answers.** The scheduled build saves UEFA's and FIBA's raw
    answers next to `known-games.json` in the Actions cache; a build on a push to main reads them
    while they are less than a day old and fetches only what they don't cover, such as a newly added
@@ -84,7 +84,7 @@ Three small changes are worth more, and they work where we are:
 - The late start begins to matter, or GitHub's "scheduled workflow will be disabled soon" email
   arrives (the keepalive stopped working): D is the smallest step that keeps the build on time.
   "Check feeds" still runs on GitHub's schedule, so a broken keepalive also needs the fallback in
-  the README's "Keeping it running".
+  "Keeping it running" in [development.md](development.md).
 - A lost Actions cache keeps resetting the alerts feeds: move `known-games.json` to Workers KV. A
   write per build, up to 13 a day so far, fits the free plan's 1,000, and it works from Actions too.
 - A feature needs code at request time, like the uncapped personal feed (option (b) in
@@ -94,7 +94,7 @@ Three small changes are worth more, and they work where we are:
 ## Looked at, not worth it now
 
 - **JSX or a framework for the pages.** Node runs our `.ts` files with no build step and rejects JSX
-  (checked with Node 22.23), so it would add a compile step. The duplication worth removing is #50.
+  (checked with Node 22.23), so it would add a compile step. The duplication worth removing went with #50.
 - **Wrangler as a dev dependency.** About 7 s of the deploy step go to `npx` fetching and starting
   Wrangler: seconds a day, against a large package in every install.
 - **Longer cache lifetimes or compressed feeds.** File names carry no content hash, so a long
@@ -118,7 +118,7 @@ Nothing was sent to UEFA or FIBA.
 | The 16 share images, rendered from the fixtures on an Apple M1 Pro | 2.2 s CPU, 1.7 s wall. Most take 40 to 90 ms; the three with Spain's flag (an 81 KB SVG with the coat of arms) about 400 ms each; the first one 0.3 s while fonts and wasm load |
 | Files rendered from the fixtures | Feeds 0.4 to 2.3 KB (the live `/greece/football.ics` is 1,544 bytes, the size of its fixture render); team pages up to 15 KB, 4.3 KB gzipped; landing page 20 KB; share images 46 to 60 KB |
 | Response headers on five live paths | HTML and CSS Brotli-compressed, feeds sent uncompressed, every file `public, max-age=0, must-revalidate`, all through Cloudflare's cache |
-| Code | `src/` 1,710 lines in 12 modules (`page.ts` 639), tests 1,120, workflows 214, of which about 40 of `publish.yml`'s 85 are the keepalive and the cache |
+| Code, after #94 | `src/` 1,684 lines in 12 modules (`page.ts` 644), tests 1,125, workflows 214, of which about 40 of `publish.yml`'s 85 are the keepalive and the cache |
 
 **Not measured or not verified:** real page load for fans (no Lighthouse or field data), so the
 fonts gain is expected, not measured; CPU time on Cloudflare's machines, where the laptop figure is
