@@ -127,11 +127,13 @@ The health signals we have today, in the order to check them:
 - **Run status.** The Actions tab lists every run of "Build feeds" and "Check feeds" with its outcome,
   and a failed run is also an open `ops` issue.
 - **Freshness.** The log of a "Check feeds" run prints how many hours old each live feed is.
+- **Changes.** The page of each "Build feeds" run shows "What this build changed": the games added,
+  changed (with the old and new value) and removed in each feed, compared with what scarf.fan served
+  just before the run, and how many played games left the feeds.
 
 GitHub Pages keeps no access logs and the site carries no tracking, so how often the feeds are fetched
 (the closest thing to a subscriber count) and how many people visit the pages cannot be seen today.
-docs/observability.md is the plan for both, plus subscribe clicks and a per-build change summary
-(#24).
+docs/observability.md is the plan for both, plus subscribe clicks (#24).
 
 ## Known limits
 
