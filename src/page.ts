@@ -271,11 +271,13 @@ const COPY_SCRIPT = `
     })
   }`
 
-// Ticking the box points every subscribe link and the paste field at the -alerts feed. Without
-// JavaScript the box stays hidden and the default links stand (a noscript line links the variant).
+// Picking "Games and announcements" points every subscribe link and the paste field at the -alerts
+// feed. Without JavaScript the choice stays hidden and the default links stand (a noscript line
+// links the variant).
 const ALERTS_SCRIPT = `
   const alertsToggle = document.getElementById('alerts-toggle')
   if (alertsToggle) {
+    const choice = alertsToggle.closest('fieldset')
     const targets = [...document.querySelectorAll('[data-alerts]')]
     for (const el of targets) el.dataset.feed = el.tagName === 'INPUT' ? el.value : el.getAttribute('href')
     const apply = () => {
@@ -286,9 +288,9 @@ const ALERTS_SCRIPT = `
       }
       for (const button of document.querySelectorAll('button[data-copy]')) button.textContent = 'Copy'
     }
-    alertsToggle.addEventListener('change', apply)
+    choice.addEventListener('change', apply)
     apply()
-    alertsToggle.closest('label').hidden = false
+    choice.hidden = false
   }`
 
 function header(root: string, nav: string): string {
@@ -304,8 +306,8 @@ function footer(): string {
 </footer>`
 }
 
-const ALERTS_LABEL = 'Also tell me when a new game is announced'
-const ALERTS_NOTE = 'An extra all-day entry on the day a new game is announced. The game itself is in your calendar either way.'
+const ALERTS_LABEL = 'Games and announcements'
+const ALERTS_NOTE = 'The same games, plus an all-day “New game” entry on the day each one is announced.'
 
 function subscribePanel(team: Team, siteUrl?: string): string {
   const feed = feedLinks(team, false, siteUrl)
@@ -319,13 +321,17 @@ function subscribePanel(team: Team, siteUrl?: string): string {
       ${link('btn-secondary', feed.apps.google, alerts.apps.google, 'Google')}
       ${link('btn-secondary', feed.apps.outlook, alerts.apps.outlook, 'Outlook')}`
       : link('btn-secondary', feed.webcal, alerts.webcal, 'Calendar file')
+  // The choice comes before the buttons, so a fan picks a calendar before adding it.
   return `    <div class="subscribe" id="subscribe">
+      <fieldset class="feed-choice" hidden><legend>Pick your calendar</legend>
+        <label><input type="radio" name="feed-choice" checked autocomplete="off"><span>Games<span class="small">Every game, with a nudge an hour before.</span></span></label>
+        <label><input type="radio" name="feed-choice" id="alerts-toggle" autocomplete="off"><span>${ALERTS_LABEL}<span class="small">${ALERTS_NOTE}</span></span></label>
+      </fieldset>
       ${link('btn-primary', feed.webcal, alerts.webcal, 'Add to my calendar')}
       <div class="apps">
       ${secondary}
       </div>
-      <label class="alerts-toggle" hidden><input type="checkbox" id="alerts-toggle" autocomplete="off"><span>${ALERTS_LABEL}<span class="small">${ALERTS_NOTE}</span></span></label>
-      <noscript><p class="small">Want to hear when a new game is announced? <a href="${esc(alerts.webcal)}">Add the feed with alerts</a> instead.</p></noscript>
+      <noscript><p class="small">Want a “New game” entry on the day each game is announced too? <a href="${esc(alerts.webcal)}">Add games and announcements</a> instead.</p></noscript>
 ${
   feed.https && alerts.https
     ? `      <div class="paste">
