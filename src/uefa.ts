@@ -4,7 +4,13 @@ import { fetchText, type Game } from './game.ts'
 // and answers with every match of any listed team (probed once on 2026-10-17 with
 // teamId=49,122,35: six matches, two per team), so one call a day covers every football team:
 // Nations League, qualifiers and friendlies. Each team then picks its own matches out of it.
-const LIMIT = 100 // what the probe asked for; a response this long may have been cut
+// With every UEFA member on scarf the call holds every European national-team match to the end of the
+// year after next, some 250 a year once qualifiers are drawn. Asked for limit=500 on 2026-10-30 (#76,
+// competitionId=2014), UEFA answered with all 156 games of the Nations League 2026-27 league phase,
+// so one answer can hold more than the 100 the first probes asked for.
+// shortcut: a full 500 is untested, and a quiet cap between 156 and 500 would drop the latest matches
+// without failing; print the match count in the run summary if that ever needs ruling out.
+const LIMIT = 500 // a response this long may have been cut
 
 export interface UefaMatch {
   id: string

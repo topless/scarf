@@ -204,14 +204,12 @@ test('landing has one card per country in alphabetical order, each with a cell p
   // Every team has its cell; a sport a country has no team in says so, football before basketball.
   assert.equal(html.match(/<a class="cell" href="/g)?.length, teams.length)
   for (const team of teams) assert.ok(html.includes(`<a class="cell" href="${team.country}/${team.sport}/">`), team.name)
-  const england = html.slice(html.indexOf('id="england"'), html.indexOf('id="france"'))
-  inOrder(england, 'href="england/football/"', '<div class="cell cell-empty">')
-  assert.match(england, /<div class="cell cell-empty"><span class="cell-sport"><svg[^>]*>.*?<\/svg>Basketball<\/span><span>Not on scarf yet<\/span><\/div>/)
-  const france = html.slice(html.indexOf('id="france"'), html.indexOf('id="germany"'))
-  inOrder(france, '<div class="cell cell-empty"><span class="cell-sport"><svg', 'Football</span><span>Not on scarf yet</span>', 'href="france/basketball/"')
-  // Germany lists basketball first in config.ts; its card still puts football first.
-  const germany = html.slice(html.indexOf('id="germany"'), html.indexOf('id="greece"'))
-  inOrder(germany, 'href="germany/football/"', 'href="germany/basketball/"')
+  const card = (country: string) => html.slice(html.indexOf(`id="${country}"`), html.indexOf('<article', html.indexOf(`id="${country}"`)))
+  inOrder(card('england'), 'href="england/football/"', '<div class="cell cell-empty">')
+  assert.match(card('england'), /<div class="cell cell-empty"><span class="cell-sport"><svg[^>]*>.*?<\/svg>Basketball<\/span><span>Not on scarf yet<\/span><\/div>/)
+  // France lists basketball first in config.ts; its card still puts football first.
+  inOrder(card('france'), 'href="france/football/"', 'href="france/basketball/"')
+  assert.doesNotMatch(card('france'), /cell-empty/)
   assert.match(html, /Every kickoff or tip-off, venue, channel and ticket sale/)
 })
 
@@ -276,6 +274,18 @@ test('a basketball page says tip-off and arena, never kickoff or stadium', () =>
   assert.doesNotMatch(copy(football_), /tip-off|arena/i)
 })
 
+test('every list of all the countries opens with a Find your country field, hidden until its script runs', () => {
+  const sections = teams.map((team) => ({ team, games: [] }))
+  for (const html of [renderLanding(sections), teamPage([], site), renderHowItWorks(sections, site)]) {
+    inOrder(html, '<div class="find" hidden><label for="find">Find your country</label><input id="find" type="search"', 'class="country-chip"')
+    // The status it writes as a fan types, in the house voice.
+    assert.ok(html.includes("'Not on scarf yet' : shown.size === 1 ? '1 country' : shown.size + ' countries'"))
+  }
+  // A country page lists one country, and the kit is for us.
+  assert.doesNotMatch(renderCountryPage([{ team: football, games: [] }], site), /class="find"/)
+  assert.doesNotMatch(renderKit(teams), /class="find"/)
+})
+
 test("the other-teams chips are one per country, each opening this page's sport or the country's other one", () => {
   const countries = new Set(teams.map((team) => team.country)).size
   const chips = (html: string) => html.slice(html.indexOf('id="teams"'))
@@ -295,7 +305,7 @@ test("the other-teams chips are one per country, each opening this page's sport 
   inOrder(
     football_,
     'href="../../england/football/"',
-    'href="../../france/basketball/"',
+    'href="../../france/football/"',
     'href="../../germany/football/"',
     'href="../../greece/football/" aria-current="page"',
     'href="../../spain/football/"',

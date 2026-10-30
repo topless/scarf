@@ -3,6 +3,7 @@ import { test } from 'node:test'
 import { shareSize, teams } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
 import {
+  headlineSize,
   nextGameLine,
   renderCountryShareCard,
   renderCountryShareImage,
@@ -31,11 +32,12 @@ const timed: Game = {
 // The time is out, the stadium is not: UEFA often publishes them in that order.
 const noCity: Game = { ...timed, id: 'uefa-3', venue: undefined, city: undefined }
 const unscheduled: Game = { id: 'fiba-2', competition: 'Qualifiers', home: 'Greece', away: 'Georgia', date: '2026-11-26' }
-// A stand-in in the 4:3 shape flag-icons draws, so the card tests do not depend on the package's art.
-const flag = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480"><rect width="640" height="480" fill="#0D5EAF"/></svg>'
+// A stand-in for the PNG of a team's flag the build passes, so the card tests do not depend on the package's art.
+const flag = 'data:image/png;base64,iVBORw0KGgo='
 
 const text = (card: string) => card.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ')
-// The SVGs embedded in a card, in order: the brand mark, a flag when there is one, the large mark.
+// The images embedded in a card, decoded, in order: the brand mark, a flag's PNG when there is one,
+// the large mark.
 const svgs = (card: string) => [...card.matchAll(/base64,([A-Za-z0-9+/=]+)"/g)].map((m) => Buffer.from(m[1]!, 'base64').toString())
 
 test('share card names the next game with the venue-local time and its city', () => {
@@ -49,7 +51,7 @@ test('share card names the next game with the venue-local time and its city', ()
 test('share card carries the headline, the eyebrow, the flag and the team colours', () => {
   const card = renderShareCard(football, timed, site, flag)
   assert.match(text(card), /scarf .*National team · Men's football .*Greece football, in your calendar\./)
-  assert.ok(card.includes(`<img src="data:image/svg+xml;base64,${Buffer.from(flag).toString('base64')}" width="32" height="24">`))
+  assert.ok(card.includes(`<img src="${flag}" width="32" height="24">`))
   assert.match(card, /repeating-linear-gradient\(90deg, #0D5EAF 0px 40px, #FFFFFF 40px 80px\)/)
   // Three colours share the same 80 px repeat, which does not split in three: stops round to whole pixels.
   const germany = teams.find((team) => team.country === 'germany')!
@@ -82,11 +84,14 @@ test('nothing on a share card breaks the voice rules', () => {
   }
 })
 
-test('landing card carries the brand line, every team by name and no team colours', () => {
+test('landing card carries the brand line, how many teams each sport has and no team colours', () => {
   // Two teams stand in for the whole list, so adding a team does not touch this test.
   const card = renderLandingShareCard([football, basketball], site)
-  assert.equal(teamsLine([football, basketball]), 'Greece football · Greece basketball')
-  assert.match(text(card), /scarf .*National teams · Football and basketball .*Your colours, in your calendar\. .*TEAMS Greece football · Greece basketball/)
+  assert.match(text(card), /scarf .*National teams · Football and basketball .*Your colours, in your calendar\. .*TEAMS 1 in football · 1 in basketball /)
+  // Every team by name would run off the card: there are some eighty.
+  const sport = (name: string) => teams.filter((team) => team.sport === name).length
+  assert.match(text(renderLandingShareCard(teams, site)), new RegExp(`TEAMS ${sport('football')} in football · ${sport('basketball')} in basketball `))
+  assert.match(text(renderLandingShareCard([football], site)), /TEAMS 1 in football example/)
   assert.match(text(renderLandingShareCard([football], site)), /National teams · Football /)
   // An ink band where a team's stripe would be, the large mark in terrace red and wool.
   assert.match(card, /height: 28px; background: #17171C; border-bottom: 2\.5px solid #17171C/)
@@ -107,10 +112,19 @@ test('landing card footer prints the site without the scheme, and every federati
   assert.match(text(renderLandingShareCard(teams)), /scarf\.fan Free/)
 })
 
+test('a headline that would take four lines takes a size down, so the card keeps its band', () => {
+  assert.equal(headlineSize('Republic of Ireland football, in your calendar.'), 84)
+  assert.equal(headlineSize('Bosnia and Herzegovina football, in your calendar.'), 68)
+  const bosnia = teams.find((team) => team.name === 'Bosnia and Herzegovina basketball')!
+  assert.match(renderShareCard(bosnia, timed, site, flag), /font-size: 68px/)
+  assert.match(renderShareCard(football, timed, site, flag), /font-size: 84px/)
+})
+
 test("country card carries the country's stripes, flag and name, and its teams by name", () => {
+  assert.equal(teamsLine([football, basketball]), 'Greece football · Greece basketball')
   const card = renderCountryShareCard([football, basketball], site, flag)
   assert.match(text(card), /scarf .*National teams · Football and basketball .*Greece, in your calendar\. .*TEAMS Greece football · Greece basketball/)
-  assert.ok(card.includes(`<img src="data:image/svg+xml;base64,${Buffer.from(flag).toString('base64')}" width="32" height="24">`))
+  assert.ok(card.includes(`<img src="${flag}" width="32" height="24">`))
   assert.match(card, /repeating-linear-gradient\(90deg, #0D5EAF 0px 40px, #FFFFFF 40px 80px\)/)
   assert.match(svgs(card).at(-1)!, /fill="#0D5EAF"/)
   assert.match(text(card), /example\.github\.io\/scarf\/greece Free · updated daily from UEFA and FIBA/)

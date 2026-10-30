@@ -105,13 +105,14 @@ ${nextGameCard(team, next)}
     <div class="teams-text">
       <h2>Other teams</h2>
       <p>Each team is its own feed, in its own colours. Add as many as you follow — national sides today, your club next.</p>
+${FINDER}
     </div>
 ${teamChips(all, team)}
   </div>
 </section>
 </main>
 ${footer()}`,
-    script: COPY_SCRIPT + ALERTS_SCRIPT,
+    script: COPY_SCRIPT + ALERTS_SCRIPT + FIND_SCRIPT,
   })
 }
 
@@ -129,6 +130,7 @@ export function renderLanding(sections: Section[], siteUrl?: string): string {
   <div class="hero-text">
     <h1>Your colours, in your calendar.</h1>
     <p class="lede">Pick your team and subscribe once. Every kickoff or tip-off, venue, channel and ticket sale lands in the calendar you already use, with a nudge an hour before the game. Nothing to install.</p>
+${FINDER}
     <nav class="chips" aria-label="Countries">
 ${countries.map((group) => countryChip(group[0]!.team, '', `#${group[0]!.team.country}`)).join('\n')}
     </nav>
@@ -139,6 +141,7 @@ ${countries.map((group) => countryCard(group)).join('\n')}
 </section>
 </main>
 ${footer()}`,
+    script: FIND_SCRIPT,
   })
 }
 
@@ -221,6 +224,7 @@ ${step(3, '<h3>A nudge an hour before the game</h3><p>The channel and the ticket
     <div class="teams-text">
       <h2>Pick your team</h2>
       <p>Each team is its own feed, in its own colours. Add as many as you follow.</p>
+${FINDER}
     </div>
     <nav class="chips" aria-label="Countries">
 ${byCountry(teams, (team) => team).map((group) => countryChip(group[0]!, '../', `../#${group[0]!.country}`)).join('\n')}
@@ -229,6 +233,7 @@ ${byCountry(teams, (team) => team).map((group) => countryChip(group[0]!, '../', 
 </section>
 </main>
 ${footer()}`,
+    script: FIND_SCRIPT,
   })
 }
 
@@ -382,6 +387,30 @@ const ALERTS_SCRIPT = `
     choice.addEventListener('change', apply)
     apply()
     choice.hidden = false
+  }`
+
+// A field over a long list of countries (fifty-odd chips, and the landing's cards): typing keeps
+// only the countries whose name holds what was typed, accents aside. A chip's name is its text, a
+// card's its heading. Without JavaScript it stays hidden and every country stays listed.
+const FINDER = `      <div class="find" hidden><label for="find">Find your country</label><input id="find" type="search" autocomplete="off" spellcheck="false"><p class="small" role="status" id="find-status"></p></div>`
+const FIND_SCRIPT = `
+  const findField = document.getElementById('find')
+  if (findField) {
+    const fold = (text) => text.normalize('NFD').replace(/\\p{M}/gu, '').toLowerCase()
+    const named = [...document.querySelectorAll('.country-chip, article.country')].map((el) => [el, fold((el.querySelector('h2') ?? el).textContent)])
+    const status = document.getElementById('find-status')
+    const apply = () => {
+      const query = fold(findField.value.trim())
+      const shown = new Set()
+      for (const [el, name] of named) {
+        el.hidden = !name.includes(query)
+        if (!el.hidden) shown.add(name)
+      }
+      status.textContent = !query ? '' : shown.size === 0 ? 'Not on scarf yet' : shown.size === 1 ? '1 country' : shown.size + ' countries'
+    }
+    findField.addEventListener('input', apply)
+    apply()
+    findField.parentElement.hidden = false
   }`
 
 // Every page's top bar: the logo goes home and How it works is one page for every team. A team

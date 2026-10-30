@@ -39,9 +39,8 @@ export const landingSharePath = 'share.png' // the landing page's, at the site r
 export const shareSize = { width: 1200, height: 630 } // the share image, the size chat apps expect
 
 // The countries of the teams added in #76: the name the pages print, the stripes and the flag.
-// Stripes are the flag's own colours as flag-icons draws it, in the flag's order (hoist to fly, top
-// to bottom), turned so the first, the calendar colour, is never white; small emblems are left out.
-// Denmark and Serbia take docs/brand.md's values, France those of its basketball team below.
+// Stripes follow docs/brand.md's rule for a flag; Denmark and Serbia take the values listed there,
+// France those of its basketball team below.
 const COUNTRIES = {
   albania: { name: 'Albania', colours: ['#FF0000', '#000000'], flag: 'al' },
   andorra: { name: 'Andorra', colours: ['#0018A8', '#FEDF00', '#D0103A'], flag: 'ad' },
@@ -262,8 +261,8 @@ export const teams: Team[] = [
     },
   },
   // Every other UEFA member (#76). Ids from the one probe of 2026-10-30, competitionId=2014: the 156
-  // league-phase games of the Nations League 2026-27 name all 54 members but suspended Russia. Each
-  // comment is the team's group there; test/fixtures/uefa-matches.json keeps the games still to come.
+  // league-phase games of the Nations League 2026-27 name 54 teams, every member but suspended Russia.
+  // Each comment is the team's group there; test/fixtures/uefa-matches.json keeps the games to come.
   football('albania', 2), // C1
   football('andorra', 60618), // D1
   football('armenia', 57419), // C2
