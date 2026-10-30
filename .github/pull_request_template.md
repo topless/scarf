@@ -6,6 +6,10 @@ Keep it short. CI shows tests and builds, the diff shows files. Delete any secti
 
 -
 
+## Screenshots
+
+<!-- For a change a fan can see: the page before and after, at phone width. Drag the images in. -->
+
 ## Assumptions
 
 <!-- Decisions taken without asking, one line each. -->
