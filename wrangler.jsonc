@@ -1,0 +1,8 @@
+// The site on Cloudflare Workers (#43, docs/observability.md "Hosting"): dist/ served as static
+// assets, no Worker script yet. Deployed by the "Build feeds" workflow next to GitHub Pages until
+// scarf.fan moves; until then it answers at scarf.topless.workers.dev.
+{
+  "name": "scarf",
+  "compatibility_date": "2026-10-30",
+  "assets": { "directory": "./dist" }
+}

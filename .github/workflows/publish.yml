@@ -19,6 +19,10 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      # Only whether the secret is set: a step's `if` cannot read secrets, and the token itself
+      # stays in the one step that needs it.
+      HAS_CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -57,6 +61,15 @@ jobs:
         with:
           path: known-games.json
           key: known-games-${{ github.run_id }}-${{ github.run_attempt }}
+      # The same files on Cloudflare Workers (wrangler.jsonc), side by side with GitHub Pages until
+      # scarf.fan moves (#43). Last, so a failure here never touches the Pages deploy or the cache,
+      # but still fails the run and opens the "ops" issue. Skipped until the secret exists.
+      - name: Deploy to Cloudflare Workers
+        if: env.HAS_CLOUDFLARE_TOKEN == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          WRANGLER_SEND_METRICS: 'false'
+        run: npx --yes wrangler@4.151.0 deploy
 
   # GitHub disables a scheduled workflow after 60 days without repository activity, and this
   # repository only changes when a game's details do. Re-enabling the scheduled workflows through

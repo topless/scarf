@@ -57,6 +57,19 @@ records on the apex to GitHub Pages' addresses, and `www` as a `CNAME` to `tople
 `scarf.fan` with "Enforce HTTPS" on. The build takes its address from that setting
 (`SITE_URL`), so no `CNAME` file is needed.
 
+### Cloudflare Workers, side by side (#43)
+
+The same files are also deployed to Cloudflare Workers ([wrangler.jsonc](wrangler.jsonc)), answering
+at `https://scarf.topless.workers.dev` until scarf.fan moves there (docs/observability.md, "Hosting").
+The deploy step in "Build feeds" is skipped until the token exists:
+
+1. In the Cloudflare dashboard, My Profile → API Tokens → Create Token, template "Edit Cloudflare
+   Workers", limited to this account.
+2. Store it in the repository: `gh secret set CLOUDFLARE_API_TOKEN --repo topless/scarf` and paste
+   the token when asked.
+3. Run "Build feeds" (Actions → Run workflow). Its last step, "Deploy to Cloudflare Workers", prints
+   the `workers.dev` address.
+
 ## Running it
 
 Needs Node 22.18 or newer. The share images need nothing else: they are laid out by Satori and
