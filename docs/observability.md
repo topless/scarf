@@ -116,8 +116,7 @@ every signal. Analytics Engine keeps three months.
   Shortcut: the secret does not rotate, so whoever holds it could test a guessed address against a
   past day; a one-day key that is then deleted closes that.
 - IP addresses are never stored; country is the finest location.
-- One third-party request remains: the pages load Google Fonts from Google. Serving the fonts from
-  scarf.fan would close it; worth its own issue.
+- No third-party requests: since #100 the pages load their fonts from scarf.fan too.
 
 ## What we won't see
 
