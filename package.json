@@ -1,6 +1,6 @@
 {
   "name": "scarf",
-  "description": "Your colours, in your calendar — national-team fixtures as calendar feeds",
+  "description": "Your colours, in your calendar: national-team fixtures as calendar feeds",
   "private": true,
   "type": "module",
   "engines": {

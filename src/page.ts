@@ -19,7 +19,7 @@ const TIME = utc({ hour: '2-digit', minute: '2-digit' })
 export const shortDate = (d: Date) => `${WEEKDAY.format(d)} ${DAY_MONTH.format(d)}` // "Fri 13 Nov"
 const longDate = (d: Date) => `${shortDate(d)} ${YEAR.format(d)}`
 
-const GOOGLE_NOTE = 'On Google Calendar, set a notification for this calendar once — it applies to every game.'
+const GOOGLE_NOTE = 'On Google Calendar, set a notification for this calendar once. It applies to every game.'
 
 const icon = (paths: string, stroke = 'currentColor') =>
   `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`
@@ -85,7 +85,7 @@ ${countryBar(team, all)}
   <div class="hero-text">
     <p class="sport-tag">${ball}<span>${capitalise(`men's ${team.sport}`)} · ${from}</span></p>
     <h1>${esc(team.name)}, in your calendar.</h1>
-    <p class="lede">Every ${start}, ${ground}, channel and ticket sale for the national team — kept current in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
+    <p class="lede">Every ${start}, ${ground}, channel and ticket sale for the national team, kept current in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
 ${subscribePanel(team, siteUrl)}
   </div>
 ${nextGameCard(team, next)}
@@ -97,14 +97,14 @@ ${nextGameCard(team, next)}
       ${games.length ? `<p class="aside">${inTheFeed(games.length)}</p>` : ''}
     </div>
     ${games.length ? `<ul class="rows">\n${games.map((game) => renderRow(game, start)).join('\n')}\n</ul>` : '<p>No games announced yet.</p>'}
-    <p class="small">New games and ${start} times appear a day or two after ${from} announces them. TV channels are the expected broadcasters — we update them closer to the game.</p>
+    <p class="small">New games and ${start} times appear a day or two after ${from} announces them. TV channels are the expected broadcasters. We update them closer to the game.</p>
   </div>
 </section>
 <section class="teams" id="teams">
   <div class="wrap">
     <div class="teams-text">
       <h2>Other teams</h2>
-      <p>Each team is its own feed, in its own colours. Add as many as you follow — national sides today, your club next.</p>
+      <p>Each team is its own feed, in its own colours. Add as many as you follow: national sides today, your club next.</p>
     </div>
 ${teamChips(all, team)}
   </div>
@@ -213,7 +213,7 @@ export function renderHowItWorks(sections: Section[], siteUrl?: string): string 
   <ol class="steps">
 ${step(1, '<h3>Subscribe once</h3><p>Pick your team, tap Add to my calendar and pick your app. That is the whole setup: no account, no download.</p>')}
 ${step(2, `<h3>Your calendar keeps itself current</h3><p>We rebuild the feeds every day from ${federations(teams)}. New games, times and venues land in place, in your time zone.</p>`)}
-${step(3, '<h3>A nudge an hour before the game</h3><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>On Google Calendar, set a notification for this calendar once. It applies to every game.</p>')}
+${step(3, `<h3>A nudge an hour before the game</h3><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>${GOOGLE_NOTE}</p>`)}
   </ol>
 </section>
 <section class="teams">

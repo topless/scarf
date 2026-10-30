@@ -46,7 +46,7 @@ test('feed header names the team then the brand, and carries the team colour', (
   assert.ok(lines.includes('X-WR-CALNAME:Greece football · scarf'))
   assert.ok(
     lines.includes(
-      "X-WR-CALDESC:Every game of the Greece men's national football team — kickoff, venue, TV, tickets. Kept up to date by scarf.",
+      "X-WR-CALDESC:Every game of the Greece men's national football team: kickoff, venue, TV, tickets. Kept up to date by scarf.",
     ),
   )
   assert.ok(lines.includes('X-APPLE-CALENDAR-COLOR:#0D5EAF'))
@@ -161,7 +161,7 @@ test('the alerts variant announces a newly seen game; the default feed never doe
     'X-MICROSOFT-CDO-ALLDAYEVENT:TRUE',
     'X-MICROSOFT-MSNCALENDAR-ALLDAYEVENT:TRUE',
     'SUMMARY:New game · Greece vs Ukraine\\, 26 Feb 2027',
-    "DESCRIPTION:Just announced by FIBA. It's already in this calendar — time and arena to follow.\\n\\nKept up to date by scarf · scarf.fan/greece/basketball",
+    "DESCRIPTION:Just announced by FIBA. It's already in this calendar\\, with time and arena to follow.\\n\\nKept up to date by scarf · scarf.fan/greece/basketball",
     'URL;VALUE=URI:https://scarf.fan/greece/basketball/',
     'END:VEVENT',
   ])
@@ -182,8 +182,8 @@ test('a new game already timed gets the short line; football has a stadium, not 
   const timedAlert = alert(serbia)
   assert.ok(timedAlert.includes('SUMMARY:New game · Greece vs Serbia\\, 16 Nov 2026'))
   assert.ok(timedAlert.includes(`DESCRIPTION:Just announced by UEFA. It's already in this calendar.\\n\\n${footer}`))
-  assert.ok(alert({ ...serbia, kickoff: undefined, venue: undefined }).includes(`DESCRIPTION:Just announced by UEFA. It's already in this calendar — time and stadium to follow.\\n\\n${footer}`))
-  assert.ok(alert({ ...serbia, kickoff: undefined }).includes(`DESCRIPTION:Just announced by UEFA. It's already in this calendar — time to follow.\\n\\n${footer}`))
+  assert.ok(alert({ ...serbia, kickoff: undefined, venue: undefined }).includes(`DESCRIPTION:Just announced by UEFA. It's already in this calendar\\, with time and stadium to follow.\\n\\n${footer}`))
+  assert.ok(alert({ ...serbia, kickoff: undefined }).includes(`DESCRIPTION:Just announced by UEFA. It's already in this calendar\\, with time to follow.\\n\\n${footer}`))
   // The game page is the link; the game's own entry carries the ticket link.
   assert.ok(timedAlert.includes('URL;VALUE=URI:https://scarf.fan/greece/football/'))
   assert.ok(!timedAlert.includes('BEGIN:VALARM'))
@@ -193,11 +193,11 @@ test('a basketball calendar says tip-off and arena, as its page does', () => {
   const athens: Game = { ...ukraine, kickoff: '2027-02-26T18:00:00Z', utcOffsetHours: 2, venue: 'OAKA', city: 'Athens', tv: 'ERT (Greek TV)' }
   const ics = toIcs(basketball, [athens], now)
   const lines = icsLines(ics)
-  assert.ok(lines.includes("X-WR-CALDESC:Every game of the Greece men's national basketball team — tip-off, venue, TV, tickets. Kept up to date by scarf."))
+  assert.ok(lines.includes("X-WR-CALDESC:Every game of the Greece men's national basketball team: tip-off, venue, TV, tickets. Kept up to date by scarf."))
   const event = vevent(ics, 'fiba-127100@scarf')
   assert.ok(event.includes('DESCRIPTION:FIBA Basketball World Cup 2027 European Qualifiers\\nTip-off 20:00 in Athens\\nTV: ERT (Greek TV)\\n\\nKept up to date by scarf · scarf.fan/greece/basketball'))
   assert.ok(event.includes('DESCRIPTION:Greece vs Ukraine tips off in an hour · ERT'))
-  assert.ok(icsLines(toIcs(basketball, [athens], now, undefined, {})).some((l) => l.includes('— tip-off, venue, TV, tickets — and a note')))
+  assert.ok(icsLines(toIcs(basketball, [athens], now, undefined, {})).some((l) => l.includes(': tip-off, venue, TV, tickets, and a note')))
   assert.doesNotMatch(ics.replaceAll(/\r\n[ \t]/g, ''), /kick|stadium/i)
 })
 
@@ -224,7 +224,7 @@ test('feed copy passes the voice checks, in the default feed and the alerts vari
     const ics = feed.replaceAll(/\r\n[ \t]/g, '')
     assert.doesNotMatch(ics, /!/)
     assert.doesNotMatch(ics, /\p{Extended_Pictographic}/u)
-    assert.doesNotMatch(ics, /notification|don't miss|\bTBA\b|\bTBC\b|\bTBD\b/i)
+    assert.doesNotMatch(ics, /notification|don't miss|\bTBA\b|\bTBC\b|\bTBD\b|\u2014/i)
     const kickoffs = [...ics.matchAll(/Kickoff \d{2}:\d{2}(.{0,13})/g)]
     assert.equal(kickoffs.length, 3)
     for (const [, after] of kickoffs) assert.match(after, /^( in \S| at the venue)/)
@@ -305,6 +305,6 @@ test('every team gets a feed in its own name, colour and side', () => {
     const lines = icsLines(toIcs(team, [], now))
     assert.ok(lines.includes(`X-WR-CALNAME:${team.name} · scarf`), team.name)
     assert.ok(lines.includes(`X-APPLE-CALENDAR-COLOR:${team.colours[0]}`), team.name)
-    assert.ok(lines.some((l) => l.startsWith(`X-WR-CALDESC:Every game of the ${team.side} — `)), team.name)
+    assert.ok(lines.some((l) => l.startsWith(`X-WR-CALDESC:Every game of the ${team.side}: `)), team.name)
   }
 })

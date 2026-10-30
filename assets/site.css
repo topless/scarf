@@ -1,4 +1,4 @@
-/* scarf — page layout, ported from reference/team-page.html. Colours and type come from brand-tokens.css;
+/* scarf page layout, ported from reference/team-page.html. Colours and type come from brand-tokens.css;
    each page or team element sets --stripe and --stripe-wide for its own team. */
 
 /* The brand faces from our own site: the variable files Google Fonts sends a current browser, latin
