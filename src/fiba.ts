@@ -17,8 +17,8 @@ interface FibaGame {
   hostCity: string | null
 }
 
-export function fetchFibaPage(event: string): Promise<string> {
-  return fetchText(`https://www.fiba.basketball/en/events/${event}/games`)
+export function fetchFibaPage(event: string, saved?: URL): Promise<string> {
+  return fetchText(`https://www.fiba.basketball/en/events/${event}/games`, saved)
 }
 
 export function parseFibaGames(html: string, teamCode: string): Game[] {

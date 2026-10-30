@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "node src/build.ts",
+    "build:fixtures": "node src/build.ts --fixtures",
     "test": "tsc && node --test \"test/*.test.ts\""
   },
   "dependencies": {
