@@ -109,3 +109,9 @@ test('a FIBA page without games for the team fails loudly instead of emptying th
   assert.throws(() => parseFibaGames('<html><body>Just a moment...</body></html>', 'GRE'), /format changed/)
   assert.throws(() => parseFibaGames(fixture('fiba-games.html'), 'GRC'), /no games found for GRC/)
 })
+
+test("UEFA's Türkiye loses the stray dot over its i", () => {
+  const games = parseUefaMatches(uefa(), 135)
+  assert.ok(games.length > 0)
+  for (const game of games) assert.ok([game.home, game.away].includes('Türkiye'), `${game.home} vs ${game.away}`)
+})

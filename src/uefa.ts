@@ -35,6 +35,10 @@ export async function fetchUefaMatches(teamIds: number[], today: string, saved?:
   return matches
 }
 
+// UEFA writes Türkiye with a combining dot over its i (U+0307, what lowercasing a capital İ leaves),
+// which calendars show as a second dot.
+const undotted = (name: string) => name?.replace(/i\u0307/g, 'i')
+
 // One team's games out of a response that holds the matches of every team asked for.
 export function parseUefaMatches(matches: UefaMatch[], teamId: number): Game[] {
   const id = String(teamId)
@@ -47,8 +51,8 @@ export function parseUefaMatches(matches: UefaMatch[], teamId: number): Game[] {
       const game: Game = {
         id: `uefa-${m.id}`,
         competition: m.competition.metaData.name,
-        home: m.homeTeam.internationalName,
-        away: m.awayTeam.internationalName,
+        home: undotted(m.homeTeam.internationalName),
+        away: undotted(m.awayTeam.internationalName),
         date: m.kickOffTime.date,
         kickoff: m.kickOffTime.dateTime,
         utcOffsetHours: m.kickOffTime.utcOffsetInHours,

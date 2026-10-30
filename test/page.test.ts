@@ -431,3 +431,8 @@ test('the kit shows every team and sport, unlisted and out of search engines', (
   assert.match(html, /<dt>Source<\/dt><dd>UEFA<\/dd>/)
   assert.match(html, /<dt>Source<\/dt><dd>FIBA<\/dd>/)
 })
+
+test('the note on TV channels shows only on a page with a TV line', () => {
+  assert.match(teamPage([timed]), /TV channels are the expected broadcasters/)
+  assert.doesNotMatch(teamPage([unscheduled]), /TV channels/)
+})

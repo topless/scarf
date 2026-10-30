@@ -97,7 +97,7 @@ ${nextGameCard(team, next)}
       ${games.length ? `<p class="aside">${inTheFeed(games.length)}</p>` : ''}
     </div>
     ${games.length ? `<ul class="rows">\n${games.map((game) => renderRow(game, start)).join('\n')}\n</ul>` : '<p>No games announced yet.</p>'}
-    <p class="small">New games and ${start} times appear a day or two after ${from} announces them. TV channels are the expected broadcasters — we update them closer to the game.</p>
+    <p class="small">New games and ${start} times appear a day or two after ${from} announces them.${games.some((game) => game.tv) ? ' TV channels are the expected broadcasters — we update them closer to the game.' : ''}</p>
   </div>
 </section>
 <section class="teams" id="teams">
