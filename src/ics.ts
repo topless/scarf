@@ -1,10 +1,9 @@
 import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar, type ICalEventData } from 'ical-generator'
 import { feedName, siteName, type Team } from './config.ts'
 import type { Game } from './game.ts'
-import { capitalise, WORDS } from './page.ts'
+import { capitalise, reminder, REMINDER_HOURS, WORDS } from './page.ts'
 
 const GAME_HOURS = 2
-const REMINDER_HOURS = 1
 const SALE_REMINDER_HOUR = 9 // 09:00 at the venue on the day tickets go on sale
 const DEFAULT_SITE_URL = 'https://scarf.fan'
 const FEDERATION = { uefa: 'UEFA', fiba: 'FIBA' } as const
@@ -58,12 +57,12 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = DEFAULT_SI
       ]
       const event = calendar.createEvent({ ...details, summary: title, start, end, description: lines(description) })
       // A reminder on the device; Apple honours it, Google is believed to ignore it (see README).
-      // The channel names are enough here; the "(Greek TV)" hint stays in the description.
-      const tv = game.tv?.replace(/\s*\(.*\)$/, '')
+      // Its words are shared with the page (reminder in page.ts).
+      const alarm = reminder(game, team.sport)
       event.createAlarm({
         type: ICalAlarmType.display,
         trigger: REMINDER_HOURS * 60 * 60,
-        description: [`${title} ${words.starts} in an hour`, tv].filter(Boolean).join(' · '),
+        description: [alarm.text, alarm.tv].filter(Boolean).join(' · '),
       })
     } else {
       // All-day placeholder until the time is announced; the same UID later becomes a timed event.

@@ -52,6 +52,15 @@ export const WORDS: Record<Sport, { start: string; starts: string; ground: strin
 }
 export const SPORTS = Object.keys(WORDS) as Sport[]
 
+// The reminder a timed game carries in its feed (ics.ts) and shows in its How it works step: an
+// hour before the start, the game and the channels. The channel names are enough there; the
+// "(Greek TV)" hint stays in the event's description.
+export const REMINDER_HOURS = 1
+export const reminder = (game: Game, sport: Sport) => ({
+  text: `${game.home} vs ${game.away} ${WORDS[sport].starts} in an hour`,
+  tv: game.tv?.replace(/\s*\(.*\)$/, ''),
+})
+
 // siteUrl is the public address of the site; without it (local builds) the subscribe links are
 // relative and the ones that need a public address (Google, Outlook, the paste field) are left out.
 export function renderTeamPage(section: Section, all: Team[], siteUrl?: string): string {
@@ -68,11 +77,7 @@ export function renderTeamPage(section: Section, all: Team[], siteUrl?: string):
     share: { url: siteUrl && `${siteUrl}/${team.country}/${team.sport}/`, image: siteUrl && `${siteUrl}/${sharePath(team)}` },
     stripes: team.colours,
     body: `<div class="band"></div>
-${header('../../', `<nav class="site-nav" aria-label="Page">
-  <a class="pill" href="#teams">Teams</a>
-  <a class="pill" href="#how">How it works</a>
-  <a class="pill pill-primary" href="#subscribe">Add to my calendar</a>
-</nav>`)}
+${header('../../', '<a class="pill pill-primary" href="#subscribe">Add to my calendar</a>')}
 ${countryBar(team, all)}
 <main>
 <section class="wrap hero">
@@ -93,14 +98,6 @@ ${nextGameCard(team, next)}
     ${games.length ? `<ul class="rows">\n${games.map((game) => renderRow(game, start)).join('\n')}\n</ul>` : '<p>No games announced yet.</p>'}
     <p class="small">New games and ${start} times appear a day or two after ${from} announces them. TV channels are the expected broadcasters — we update them closer to the game.</p>
   </div>
-</section>
-<section class="wrap how" id="how">
-  <h2>How it works</h2>
-  <ol class="steps">
-    <li class="step"><span class="step-num">1</span><h3>Subscribe once</h3><p>Tap Add to my calendar and pick your app. That is the whole setup — no account, no download.</p></li>
-    <li class="step"><span class="step-num">2</span><h3>Your calendar keeps itself current</h3><p>We rebuild the feed every day from ${from}. New games, ${start} times and venues appear on their own, in your time zone.</p></li>
-    <li class="step"><span class="step-num">3</span><h3>A nudge an hour before ${start}</h3><p>Channel and ticket link live inside the event, so nobody is hunting for them at 20:40.</p></li>
-  </ol>
 </section>
 <section class="teams" id="teams">
   <div class="wrap">
@@ -170,6 +167,64 @@ ${header('../', '')}
 </section>
 <section class="wrap countries" aria-label="${name} teams">
 ${countryCard(group, '../', true)}
+</section>
+</main>
+${footer()}`,
+  })
+}
+
+// How it works at /how-it-works/: one page for every team, linked from every top bar, so its steps
+// name both sports' starts. Each step sits over a picture of what the fan gets: the button, a game's
+// event replacing its placeholder, and its reminder. The pictures show the soonest game with a
+// time, in its own sport's words and its team's colours; until a game has a time, there are none.
+export function renderHowItWorks(sections: Section[], siteUrl?: string): string {
+  const teams = sections.map(({ team }) => team)
+  const soonest = sections
+    .flatMap(({ team, games }) => games.filter((game) => game.kickoff).map((game) => ({ team, game })))
+    .sort((a, b) => Date.parse(a.game.kickoff!) - Date.parse(b.game.kickoff!))[0]
+  let scenes = ['', '', '']
+  if (soonest) {
+    const { team, game } = soonest
+    const alarm = reminder(game, team.sport)
+    // When the reminder goes off, read like a kickoff: at the venue's clock, with its city.
+    const alarmAt = kickoffText({ ...game, kickoff: new Date(Date.parse(game.kickoff!) - REMINDER_HOURS * 60 * 60 * 1000).toISOString() }, shortDate)
+    scenes = [
+      `<div class="scene"><a class="btn-primary" href="../">Pick your team</a></div>`,
+      `<div class="scene" aria-hidden="true"><span class="cal-old">${matchTitle(game)} · time not announced</span><span class="cal-event" style="${stripeVars(team.colours)}"><b>${matchTitle(game)}</b><span>${esc(kickoffText(game, shortDate, WORDS[team.sport].start))}</span><span>${esc(place(game))}</span></span></div>`,
+      `<div class="scene" aria-hidden="true"><span class="nudge"><span class="nudge-time">${ICON.date}${esc(alarmAt)}</span><b>${esc(alarm.text)}</b>${alarm.tv ? `<span>${esc(alarm.tv)}</span>` : ''}</span></div>`,
+    ]
+  }
+  const step = (n: number, body: string) => `    <li class="step">${scenes[n - 1]}<div class="step-body"><span class="step-num">${n}</span>${body}</div></li>`
+  return page({
+    root: '../',
+    title: `How it works · ${siteName}`,
+    description: 'Subscribe once and every kickoff or tip-off, venue, TV channel and ticket sale lands in your calendar, updated daily.',
+    share: { url: siteUrl && `${siteUrl}/how-it-works/`, image: siteUrl && `${siteUrl}/${landingSharePath}` },
+    body: `${header('../')}
+<main>
+<section class="wrap hero">
+  <div class="hero-text">
+    <h1>How it works</h1>
+    <p class="lede">Subscribe once and every kickoff or tip-off, venue, channel and ticket sale lands in the calendar you already use, kept current every day. Nothing to install.</p>
+  </div>
+</section>
+<section class="wrap how">
+  <ol class="steps">
+${step(1, '<h3>Subscribe once</h3><p>Pick your team, tap Add to my calendar and pick your app. That is the whole setup: no account, no download.</p>')}
+${step(2, `<h3>Your calendar keeps itself current</h3><p>We rebuild the feeds every day from ${federations(teams)}. New games, times and venues land in place, in your time zone.</p>`)}
+${step(3, '<h3>A nudge an hour before the game</h3><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>On Google Calendar, set a notification for this calendar once. It applies to every game.</p>')}
+  </ol>
+</section>
+<section class="teams">
+  <div class="wrap">
+    <div class="teams-text">
+      <h2>Pick your team</h2>
+      <p>Each team is its own feed, in its own colours. Add as many as you follow.</p>
+    </div>
+    <nav class="chips" aria-label="Countries">
+${byCountry(teams, (team) => team).map((group) => countryChip(group[0]!, '../', `../#${group[0]!.country}`)).join('\n')}
+    </nav>
+  </div>
 </section>
 </main>
 ${footer()}`,
@@ -325,10 +380,12 @@ const ALERTS_SCRIPT = `
     choice.hidden = false
   }`
 
-function header(root: string, nav: string): string {
+// Every page's top bar: the logo goes home and How it works is one page for every team. A team
+// page adds its subscribe button.
+function header(root: string, nav = ''): string {
   return `<header class="wrap site-header">
   <a class="brand" href="${root || './'}">${mark(38)}<span class="wordmark">${siteName}</span></a>
-  ${nav}
+  <nav class="site-nav" aria-label="Site"><a class="pill" href="${root}how-it-works/">How it works</a>${nav}</nav>
 </header>`
 }
 
