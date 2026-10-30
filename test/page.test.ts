@@ -343,8 +343,9 @@ test('the kit shows every team and sport, unlisted and out of search engines', (
   assert.match(html, /<meta name="robots" content="noindex">/)
   assert.doesNotMatch(renderLanding(teams.map((team) => ({ team, games: [] }))), /noindex|kit\//)
   for (const team of teams) {
-    // The country card's flag and team link resolve from /kit/, and the team card names its stripes.
+    // The country card's flag, country link and team link resolve from /kit/, and the team card names its stripes.
     assert.ok(html.includes(`<img class="flag" src="../flags/${team.flag}.svg" width="44" height="33" alt="">`), team.name)
+    assert.ok(html.includes(`<a class="country-name" href="../${team.country}/">`), team.name)
     assert.ok(html.includes(`<a class="cell" href="../${team.country}/${team.sport}/">`), team.name)
     assert.ok(html.includes(`<p class="small">${team.name} · <span class="num">${team.colours.join(' · ')}</span></p>`), team.name)
   }

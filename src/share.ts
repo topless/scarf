@@ -5,7 +5,7 @@ import { html } from 'satori-html'
 import { shareSize, siteName, type Team } from './config.ts'
 import { readFlag } from './flags.ts'
 import type { Game } from './game.ts'
-import { countryName, federation, federations, kickoffText, landingKind, shortDate, teamKind } from './page.ts'
+import { countryName, federation, federations, kickoffText, landingKind, shortDate, SPORTS, teamKind } from './page.ts'
 
 // The 1200×630 share images behind the pages' og:image, ported from reference/share-card.html:
 // one per team, and a neutral one for the landing page in the same layout. A card is HTML with
@@ -84,7 +84,9 @@ export async function renderCountryShareImage(teams: Team[], siteUrl?: string): 
 // A country's card: a team's card in the country's stripes and flag, with its teams by name where
 // a team's card has its next game, as on the landing's card. teams are the country's, which share
 // their colours (they come from the flag).
-export function renderCountryShareCard(teams: Team[], siteUrl?: string, flagSvg?: string): string {
+export function renderCountryShareCard(countryTeams: Team[], siteUrl?: string, flagSvg?: string): string {
+  // Football first, as on the page's card, whatever order config.ts lists the teams in.
+  const teams = SPORTS.flatMap((sport) => countryTeams.filter((team) => team.sport === sport))
   const [team] = teams as [Team]
   const [band, ...stripes] = team.colours
   return card(

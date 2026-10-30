@@ -111,6 +111,9 @@ test("country card carries the country's stripes, flag and name, and its teams b
   assert.match(card, /repeating-linear-gradient\(90deg, #0D5EAF 0px 40px, #FFFFFF 40px 80px\)/)
   assert.match(svgs(card).at(-1)!, /fill="#0D5EAF"/)
   assert.match(text(card), /example\.github\.io\/scarf\/greece Free · updated daily from UEFA and FIBA/)
+  // Germany lists basketball first in config.ts; its card still puts football first, as its page does.
+  const germany = teams.filter((team) => team.country === 'germany')
+  assert.match(text(renderCountryShareCard(germany, site, flag)), /National teams · Football and basketball .*TEAMS Germany football · Germany basketball .*updated daily from UEFA and FIBA/)
   // A country with one team names it as that team's card does.
   const england = teams.find((team) => team.country === 'england')!
   assert.match(text(renderCountryShareCard([england], site, flag)), /National team · Men's football .*England, in your calendar\. .*TEAMS England football .*updated daily from UEFA /)

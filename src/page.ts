@@ -50,7 +50,7 @@ export const WORDS: Record<Sport, { start: string; starts: string; ground: strin
     surface: drawing('<rect x="10" y="10" width="280" height="170" rx="2"/><path d="M150 10v170"/><circle cx="150" cy="95" r="18"/><rect x="10" y="70" width="58" height="50"/><path d="M68 77A18 18 0 0 1 68 113"/><path d="M10 24H44A74.3 74.3 0 0 1 44 166H10"/><circle cx="22" cy="95" r="4"/><path d="M16 87v16"/><rect x="232" y="70" width="58" height="50"/><path d="M232 77A18 18 0 0 0 232 113"/><path d="M290 24H256A74.3 74.3 0 0 0 256 166H290"/><circle cx="278" cy="95" r="4"/><path d="M284 87v16"/>'),
   },
 }
-const SPORTS = Object.keys(WORDS) as Sport[]
+export const SPORTS = Object.keys(WORDS) as Sport[]
 
 // siteUrl is the public address of the site; without it (local builds) the subscribe links are
 // relative and the ones that need a public address (Google, Outlook, the paste field) are left out.
