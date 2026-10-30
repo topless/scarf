@@ -9,8 +9,9 @@ visits, which subscribe buttons get pressed, and what each daily build changed. 
 - **First-party, cookie-free counting.** A small script on our own pages may report to our own
   Worker. No cookies, no browser storage, no stored IP addresses, no third-party trackers. The pages
   carry no notice about it; one separate privacy page describes it (#78).
-- **Hosting moves to Cloudflare Workers** with static assets, on the Workers Paid plan once the Worker
-  counts feeds. The build stays in GitHub Actions.
+- **Hosting moves to Cloudflare Workers** with static assets, on the free plan. The build stays in
+  GitHub Actions.
+- **Measure first.** A week of Cloudflare's built-in request counts comes before any counting code.
 - **Four signals:** feed subscribers, page visitors, subscribe clicks, build and data changes.
 
 ## Why we see nothing today
@@ -46,6 +47,16 @@ The first three are rows in one Workers Analytics Engine dataset, `scarf_events`
 - GitHub Pages and its custom-domain setting stay, so `topless.github.io/scarf/…` keeps redirecting.
   Unverified whether GitHub keeps redirecting once scarf.fan points elsewhere: check right after.
 
+**Measure first.** Once scarf.fan runs on Workers, Cloudflare's built-in analytics count every request
+by path, User-Agent, country and status: free, no code, 30 days back. Read a week of feed requests per
+day before #71 turns the Worker on. The feeds already ask calendars to refresh every 12 hours
+(`REFRESH-INTERVAL` and `X-PUBLISHED-TTL`, docs/calendar-event-spec.md), so a device that listens
+makes about two requests per feed a day. Workers Free allows 100,000 Worker requests a day; reaching
+that takes tens of thousands of subscriptions, or one misbehaving client. Past it, feeds answer 429
+until midnight UTC and calendars keep the games they have, so a change arrives a day late. If the
+week's numbers come anywhere near, add the free plan's one rate-limiting rule or move to Workers Paid
+(US$5 a month) before #71.
+
 ## Feed subscribers (#71)
 
 The Worker passes each feed request to the static files and returns the response untouched. Then
@@ -63,10 +74,6 @@ build writes `dist/versions.json`: each feed's path and a short hash of the feed
 lines. The Worker reads it once per instance and logs the feed's version; files and Worker deploy
 together, so it is never stale. The share of today's devices on the newest version shows how long a
 changed kickoff takes to reach calendars.
-
-**Plan.** Workers Free answers Worker requests past 100,000 a day with a 429, which would stop every
-feed until midnight UTC; a few hundred devices refreshing every five minutes get there. So the account
-moves to Workers Paid (US$5 a month, extra requests billed instead of refused) when #71 ships.
 
 ## Page visitors and subscribe clicks (#72)
 
@@ -97,9 +104,9 @@ one-request-per-source rule is untouched. This step does not depend on the move.
 A Grafana Cloud dashboard on the free tier reads `scarf_events` through the Analytics Engine SQL API
 with a read-only token. Panels: subscribers per team by app, with Google and Outlook.com apart as "at
 least"; refresh rate per app; update reach; page views, visitors, referring sites and countries;
-subscribe clicks per team and app, and per hundred page views; feed requests per day. Its JSON lives in
-the repository, and the README's "What we can see" lists every signal. Analytics Engine keeps three
-months.
+subscribe clicks per team and app, and per hundred page views; feed requests per day against the free
+plan's 100,000. Its JSON lives in the repository, and the README's "What we can see" lists every
+signal. Analytics Engine keeps three months.
 
 ## Privacy
 
@@ -120,4 +127,5 @@ months.
 
 ## Order
 
-#70 now, then #43, #71 together with the privacy page (#78), #72, and #73 once a week of data exists.
+#70 now, then #43 and a week of Cloudflare's built-in numbers, then #71 together with the privacy
+page (#78), #72, and #73 once a week of data exists.
