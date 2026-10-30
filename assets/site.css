@@ -122,6 +122,14 @@ a.cell:hover { color: var(--ink); border-color: var(--ink); }
 .cell-empty { justify-content: center; border-style: dashed; background: transparent; color: var(--stand); font-size: 14px; }
 .cell-empty .cell-sport svg { stroke: currentColor; }
 
+/* Identity kit (/kit/): every country, sport and team card side by side */
+.kit { padding-bottom: 56px; display: flex; flex-direction: column; gap: 16px; }
+.kit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; align-items: start; }
+.kit-team { display: flex; flex-direction: column; gap: 8px; }
+.kit-words { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 0; font-size: 15px; }
+.kit-words dt { color: var(--stand); }
+.kit-words dd { margin: 0; font-weight: 600; }
+
 /* Footer */
 .site-footer { padding-top: 28px; padding-bottom: 36px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; font-size: 13px; line-height: 1.5; color: var(--stand); }
 .footer-brand { display: flex; align-items: center; gap: 10px; }
