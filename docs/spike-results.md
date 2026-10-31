@@ -33,10 +33,14 @@ fans' calendars, as it does the day after today.
 | Days kept | For fans | Cost |
 |---|---|---|
 | 7 | The week after the game | Nothing to speak of |
-| **30 (recommended)** | The rest of the international window and a few weeks after | UEFA's one answer gains at most one window of matches, around 55 to 100 by estimate. Its cap is 500 (`src/uefa.ts`), and the matches still to come stay under about 300 once qualifiers are drawn |
-| The whole competition | A season's history in the calendar | Free for FIBA, which lists the whole event. For UEFA, a year back adds about 250 matches and can push the answer past 500. The build then fails ("paging is needed"), and paging would break the one-request rule |
+| **30 (decided)** | The rest of the international window and a few weeks after | UEFA's one answer gains at most one window, about 55 matches. After the qualifying draw it would hold about 350, under our cap of 500 (`src/uefa.ts`) |
+| 90 | Most of an autumn's three windows | About 460 after the draw, close to the cap |
+| The whole competition | A season's history in the calendar | Free for FIBA, which lists the whole event. For UEFA, a year back adds about 250 to 300 matches and pushes the answer past 500. The build then fails ("paging is needed") every day, and paging would break the one-request rule |
 
-The counts are estimates from the comments in `src/uefa.ts`.
+Measured: the last build of 30 October had 107 upcoming games across 54 football teams, so UEFA's
+answer held about 55 matches, one window's worth. The rest are estimates: each window adds about 55
+matches, and the Euro 2028 qualifying draw in December (date not verified) should bring the
+upcoming matches to roughly 250 to 300.
 
 **The sources.** Still one request each:
 
@@ -61,7 +65,8 @@ The counts are estimates from the comments in `src/uefa.ts`.
 | Team page, share card, landing | Unchanged. They keep the upcoming list, so the next game stays first. The build keeps two lists: the feed's (the window) and the page's (upcoming) |
 
 **In code,** for the build PR: `fromDate` in `src/uefa.ts`; the window and the two lists in
-`src/build.ts`, with `recordSeen` on the upcoming list; the spec § 3 and `src/changes.ts` wording.
+`src/build.ts`, with `recordSeen` on the upcoming list; UEFA's match count in the run summary (see
+Risks); the spec § 3 and `src/changes.ts` wording.
 Tests: a game played inside the window stays in the feed, one played before it leaves, and a played
 game is never announced as new.
 
@@ -71,8 +76,12 @@ game is never announced as new.
 - **FIBA stops listing played games.** Its played games leave the feed the next day, as they do
   today. Not new: the zero-games check in `src/fiba.ts` already counts on played games being listed,
   and would fail the build for a team with nothing left to play in the event.
-- **UEFA's cap.** A wider window brings the one answer closer to 500. Past it the build fails loudly,
-  so a window longer than 30 days needs a real count first.
+- **UEFA's cap.** A wider window brings the one answer closer to 500. Past it the build fails loudly.
+  Worse, UEFA has only ever been seen to return 156 matches in one answer. If it quietly stops
+  somewhere below 500, the build doesn't fail: it drops the games furthest ahead, the ones fans
+  subscribe for. That is already possible once qualifiers are drawn, and the window brings it
+  closer. So the build PR prints UEFA's match count in the run summary, as the shortcut in
+  `src/uefa.ts` suggests. A window longer than 30 days waits until that count shows room.
 - **A calendar that subscribes after a game** gets that game's reminder set for a time already past.
   Untested; calendars aren't known to fire those.
 
@@ -104,6 +113,6 @@ Not built. What we know, for an issue if fans ask:
 
 1. **Results or no results.** Decided on 31 October 2026: played games stay, unchanged, with no
    score.
-2. **Keep-window:** 30 days (recommended), 7 days, or the whole competition (UEFA's cap stands in the
-   way).
+2. **Keep-window.** Decided on 31 October 2026: 30 days. Longer only once UEFA's match count shows
+   room.
 3. **Opt-in results feed:** wait until fans ask (recommended), or open its issue now.
