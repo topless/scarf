@@ -56,6 +56,8 @@ colours, in your calendar." Motto: "Wrapped up in the game."
   scarf.fan (`assets/fonts/`), not Google Fonts.
 - Wordmark is lowercase `scarf`. Mark: the striped scarf (`assets/scarf-mark.svg`), recoloured per
   team on team surfaces (`assets/scarf-mark-greece.svg`).
+- The brand as a browsable design system lives on claude.ai (link in docs/brand.md, Design system). The
+  repository is its source: refresh it from the code after a brand change, never the other way round.
 
 ## Don't
 
