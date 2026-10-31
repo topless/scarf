@@ -377,7 +377,7 @@ test('every footer carries the motto and a link to suggest a team or report a bu
   ]
   for (const html of pages) {
     const footer = html.slice(html.indexOf('<footer'), html.indexOf('</footer>'))
-    assert.match(footer, /<span>· Wrapped up in the game\.<\/span>/)
+    assert.match(footer, /<span>· Wrapped in the game\.<\/span>/)
     assert.match(footer, /<a class="footer-link" href="https:\/\/github\.com\/topless\/scarf\/issues\/new\/choose"><svg [^>]*aria-hidden="true">.*<\/svg>Suggest a team or report a bug<\/a>/)
   }
 })
