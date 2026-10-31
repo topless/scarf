@@ -54,6 +54,8 @@ Kept up to date by scarf · {canonical}/greece/football
 Rules: six lines at most; the TV line is dropped when unknown rather than filled with a guess;
 the ticket line is dropped until a link exists; the footer is the only place the brand name appears.
 In a combined personal feed the summary gains a sport suffix: `Greece vs Serbia · football`.
+A played game stays in the feed for 30 days after its date, exactly as it was and with no score,
+then leaves it (#20).
 
 Until the city is announced the kickoff line reads `Kickoff 21:45 at the venue`, as on the team
 page and the share card. A team the federation has not named yet (later-round qualifiers) reads
@@ -109,7 +111,7 @@ Kept up to date by scarf · {canonical}/greece/football
 ```
 
 Rules: the event needs both the `onSale` day and a ticket link; it lives as long as its game, so it
-goes when the game is past, and removing the day removes it in place on the next build. The day and the
+leaves the feed with it, 30 days after the game, and removing the day removes it in place on the next build. The day and the
 kickoff are venue-local; the kickoff reads `21:45 at the venue` until the city is announced, as on the
 kickoff line, and is left out while the venue's UTC offset is unknown.
 The reminder is 09:00 at the venue, from the game's UTC offset, so it lands an hour off when the

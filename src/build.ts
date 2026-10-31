@@ -6,7 +6,7 @@ import { feedChanges } from './changes.ts'
 import { alertsFeedPath, countrySharePath, feedPath, landingSharePath, sharePath, teams, type Team } from './config.ts'
 import { fetchFibaPage, parseFibaGames } from './fiba.ts'
 import { flagFile, flagLicenseFile, flagPath } from './flags.ts'
-import { byStart, withDetails, type Game } from './game.ts'
+import { byStart, keptSince, withDetails, type Game } from './game.ts'
 import { toIcs } from './ics.ts'
 import { announced, recordSeen, type KnownGames } from './known-games.ts'
 import { manual } from './manual.ts'
@@ -14,7 +14,7 @@ import { renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderTe
 import { renderCountryShareImage, renderLandingShareImage, renderShareImage } from './share.ts'
 import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
 
-// Fetches every team's upcoming games and writes one calendar feed, one page and one share image
+// Fetches every team's games and writes one calendar feed, one page and one share image
 // per team, the landing page with its own share image, How it works at /how-it-works/, the
 // unlisted identity kit at /kit/, and
 // next to them the brand assets (stylesheets, icons) and the flags the teams use, copied out of
@@ -31,6 +31,7 @@ const fixtures = process.argv.includes('--fixtures')
 // A fixture build is dated on the day the newer fixture was saved, so the fixtures' games stay upcoming.
 const now = fixtures ? new Date('2026-10-30') : new Date()
 const today = now.toISOString().slice(0, 10)
+const since = keptSince(today) // the first day a feed still carries: played games stay PLAYED_DAYS
 const siteUrl = process.env.SITE_URL?.replace(/\/$/, '')
 
 // A JSON file an earlier build left, or {} when there is none yet.
@@ -96,17 +97,20 @@ async function liveFeed(team: Team): Promise<string> {
 const sections: Section[] = []
 const changes: string[] = [] // a Markdown block per team whose feed changed, for the run summary
 for (const team of teams) {
-  const games = gamesOf(team)
-    .filter((game) => game.date >= today)
+  // The feed keeps the games played since `since` exactly as they were. The pages and the record of
+  // known games take only those still to come, so a played game is never announced as new.
+  const feed = gamesOf(team)
+    .filter((game) => game.date >= since)
     .map((game) => withDetails(game, team.defaults, manual[game.id]))
     .sort(byStart)
+  const games = feed.filter((game) => game.date >= today)
   const key = `${team.country}/${team.sport}`
   const seen = recordSeen(known[key], games.map((game) => game.id), today)
   known[key] = seen.feed
   await mkdir(`dist/${team.country}/${team.sport}`, { recursive: true })
-  const ics = toIcs(team, games, now, siteUrl)
+  const ics = toIcs(team, feed, now, siteUrl)
   await writeFile(`dist/${feedPath(team)}`, ics)
-  await writeFile(`dist/${alertsFeedPath(team)}`, toIcs(team, games, now, siteUrl, announced(seen.feed)))
+  await writeFile(`dist/${alertsFeedPath(team)}`, toIcs(team, feed, now, siteUrl, announced(seen.feed)))
   sections.push({ team, games })
   console.log(`${team.name}: ${games.length} upcoming games, ${seen.fresh.length} new`)
   if (siteUrl && !fixtures) {
@@ -143,7 +147,7 @@ await cp(flagLicenseFile(), 'dist/flags/LICENSE')
 if (siteUrl && !fixtures) {
   const fibaAnswers = [...fibaPages.keys()].map((event) => answers[`${event}.html`])
   const sources = [
-    uefaTeamIds.length && `UEFA answered one request for ${uefaTeamIds.length} football teams${reusedNote([answers['uefa.json']], now)}`,
+    uefaTeamIds.length && `UEFA answered one request for ${uefaTeamIds.length} football teams with ${uefaMatches.length} matches${reusedNote([answers['uefa.json']], now)}`,
     fibaPages.size && `FIBA answered ${fibaPages.size} competition ${fibaPages.size === 1 ? 'page' : 'pages'}${reusedNote(fibaAnswers, now)}`,
   ].filter(Boolean)
   const counts = sections.map(({ team, games }) => `${team.name} ${games.length}`).join(' · ')

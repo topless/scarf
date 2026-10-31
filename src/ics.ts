@@ -74,7 +74,7 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
       })
     }
     // The "Tickets on sale" day rides on its game, so it leaves the feed with the game: build.ts
-    // drops past games before they reach here, and a sale day with no game has nothing to sell.
+    // drops a game PLAYED_DAYS after it is played (game.ts), and a sale day with no game has nothing to sell.
     if (game.onSale && game.tickets) ticketSaleEvent(calendar, game, now, footer)
   }
   // Only games still in the feed are announced, so an alert leaves with its game.

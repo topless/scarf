@@ -89,7 +89,7 @@ describe('a push build', { concurrency: true }, () => {
   test('a push within a day of the last run asks no source, and its summary says the answers were reused', async (t) => {
     const { index, asked, summary, saved } = await pushBuild(t, uefaTeamIds)
     assert.deepEqual(asked, [])
-    assert.match(summary, /UEFA answered one request for \d+ football teams \(reused, 3\.0 h old\) · FIBA answered \d+ competition pages? \(reused, 3\.0 h old\)\./)
+    assert.match(summary, /UEFA answered one request for \d+ football teams with \d+ matches \(reused, 3\.0 h old\) · FIBA answered \d+ competition pages? \(reused, 3\.0 h old\)\./)
     // Saved again as they were, so they still age out a day after they were fetched.
     assert.deepEqual(saved, index)
   })
@@ -98,7 +98,7 @@ describe('a push build', { concurrency: true }, () => {
     const { index, asked, summary, saved, savedUefa } = await pushBuild(t, uefaTeamIds.slice(1))
     assert.equal(asked.length, 1)
     assert.match(asked[0], new RegExp(`^asked https://match\\.uefa\\.com/v5/matches\\?teamId=${uefaTeamIds.join(',')}&`))
-    assert.match(summary, /UEFA answered one request for \d+ football teams · FIBA answered \d+ competition pages? \(reused, 3\.0 h old\)\./)
+    assert.match(summary, /UEFA answered one request for \d+ football teams with \d+ matches · FIBA answered \d+ competition pages? \(reused, 3\.0 h old\)\./)
     // Saved with UEFA's new answer, which covers every team, so the next push reuses it too.
     assert.deepEqual(saved, { ...index, 'uefa.json': { fetched: saved['uefa.json'].fetched, teamIds: uefaTeamIds } })
     assert.ok(saved['uefa.json'].fetched > index['uefa.json'].fetched)

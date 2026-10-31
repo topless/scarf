@@ -27,8 +27,8 @@ export function calendarEvents(ics: string): Map<string, CalendarEvent> {
   return found
 }
 
-// One line per added, changed or removed event; games already played leave the feed every day,
-// so they are counted, not listed. `today` is YYYY-MM-DD in UTC, as the build uses it.
+// One line per added, changed or removed event; played games leave the feed PLAYED_DAYS after they
+// are played (game.ts), so they are counted, not listed. `today` is YYYY-MM-DD in UTC, as the build uses it.
 export function feedChanges(before: string, after: string, today: string): string[] {
   const was = calendarEvents(before)
   const now = calendarEvents(after)
