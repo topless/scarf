@@ -7,7 +7,7 @@ card header, the share image and the recoloured mark.
 
 - Name: **scarf**, lowercase wordmark, always. "Scarf" only at the start of a sentence.
 - Line: **Your colours, in your calendar.**
-- Motto: **Wrapped up in the game.**
+- Motto: **Wrapped in the game.**
 
 ## Colour tokens
 
