@@ -69,17 +69,18 @@ export function renderTeamPage(section: Section, all: Team[], siteUrl?: string):
   const from = federation(team)
   const { start, ground, ball } = WORDS[team.sport]
   const next = games[0]
+  const url = siteUrl && `${siteUrl}/${team.country}/${team.sport}/`
   return page({
     root: '../../',
     title: `${team.name} · ${siteName}`,
     description: `Every game of the ${team.side} in your calendar: ${start}, venue, TV and tickets, updated daily.`,
     // The share image sits next to the page; chat apps need both addresses absolute, so a local
     // build (no public address) leaves them out rather than printing relative ones.
-    share: { url: siteUrl && `${siteUrl}/${team.country}/${team.sport}/`, image: siteUrl && `${siteUrl}/${sharePath(team)}` },
+    share: { url, image: siteUrl && `${siteUrl}/${sharePath(team)}` },
     stripes: team.colours,
     body: `<div class="band"></div>
 ${header('../../', '<a class="pill pill-primary" href="#subscribe">Add to my calendar</a>')}
-${countryBar(team, all)}
+${countryBar(team, all, url)}
 <main>
 <section class="wrap hero">
   <div class="hero-text">
@@ -112,7 +113,7 @@ ${teamChips(all, team)}
 </section>
 </main>
 ${footer()}`,
-    script: COPY_SCRIPT + ALERTS_SCRIPT + FIND_SCRIPT,
+    script: COPY_SCRIPT + ALERTS_SCRIPT + SHARE_SCRIPT + FIND_SCRIPT,
   })
 }
 
@@ -367,6 +368,21 @@ const COPY_SCRIPT = `
     })
   }`
 
+// Share opens the share sheet on a touch screen (phones, tablets). A desktop copies the address and
+// says "Copied", even where it has a share menu of its own (Safari and Chrome on a Mac, Windows), as
+// it does where there is no share sheet at all. The button stays hidden in a browser that can do neither.
+export const SHARE_SCRIPT = `
+  const share = document.querySelector('button[data-share]')
+  const shareSheet = navigator.share && matchMedia('(pointer: coarse)').matches
+  if (share && (shareSheet || navigator.clipboard)) {
+    share.addEventListener('click', () => {
+      const url = share.dataset.share
+      if (shareSheet) navigator.share({ title: document.title, text: share.dataset.text, url }).catch(() => {})
+      else navigator.clipboard.writeText(url).then(() => { share.lastChild.textContent = 'Copied' }, () => {}) // the word, not the icon
+    })
+    share.hidden = false
+  }`
+
 // Picking "Games and announcements" points every subscribe link and the paste field at the -alerts
 // feed. Without JavaScript the choice stays hidden and the default links stand (a noscript line
 // links the variant).
@@ -490,7 +506,9 @@ function feedLinks(team: Team, alerts: boolean, siteUrl?: string): { webcal: str
 }
 
 // The country under the header, with a switch to its other sports when it has more than one.
-function countryBar(team: Team, all: Team[]): string {
+// url is the team page's public address, which the Share button sends; local builds have none and
+// leave the button out.
+function countryBar(team: Team, all: Team[], url?: string): string {
   const name = esc(countryName(team))
   const sports = SPORTS.flatMap((sport) => all.filter((other) => other.country === team.country && other.sport === sport))
   const link = (other: Team) =>
@@ -499,6 +517,7 @@ function countryBar(team: Team, all: Team[]): string {
   <div class="country-bar">
     <a class="country-name" href="../"><img class="flag" src="../../${flagPath(team.flag)}" width="32" height="24" alt="">${name}</a>
     ${sports.length > 1 ? `<nav class="switch" aria-label="${name} teams">${sports.map(link).join('')}</nav>` : ''}
+    ${url ? `<button class="btn-secondary share" type="button" data-share="${esc(url)}" data-text="${esc(`${team.name} in your calendar · ${siteName}`)}" aria-live="polite" hidden>${ICON.share}Share</button>` : ''}
   </div>
 </div>`
 }
@@ -670,6 +689,8 @@ const ICON = {
   place: icon('<path d="M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/>'),
   tv: icon('<rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 3l4 4 4-4"/>'),
   ticket: icon('<path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4V7z"/><path d="M10 7v10" stroke-dasharray="2 2"/>'),
+  // The share glyph phones and Macs use: an arrow rising out of an open box.
+  share: icon('<path d="M12 3v12M8 7l4-4 4 4"/><path d="M8 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-2"/>'),
 }
 
 export function esc(text: string): string {
