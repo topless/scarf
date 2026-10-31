@@ -15,7 +15,7 @@ the 24 teams still in the FIBA World Cup 2027 European qualifiers. Pick your tea
 
 - [docs/development.md](docs/development.md): how the build works, the frozen paths, one-time setup,
   running it, maintaining it by hand, keeping it running and known limits.
-- [docs/brand.md](docs/brand.md): the identity.
+- [docs/brand.md](docs/brand.md): the identity, and the link to the published design system.
 - [docs/calendar-event-spec.md](docs/calendar-event-spec.md): the exact calendar-event copy.
 - [docs/observability.md](docs/observability.md): the plan for counting subscribers, visitors and
   subscribe clicks (#24).
