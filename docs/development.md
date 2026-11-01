@@ -104,7 +104,9 @@ answers and the known games the last daily build saved in its Actions cache, tak
 makes no source request (a source the branch adds, which production has no answer for, uses its
 fixture). It writes a `dist/_headers` file with `X-Robots-Tag: noindex` that keeps staging out of
 search engines, and deploys `dist/` to the Worker `scarf-staging`. Nothing deploys on a push: to put a newer
-commit on staging, remove the label and add it again. A branch without a pull request goes the same way
+commit on staging, remove the label and add it again. A pull request from a fork cannot be staged (GitHub
+gives it no secrets), nor one that conflicts with main until the conflict is resolved. A branch without a
+pull request goes the same way
 from the Actions tab (Deploy staging → Run workflow → pick the branch) once it contains the workflow,
 so merge main into a branch cut before it. A newer run cancels an older one, so staging shows the
 branch asked for last. Why the Worker cannot take scarf.fan: `env.staging` in [wrangler.jsonc](../wrangler.jsonc).
