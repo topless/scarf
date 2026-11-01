@@ -1,5 +1,5 @@
 // The sources' answers a build used, saved in source-answers/ so that a build on a push to main can
-// reuse the day's instead of asking UEFA and FIBA again. The Actions job keeps the folder in its cache
+// reuse them instead of asking UEFA and FIBA again. The Actions job keeps the folder in its cache
 // next to known-games.json. Pure functions; the build reads and writes the files.
 
 // What one saved answer covers, kept by file name in source-answers/index.json. UEFA's one answer
@@ -13,10 +13,11 @@ export type SavedAnswers = Record<string, SavedAnswer>
 
 const HOUR = 3_600_000
 
-// A saved answer stands in for a request while it is less than a day old and covers every team the
-// request is for: a football team added since means asking UEFA again.
-export function reusable(answer: SavedAnswer | undefined, now: Date, teamIds: number[] = []): boolean {
-  return answer !== undefined && now.getTime() - Date.parse(answer.fetched) < 24 * HOUR && teamIds.every((id) => answer.teamIds?.includes(id))
+// A saved answer stands in for a request whatever its age, so the pushes after a failed or late daily
+// run send no burst at a source that may have just refused us. It must cover every team the request
+// is for: a football team added since means asking UEFA again.
+export function reusable(answer: SavedAnswer | undefined, teamIds: number[] = []): boolean {
+  return answer !== undefined && teamIds.every((id) => answer.teamIds?.includes(id))
 }
 
 // For the run summary: " (reused, 3.2 h old)" when saved answers stood in for a source's requests,
