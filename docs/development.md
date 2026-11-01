@@ -20,7 +20,7 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
    colours with every team's name;
 5. records the games it saw in `known-games.json` and the sources' answers in `source-answers/`, which the
    Actions job keeps in its cache between runs (not in git), so the next run can tell a newly announced game
-   from an old one, and a run on a push to `main` can reuse the day's answers instead of asking again.
+   from an old one, and a run on a push to `main` can reuse the last run's answers instead of asking again.
 
 If a source cannot be fetched or its format changed, the build fails and the last published files stay online.
 
@@ -189,8 +189,9 @@ docs/observability.md is the plan for counting subscribers, visitors and subscri
 - The UEFA endpoint and the FIBA page are undocumented and can change without notice. Their terms do not
   allow automated collection, so this stays a small friends-only tool: the daily run, and a manual one, make
   one UEFA request for all football teams together and one FIBA request per basketball competition. A run
-  on a push to `main` reuses the answers the last run saved while they are less than a day old, and asks
-  only for what they don't cover: UEFA again for a new football team, FIBA for a new competition's page.
+  on a push to `main` reuses the answers the last run saved, however old, and asks only for what they don't
+  cover: UEFA again for a new football team, FIBA for a new competition's page. Its run summary says how
+  old the reused answers are.
 - Calendar apps refresh subscribed feeds on their own schedule; Google Calendar can take a day. On a Mac,
   choose "Every day" for auto-refresh when subscribing; the default is reportedly weekly.
 - Subscribing in Google Calendar only works in a computer browser, not in the phone app.

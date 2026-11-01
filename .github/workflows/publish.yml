@@ -34,10 +34,10 @@ jobs:
           path: known-games.json
           key: known-games-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: known-games-
-      # The sources' answers the last run used, so a push reuses the day's instead of asking UEFA and
-      # FIBA again (src/answers.ts); the daily and manual runs always ask. A cache of its own: a path
-      # added to the one above would change its version and lose the known games. As for any cache,
-      # main restores only what main's own runs saved, never a pull request's.
+      # The sources' answers the last run used, so a push reuses them, however old, instead of asking
+      # UEFA and FIBA again (src/answers.ts); the daily and manual runs always ask. A cache of its own:
+      # a path added to the one above would change its version and lose the known games. As for any
+      # cache, main restores only what main's own runs saved, never a pull request's.
       - uses: actions/cache/restore@v6
         if: github.event_name == 'push'
         with:

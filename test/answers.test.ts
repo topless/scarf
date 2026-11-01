@@ -13,26 +13,26 @@ const HOUR = 3_600_000
 const now = new Date('2026-10-30T12:00:00Z')
 const hoursAgo = (hours: number) => new Date(now.getTime() - hours * HOUR).toISOString()
 
-test('a saved answer stands in for a request while it is less than a day old', () => {
-  assert.equal(reusable({ fetched: hoursAgo(23.9) }, now), true)
-  assert.equal(reusable({ fetched: hoursAgo(24) }, now), false)
+test('a saved answer stands in for a request whatever its age', () => {
+  assert.equal(reusable({ fetched: hoursAgo(24) }), true)
+  assert.equal(reusable({ fetched: hoursAgo(24 * 30) }), true)
 })
 
 test('with no saved answer, as on the first push or once the cache is lost, the build asks', () => {
-  assert.equal(reusable(undefined, now), false)
+  assert.equal(reusable(undefined), false)
 })
 
 test("UEFA's saved answer covers the football teams it was asked for, and a team added since means asking again", () => {
   const uefa = { fetched: hoursAgo(3), teamIds: [49, 122] }
-  assert.equal(reusable(uefa, now, [49, 122]), true)
-  assert.equal(reusable(uefa, now, [122]), true) // a team dropped since is still covered
-  assert.equal(reusable(uefa, now, [49, 122, 35]), false)
+  assert.equal(reusable(uefa, [49, 122]), true)
+  assert.equal(reusable(uefa, [122]), true) // a team dropped since is still covered
+  assert.equal(reusable(uefa, [49, 122, 35]), false)
 })
 
 test('a FIBA page covers its own competition, so a competition added since means asking for its page', () => {
   const saved: SavedAnswers = { 'fiba-basketball-world-cup-2027-european-qualifiers.html': { fetched: hoursAgo(3) } }
-  assert.equal(reusable(saved['fiba-basketball-world-cup-2027-european-qualifiers.html'], now), true)
-  assert.equal(reusable(saved['fiba-eurobasket-2029.html'], now), false)
+  assert.equal(reusable(saved['fiba-basketball-world-cup-2027-european-qualifiers.html']), true)
+  assert.equal(reusable(saved['fiba-eurobasket-2029.html']), false)
 })
 
 test('the run summary says which answers were reused and how old the oldest is', () => {
@@ -42,10 +42,10 @@ test('the run summary says which answers were reused and how old the oldest is',
   assert.equal(reusedNote([asked, { fetched: hoursAgo(3.2) }, { fetched: hoursAgo(20) }], now), ' (2 reused, 20.0 h old)')
 })
 
-// A build on a push to main, in a folder of its own, with source-answers/ as an earlier run left it
-// 3 h ago: the test fixtures, UEFA's answer covering `savedTeamIds`. The stub prints every request to a
-// source, answers UEFA's with the fixture and fails the run on any other; the live feeds, our own
-// site, answer 404.
+// A build on a push to main, in a folder of its own, with source-answers/ as the last run left it
+// 30 h ago, the daily run since having failed: the test fixtures, UEFA's answer covering
+// `savedTeamIds`. The stub prints every request to a source, answers UEFA's with the fixture and
+// fails the run on any other; the live feeds, our own site, answer 404.
 const fixture = (name: string) => fileURLToPath(new URL(`./fixtures/${name}`, import.meta.url))
 const build = fileURLToPath(new URL('../src/build.ts', import.meta.url))
 const uefaTeamIds = teams.flatMap(({ source }) => (source.kind === 'uefa' ? [source.teamId] : []))
@@ -56,7 +56,7 @@ async function pushBuild(t: TestContext, savedTeamIds: number[]) {
   t.after(() => rm(dir, { recursive: true }))
   const answers = join(dir, 'source-answers')
   await mkdir(answers)
-  const fetched = new Date(Date.now() - 3 * HOUR).toISOString()
+  const fetched = new Date(Date.now() - 30 * HOUR).toISOString()
   const index: SavedAnswers = { 'uefa.json': { fetched, teamIds: savedTeamIds } }
   await copyFile(fixture('uefa-matches.json'), join(answers, 'uefa.json'))
   for (const event of fibaEvents) {
@@ -86,11 +86,11 @@ async function pushBuild(t: TestContext, savedTeamIds: number[]) {
 
 // Each runs a whole build, about 2 s, so the two run side by side.
 describe('a push build', { concurrency: true }, () => {
-  test('a push within a day of the last run asks no source, and its summary says the answers were reused', async (t) => {
+  test('a push the day after a failed daily run asks no source, and its summary says the answers were reused and how old they are', async (t) => {
     const { index, asked, summary, saved } = await pushBuild(t, uefaTeamIds)
     assert.deepEqual(asked, [])
-    assert.match(summary, /UEFA answered one request for \d+ football teams with \d+ matches \(reused, 3\.0 h old\) · FIBA answered \d+ competition pages? \(reused, 3\.0 h old\)\./)
-    // Saved again as they were, so they still age out a day after they were fetched.
+    assert.match(summary, /UEFA answered one request for \d+ football teams with \d+ matches \(reused, 30\.0 h old\) · FIBA answered \d+ competition pages? \(reused, 30\.0 h old\)\./)
+    // Saved again as they were, so the next summary still counts their age from when they were fetched.
     assert.deepEqual(saved, index)
   })
 
@@ -98,7 +98,7 @@ describe('a push build', { concurrency: true }, () => {
     const { index, asked, summary, saved, savedUefa } = await pushBuild(t, uefaTeamIds.slice(1))
     assert.equal(asked.length, 1)
     assert.match(asked[0], new RegExp(`^asked https://match\\.uefa\\.com/v5/matches\\?teamId=${uefaTeamIds.join(',')}&`))
-    assert.match(summary, /UEFA answered one request for \d+ football teams with \d+ matches · FIBA answered \d+ competition pages? \(reused, 3\.0 h old\)\./)
+    assert.match(summary, /UEFA answered one request for \d+ football teams with \d+ matches · FIBA answered \d+ competition pages? \(reused, 30\.0 h old\)\./)
     // Saved with UEFA's new answer, which covers every team, so the next push reuses it too.
     assert.deepEqual(saved, { ...index, 'uefa.json': { fetched: saved['uefa.json'].fetched, teamIds: uefaTeamIds } })
     assert.ok(saved['uefa.json'].fetched > index['uefa.json'].fetched)

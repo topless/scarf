@@ -22,8 +22,8 @@ import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
 // Each country gets a page and a share image of its own too, listing its teams.
 // Requests stay minimal: UEFA answers for every football team in one call, and a FIBA page is
 // fetched once per competition and shared by the teams playing in it (Greece and Spain are in
-// the same qualifiers); a build on a push to main reuses the answers an earlier build saved less
-// than a day ago. Any failure aborts the whole build, so the previously published files stay in place.
+// the same qualifiers); a build on a push to main reuses the answers an earlier build saved, whatever
+// their age. Any failure aborts the whole build, so the previously published files stay in place.
 // With --fixtures (npm run build:fixtures) it builds the same site from the sources' answers saved
 // in test/fixtures/ and makes no request at all: none to the sources, none to the live feeds.
 // With --saved (npm run build:staging, the staging deploy) it builds from the answers a daily build
@@ -57,9 +57,9 @@ const known: KnownGames = fixtures ? {} : await readSaved(KNOWN_GAMES)
 
 // The sources' answers, which a live build saves in source-answers/ with what each covers and when it
 // was fetched (src/answers.ts). Not in git: the Actions job keeps the folder in its cache next to
-// known-games.json and restores it for a push to main, whose build reuses the answers that are less
-// than a day old, and for a staging build, which takes them whatever their age. The daily, manual and
-// local builds always ask the sources.
+// known-games.json and restores it for a push to main, whose build reuses the answers that cover its
+// requests, and for a staging build, which takes them as they are, both whatever their age. The daily,
+// manual and local builds always ask the sources.
 const ANSWERS = 'source-answers'
 const earlier: SavedAnswers = staging || (live && process.env.GITHUB_EVENT_NAME === 'push') ? await readSaved(`${ANSWERS}/index.json`) : {}
 if (staging && Object.keys(earlier).length === 0) throw new Error(`${ANSWERS}/index.json is missing or empty: a staging build shows what the last "Build feeds" run saved in its Actions cache`)
@@ -67,13 +67,13 @@ const answers: SavedAnswers = {} // the ones this build uses, by file name, save
 
 // Where a source's answer comes from: in a fixture build that file in test/fixtures/, as for a source a
 // staging build has no saved answer for (one this branch adds); else an earlier build's, in a staging
-// build as it is and in a live build while it is less than a day old and covers the request, or none,
-// and it is fetched now. Outside a fixture build either one is noted in `answers`, to be saved.
+// build as it is and in a live build when it covers the request, or none, and it is fetched now.
+// Outside a fixture build either one is noted in `answers`, to be saved.
 function saved(fixture: string, file: string, teamIds?: number[]): URL | undefined {
   const answer = earlier[file]
   if (staging && !answer) console.log(`${file}: no saved answer, so the fixture ${fixture} stands in`)
   if (fixtures || (staging && !answer)) return new URL(`../test/fixtures/${fixture}`, import.meta.url)
-  if (staging || reusable(answer, now, teamIds)) {
+  if (staging || reusable(answer, teamIds)) {
     answers[file] = answer
     return pathToFileURL(`${ANSWERS}/${file}`)
   }
