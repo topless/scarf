@@ -6,7 +6,7 @@
 <title>Pick your teams · scarf</title>
 <meta name="description" content="Follow more than one team with one calendar: pick your teams and subscribe once.">
 <!--
-  Reference for the team picker at /my/ (issue #17, docs/spike-team-picker.md). Same header, footer,
+  Reference for the team picker at /my/ (issue #17, docs/archive/spike-team-picker.md). Same header, footer,
   tokens and layout as reference/team-page.html; the page-specific styles are in the <style> below.
   Port, don't redesign. The build emits one chip per team in src/config.ts, in config order; names,
   slugs, feed paths and stripe colours below are copied from the six teams there on 2026-10-22. At
@@ -145,7 +145,7 @@
   <p>Updated daily from UEFA and FIBA · last run Sat 17 Oct 2026, 04:31 UTC</p>
 </footer>
 <script>
-  // ---- URL scheme: the one thing that changes with the approach picked in docs/spike-team-picker.md ----
+  // ---- URL scheme: the one thing that changes with the approach picked in docs/archive/spike-team-picker.md ----
   const SITE = 'https://scarf.fan' // the canonical host; the build fills this in from SITE_URL
   const SCHEME = 'static' // 'static': pre-built files (approach a) · 'worker': merged on request (approach b)
   const MAX_TEAMS = 3

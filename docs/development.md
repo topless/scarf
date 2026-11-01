@@ -26,7 +26,8 @@ If a source cannot be fetched or its format changed, the build fails and the las
 
 ## Paths
 
-Subscriptions point at these paths, so they are frozen (see [HANDOVER.md](../HANDOVER.md)):
+Subscriptions point at the feeds, and every event's footer names the team page, so those two paths
+are frozen. Every other page may move, with a redirect from its old address.
 
 - `/{country}/{sport}.ics`: one feed per team, for example `/greece/football.ics` and `/greece/basketball.ics`.
 - `/{country}/{sport}-alerts.ics`: the same feed plus an all-day "New game" entry on the day a game is announced,
@@ -35,7 +36,9 @@ Subscriptions point at these paths, so they are frozen (see [HANDOVER.md](../HAN
   `/{country}/{sport}/share.png`.
 - `/{country}/`: the country's page listing its teams, for example `/greece/`, with its share image at
   `/{country}/share.png`.
-- `/`: the page listing every team.
+- `/`: the page listing every team, with its share image at `/share.png`.
+- `/how-it-works/`: the How it works page, linked from every top bar.
+- `/kit/`: the identity kit, unlisted and `noindex` ([docs/brand.md](brand.md), Countries and sports).
 
 Each event's `UID` is the source's id (`uefa-…`, `fiba-…`) and never changes, so an updated game
 replaces the old entry instead of duplicating it.
@@ -83,6 +86,13 @@ npx wrangler dev
 then open http://localhost:8787/greece/football/. The fixture build reads the sources' answers saved in
 [test/fixtures/](../test/fixtures/), dated on the day they were saved so their games stay upcoming. It
 makes no request at all and leaves `known-games.json` and `source-answers/` alone.
+
+## Definition of done for a feed change
+
+- `npm test` passes; the ICS validates (an `icalendar` validator or an `ical.js` parse) and the changed
+  feeds import into Apple Calendar and Google Calendar without warnings.
+- The event copy matches [docs/calendar-event-spec.md](calendar-event-spec.md) byte for byte for the
+  sample fixture, and passes its voice checks.
 
 ## Maintaining it by hand
 
@@ -160,9 +170,13 @@ docs/observability.md is the plan for counting subscribers, visitors and subscri
 - Calendar apps refresh subscribed feeds on their own schedule; Google Calendar can take a day. On a Mac,
   choose "Every day" for auto-refresh when subscribing; the default is reportedly weekly.
 - Subscribing in Google Calendar only works in a computer browser, not in the phone app.
-- Each timed game carries a reminder one hour before kickoff. Apple Calendar shows it unless "Remove alarms"
-  is on for the subscription; Google Calendar is believed to ignore embedded reminders, but lets you set a
-  notification for the whole calendar in its settings. Outlook is unverified.
+- Each timed game carries a reminder one hour before kickoff (`VALARM`); what happens next is up to the
+  calendar app. iPhone Calendar stores it but never schedules it: in the iOS Simulator (iOS 17.5 and 18.0,
+  subscription stored "On My iPhone", 30 October 2026) every game shows "Alert: None" and nothing fires,
+  even with Event Alerts on. The fan-side fix is Default Alert Times › Events › 1 hour before in the
+  Calendar settings, which then covers every timed event. Not tested on a real iPhone, an iCloud-stored
+  subscription or a Mac. Google Calendar is believed to ignore embedded reminders but lets you set a
+  notification for the whole calendar once, as the team page says. Outlook is unverified.
 - Games with no announced time appear as all-day entries marked "time not announced".
 - The `-alerts` feeds rely on the `known-games-…` entries under Actions → Caches. GitHub drops a cache
   unused for 7 days, and the daily run uses it every day. If it is lost anyway, or deleted to start afresh,

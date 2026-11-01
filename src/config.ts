@@ -10,7 +10,7 @@ export const defaultSiteUrl = 'https://scarf.fan'
 export type Sport = 'football' | 'basketball'
 
 export interface Team {
-  // URL slugs. The path scheme is frozen because subscriptions point at it (see HANDOVER.md):
+  // URL slugs. The path scheme is frozen because subscriptions point at it (docs/development.md, Paths):
   // the feed is /{country}/{sport}.ics and the team page /{country}/{sport}/.
   country: string
   sport: Sport
