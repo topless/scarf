@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { existsSync, readFileSync } from 'node:fs'
 import { test } from 'node:test'
-import { COUNTRIES, teamPath, teams, type Competition, type Sport, type Team } from '../src/config.ts'
+import { COUNTRIES, sourceKey, teamPath, teams, type Competition, type Sport, type Team } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
 import { landingKind, renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderTeamPage, SHARE_SCRIPT, teamKind, WORDS } from '../src/page.ts'
 
@@ -50,7 +50,8 @@ const panathinaikos = teams.find((team) => team.club?.slug === 'panathinaikos')!
 const olympiacosFootball: Team = { ...olympiacos, sport: 'football', name: 'Olympiacos football', club: { ...olympiacos.club!, ground: 'Georgios Karaiskakis Stadium', competition: 'champions-league' } }
 function clubTeam(name: string, country: Team['country'] = 'greece', competition: Competition = 'euroleague', sport: Sport = 'basketball'): Team {
   const slug = name.toLowerCase().replaceAll(' ', '-')
-  return { ...olympiacos, country, sport, name: `${name} ${sport}`, colours: ['#123456', '#FFFFFF'], flag: COUNTRIES[country].flag, club: { slug, name, city: `${name} City`, ground: `${name} Arena`, competition } }
+  const source: Team['source'] = sport === 'football' ? { kind: 'uefa', teamId: 900000 + slug.length * 131 + slug.charCodeAt(0) } : { kind: 'euroleague', season: 'E2026', clubCode: slug.replaceAll('-', '').slice(0, 3).toUpperCase() }
+  return { ...olympiacos, country, sport, name: `${name} ${sport}`, colours: ['#123456', '#FFFFFF'], flag: COUNTRIES[country].flag, source, club: { slug, name, city: `${name} City`, ground: `${name} Arena`, competition } }
 }
 const derby: Game = {
   id: 'euroleague-E2026_1',
@@ -295,7 +296,7 @@ test('every list of all the countries or clubs opens with a find field, hidden u
 })
 
 test("the other-teams chips are one per country, each opening this page's sport or the country's other one", () => {
-  const countries = new Set(teams.map((team) => team.country)).size
+  const countries = new Set(national.map((team) => team.country)).size
   const chips = (html: string) => html.slice(html.indexOf('id="teams"'))
   const basketball_ = chips(renderTeamPage({ team: basketball, games: [] }, teams, site))
   assert.equal(basketball_.match(/class="country-chip"/g)?.length, countries)
@@ -550,10 +551,16 @@ test("a club's page sits one folder deeper, and every relative link on it climbs
 
 test("a club's other teams are its neighbours: its next opponents on scarf, its competition, its country's national teams", () => {
   const rivals = ['Anadolu Efes', 'Baskonia', 'Barcelona', 'Fenerbahce', 'Milan', 'Monaco', 'Paris'].map((name) => clubTeam(name))
-  const game = (away: string, n: number): Game => ({ ...derby, id: `euroleague-E2026_${n}`, away })
+  // The source names the sides as it likes ("Hapoel TLV"); the match goes by the source's own ids.
+  const game = (away: Team | string, n: number): Game => ({
+    ...derby,
+    id: `euroleague-E2026_${n}`,
+    away: typeof away === 'string' ? away : `${away.club!.name.toUpperCase()} BC`,
+    sides: [sourceKey(olympiacos), typeof away === 'string' ? `euroleague:${away.slice(0, 3).toUpperCase()}` : sourceKey(away)],
+  })
   // Panathinaikos twice and a club not on scarf, then seven more: six chips, each club once, in the order played.
-  const games = [game('Panathinaikos', 1), game('Real Madrid', 2), game('Panathinaikos', 3), ...rivals.map((rival, i) => game(rival.club!.name, 10 + i))]
-  const html = renderTeamPage({ team: olympiacos, games }, [...teams, ...rivals], site)
+  const games = [game(panathinaikos, 1), game('Real Madrid', 2), game(panathinaikos, 3), ...rivals.map((rival, i) => game(rival, 10 + i))]
+  const html = renderTeamPage({ team: olympiacos, games }, [...national, olympiacos, panathinaikos, ...rivals], site)
   const others = part(html, 'id="teams"', '</section>')
   inOrder(
     others,
@@ -572,7 +579,7 @@ test("a club's other teams are its neighbours: its next opponents on scarf, its 
   assert.doesNotMatch(others, />Monaco<|>Paris<|Real Madrid|class="find"/)
   assert.match(others, /Add as many as you follow: the rivals, the national side\.<\/p>/)
   // A club with two teams on scarf names the other half too.
-  assert.match(renderTeamPage({ team: olympiacos, games: [] }, [...teams, olympiacosFootball], site), /Add as many as you follow: the rivals, the national side, the other half of the club\.<\/p>/)
+  assert.match(renderTeamPage({ team: olympiacos, games: [] }, [...national, olympiacos, olympiacosFootball], site), /Add as many as you follow: the rivals, the national side, the other half of the club\.<\/p>/)
 })
 
 test('a country page shows its clubs in Europe after its national teams, football first, then by name', () => {
@@ -659,7 +666,7 @@ test('a competition page lists its clubs A to Z under a find field, with no stri
 
 test('the landing lists the competitions with their clubs, then every country with a national team as a chip to its page', () => {
   const rivals = ['Milan', 'Baskonia', 'Barcelona', 'Fenerbahce', 'Anadolu Efes'].map((name) => clubTeam(name))
-  const html = renderLanding([...teams, olympiacosFootball, ...rivals].map((team) => ({ team, games: [] })), today)
+  const html = renderLanding([...national, olympiacos, panathinaikos, olympiacosFootball, ...rivals].map((team) => ({ team, games: [] })), today)
   inOrder(
     html,
     '<p class="lede">Pick your team, a national side or a club, and subscribe once. Every kickoff or tip-off, venue, channel and ticket sale lands in the calendar you already use, with a nudge an hour before the game. Nothing to install.</p>',

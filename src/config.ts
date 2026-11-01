@@ -122,6 +122,10 @@ export const COUNTRIES = {
   wales: { name: 'Wales', colours: ['#00AB39', '#D21034', '#FFFFFF'], flag: 'gb-wls' },
 } satisfies Record<string, { name: string; colours: Team['colours']; flag: string }>
 
+// A team's side as its source identifies it: the key a game's `sides` carries (game.ts).
+export const sourceKey = ({ source }: Team): string =>
+  source.kind === 'uefa' ? `uefa:${source.teamId}` : source.kind === 'fiba' ? `fiba:${source.teamCode}` : `euroleague:${source.clubCode}`
+
 // A team's country as the pages draw it: a club's card and bar show the country's flag as a small
 // mark next to its home city, over the club's own stripes.
 export const countryOf = (team: Team) => COUNTRIES[team.country]

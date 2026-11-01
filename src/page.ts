@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { alertsFeedPath, COMPETITIONS, competitionPath, countryOf, countrySharePath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, teamPath, type Competition, type Sport, type Team } from './config.ts'
+import { alertsFeedPath, COMPETITIONS, competitionPath, countryOf, countrySharePath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, sourceKey, teamPath, type Competition, type Sport, type Team } from './config.ts'
 import { flagPath } from './flags.ts'
 import { byStart, type Game } from './game.ts'
 
@@ -136,9 +136,11 @@ ${teamChips(all, team, root)}
 // its competition, then its country's national teams and a way to every team.
 function neighbours({ team, games }: Section, all: Team[], root: string): string {
   const club = team.club!
-  const opponents = [
-    ...new Set(games.flatMap((game) => all.filter((other) => other !== team && other.sport === team.sport && [game.home, game.away].includes(other.club?.name ?? ''))))
-  ].slice(0, 6)
+  // The other side of each game, matched by the source's own id: the source rarely calls a club what
+  // fans do ("Hapoel TLV", "Cosea JL Bourg"), and a club not on scarf matches nothing.
+  const mine = sourceKey(team)
+  const others = new Map(all.filter((other) => other !== team && other.sport === team.sport).map((other) => [sourceKey(other), other]))
+  const opponents = [...new Set(games.flatMap((game) => (game.sides ?? []).filter((side) => side !== mine).flatMap((side) => others.get(side) ?? [])))].slice(0, 6)
   const rivals = all.filter((other) => other.club?.competition === club.competition).length
   const nationals = siblings({ ...team, club: undefined }, all)
   const more = (href: string, text: string) => `      <a class="country-chip more" href="${href}">${text}${ICON.arrow}</a>`
