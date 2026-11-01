@@ -89,10 +89,13 @@ export async function renderCountryShareImage(teams: Team[], siteUrl?: string): 
 
 // A country's card: a team's card in the country's stripes and flag, with its national teams by
 // name where a team's card has its next game. countryTeams are the country's, clubs included; the
-// clubs, in their own kit, have cards of their own and stay off this one.
+// clubs, in their own kit, have cards of their own and stay off this one, unless the country has
+// no national team on scarf (Monaco): then the card names its clubs.
 export function renderCountryShareCard(countryTeams: Team[], siteUrl?: string, flag?: string): string {
   // Football first, as on the page's card, whatever order config.ts lists the teams in.
-  const teams = SPORTS.flatMap((sport) => countryTeams.filter((team) => !team.club && team.sport === sport))
+  const all = SPORTS.flatMap((sport) => countryTeams.filter((team) => team.sport === sport))
+  const national = all.filter((team) => !team.club)
+  const teams = national.length ? national : all
   const [team] = teams as [Team]
   const country = countryOf(team)
   const [band, ...rest] = country.colours

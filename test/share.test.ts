@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { shareSize, teams } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
-import { stripes, teamKind } from '../src/page.ts'
+import { landingKind, stripes, teamKind } from '../src/page.ts'
 import {
   headlineSize,
   nextGameLine,
@@ -162,6 +162,21 @@ test("country card lists the national teams only, in the country's stripes, what
   assert.doesNotMatch(national, /Olympiacos|Panathinaikos|EuroLeague/)
   // One national team and a club: the card reads as that team's alone.
   assert.equal(renderCountryShareCard([olympiacos, football], site, flag), renderCountryShareCard([football], site, flag))
+})
+
+// Monaco and the United Arab Emirates have a club on scarf and no national team. Greece's clubs on
+// their own stand in for such a country, so the test does not wait for the data.
+test('a country with clubs only names its clubs, in the country stripes, and still renders', async () => {
+  const two = renderCountryShareCard([panathinaikos, olympiacos], site, flag)
+  assert.match(text(two), new RegExp(`${landingKind([panathinaikos, olympiacos])} .*Greece, in your calendar\\. .*TEAMS Panathinaikos basketball · Olympiacos basketball `))
+  assert.match(two, /repeating-linear-gradient\(90deg, #0D5EAF 0px 40px, #FFFFFF 40px 80px\)/)
+  assert.ok(two.includes(`<img src="${flag}" width="32" height="24">`))
+  assert.match(text(two), /example\.github\.io\/scarf\/greece Free · updated daily from EuroLeague/)
+  const one = text(renderCountryShareCard([olympiacos], site, flag))
+  assert.match(one, new RegExp(`${teamKind(olympiacos)} .*Greece, in your calendar\\. .*TEAMS Olympiacos basketball `))
+  const png = await renderCountryShareImage([olympiacos], site)
+  assert.equal(png.readUInt32BE(16), shareSize.width)
+  assert.ok(png.byteLength < SHARE_MAX_BYTES)
 })
 
 test('every team, country and the landing page render as 1200×630 PNGs under the size limit without a browser', async () => {
