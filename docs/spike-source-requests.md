@@ -75,19 +75,21 @@ address to the operator. Chris's call, below.
 
 ## Follow-up issues
 
-1. **A push never asks a source.** `reusable()` in src/answers.ts loses the 24-hour condition; the assertions on age in
+Chris had both opened on 1 November 2026: #126 and #127.
+
+1. **A push never asks a source (#126).** `reusable()` in src/answers.ts loses the 24-hour condition; the assertions on age in
    test/answers.test.ts; the "Known limits" sentence in docs/development.md and
    the comments in .github/workflows/publish.yml and src/build.ts that say "less than a day old".
-2. **Log what each source answered.** `fetchText` in src/game.ts prints status and the headers named
+2. **Log what each source answered (#127).** `fetchText` in src/game.ts prints status and the headers named
    above; the parse errors in src/uefa.ts and src/fiba.ts carry the body's first 200 characters; one
    test for the message.
 
 **Decisions that are Chris's**
 
 1. Open the two follow-ups, or take them as one small PR.
-2. A contact in the User-Agent, `scarf/0.1 (+https://scarf.fan)`: the polite-bot convention, and it
+1. A contact in the User-Agent, `scarf/0.1 (+https://scarf.fan)`: the polite-bot convention, and it
    names the site to the sources.
-3. A guard on `npm run build` outside CI, refusing unless `CI` or an opt-in variable is set, so no
+2. A guard on `npm run build` outside CI, refusing unless `CI` or an opt-in variable is set, so no
    developer machine or agent asks a source by accident; `npm run build:fixtures` is the check build.
    Two lines, and a change of local habit.
 
