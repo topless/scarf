@@ -154,7 +154,10 @@ older one, so staging shows the branch asked for last. Why the Worker cannot tak
   for basketball. A football club costs no extra request, nor a basketball club in a season already
   fetched; a new season code costs one. A EuroLeague arena missing from `VENUES` in
   [src/euroleague.ts](../src/euroleague.ts) shows no city, so its times read "at the venue" until its row
-  is added.
+  is added. Then `node scripts/crests.ts` once: it fetches the crests that are missing from
+  [assets/crests/](../assets/crests/) (UEFA by team id, the EuroLeague clubs endpoint by club code), scales
+  each to 192 px and leaves the rest alone; the club's `crest` names its file. Without one the pages show
+  the kit stripes. Never in the build, which keeps to its one request per source (#132).
 - **A new season** of the club competitions: once the next season's games are published (July, as a rule),
   the season codes in [src/clubs.ts](../src/clubs.ts) move on (`E2026` to `E2027`, `U2026` to `U2027`), and
   the clubs and `COMPETITIONS` in [src/config.ts](../src/config.ts) are refreshed with them.
