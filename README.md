@@ -13,17 +13,13 @@ the 24 teams still in the FIBA World Cup 2027 European qualifiers. Pick your tea
 
 ## Docs
 
-- [docs/development.md](docs/development.md): how the build works, the frozen paths, one-time setup,
-  running it, maintaining it by hand, keeping it running and known limits.
-- [docs/brand.md](docs/brand.md): the identity.
+- [docs/development.md](docs/development.md): how the build works, the paths, one-time setup,
+  running it, what done means for a feed change, maintaining it by hand, keeping it running and
+  known limits.
+- [docs/brand.md](docs/brand.md): the identity, and where it came from.
 - [docs/calendar-event-spec.md](docs/calendar-event-spec.md): the exact calendar-event copy.
 - [docs/observability.md](docs/observability.md): the plan for counting subscribers, visitors and
   subscribe clicks (#24).
 - [docs/research-2026-10-02.md](docs/research-2026-10-02.md): background on the data sources.
-- [docs/spike-team-picker.md](docs/spike-team-picker.md): the spike on a team picker and one feed for
-  several teams (#17).
-- [docs/spike-build-platform.md](docs/spike-build-platform.md): the spike on where the build runs and
-  what would make scarf faster (#93).
+- [docs/archive/](docs/archive/): the spikes behind decisions already taken.
 - [GitHub issues](https://github.com/topless/scarf/issues): the backlog.
-- [HANDOVER.md](HANDOVER.md): the design handover, where the identity, the exact calendar-event copy
-  and the backlog come from.

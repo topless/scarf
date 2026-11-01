@@ -88,11 +88,11 @@ Chris opened all three on 30 October 2026: #98, #99 (after #98) and #100.
 - The late start begins to matter, or GitHub's "scheduled workflow will be disabled soon" email
   arrives (the keepalive stopped working): D is the smallest step that keeps the build on time.
   "Check feeds" still runs on GitHub's schedule, so a broken keepalive also needs the fallback in
-  "Keeping it running" in [development.md](development.md).
+  "Keeping it running" in [development.md](../development.md).
 - A lost Actions cache keeps resetting the alerts feeds: move `known-games.json` to Workers KV. A
   write per build, up to 13 a day so far, fits the free plan's 1,000, and it works from Actions too.
 - A feature needs code at request time, like the uncapped personal feed (option (b) in
-  docs/spike-team-picker.md) or the counting in #71. That is a Worker answering requests, and the
+  docs/archive/spike-team-picker.md) or the counting in #71. That is a Worker answering requests, and the
   build can stay where it is.
 
 ## Looked at, not worth it now

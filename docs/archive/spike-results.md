@@ -106,7 +106,7 @@ Not built. What we know, for an issue if fans ask:
   docs/calendar-event-spec.md.
 - **Delivery.** A result is an in-place update. PR #109 has proven those only on Apple so far, with
   Google and Outlook pending. The daily build starts between about 08:40 and 12:10 UTC
-  (docs/spike-build-platform.md), so a result would reach Google calendars a day or more after the
+  (docs/archive/spike-build-platform.md), so a result would reach Google calendars a day or more after the
   game.
 
 ## Decisions that are Chris's
