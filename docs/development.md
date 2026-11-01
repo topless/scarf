@@ -53,7 +53,8 @@ is set in the workflow.
   API Tokens → Create Token, template "Edit Cloudflare Workers", limited to this account and the
   scarf.fan zone; then `gh secret set CLOUDFLARE_API_TOKEN --repo topless/scarf` and paste it.
 - **DNS** is at Cloudflare. `scarf.fan` is the Worker's custom domain (the `routes` entry in
-  wrangler.jsonc), so Cloudflare keeps its record and certificate. `www` is a proxied placeholder
+  wrangler.jsonc), so Cloudflare keeps its record and certificate. `staging.scarf.fan` is the custom
+  domain of the Worker `scarf-staging` the same way (`env.staging`). `www` is a proxied placeholder
   record (`AAAA 100::`) with a redirect rule that sends every request to `https://scarf.fan` with the
   same path. "Always Use HTTPS" is on, so a calendar that asks over `http://` ends on https.
 - **GitHub Pages** stays on, with the custom domain `scarf.fan` and its last deployment, only so the
@@ -96,12 +97,14 @@ page height, the Share button's room, each component against [docs/brand.md](bra
 what changed since the base. The limits sit at the top of the script; the report's shape is in
 [.claude/skills/ui-review/SKILL.md](../.claude/skills/ui-review/SKILL.md). Needs Google Chrome.
 
-To put a branch where someone else can open it, run the "Deploy staging" workflow by hand: Actions tab →
-Deploy staging → Run workflow → pick the branch. It builds from the fixtures, so it makes no source
-request, and deploys `dist/` to the Worker `scarf-staging` at https://scarf-staging.topless.workers.dev.
-Each run replaces the last. The `env.staging` block in [wrangler.jsonc](../wrangler.jsonc) sets no routes,
-so scarf.fan stays with the Worker `scarf`, and the workflow writes a `dist/_headers` file with
-`X-Robots-Tag: noindex` that keeps staging out of search engines (#85).
+To put a branch on https://staging.scarf.fan, add the label `staging` to its pull request (#85). The
+"Deploy staging" workflow builds the branch as merged into main from the fixtures, so it makes no source
+request, writes a `dist/_headers` file with `X-Robots-Tag: noindex` that keeps staging out of search
+engines, and deploys `dist/` to the Worker `scarf-staging`. Nothing deploys on a push: to put a newer
+commit on staging, remove the label and add it again. A branch without a pull request goes the same way
+from the Actions tab (Deploy staging → Run workflow → pick the branch) once it contains the workflow,
+so merge main into a branch cut before it. A newer run cancels an older one, so staging shows the
+branch asked for last. Why the Worker cannot take scarf.fan: `env.staging` in [wrangler.jsonc](../wrangler.jsonc).
 
 ## Definition of done for a feed change
 

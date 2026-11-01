@@ -8,11 +8,13 @@
   "routes": [{ "pattern": "scarf.fan", "custom_domain": true }],
   // The side-by-side copy at scarf.topless.workers.dev goes once scarf.fan answers here.
   "workers_dev": false,
-  // Staging (#85): "Deploy staging" (.github/workflows/staging.yml) puts any branch, built from the
-  // fixtures, on the Worker scarf-staging at https://scarf-staging.topless.workers.dev. The empty
-  // routes are the point: routes are inherited, so without them this environment would claim the
-  // scarf.fan custom domain for itself.
+  // Staging (#85): "Deploy staging" (.github/workflows/staging.yml) puts one branch, built from the
+  // fixtures, on the Worker scarf-staging at https://staging.scarf.fan. Routes are inherited, so this
+  // environment must name its own: left out, it would claim the scarf.fan custom domain for itself.
   "env": {
-    "staging": { "name": "scarf-staging", "routes": [], "workers_dev": true }
+    "staging": {
+      "name": "scarf-staging",
+      "routes": [{ "pattern": "staging.scarf.fan", "custom_domain": true }]
+    }
   }
 }

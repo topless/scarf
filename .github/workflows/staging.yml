@@ -1,17 +1,24 @@
 name: Deploy staging
 
-# #85, option B: puts any branch on the Worker scarf-staging at
-# https://scarf-staging.topless.workers.dev, by hand only (Actions tab, "Deploy staging", "Run
-# workflow", pick the branch). scarf.fan is never touched: env.staging in wrangler.jsonc sets no
-# routes, so the custom domain stays with the Worker "scarf" that "Build feeds" deploys.
+# Puts one branch on https://staging.scarf.fan (#85): add the "staging" label to its pull request, or
+# run this from the Actions tab for a branch without one. Nothing runs on a push. It never touches
+# scarf.fan: env.staging in wrangler.jsonc says why.
 on:
+  pull_request:
+    types: [labeled]
   workflow_dispatch:
 
 permissions:
   contents: read
 
+# A newer run cancels an older one, so staging shows the branch asked for last.
+concurrency:
+  group: staging
+  cancel-in-progress: true
+
 jobs:
   staging:
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'staging'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -25,7 +32,7 @@ jobs:
       # per run belongs to the daily build. Pages and feeds point at the staging address.
       - run: npm run build:fixtures
         env:
-          SITE_URL: https://scarf-staging.topless.workers.dev
+          SITE_URL: https://staging.scarf.fan
       # Workers reads dist/_headers and adds the header to every asset it serves.
       - name: Keep staging out of search engines
         run: |
