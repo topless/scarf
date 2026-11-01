@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { teams } from '../src/config.ts'
+import { parseEuroleagueGames } from '../src/euroleague.ts'
 import { withDetails, type Game } from '../src/game.ts'
 import { toIcs } from '../src/ics.ts'
 
@@ -298,6 +300,44 @@ test('removing the on-sale day, or having no ticket link, removes the extra even
   assert.deepEqual(uids([onSale]), ['UID:uefa-2047926@scarf', 'UID:uefa-2047926-tickets@scarf'])
   assert.deepEqual(uids([serbia]), ['UID:uefa-2047926@scarf'])
   assert.deepEqual(uids([{ ...onSale, tickets: undefined }]), ['UID:uefa-2047926@scarf'])
+})
+
+test("a club's feed is the club's: its name, its side, its page under the country and sport, EuroLeague's ids", () => {
+  const olympiacos = teams.find((team) => team.club?.slug === 'olympiacos')!
+  const fixture = readFileSync(new URL('./fixtures/euroleague-games.json', import.meta.url), 'utf8')
+  const games = parseEuroleagueGames(fixture, 'OLY').map((game) => withDetails(game, olympiacos.defaults))
+  const ics = toIcs(olympiacos, games, now)
+  const lines = icsLines(ics)
+  assert.ok(lines.includes('X-WR-CALNAME:Olympiacos basketball · scarf'))
+  assert.ok(lines.includes("X-WR-CALDESC:Every game of the Olympiacos men's basketball team: tip-off, venue, TV, tickets. Kept up to date by scarf."))
+  // The UID is EuroLeague's game id, so a game moved or retimed lands in place, in the alerts variant too.
+  const everyGameNew = Object.fromEntries(games.map((game) => [game.id, '2026-10-01']))
+  const uids = icsLines(toIcs(olympiacos, games, now, undefined, everyGameNew)).filter((line) => line.startsWith('UID:'))
+  assert.equal(uids.length, games.length * 2)
+  for (const uid of uids) assert.match(uid, /^UID:euroleague-E2026_\d+(-new)?@scarf$/)
+  const footer = 'Kept up to date by scarf · scarf.fan/greece/basketball/olympiacos'
+  assert.deepEqual(vevent(ics, 'euroleague-E2026_100@scarf'), [
+    'BEGIN:VEVENT',
+    'UID:euroleague-E2026_100@scarf',
+    'SEQUENCE:0',
+    'DTSTART:20261106T191500Z',
+    'DTEND:20261106T211500Z',
+    'SUMMARY:Olympiacos vs Crvena Zvezda',
+    'LOCATION:SUNEL Arena\\, Athens',
+    `DESCRIPTION:EuroLeague · Round 10\\nTip-off 21:15 in Athens\\nTV: Novasports (Greek TV)\\nTickets: ticketmaster.gr\\n\\n${footer}`,
+    'BEGIN:VALARM',
+    'ACTION:DISPLAY',
+    'TRIGGER:-PT1H',
+    'DESCRIPTION:Olympiacos vs Crvena Zvezda tips off in an hour · Novasports',
+    'END:VALARM',
+    'URL;VALUE=URI:https://www.ticketmaster.gr/osfpbc/',
+    'END:VEVENT',
+  ])
+  // Without a time or a ticket link: the placeholder waits for EuroLeague and links the club's page.
+  const placeholder = { ...games[0]!, kickoff: undefined, venue: undefined, city: undefined, tickets: undefined }
+  const event = vevent(toIcs(olympiacos, [placeholder], now), `${placeholder.id}@scarf`)
+  assert.ok(event.includes(`DESCRIPTION:${placeholder.competition}\\nVenue not announced\\nWe'll fill in the time and arena as soon as EuroLeague publishes them.\\n\\n${footer}`))
+  assert.ok(event.includes('URL;VALUE=URI:https://scarf.fan/greece/basketball/olympiacos/'))
 })
 
 test('every team gets a feed in its own name, colour and side', () => {

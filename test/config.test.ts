@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { existsSync } from 'node:fs'
 import { test } from 'node:test'
-import { feedPath, teams } from '../src/config.ts'
+import { COMPETITIONS, countryOf, feedPath, teams } from '../src/config.ts'
 import { flagFile } from '../src/flags.ts'
 import { manual } from '../src/manual.ts'
 
@@ -99,6 +99,21 @@ test('every team has its own frozen feed path, named after the team', () => {
   }
   // One feed per country and sport: two entries for one team would write the same files twice.
   assert.equal(new Set(teams.map(feedPath)).size, teams.length)
+})
+
+// A club's slug is the last segment of its frozen paths, /{country}/{sport}/{club}.ics and its page.
+test('every club has a path slug, its home, a competition of its sport and its country flag', () => {
+  const clubs = teams.flatMap((team) => (team.club ? [{ team, club: team.club }] : []))
+  assert.ok(clubs.length > 0)
+  for (const { team, club } of clubs) {
+    assert.match(club.slug, /^[a-z0-9]+(-[a-z0-9]+)*$/, team.name)
+    for (const fact of [club.name, club.city, club.ground]) assert.ok(fact.trim(), team.name)
+    assert.equal(COMPETITIONS[club.competition].sport, team.sport, team.name)
+    assert.equal(team.name, `${club.name} ${team.sport}`)
+    assert.equal(team.flag, countryOf(team).flag, team.name)
+  }
+  // Two clubs on one slug in one country and sport would write the same page and feeds twice.
+  assert.equal(new Set(clubs.map(({ team, club }) => `${team.country}/${team.sport}/${club.slug}`)).size, clubs.length)
 })
 
 test('every team has two or three stripe colours and a flag that flag-icons ships', () => {

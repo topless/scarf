@@ -2,10 +2,10 @@ import { readFile } from 'node:fs/promises'
 import { Resvg, initWasm } from '@resvg/resvg-wasm'
 import satori from 'satori'
 import { html } from 'satori-html'
-import { defaultSiteUrl, shareSize, siteName, teamPath, type Team } from './config.ts'
+import { countryOf, defaultSiteUrl, shareSize, siteName, teamPath, type Team } from './config.ts'
 import { readFlag } from './flags.ts'
 import type { Game } from './game.ts'
-import { countryName, esc, federation, federations, kickoffText, landingKind, markDrawing, shortDate, SPORTS, stripes, teamKind } from './page.ts'
+import { esc, federation, federations, kickoffText, landingKind, markDrawing, shortDate, SPORTS, stripes, teamKind } from './page.ts'
 
 // The 1200×630 share images behind the pages' og:image, ported from reference/share-card.html:
 // one per team, and a neutral one for the landing page in the same layout. A card is HTML with
@@ -41,8 +41,9 @@ export function renderLandingShareImage(teams: Team[], siteUrl?: string): Promis
 }
 
 // A team's card: its stripe across the top, its flag and kind over the headline, the large mark
-// in its colours, and its next game under a NEXT pill. The flag (an image URL) is optional so a card
-// can be laid out without one; the build always passes it, in the 4:3 box flag-icons draws for.
+// in its colours, and its next game under a NEXT pill; a club's is the same in its kit, under its
+// country's flag. The flag (an image URL) is optional so a card can be laid out without one; the
+// build always passes it, in the 4:3 box flag-icons draws for.
 export function renderShareCard(team: Team, next: Game | undefined, siteUrl?: string, flag?: string): string {
   const [band, ...rest] = team.colours
   return card(
@@ -86,19 +87,20 @@ export async function renderCountryShareImage(teams: Team[], siteUrl?: string): 
   return renderSharePng(renderCountryShareCard(teams, siteUrl, await flagImage(teams[0]!)))
 }
 
-// A country's card: a team's card in the country's stripes and flag, with its teams by name where
-// a team's card has its next game. teams are the country's, which share their colours (they come
-// from the flag).
+// A country's card: a team's card in the country's stripes and flag, with its national teams by
+// name where a team's card has its next game. countryTeams are the country's, clubs included; the
+// clubs, in their own kit, have cards of their own and stay off this one.
 export function renderCountryShareCard(countryTeams: Team[], siteUrl?: string, flag?: string): string {
   // Football first, as on the page's card, whatever order config.ts lists the teams in.
-  const teams = SPORTS.flatMap((sport) => countryTeams.filter((team) => team.sport === sport))
+  const teams = SPORTS.flatMap((sport) => countryTeams.filter((team) => !team.club && team.sport === sport))
   const [team] = teams as [Team]
-  const [band, ...rest] = team.colours
+  const country = countryOf(team)
+  const [band, ...rest] = country.colours
   return card(
     {
-      band: stripes(team.colours, 80), // 40 px per colour for two, as in the reference card
+      band: stripes(country.colours, 80), // 40 px per colour for two, as in the reference card
       eyebrow: `${flag ? flagTag(flag) : ''}<span>${esc(teams.length > 1 ? landingKind(teams) : teamKind(team))}</span>`,
-      headline: `${countryName(team)}, in your calendar.`,
+      headline: `${country.name}, in your calendar.`,
       label: 'TEAMS',
       labelColour: INK,
       line: teamsLine(teams),
@@ -113,12 +115,17 @@ export function renderCountryShareCard(countryTeams: Team[], siteUrl?: string, f
 // "Greece football · Greece basketball"
 export const teamsLine = (teams: Team[]): string => teams.map((team) => team.name).join(' · ')
 
-// "54 in football · 24 in basketball": the landing card's teams, too many to name on one card.
-export const sportsLine = (teams: Team[]): string =>
-  SPORTS.map((sport) => [sport, teams.filter((team) => team.sport === sport).length] as const)
-    .filter(([, count]) => count > 0)
-    .map(([sport, count]) => `${count} in ${sport}`)
-    .join(' · ')
+// "54 in football · 24 in basketball · 2 clubs": the landing card's national teams by sport, then
+// the clubs, too many to name on one card.
+export function sportsLine(teams: Team[]): string {
+  const clubs = teams.filter((team) => team.club).length
+  return [
+    ...SPORTS.map((sport) => [sport, teams.filter((team) => !team.club && team.sport === sport).length] as const)
+      .filter(([, count]) => count > 0)
+      .map(([sport, count]) => `${count} in ${sport}`),
+    ...(clubs ? [`${clubs} ${clubs === 1 ? 'club' : 'clubs'}`] : []),
+  ].join(' · ')
+}
 
 // "Netherlands vs Greece · Fri 13 Nov · 20:45 in Amsterdam", or "… · time not announced".
 export function nextGameLine(game?: Game): string {
