@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { teams } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
-import { renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderTeamPage, WORDS } from '../src/page.ts'
+import { renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderTeamPage, SHARE_SCRIPT, WORDS } from '../src/page.ts'
 
 const [football, basketball] = teams
 const site = 'https://example.github.io/scarf'
@@ -329,6 +329,62 @@ test('a team page names its country, linking its page, and switches sport only w
   const english = renderTeamPage({ team: england, games: [] }, teams, site)
   assert.match(english, /<a class="country-name" href="\.\.\/"><img class="flag" src="\.\.\/\.\.\/flags\/gb-eng\.svg" width="32" height="24" alt="">England<\/a>/)
   assert.doesNotMatch(english, /class="switch"/)
+})
+
+test('every team page ends its country bar with a Share button for its own address, only with a public address', () => {
+  for (const team of teams) {
+    const html = renderTeamPage({ team, games: [] }, teams, site)
+    const bar = html.slice(html.indexOf('<div class="country-bar">'), html.indexOf('<main>'))
+    const button = `<button class="btn-secondary share" type="button" data-share="${site}/${team.country}/${team.sport}/" data-text="${team.name} in your calendar · scarf" aria-live="polite" hidden><svg `
+    assert.ok(bar.includes(button), `${team.name}: ${bar}`)
+    assert.ok(bar.includes('aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4"/>'), `${team.name}: the share glyph, hidden from screen readers`)
+    assert.ok(bar.includes('</svg>Share</button>\n  </div>'), `${team.name}: Share ends the bar`)
+  }
+  assert.doesNotMatch(teamPage([timed]), /<button class="btn-secondary share"/)
+})
+
+// Runs SHARE_SCRIPT against a stub page and browser, presses Share and returns the button. touch
+// says whether the screen's main pointer is a finger, as on a phone.
+async function pressShare(navigator: object, touch = true) {
+  let press = () => {}
+  const button = {
+    dataset: { share: 'https://scarf.fan/greece/football/', text: 'Greece football in your calendar · scarf' },
+    hidden: true,
+    lastChild: { textContent: 'Share' }, // the word after the icon
+    addEventListener: (_: string, listener: () => void) => (press = listener),
+  }
+  const matchMedia = (query: string) => ({ matches: query === '(pointer: coarse)' && touch })
+  new Function('document', 'navigator', 'matchMedia', SHARE_SCRIPT)({ title: 'Greece football · scarf', querySelector: () => button }, navigator, matchMedia)
+  press()
+  await new Promise(setImmediate)
+  return button
+}
+
+test('Share opens the share sheet on a phone, and copies the address on a desktop or where there is no sheet', async () => {
+  const shared: object[] = []
+  const copied: string[] = []
+  const browser = {
+    share: async (data: object) => void shared.push(data),
+    clipboard: { writeText: async (text: string) => void copied.push(text) },
+  }
+  const phone = await pressShare(browser)
+  assert.deepEqual(shared, [{ title: 'Greece football · scarf', text: 'Greece football in your calendar · scarf', url: 'https://scarf.fan/greece/football/' }])
+  assert.deepEqual(copied, [])
+  assert.equal(phone.hidden, false)
+  // Safari and Chrome on a Mac have a share menu too; a desktop copies all the same.
+  const desktop = await pressShare(browser, false)
+  assert.equal(shared.length, 1)
+  assert.deepEqual(copied, ['https://scarf.fan/greece/football/'])
+  assert.equal(desktop.lastChild.textContent, 'Copied')
+  const noSheet = await pressShare({ clipboard: browser.clipboard })
+  assert.equal(copied.length, 2)
+  assert.equal(noSheet.lastChild.textContent, 'Copied')
+  // A fan who closes the share sheet sees no error and no change.
+  const closed = await pressShare({ share: async () => Promise.reject(new DOMException('', 'AbortError')) })
+  assert.equal(closed.lastChild.textContent, 'Share')
+  // A desktop without a clipboard cannot copy, so the button stays hidden.
+  assert.equal((await pressShare({ share: browser.share }, false)).hidden, true)
+  assert.equal((await pressShare({})).hidden, true)
 })
 
 test("the next-game card carries the sport's drawing, hidden from screen readers", () => {
