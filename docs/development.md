@@ -24,7 +24,7 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
    colours; a competition page has none;
 5. records the games it saw in `known-games.json` and the sources' answers in `source-answers/`, which the
    Actions job keeps in its cache between runs (not in git), so the next run can tell a newly announced game
-   from an old one, and a run on a push to `main` can reuse the day's answers instead of asking again.
+   from an old one, and a run on a push to `main` can reuse the last run's answers instead of asking again.
 
 If a source cannot be fetched or its format changed, the build fails and the last published files stay online.
 
@@ -64,7 +64,8 @@ is set in the workflow.
   API Tokens → Create Token, template "Edit Cloudflare Workers", limited to this account and the
   scarf.fan zone; then `gh secret set CLOUDFLARE_API_TOKEN --repo topless/scarf` and paste it.
 - **DNS** is at Cloudflare. `scarf.fan` is the Worker's custom domain (the `routes` entry in
-  wrangler.jsonc), so Cloudflare keeps its record and certificate. `www` is a proxied placeholder
+  wrangler.jsonc), so Cloudflare keeps its record and certificate. `staging.scarf.fan` is the custom
+  domain of the Worker `scarf-staging` the same way (`env.staging`). `www` is a proxied placeholder
   record (`AAAA 100::`) with a redirect rule that sends every request to `https://scarf.fan` with the
   same path. "Always Use HTTPS" is on, so a calendar that asks over `http://` ends on https.
 - **GitHub Pages** stays on, with the custom domain `scarf.fan` and its last deployment, only so the
@@ -96,7 +97,8 @@ npx wrangler dev
 
 then open http://localhost:8787/greece/football/. The fixture build reads the sources' answers saved in
 [test/fixtures/](../test/fixtures/), dated on the day they were saved so their games stay upcoming. It
-makes no request at all and leaves `known-games.json` and `source-answers/` alone.
+makes no request at all and leaves `known-games.json` and `source-answers/` alone. `npm run build:staging`
+builds the same way from the `source-answers/` an earlier `npm run build` left, whatever its age.
 
 To review the pages for drift before a page change ships, run `/ui-review main` in Claude Code, or
 by hand `node .claude/skills/ui-review/measure.ts --base main`. It builds from the fixtures, serves
@@ -106,6 +108,19 @@ measures what drifts (overflow, where the headline starts, red actions per scree
 page height, the Share button's room, each component against [docs/brand.md](brand.md)) and prints
 what changed since the base. The limits sit at the top of the script; the report's shape is in
 [.claude/skills/ui-review/SKILL.md](../.claude/skills/ui-review/SKILL.md). Needs Google Chrome.
+
+To put a branch on https://staging.scarf.fan, add the label `staging` to its pull request (#85). The
+"Deploy staging" workflow builds the branch as merged into main with production's data: the sources'
+answers and the known games the last daily build saved in its Actions cache, taken as they are, so it
+makes no source request (a source the branch adds, which production has no answer for, uses its
+fixture). It writes a `dist/_headers` file with `X-Robots-Tag: noindex` that keeps staging out of
+search engines, and deploys `dist/` to the Worker `scarf-staging`. Nothing deploys on a push: to put a
+newer commit on staging, remove the label and add it again. A pull request from a fork cannot be staged
+(GitHub gives it no secrets), nor one that conflicts with main until the conflict is resolved. A branch
+without a pull request goes the same way from the Actions tab (Deploy staging → Run workflow → pick the
+branch) once it contains the workflow, so merge main into a branch cut before it. A newer run cancels an
+older one, so staging shows the branch asked for last. Why the Worker cannot take scarf.fan:
+`env.staging` in [wrangler.jsonc](../wrangler.jsonc).
 
 ## Definition of done for a feed change
 
@@ -180,6 +195,9 @@ The health signals we have today, in the order to check them:
 
 - **Run status.** The Actions tab lists every run of "Build feeds" and "Check feeds" with its outcome,
   and a failed run is also an open `ops` issue.
+- **Source answers.** The log of a "Build feeds" run has one line per request to a source: its host, the
+  status and any `server`, `retry-after` or rate-limit header. When an answer is refused or unreadable,
+  the error quotes its first 200 characters, so a bot-challenge page reads as one.
 - **Freshness.** The log of a "Check feeds" run prints how many hours old each live feed is.
 - **Changes.** The page of each "Build feeds" run shows "What this build changed": the games added,
   changed (with the old and new value) and removed in each feed, compared with what scarf.fan served
@@ -199,8 +217,9 @@ docs/observability.md is the plan for counting subscribers, visitors and subscri
   run, and a manual one, make one UEFA request for all football teams together, national and club, one FIBA
   request per basketball competition, and one EuroLeague request per season code (`E2026` for the
   EuroLeague, `U2026` for the EuroCup), parsed for every club in it. A run on a push to `main` reuses the
-  answers the last run saved while they are less than a day old, and asks only for what they don't cover:
-  UEFA again for a new football team, FIBA for a new competition's page, EuroLeague for a new season code.
+  answers the last run saved, however old, and asks only for what they don't cover: UEFA again for a new
+  football team, FIBA for a new competition's page, EuroLeague for a new season code. Its run summary says
+  how old the reused answers are.
 - Calendar apps refresh subscribed feeds on their own schedule; Google Calendar can take a day. On a Mac,
   choose "Every day" for auto-refresh when subscribing; the default is reportedly weekly.
 - Subscribing in Google Calendar only works in a computer browser, not in the phone app.

@@ -9,8 +9,9 @@ identity, the brand line and the motto: docs/brand.md.
 ## Stack and commands
 
 - Node 22.18+, TypeScript. `npm install` · `npm test` · `npm run build:fixtures` (writes `dist/`
-  from the test fixtures and asks no source: the build to check a change with) · `npm run build`
-  (asks UEFA, FIBA and EuroLeague: the daily job's build, not a check).
+  from the test fixtures and asks no source: the build to check a change with) · `npm run build:staging`
+  (from the answers a daily build saved in `source-answers/`, no request: the staging deploy's build) ·
+  `npm run build` (asks UEFA, FIBA and EuroLeague: the daily job's build, not a check).
 - Sources: UEFA match API (football), FIBA games page (national basketball), EuroLeague Basketball API
   (basketball clubs). All undocumented; **one request per source per run**, never more: UEFA takes every
   team id in one call, a FIBA page is fetched once per competition and a EuroLeague season once per

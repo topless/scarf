@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { parseEuroleagueGames } from '../src/euroleague.ts'
 import { parseFibaGames } from '../src/fiba.ts'
+import { fetchText } from '../src/game.ts'
 import { fetchUefaMatches, parseUefaMatches } from '../src/uefa.ts'
 
 // Both fixtures are cut down from the answers of 2026-10-30 (#76), so every team has a game in them.
@@ -50,7 +51,33 @@ test('a changed UEFA format fails loudly', () => {
 test('an empty UEFA response fails loudly instead of emptying every football feed', async (t) => {
   // Stubbed: the test makes no request to UEFA.
   t.mock.method(globalThis, 'fetch', async () => new Response('[]'))
+  t.mock.method(console, 'log', () => {})
   await assert.rejects(fetchUefaMatches([49, 122], '2026-10-22'), /UEFA returned no matches at all for teamId=49,122/)
+})
+
+// The start of a bot-challenge page, as a source may answer it with a 200 instead of a refusal.
+const challenge = '<!DOCTYPE html>\n<html lang="en-US">\n  <head>\n    <title>Just a moment...</title>'
+
+test('UEFA answering a web page instead of JSON fails with the start of that page', async (t) => {
+  t.mock.method(globalThis, 'fetch', async () => new Response(challenge))
+  t.mock.method(console, 'log', () => {})
+  await assert.rejects(fetchUefaMatches([49], '2026-10-22'), /UEFA's answer is not JSON: it starts "<!DOCTYPE html> <html lang="en-US"> <head> <title>Just a moment\.\.\.<\/title>"/)
+})
+
+test('a refused request fails with its status, its retry-after and the start of its answer', async (t) => {
+  const answer = new Response('<html>\n  <body>Slow down</body>\n</html>', {
+    status: 429,
+    statusText: 'Too Many Requests',
+    headers: { 'Retry-After': '60', Server: 'cloudflare' },
+  })
+  t.mock.method(globalThis, 'fetch', async () => answer)
+  const log = t.mock.method(console, 'log', () => {})
+  await assert.rejects(
+    fetchText('https://match.uefa.com/v5/matches'),
+    /429 Too Many Requests for https:\/\/match\.uefa\.com\/v5\/matches · retry-after: 60 · the answer starts "<html> <body>Slow down<\/body> <\/html>"/,
+  )
+  // The step log's line: the headers worth knowing, without the content-type every answer has.
+  assert.deepEqual(log.mock.calls.map((call) => call.arguments), [['match.uefa.com answered 429 · retry-after: 60 · server: cloudflare']])
 })
 
 test('FIBA page yields only the requested team, with time and venue once announced', () => {
@@ -112,6 +139,10 @@ test('a FIBA team not known yet reads "opponent not announced", capitalised when
 test('a FIBA page without games for the team fails loudly instead of emptying the calendar', () => {
   assert.throws(() => parseFibaGames('<html><body>Just a moment...</body></html>', 'GRE'), /format changed/)
   assert.throws(() => parseFibaGames(fixture('fiba-games.html'), 'GRC'), /no games found for GRC/)
+})
+
+test('a FIBA page with no games quotes its start, so a bot challenge reads as one', () => {
+  assert.throws(() => parseFibaGames(challenge, 'GRE'), /no games found for GRE, and the page starts "<!DOCTYPE html> <html lang="en-US"> <head> <title>Just a moment\.\.\.<\/title>"/)
 })
 
 test("UEFA's Türkiye loses the stray dot over its i", () => {

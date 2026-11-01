@@ -9,6 +9,7 @@
   "scripts": {
     "build": "node src/build.ts",
     "build:fixtures": "node src/build.ts --fixtures",
+    "build:staging": "node src/build.ts --saved",
     "test": "tsc && node --test \"test/*.test.ts\""
   },
   "dependencies": {

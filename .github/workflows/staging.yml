@@ -1,0 +1,56 @@
+name: Deploy staging
+
+# Puts one branch on https://staging.scarf.fan (#85): add the "staging" label to its pull request, or
+# run this from the Actions tab for a branch without one. Nothing runs on a push. It never touches
+# scarf.fan: env.staging in wrangler.jsonc says why.
+on:
+  pull_request:
+    types: [labeled]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer run cancels an older one, so staging shows the branch asked for last.
+concurrency:
+  group: staging
+  cancel-in-progress: true
+
+jobs:
+  staging:
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'staging'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      # Production's data: the sources' answers and the known games the last "Build feeds" run saved
+      # in its Actions cache on main, which a run on any branch may restore. The build takes them as
+      # they are and asks UEFA and FIBA nothing; a source this branch adds, which production has no
+      # answer for, uses its test fixture. Pages and feeds point at the staging address.
+      - uses: actions/cache/restore@v6
+        with:
+          path: source-answers
+          key: staging-${{ github.run_id }}
+          restore-keys: source-answers-
+      - uses: actions/cache/restore@v6
+        with:
+          path: known-games.json
+          key: staging-${{ github.run_id }}
+          restore-keys: known-games-
+      - run: npm run build:staging
+        env:
+          SITE_URL: https://staging.scarf.fan
+      # Workers reads dist/_headers and adds the header to every asset it serves.
+      - name: Keep staging out of search engines
+        run: |
+          printf '/*\n  X-Robots-Tag: noindex\n' > dist/_headers
+      - name: Deploy to Cloudflare Workers (staging)
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          WRANGLER_SEND_METRICS: 'false'
+        run: npx --yes wrangler@4.151.0 deploy --env staging
