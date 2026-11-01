@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { alertsFeedPath, countrySharePath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, type Sport, type Team } from './config.ts'
+import { alertsFeedPath, COMPETITIONS, competitionPath, countrySharePath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, teamPath, type Competition, type Sport, type Team } from './config.ts'
 import { flagPath } from './flags.ts'
 import type { Game } from './game.ts'
 
@@ -118,7 +118,7 @@ ${footer()}`,
 }
 
 export function renderLanding(sections: Section[], siteUrl?: string): string {
-  const countries = byCountry(sections, ({ team }) => team)
+  const countries = byCountry(national(sections), ({ team }) => team)
   return page({
     root: '',
     title: `${siteName} · Your colours, in your calendar`,
@@ -148,7 +148,8 @@ ${footer()}`,
 
 // A country's page at /{country}/: its teams on the same card as on the landing, under the
 // country's stripes. Room for its clubs later, so the landing keeps one card per country.
-export function renderCountryPage(group: Section[], siteUrl?: string): string {
+export function renderCountryPage(all: Section[], siteUrl?: string): string {
+  const group = national(all)
   const { team } = group[0]!
   const name = esc(countryName(team))
   // "kickoff or tip-off", or only the words of the sports the country has a team in.
@@ -228,7 +229,7 @@ ${step(3, `<h3>A nudge an hour before the game</h3><p>The channel and the ticket
 ${FINDER}
     </div>
     <nav class="chips" aria-label="Countries">
-${byCountry(teams, (team) => team).map((group) => countryChip(group[0]!, '../', `../#${group[0]!.country}`)).join('\n')}
+${byCountry(teams.filter((team) => !team.club), (team) => team).map((group) => countryChip(group[0]!, '../', `../#${group[0]!.country}`)).join('\n')}
     </nav>
   </div>
 </section>
@@ -242,7 +243,7 @@ ${footer()}`,
 // so a clashing stripe, a missing flag or a missing sport mark shows here first. Unlisted and kept
 // out of search engines: it is a test page for us, not for fans.
 export function renderKit(all: Team[]): string {
-  const countries = byCountry(all.map((team): Section => ({ team, games: [] })), ({ team }) => team)
+  const countries = byCountry(all.filter((team) => !team.club).map((team): Section => ({ team, games: [] })), ({ team }) => team)
   const sport = (name: Sport) => {
     const { ball, surface, start, starts, ground } = WORDS[name]
     return `  <div class="card">
@@ -571,7 +572,7 @@ function teamChips(all: Team[], current: Team): string {
     return countryChip(team, '../../', `../../${team.country}/${team.sport}/`, team === current)
   }
   return `    <div class="chips">
-${byCountry(all, (team) => team).map(chip).join('\n')}
+${byCountry(all.filter((team) => !team.club), (team) => team).map(chip).join('\n')}
     </div>`
 }
 
@@ -614,7 +615,8 @@ function sportCell(sport: Sport, section?: Section, root = ''): string {
 
 const matchTitle = (game: Game) => `${esc(game.home)} vs ${esc(game.away)}`
 const place = (game: Game) => [game.venue, game.city].filter(Boolean).join(', ') || 'Venue not announced'
-export const federation = (team: Team) => team.source.kind.toUpperCase()
+const SOURCES = { uefa: 'UEFA', fiba: 'FIBA', euroleague: 'EuroLeague' } as const
+export const federation = (team: Team) => SOURCES[team.source.kind]
 // "UEFA and FIBA", "football, basketball and handball".
 const and = (items: string[]) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`)
 // "UEFA and FIBA": every source behind a list of teams, once each, in the teams' order.
@@ -699,4 +701,28 @@ export function esc(text: string): string {
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
+}
+
+// The national teams among a page's sections: the country cards and chips draw countries from those.
+// shortcut: clubs are left out of the cards, the switch and the chips until the pages work gives them their own.
+const national = (sections: Section[]) => sections.filter(({ team }) => !team.club)
+
+// A competition's page at /{sport}/{competition}/: this season's clubs, each linking to its own page.
+// shortcut: a bare list for now, the designed page (club cards, find field) lands with the pages work.
+export function renderCompetitionPage(competition: Competition, group: Section[], _all: Team[], siteUrl?: string): string {
+  const { name, season } = COMPETITIONS[competition]
+  return page({
+    root: '../../',
+    title: `${name} · ${siteName}`,
+    description: `Every ${name} club's games in your calendar, updated daily.`,
+    share: { url: siteUrl && `${siteUrl}/${competitionPath(competition)}/` },
+    body: `${header('../../', '')}
+<main>
+<section class="wrap hero"><div class="hero-text"><h1>${esc(name)}, club by club.</h1><p class="lede">${season} season.</p>
+<nav class="chips" aria-label="${esc(name)} clubs">
+${group.map(({ team }) => `<a class="country-chip" href="../../${teamPath(team)}/">${esc(team.club!.name)}</a>`).join('\n')}
+</nav></div></section>
+</main>
+${footer()}`,
+  })
 }

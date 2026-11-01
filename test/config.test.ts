@@ -87,12 +87,15 @@ test('every team has its own frozen feed path, named after the team', () => {
       ['sweden/basketball.ics', 'Sweden basketball'],
       ['turkiye/basketball.ics', 'Türkiye basketball'],
       ['ukraine/basketball.ics', 'Ukraine basketball'],
+      // Clubs: under the country and the sport, by the club's slug (src/clubs.ts).
+      ['greece/basketball/olympiacos.ics', 'Olympiacos basketball'],
+      ['greece/basketball/panathinaikos.ics', 'Panathinaikos basketball'],
     ],
   )
   for (const team of teams) {
     assert.match(team.country, /^[a-z]+(-[a-z]+)*$/, team.name)
     assert.match(team.sport, /^[a-z]+$/, team.name)
-    assert.match(team.side, /^\p{Lu}[\p{L} ]+ men's national (football|basketball) team$/u, team.name) // "Türkiye"
+    assert.match(team.side, /^\p{Lu}[\p{L} ]+ men's (national )?(football|basketball) team$/u, team.name) // "Türkiye", a club without "national"
   }
   // One feed per country and sport: two entries for one team would write the same files twice.
   assert.equal(new Set(teams.map(feedPath)).size, teams.length)
@@ -109,10 +112,12 @@ test('every team has two or three stripe colours and a flag that flag-icons ship
   }
 })
 
-// The landing card and the country page draw a country from its first team, so its teams agree.
-test("a country's teams share its name, stripes and flag", () => {
-  for (const team of teams) {
-    const first = teams.find((other) => other.country === team.country)!
+// The landing card and the country page draw a country from its first team, so its national teams
+// agree. A club keeps its own name and stripes under the country's flag.
+test("a country's national teams share its name, stripes and flag", () => {
+  const national = teams.filter((team) => !team.club)
+  for (const team of national) {
+    const first = national.find((other) => other.country === team.country)!
     assert.deepEqual([team.name.replace(/ \w+$/, ''), team.colours, team.flag], [first.name.replace(/ \w+$/, ''), first.colours, first.flag], team.name)
   }
 })
@@ -121,13 +126,18 @@ test('source ids and codes fit their source, each team its own', () => {
   for (const { source, name } of teams) {
     if (source.kind === 'uefa') {
       assert.ok(Number.isInteger(source.teamId) && source.teamId > 0, name)
-    } else {
+    } else if (source.kind === 'fiba') {
       assert.match(source.event, /^fiba-[a-z0-9-]+$/, name)
       assert.match(source.teamCode, /^[A-Z]{3}$/, name)
+    } else {
+      assert.match(source.season, /^[EU]\d{4}$/, name) // E: EuroLeague, U: EuroCup
+      assert.match(source.clubCode, /^[A-Z]{3}$/, name)
     }
   }
   // Two teams on one id would show the same games twice under two names.
-  const ids = teams.map(({ source }) => (source.kind === 'uefa' ? `uefa ${source.teamId}` : `${source.event} ${source.teamCode}`))
+  const ids = teams.map(({ source }) =>
+    source.kind === 'uefa' ? `uefa ${source.teamId}` : source.kind === 'fiba' ? `${source.event} ${source.teamCode}` : `${source.season} ${source.clubCode}`,
+  )
   assert.equal(new Set(ids).size, teams.length)
 })
 

@@ -3,14 +3,15 @@ import { setTimeout as pause } from 'node:timers/promises'
 import { pathToFileURL } from 'node:url'
 import { reusable, reusedNote, type SavedAnswers } from './answers.ts'
 import { feedChanges } from './changes.ts'
-import { alertsFeedPath, countrySharePath, feedPath, landingSharePath, sharePath, teams, type Team } from './config.ts'
+import { alertsFeedPath, COMPETITIONS, competitionPath, countrySharePath, feedPath, landingSharePath, sharePath, teamPath, teams, type Competition, type Team } from './config.ts'
+import { fetchEuroleagueGames, parseEuroleagueGames } from './euroleague.ts'
 import { fetchFibaPage, parseFibaGames } from './fiba.ts'
 import { flagFile, flagLicenseFile, flagPath } from './flags.ts'
 import { byStart, keptSince, withDetails, type Game } from './game.ts'
 import { toIcs } from './ics.ts'
 import { announced, recordSeen, type KnownGames } from './known-games.ts'
 import { manual } from './manual.ts'
-import { renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderTeamPage, type Section } from './page.ts'
+import { renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderTeamPage, type Section } from './page.ts'
 import { renderCountryShareImage, renderLandingShareImage, renderShareImage } from './share.ts'
 import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
 
@@ -20,10 +21,10 @@ import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
 // next to them the brand assets (stylesheets, icons) and the flags the teams use, copied out of
 // flag-icons with its licence.
 // Each country gets a page and a share image of its own too, listing its teams.
-// Requests stay minimal: UEFA answers for every football team in one call, and a FIBA page is
+// Requests stay minimal: UEFA answers for every football team in one call, a FIBA page is
 // fetched once per competition and shared by the teams playing in it (Greece and Spain are in
-// the same qualifiers); a build on a push to main reuses the answers an earlier build saved less
-// than a day ago. Any failure aborts the whole build, so the previously published files stay in place.
+// the same qualifiers), and a EuroLeague season is fetched once for every club in it; a build on
+// a push to main reuses the answers an earlier build saved less than a day ago. Any failure aborts the whole build, so the previously published files stay in place.
 // With --fixtures (npm run build:fixtures) it builds the same site from the sources' answers saved
 // in test/fixtures/ and makes no request at all: none to the sources, none to the live feeds.
 
@@ -83,8 +84,22 @@ for (const event of new Set(teams.flatMap(({ source }) => (source.kind === 'fiba
   fibaPages.set(event, await fetchFibaPage(event, savedPage))
 }
 
-const gamesOf = ({ source }: Team): Game[] =>
-  source.kind === 'uefa' ? parseUefaMatches(uefaMatches, source.teamId) : parseFibaGames(fibaPages.get(source.event)!, source.teamCode)
+// A EuroLeague season's games, which every club playing in it shares.
+const euroleagueSeasons = new Map<string, string>()
+for (const season of new Set(teams.flatMap(({ source }) => (source.kind === 'euroleague' ? [source.season] : [])))) {
+  euroleagueSeasons.set(season, await fetchEuroleagueGames(season, saved('euroleague-games.json', `euroleague-${season}.json`)))
+}
+
+function gamesOf({ source }: Team): Game[] {
+  switch (source.kind) {
+    case 'uefa':
+      return parseUefaMatches(uefaMatches, source.teamId)
+    case 'fiba':
+      return parseFibaGames(fibaPages.get(source.event)!, source.teamCode)
+    case 'euroleague':
+      return parseEuroleagueGames(euroleagueSeasons.get(source.season)!, source.clubCode)
+  }
+}
 
 // The feed fans have now, to tell what this build changes (src/changes.ts). Our own site, not a
 // source, so it does not count against the one-request-per-source rule.
@@ -104,10 +119,10 @@ for (const team of teams) {
     .map((game) => withDetails(game, team.defaults, manual[game.id]))
     .sort(byStart)
   const games = feed.filter((game) => game.date >= today)
-  const key = `${team.country}/${team.sport}`
+  const key = teamPath(team)
   const seen = recordSeen(known[key], games.map((game) => game.id), today)
   known[key] = seen.feed
-  await mkdir(`dist/${team.country}/${team.sport}`, { recursive: true })
+  await mkdir(`dist/${key}`, { recursive: true })
   const ics = toIcs(team, feed, now, siteUrl)
   await writeFile(`dist/${feedPath(team)}`, ics)
   await writeFile(`dist/${alertsFeedPath(team)}`, toIcs(team, feed, now, siteUrl, announced(seen.feed)))
@@ -123,13 +138,20 @@ for (const team of teams) {
 }
 for (const section of sections) {
   const { team, games } = section
-  await writeFile(`dist/${team.country}/${team.sport}/index.html`, renderTeamPage(section, teams, siteUrl))
+  await writeFile(`dist/${teamPath(team)}/index.html`, renderTeamPage(section, teams, siteUrl))
   await writeFile(`dist/${sharePath(team)}`, await renderShareImage(team, games[0], siteUrl))
 }
 for (const country of new Set(teams.map((team) => team.country))) {
   const group = sections.filter((section) => section.team.country === country)
   await writeFile(`dist/${country}/index.html`, renderCountryPage(group, siteUrl))
   await writeFile(`dist/${countrySharePath(group[0]!.team)}`, await renderCountryShareImage(group.map((section) => section.team), siteUrl))
+}
+// A competition's page at /{sport}/{competition}/ lists this season's clubs; no feed of its own.
+for (const competition of Object.keys(COMPETITIONS) as Competition[]) {
+  const group = sections.filter(({ team }) => team.club?.competition === competition)
+  if (group.length === 0) continue
+  await mkdir(`dist/${competitionPath(competition)}`, { recursive: true })
+  await writeFile(`dist/${competitionPath(competition)}/index.html`, renderCompetitionPage(competition, group, teams, siteUrl))
 }
 await writeFile('dist/index.html', renderLanding(sections, siteUrl))
 await writeFile(`dist/${landingSharePath}`, await renderLandingShareImage(teams, siteUrl))
@@ -146,9 +168,11 @@ await cp(flagLicenseFile(), 'dist/flags/LICENSE')
 // SITE_URL, so nothing to compare with and no summary; nor has a fixture build, whatever its SITE_URL.
 if (siteUrl && !fixtures) {
   const fibaAnswers = [...fibaPages.keys()].map((event) => answers[`${event}.html`])
+  const euroleagueAnswers = [...euroleagueSeasons.keys()].map((season) => answers[`euroleague-${season}.json`])
   const sources = [
     uefaTeamIds.length && `UEFA answered one request for ${uefaTeamIds.length} football teams with ${uefaMatches.length} matches${reusedNote([answers['uefa.json']], now)}`,
     fibaPages.size && `FIBA answered ${fibaPages.size} competition ${fibaPages.size === 1 ? 'page' : 'pages'}${reusedNote(fibaAnswers, now)}`,
+    euroleagueSeasons.size && `EuroLeague answered ${euroleagueSeasons.size} season ${euroleagueSeasons.size === 1 ? 'schedule' : 'schedules'}${reusedNote(euroleagueAnswers, now)}`,
   ].filter(Boolean)
   const counts = sections.map(({ team, games }) => `${team.name} ${games.length}`).join(' · ')
   const report = [
@@ -169,5 +193,6 @@ if (!fixtures) {
   await mkdir(ANSWERS, { recursive: true })
   if (uefaTeamIds.length) await writeFile(`${ANSWERS}/uefa.json`, JSON.stringify(uefaMatches))
   for (const [event, page] of fibaPages) await writeFile(`${ANSWERS}/${event}.html`, page)
+  for (const [season, json] of euroleagueSeasons) await writeFile(`${ANSWERS}/euroleague-${season}.json`, json)
   await writeFile(`${ANSWERS}/index.json`, JSON.stringify(answers, null, 2) + '\n')
 }

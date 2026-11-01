@@ -1,0 +1,2669 @@
+{
+  "data": [
+    {
+      "identifier": "E2026_380",
+      "gameCode": 380,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 38",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2027-04-16T21:15:00",
+      "utcDate": "2027-04-16T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAM",
+          "name": "Valencia Basket",
+          "abbreviatedName": "Valencia",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASF6",
+        "name": "PEACE AND FRIENDSHIP STADIUM",
+        "address": "Ethnarchou Makariou Av., Piraeus"
+      }
+    },
+    {
+      "identifier": "E2026_376",
+      "gameCode": 376,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 38",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2027-04-15T21:15:00",
+      "utcDate": "2027-04-15T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MAD",
+          "name": "Real Madrid",
+          "abbreviatedName": "Real Madrid",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_370",
+      "gameCode": 370,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 37",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2027-04-09T21:15:00",
+      "utcDate": "2027-04-09T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ZAL",
+          "name": "Zalgiris Kaunas",
+          "abbreviatedName": "Zalgiris",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASF6",
+        "name": "PEACE AND FRIENDSHIP STADIUM",
+        "address": "Ethnarchou Makariou Av., Piraeus"
+      }
+    },
+    {
+      "identifier": "E2026_367",
+      "gameCode": 367,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 37",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2027-04-08T21:15:00",
+      "utcDate": "2027-04-08T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "VIR",
+          "name": "Virtus Bologna",
+          "abbreviatedName": "Virtus Bologna",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_352",
+      "gameCode": 352,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 36",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-04-06T20:30:00",
+      "utcDate": "2027-04-06T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "RED",
+          "name": "Crvena Zvezda Meridianbet Belgrade",
+          "abbreviatedName": "Crvena Zvezda",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ATM8",
+        "name": "BELGRADE ARENA",
+        "address": "Bulevar Arsenija Carnojevica 58, 11070 Belgrade - Serbia"
+      }
+    },
+    {
+      "identifier": "E2026_356",
+      "gameCode": 356,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 36",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2027-04-06T20:45:00",
+      "utcDate": "2027-04-06T17:45:00Z",
+      "local": {
+        "club": {
+          "code": "ULK",
+          "name": "Fenerbahce Tarfin Istanbul",
+          "abbreviatedName": "Fenerbahce",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AMY",
+        "name": "ULKER SPORTS AND EVENT HALL",
+        "address": "Barbaros Mah. Ihlamur Sok. Batı Ataşehir, 34764 Istanbul, Turkiye "
+      }
+    },
+    {
+      "identifier": "E2026_349",
+      "gameCode": 349,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 35",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-04-02T20:30:00",
+      "utcDate": "2027-04-02T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BAR",
+          "name": "FC Barcelona",
+          "abbreviatedName": "FC Barcelona",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AMH",
+        "name": "PALAU BLAUGRANA",
+        "address": "Aristides Maillol Av S/N, 08028 Barcelona"
+      }
+    },
+    {
+      "identifier": "E2026_343",
+      "gameCode": 343,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 35",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2027-03-31T20:30:00",
+      "utcDate": "2027-03-31T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "IST",
+          "name": "Anadolu Efes Istanbul",
+          "abbreviatedName": "Anadolu Efes",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVG2",
+        "name": "TURKCELL BASKETBALL DEVELOPMENT CENTER",
+        "address": "Kazliçesme Mah. 10. Yil Caddesi No: 2/1 Zeytinburnu / Turkiye"
+      }
+    },
+    {
+      "identifier": "E2026_340",
+      "gameCode": 340,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 34",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-03-26T21:15:00",
+      "utcDate": "2027-03-26T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "VIR",
+          "name": "Virtus Bologna",
+          "abbreviatedName": "Virtus Bologna",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASF6",
+        "name": "PEACE AND FRIENDSHIP STADIUM",
+        "address": "Ethnarchou Makariou Av., Piraeus"
+      }
+    },
+    {
+      "identifier": "E2026_334",
+      "gameCode": 334,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 34",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-03-25T21:15:00",
+      "utcDate": "2027-03-25T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAR",
+          "name": "Partizan Mozzart Bet Belgrade",
+          "abbreviatedName": "Partizan",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_330",
+      "gameCode": 330,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 33",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-03-24T21:15:00",
+      "utcDate": "2027-03-24T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BAR",
+          "name": "FC Barcelona",
+          "abbreviatedName": "FC Barcelona",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASF6",
+        "name": "PEACE AND FRIENDSHIP STADIUM",
+        "address": "Ethnarchou Makariou Av., Piraeus"
+      }
+    },
+    {
+      "identifier": "E2026_323",
+      "gameCode": 323,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 33",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-03-23T20:00:00",
+      "utcDate": "2027-03-23T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "ASV",
+          "name": "LDLC ASVEL Villeurbanne",
+          "abbreviatedName": "LDLC ASVEL",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUZ1",
+        "name": "LDLC ARENA",
+        "address": "Avenue Simone Veil 5, 69150 Décines-Charpieu - France"
+      }
+    },
+    {
+      "identifier": "E2026_317",
+      "gameCode": 317,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 32",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-03-19T20:00:00",
+      "utcDate": "2027-03-19T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "RED",
+          "name": "Crvena Zvezda Meridianbet Belgrade",
+          "abbreviatedName": "Crvena Zvezda",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ATM8",
+        "name": "BELGRADE ARENA",
+        "address": "Bulevar Arsenija Carnojevica 58, 11070 Belgrade - Serbia"
+      }
+    },
+    {
+      "identifier": "E2026_315",
+      "gameCode": 315,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 32",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-03-18T21:15:00",
+      "utcDate": "2027-03-18T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ZAL",
+          "name": "Zalgiris Kaunas",
+          "abbreviatedName": "Zalgiris",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_310",
+      "gameCode": 310,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 31",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-03-12T21:15:00",
+      "utcDate": "2027-03-12T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BES",
+          "name": "Besiktas Istanbul",
+          "abbreviatedName": "Besiktas",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASF6",
+        "name": "PEACE AND FRIENDSHIP STADIUM",
+        "address": "Ethnarchou Makariou Av., Piraeus"
+      }
+    },
+    {
+      "identifier": "E2026_304",
+      "gameCode": 304,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 31",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-03-11T20:45:00",
+      "utcDate": "2027-03-11T19:45:00Z",
+      "local": {
+        "club": {
+          "code": "PRS",
+          "name": "Paris Basketball",
+          "abbreviatedName": "Paris",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVB11",
+        "name": "ADIDAS ARENA",
+        "address": "56 Boulevard Ney, 75018 Paris, France"
+      }
+    },
+    {
+      "identifier": "E2026_300",
+      "gameCode": 300,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 30",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-03-10T20:30:00",
+      "utcDate": "2027-03-10T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "MIL",
+          "name": "Armani Olimpia Milan",
+          "abbreviatedName": "Milan",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASX8",
+        "name": "UNIPOL FORUM",
+        "address": "Via G. Di Vittorio 6, 20090 Assago"
+      }
+    },
+    {
+      "identifier": "E2026_294",
+      "gameCode": 294,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 30",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-03-09T20:30:00",
+      "utcDate": "2027-03-09T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "BAS",
+          "name": "Kosner Baskonia Vitoria-Gasteiz",
+          "abbreviatedName": "Baskonia",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUC",
+        "name": "BUESA ARENA",
+        "address": "Ctra.  Zurbano s/n, 01013 Vitoria"
+      }
+    },
+    {
+      "identifier": "E2026_287",
+      "gameCode": 287,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 29",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 4,
+      "localDate": "2027-03-05T20:00:00",
+      "utcDate": "2027-03-05T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "DUB",
+          "name": "Dubai Basketball",
+          "abbreviatedName": "Dubai",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ACA4",
+        "name": "COCA-COLA ARENA",
+        "address": "Al Wasl - سٹی واک - Dubai - United Arab Emirates"
+      }
+    },
+    {
+      "identifier": "E2026_285",
+      "gameCode": 285,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 29",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-03-04T21:15:00",
+      "utcDate": "2027-03-04T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BES",
+          "name": "Besiktas Istanbul",
+          "abbreviatedName": "Besiktas",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_280",
+      "gameCode": 280,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 28",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-02-12T21:15:00",
+      "utcDate": "2027-02-12T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASF6",
+        "name": "PEACE AND FRIENDSHIP STADIUM",
+        "address": "Ethnarchou Makariou Av., Piraeus"
+      }
+    },
+    {
+      "identifier": "E2026_267",
+      "gameCode": 267,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 27",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-02-05T20:30:00",
+      "utcDate": "2027-02-05T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "MIL",
+          "name": "Armani Olimpia Milan",
+          "abbreviatedName": "Milan",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASX8",
+        "name": "UNIPOL FORUM",
+        "address": "Via G. Di Vittorio 6, 20090 Assago"
+      }
+    },
+    {
+      "identifier": "E2026_270",
+      "gameCode": 270,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 27",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-02-05T20:30:00",
+      "utcDate": "2027-02-05T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MUN",
+          "name": "FC Bayern Munich",
+          "abbreviatedName": "Bayern Munich",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASF6",
+        "name": "PEACE AND FRIENDSHIP STADIUM",
+        "address": "Ethnarchou Makariou Av., Piraeus"
+      }
+    },
+    {
+      "identifier": "E2026_257",
+      "gameCode": 257,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 26",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-02-03T20:00:00",
+      "utcDate": "2027-02-03T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "HTA",
+          "name": "Hapoel IBI Tel Aviv",
+          "abbreviatedName": "Hapoel TLV",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVK1",
+        "name": "ARENA 8888 SOFIA",
+        "address": ""
+      }
+    },
+    {
+      "identifier": "E2026_256",
+      "gameCode": 256,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 26",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-02-02T21:15:00",
+      "utcDate": "2027-02-02T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "DUB",
+          "name": "Dubai Basketball",
+          "abbreviatedName": "Dubai",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_250",
+      "gameCode": 250,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 25",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-29T21:15:00",
+      "utcDate": "2027-01-29T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "IST",
+          "name": "Anadolu Efes Istanbul",
+          "abbreviatedName": "Anadolu Efes",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_245",
+      "gameCode": 245,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 25",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-28T21:15:00",
+      "utcDate": "2027-01-28T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TEL",
+          "name": "Maccabi Rapyd Tel Aviv",
+          "abbreviatedName": "Maccabi",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASF6",
+        "name": "PEACE AND FRIENDSHIP STADIUM",
+        "address": "Ethnarchou Makariou Av., Piraeus"
+      }
+    },
+    {
+      "identifier": "E2026_235",
+      "gameCode": 235,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 24",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-21T20:45:00",
+      "utcDate": "2027-01-21T19:45:00Z",
+      "local": {
+        "club": {
+          "code": "PAR",
+          "name": "Partizan Mozzart Bet Belgrade",
+          "abbreviatedName": "Partizan",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ATM8",
+        "name": "BELGRADE ARENA",
+        "address": "Bulevar Arsenija Carnojevica 58, 11070 Belgrade - Serbia"
+      }
+    },
+    {
+      "identifier": "E2026_231",
+      "gameCode": 231,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 24",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-21T19:00:00",
+      "utcDate": "2027-01-21T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "HTA",
+          "name": "Hapoel IBI Tel Aviv",
+          "abbreviatedName": "Hapoel TLV",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVK1",
+        "name": "ARENA 8888 SOFIA",
+        "address": ""
+      }
+    },
+    {
+      "identifier": "E2026_230",
+      "gameCode": 230,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 23",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-15T21:15:00",
+      "utcDate": "2027-01-15T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PRS",
+          "name": "Paris Basketball",
+          "abbreviatedName": "Paris",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASF6",
+        "name": "PEACE AND FRIENDSHIP STADIUM",
+        "address": "Ethnarchou Makariou Av., Piraeus"
+      }
+    },
+    {
+      "identifier": "E2026_225",
+      "gameCode": 225,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 23",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-14T21:15:00",
+      "utcDate": "2027-01-14T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MUN",
+          "name": "FC Bayern Munich",
+          "abbreviatedName": "Bayern Munich",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_220",
+      "gameCode": 220,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 22",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-13T21:15:00",
+      "utcDate": "2027-01-13T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BAS",
+          "name": "Kosner Baskonia Vitoria-Gasteiz",
+          "abbreviatedName": "Baskonia",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ASF6",
+        "name": "PEACE AND FRIENDSHIP STADIUM",
+        "address": "Ethnarchou Makariou Av., Piraeus"
+      }
+    },
+    {
+      "identifier": "E2026_218",
+      "gameCode": 218,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 22",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-12T21:15:00",
+      "utcDate": "2027-01-12T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAM",
+          "name": "Valencia Basket",
+          "abbreviatedName": "Valencia",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_210",
+      "gameCode": 210,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 21",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-07T20:45:00",
+      "utcDate": "2027-01-07T19:45:00Z",
+      "local": {
+        "club": {
+          "code": "MAD",
+          "name": "Real Madrid",
+          "abbreviatedName": "Real Madrid",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ATI7",
+        "name": "MOVISTAR ARENA",
+        "address": "Avenida de Felipe II 1, 28009, Madrid"
+      }
+    },
+    {
+      "identifier": "E2026_203",
+      "gameCode": 203,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 21",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-07T18:00:00",
+      "utcDate": "2027-01-07T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "TEL",
+          "name": "Maccabi Rapyd Tel Aviv",
+          "abbreviatedName": "Maccabi",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUF4",
+        "name": "ALEKSANDAR NIKOLIC HALL",
+        "address": "Carlija Caplina 39, Belgrade 11000, Serbia"
+      }
+    },
+    {
+      "identifier": "E2026_196",
+      "gameCode": 196,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 20",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-30T20:00:00",
+      "utcDate": "2026-12-30T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "ASV",
+          "name": "LDLC ASVEL Villeurbanne",
+          "abbreviatedName": "LDLC ASVEL",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUZ1",
+        "name": "LDLC ARENA",
+        "address": "Avenue Simone Veil 5, 69150 Décines-Charpieu - France"
+      }
+    },
+    {
+      "identifier": "E2026_193",
+      "gameCode": 193,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 20",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-12-29T20:45:00",
+      "utcDate": "2026-12-29T17:45:00Z",
+      "local": {
+        "club": {
+          "code": "ULK",
+          "name": "Fenerbahce Tarfin Istanbul",
+          "abbreviatedName": "Fenerbahce",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AMY",
+        "name": "ULKER SPORTS AND EVENT HALL",
+        "address": "Barbaros Mah. Ihlamur Sok. Batı Ataşehir, 34764 Istanbul, Turkiye "
+      }
+    },
+    {
+      "identifier": "E2026_187",
+      "gameCode": 187,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 19",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 4,
+      "localDate": "2026-12-23T20:00:00",
+      "utcDate": "2026-12-23T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "DUB",
+          "name": "Dubai Basketball",
+          "abbreviatedName": "Dubai",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ACA4",
+        "name": "COCA-COLA ARENA",
+        "address": "Al Wasl - سٹی واک - Dubai - United Arab Emirates"
+      }
+    },
+    {
+      "identifier": "E2026_184",
+      "gameCode": 184,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 19",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-22T20:00:00",
+      "utcDate": "2026-12-22T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "MUN",
+          "name": "FC Bayern Munich",
+          "abbreviatedName": "Bayern Munich",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVE1",
+        "name": "SAP GARDEN",
+        "address": "Toni-Merkens-Weg 4, 80809 Munich - Germany"
+      }
+    },
+    {
+      "identifier": "E2026_179",
+      "gameCode": 179,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 18",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-18T20:00:00",
+      "utcDate": "2026-12-18T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "MUN",
+          "name": "FC Bayern Munich",
+          "abbreviatedName": "Bayern Munich",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVE1",
+        "name": "SAP GARDEN",
+        "address": "Toni-Merkens-Weg 4, 80809 Munich - Germany"
+      }
+    },
+    {
+      "identifier": "E2026_180",
+      "gameCode": 180,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 18",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-18T20:30:00",
+      "utcDate": "2026-12-18T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAR",
+          "name": "Partizan Mozzart Bet Belgrade",
+          "abbreviatedName": "Partizan",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVT1",
+        "name": "SUNEL ARENA",
+        "address": "Konstantinoupoleos 59, Ano Liosia, 13342 Athens, Greece"
+      }
+    },
+    {
+      "identifier": "E2026_170",
+      "gameCode": 170,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 17",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-16T21:15:00",
+      "utcDate": "2026-12-16T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RED",
+          "name": "Crvena Zvezda Meridianbet Belgrade",
+          "abbreviatedName": "Crvena Zvezda",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_165",
+      "gameCode": 165,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 17",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-15T20:45:00",
+      "utcDate": "2026-12-15T19:45:00Z",
+      "local": {
+        "club": {
+          "code": "PRS",
+          "name": "Paris Basketball",
+          "abbreviatedName": "Paris",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVB11",
+        "name": "ADIDAS ARENA",
+        "address": "56 Boulevard Ney, 75018 Paris, France"
+      }
+    },
+    {
+      "identifier": "E2026_160",
+      "gameCode": 160,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 16",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-11T21:15:00",
+      "utcDate": "2026-12-11T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_150",
+      "gameCode": 150,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 15",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-04T21:15:00",
+      "utcDate": "2026-12-04T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ASV",
+          "name": "LDLC ASVEL Villeurbanne",
+          "abbreviatedName": "LDLC ASVEL",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVT1",
+        "name": "SUNEL ARENA",
+        "address": "Konstantinoupoleos 59, Ano Liosia, 13342 Athens, Greece"
+      }
+    },
+    {
+      "identifier": "E2026_146",
+      "gameCode": 146,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 15",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-12-04T20:00:00",
+      "utcDate": "2026-12-04T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BES",
+          "name": "Besiktas Istanbul",
+          "abbreviatedName": "Besiktas",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVG2",
+        "name": "TURKCELL BASKETBALL DEVELOPMENT CENTER",
+        "address": "Kazliçesme Mah. 10. Yil Caddesi No: 2/1 Zeytinburnu / Turkiye"
+      }
+    },
+    {
+      "identifier": "E2026_140",
+      "gameCode": 140,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 14",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-25T21:15:00",
+      "utcDate": "2026-11-25T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "HTA",
+          "name": "Hapoel IBI Tel Aviv",
+          "abbreviatedName": "Hapoel TLV",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVT1",
+        "name": "SUNEL ARENA",
+        "address": "Konstantinoupoleos 59, Ano Liosia, 13342 Athens, Greece"
+      }
+    },
+    {
+      "identifier": "E2026_135",
+      "gameCode": 135,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 14",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-24T20:30:00",
+      "utcDate": "2026-11-24T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "PAM",
+          "name": "Valencia Basket",
+          "abbreviatedName": "Valencia",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVJ1",
+        "name": "ROIG ARENA",
+        "address": "C/ del Bomber Ramon Duart, 12, Quatre Carreres, 46013 Valencia "
+      }
+    },
+    {
+      "identifier": "E2026_130",
+      "gameCode": 130,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 13",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-20T21:15:00",
+      "utcDate": "2026-11-20T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MAD",
+          "name": "Real Madrid",
+          "abbreviatedName": "Real Madrid",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVT1",
+        "name": "SUNEL ARENA",
+        "address": "Konstantinoupoleos 59, Ano Liosia, 13342 Athens, Greece"
+      }
+    },
+    {
+      "identifier": "E2026_121",
+      "gameCode": 121,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 13",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-19T20:00:00",
+      "utcDate": "2026-11-19T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "ZAL",
+          "name": "Zalgiris Kaunas",
+          "abbreviatedName": "Zalgiris",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ATJ",
+        "name": "ZALGIRIO ARENA",
+        "address": "Karaliaus Mindaugo Av. 50, 44287 Kaunas"
+      }
+    },
+    {
+      "identifier": "E2026_119",
+      "gameCode": 119,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 12",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-17T21:00:00",
+      "utcDate": "2026-11-17T20:00:00Z",
+      "local": {
+        "club": {
+          "code": "VIR",
+          "name": "Virtus Bologna",
+          "abbreviatedName": "Virtus Bologna",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AIG",
+        "name": "PALADOZZA",
+        "address": "Via Nannetti 1, 40122 Bologna - Italy"
+      }
+    },
+    {
+      "identifier": "E2026_113",
+      "gameCode": 113,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 12",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-17T18:00:00",
+      "utcDate": "2026-11-17T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "TEL",
+          "name": "Maccabi Rapyd Tel Aviv",
+          "abbreviatedName": "Maccabi",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUF4",
+        "name": "ALEKSANDAR NIKOLIC HALL",
+        "address": "Carlija Caplina 39, Belgrade 11000, Serbia"
+      }
+    },
+    {
+      "identifier": "E2026_110",
+      "gameCode": 110,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 11",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-13T21:15:00",
+      "utcDate": "2026-11-13T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BAR",
+          "name": "FC Barcelona",
+          "abbreviatedName": "FC Barcelona",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_107",
+      "gameCode": 107,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 11",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-12T21:15:00",
+      "utcDate": "2026-11-12T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "DUB",
+          "name": "Dubai Basketball",
+          "abbreviatedName": "Dubai",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVT1",
+        "name": "SUNEL ARENA",
+        "address": "Konstantinoupoleos 59, Ano Liosia, 13342 Athens, Greece"
+      }
+    },
+    {
+      "identifier": "E2026_100",
+      "gameCode": 100,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 10",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-06T21:15:00",
+      "utcDate": "2026-11-06T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RED",
+          "name": "Crvena Zvezda Meridianbet Belgrade",
+          "abbreviatedName": "Crvena Zvezda",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVT1",
+        "name": "SUNEL ARENA",
+        "address": "Konstantinoupoleos 59, Ano Liosia, 13342 Athens, Greece"
+      }
+    },
+    {
+      "identifier": "E2026_91",
+      "gameCode": 91,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 10",
+      "played": false,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-04T20:45:00",
+      "utcDate": "2026-11-04T19:45:00Z",
+      "local": {
+        "club": {
+          "code": "MAD",
+          "name": "Real Madrid",
+          "abbreviatedName": "Real Madrid",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ATI7",
+        "name": "MOVISTAR ARENA",
+        "address": "Avenida de Felipe II 1, 28009, Madrid"
+      }
+    },
+    {
+      "identifier": "E2026_90",
+      "gameCode": 90,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 9",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-30T21:15:00",
+      "utcDate": "2026-10-30T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MIL",
+          "name": "Armani Olimpia Milan",
+          "abbreviatedName": "Milan",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVT1",
+        "name": "SUNEL ARENA",
+        "address": "Konstantinoupoleos 59, Ano Liosia, 13342 Athens, Greece"
+      }
+    },
+    {
+      "identifier": "E2026_88",
+      "gameCode": 88,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 9",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-30T20:30:00",
+      "utcDate": "2026-10-30T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "IST",
+          "name": "Anadolu Efes Istanbul",
+          "abbreviatedName": "Anadolu Efes",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVG2",
+        "name": "TURKCELL BASKETBALL DEVELOPMENT CENTER",
+        "address": "Kazliçesme Mah. 10. Yil Caddesi No: 2/1 Zeytinburnu / Turkiye"
+      }
+    },
+    {
+      "identifier": "E2026_79",
+      "gameCode": 79,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 8",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-28T20:30:00",
+      "utcDate": "2026-10-28T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "BES",
+          "name": "Besiktas Istanbul",
+          "abbreviatedName": "Besiktas",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVG2",
+        "name": "TURKCELL BASKETBALL DEVELOPMENT CENTER",
+        "address": "Kazliçesme Mah. 10. Yil Caddesi No: 2/1 Zeytinburnu / Turkiye"
+      }
+    },
+    {
+      "identifier": "E2026_76",
+      "gameCode": 76,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 8",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-27T21:15:00",
+      "utcDate": "2026-10-27T19:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MIL",
+          "name": "Armani Olimpia Milan",
+          "abbreviatedName": "Milan",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_70",
+      "gameCode": 70,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 7",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-23T21:15:00",
+      "utcDate": "2026-10-23T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ULK",
+          "name": "Fenerbahce Tarfin Istanbul",
+          "abbreviatedName": "Fenerbahce",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVT1",
+        "name": "SUNEL ARENA",
+        "address": "Konstantinoupoleos 59, Ano Liosia, 13342 Athens, Greece"
+      }
+    },
+    {
+      "identifier": "E2026_67",
+      "gameCode": 67,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 7",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-22T21:15:00",
+      "utcDate": "2026-10-22T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BAS",
+          "name": "Kosner Baskonia Vitoria-Gasteiz",
+          "abbreviatedName": "Baskonia",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_58",
+      "gameCode": 58,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 6",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-16T20:30:00",
+      "utcDate": "2026-10-16T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BAR",
+          "name": "FC Barcelona",
+          "abbreviatedName": "FC Barcelona",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AMH",
+        "name": "PALAU BLAUGRANA",
+        "address": "Aristides Maillol Av S/N, 08028 Barcelona"
+      }
+    },
+    {
+      "identifier": "E2026_60",
+      "gameCode": 60,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 6",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-16T21:15:00",
+      "utcDate": "2026-10-16T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "HTA",
+          "name": "Hapoel IBI Tel Aviv",
+          "abbreviatedName": "Hapoel TLV",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_45",
+      "gameCode": 45,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 5",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-13T21:00:00",
+      "utcDate": "2026-10-13T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "PAM",
+          "name": "Valencia Basket",
+          "abbreviatedName": "Valencia",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVJ1",
+        "name": "ROIG ARENA",
+        "address": "C/ del Bomber Ramon Duart, 12, Quatre Carreres, 46013 Valencia "
+      }
+    },
+    {
+      "identifier": "E2026_47",
+      "gameCode": 47,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 5",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-13T20:30:00",
+      "utcDate": "2026-10-13T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "PAR",
+          "name": "Partizan Mozzart Bet Belgrade",
+          "abbreviatedName": "Partizan",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ATM8",
+        "name": "BELGRADE ARENA",
+        "address": "Bulevar Arsenija Carnojevica 58, 11070 Belgrade - Serbia"
+      }
+    },
+    {
+      "identifier": "E2026_40",
+      "gameCode": 40,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 4",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-09T21:15:00",
+      "utcDate": "2026-10-09T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "IST",
+          "name": "Anadolu Efes Istanbul",
+          "abbreviatedName": "Anadolu Efes",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AVT1",
+        "name": "SUNEL ARENA",
+        "address": "Konstantinoupoleos 59, Ano Liosia, 13342 Athens, Greece"
+      }
+    },
+    {
+      "identifier": "E2026_36",
+      "gameCode": 36,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 4",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-08T21:15:00",
+      "utcDate": "2026-10-08T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ULK",
+          "name": "Fenerbahce Tarfin Istanbul",
+          "abbreviatedName": "Fenerbahce",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_30",
+      "gameCode": 30,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 3",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-02T21:15:00",
+      "utcDate": "2026-10-02T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TEL",
+          "name": "Maccabi Rapyd Tel Aviv",
+          "abbreviatedName": "Maccabi",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_23",
+      "gameCode": 23,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 3",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-01T20:30:00",
+      "utcDate": "2026-10-01T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "VIR",
+          "name": "Virtus Bologna",
+          "abbreviatedName": "Virtus Bologna",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AIG",
+        "name": "PALADOZZA",
+        "address": "Via Nannetti 1, 40122 Bologna - Italy"
+      }
+    },
+    {
+      "identifier": "E2026_20",
+      "gameCode": 20,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 2",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-09-30T21:15:00",
+      "utcDate": "2026-09-30T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ASV",
+          "name": "LDLC ASVEL Villeurbanne",
+          "abbreviatedName": "LDLC ASVEL",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    },
+    {
+      "identifier": "E2026_14",
+      "gameCode": 14,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 2",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-09-29T20:00:00",
+      "utcDate": "2026-09-29T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "ZAL",
+          "name": "Zalgiris Kaunas",
+          "abbreviatedName": "Zalgiris",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "ATJ",
+        "name": "ZALGIRIO ARENA",
+        "address": "Karaliaus Mindaugo Av. 50, 44287 Kaunas"
+      }
+    },
+    {
+      "identifier": "E2026_5",
+      "gameCode": 5,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 1",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-09-24T20:30:00",
+      "utcDate": "2026-09-24T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BAS",
+          "name": "Kosner Baskonia Vitoria-Gasteiz",
+          "abbreviatedName": "Baskonia",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "OLY",
+          "name": "Olympiacos Piraeus",
+          "abbreviatedName": "Olympiacos",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUC",
+        "name": "BUESA ARENA",
+        "address": "Ctra.  Zurbano s/n, 01013 Vitoria"
+      }
+    },
+    {
+      "identifier": "E2026_7",
+      "gameCode": 7,
+      "phaseType": {
+        "code": "RS",
+        "name": "Regular Season"
+      },
+      "roundName": "Round 1",
+      "played": true,
+      "confirmedDate": true,
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-09-24T21:15:00",
+      "utcDate": "2026-09-24T18:15:00Z",
+      "local": {
+        "club": {
+          "code": "PAN",
+          "name": "Panathinaikos AKTOR Athens",
+          "abbreviatedName": "Panathinaikos",
+          "isVirtual": false
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PRS",
+          "name": "Paris Basketball",
+          "abbreviatedName": "Paris",
+          "isVirtual": false
+        }
+      },
+      "venue": {
+        "code": "AUM6",
+        "name": "TELEKOM CENTER ATHENS",
+        "address": "37 Kifisias Avenue, 15123 Marousi"
+      }
+    }
+  ],
+  "total": 74
+}

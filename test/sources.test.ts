@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { test } from 'node:test'
+import { parseEuroleagueGames } from '../src/euroleague.ts'
 import { parseFibaGames } from '../src/fiba.ts'
 import { fetchUefaMatches, parseUefaMatches } from '../src/uefa.ts'
 
@@ -10,7 +11,10 @@ import { fetchUefaMatches, parseUefaMatches } from '../src/uefa.ts'
 // (teamId=49,122,35, 2026-10-17) are among them, unchanged. The FIBA one is the qualifiers page's games
 // still to come, plus Greece v Spain (played, with time and venue) and Denmark v Spain (its city ends
 // in a space), whole, its data split over two chunks inside a game as the page of 2 October was.
+// The EuroLeague one is the 2026-27 answer of 2026-10-31 (#113) cut to the 74 games of Olympiacos and
+// Panathinaikos, played and to come, and to the fields the parser reads.
 const fixture = (name: string) => readFileSync(new URL(`./fixtures/${name}`, import.meta.url), 'utf8')
+const euroleague = () => fixture('euroleague-games.json')
 const uefa = () => JSON.parse(fixture('uefa-matches.json'))
 const ids = (games: { id: string }[]) => games.map((g) => g.id)
 
@@ -114,4 +118,43 @@ test("UEFA's Türkiye loses the stray dot over its i", () => {
   const games = parseUefaMatches(uefa(), 135)
   assert.ok(games.length > 0)
   for (const game of games) assert.ok([game.home, game.away].includes('Türkiye'), `${game.home} vs ${game.away}`)
+})
+
+test('one EuroLeague season answers for every club in it, and each club gets only its own games', () => {
+  const olympiacos = parseEuroleagueGames(euroleague(), 'OLY')
+  const panathinaikos = parseEuroleagueGames(euroleague(), 'PAN')
+  assert.equal(olympiacos.length, 38)
+  assert.ok(olympiacos.every((game) => game.home === 'Olympiacos' || game.away === 'Olympiacos'))
+  // The two derbies are in both lists under one id each, so they land in both feeds as the same event.
+  assert.equal(new Set([...olympiacos, ...panathinaikos].map((game) => game.id)).size, 74)
+  // A club that is not in the season fails the build rather than publishing an empty feed.
+  assert.throws(() => parseEuroleagueGames(euroleague(), 'XXX'), /no games for XXX/)
+})
+
+test('EuroLeague games become games with tip-off, the arena and its city, the clubs named without sponsors', () => {
+  const game = parseEuroleagueGames(euroleague(), 'OLY').find((game) => game.id === 'euroleague-E2026_100')
+  assert.deepEqual(game, {
+    id: 'euroleague-E2026_100',
+    competition: 'EuroLeague · Round 10',
+    home: 'Olympiacos',
+    away: 'Crvena Zvezda',
+    date: '2026-11-06',
+    kickoff: '2026-11-06T19:15:00Z',
+    utcOffsetHours: 2,
+    venue: 'SUNEL Arena',
+    city: 'Athens',
+  })
+})
+
+test('a changed EuroLeague format fails loudly; an arena not yet listed keeps the API name and no city', () => {
+  const game = JSON.parse(euroleague()).data.find((game: { identifier: string }) => game.identifier === 'E2026_100')
+  const answer = (changed: object) => JSON.stringify({ data: [{ ...game, ...changed }] })
+  assert.throws(() => parseEuroleagueGames(answer({ utcDate: '2026-11-06T19:15:00' }), 'OLY'), /format changed/)
+  assert.throws(() => parseEuroleagueGames(answer({ roundName: undefined }), 'OLY'), /format changed/)
+  assert.throws(() => parseEuroleagueGames(JSON.stringify({ games: [] }), 'OLY'), /format changed/)
+  const unlisted = parseEuroleagueGames(answer({ venue: { code: 'NEW1', name: 'NEW ARENA' } }), 'OLY')[0]!
+  assert.deepEqual([unlisted.venue, unlisted.city], ['NEW ARENA', undefined])
+  // No time yet: an all-day placeholder on the day, as for the other sources.
+  const unscheduled = parseEuroleagueGames(answer({ confirmedHour: false }), 'OLY')[0]!
+  assert.deepEqual([unscheduled.date, unscheduled.kickoff, unscheduled.utcOffsetHours], ['2026-11-06', undefined, undefined])
 })

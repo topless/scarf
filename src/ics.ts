@@ -1,5 +1,5 @@
 import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar, type ICalEventData } from 'ical-generator'
-import { defaultSiteUrl, feedName, siteName, type Team } from './config.ts'
+import { defaultSiteUrl, feedName, siteName, teamPath, type Team } from './config.ts'
 import type { Game } from './game.ts'
 import { capitalise, federation, reminder, REMINDER_HOURS, shortDate, WORDS } from './page.ts'
 
@@ -17,7 +17,7 @@ export type Announced = Record<string, string>
 // one all-day "New game" entry per announced game (spec § 4). The default feed never carries those.
 export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSiteUrl, alerts?: Announced): string {
   const words = WORDS[team.sport]
-  const teamPage = `${siteUrl}/${team.country}/${team.sport}`
+  const teamPage = `${siteUrl}/${teamPath(team)}`
   const footer = `Kept up to date by ${siteName} · ${teamPage.replace(/^https?:\/\//, '')}`
   // Header fields: team first, brand last, the team's colour.
   const calendar = ical({

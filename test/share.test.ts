@@ -105,7 +105,7 @@ test('landing card carries the brand line, how many teams each sport has and no 
 
 test('landing card footer prints the site without the scheme, and every federation', () => {
   const copy = text(renderLandingShareCard(teams, site))
-  assert.match(copy, /example\.github\.io\/scarf Free · updated daily from UEFA and FIBA/)
+  assert.match(copy, /example\.github\.io\/scarf Free · updated daily from UEFA, FIBA and EuroLeague/)
   assert.doesNotMatch(copy, /https?:/)
   assert.match(text(renderLandingShareCard(teams, `${site}/`)), /example\.github\.io\/scarf Free/)
   assert.match(text(renderLandingShareCard([football], site)), /scarf Free · updated daily from UEFA /)

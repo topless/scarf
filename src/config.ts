@@ -1,3 +1,4 @@
+import { clubs } from './clubs.ts'
 import type { Details } from './game.ts'
 
 // Lowercase wordmark, "Scarf" only at the start of a sentence. See docs/brand.md.
@@ -9,39 +10,62 @@ export const defaultSiteUrl = 'https://scarf.fan'
 // arena; see page.ts), so a new sport is added here and given its words there.
 export type Sport = 'football' | 'basketball'
 
+// The club competitions scarf covers, by path slug: each has a page at /{sport}/{competition}/
+// listing this season's clubs. A club names its competition in config (clubs.ts); the list is
+// refreshed each season with the clubs.
+export type Competition = 'champions-league' | 'euroleague' | 'eurocup'
+export const COMPETITIONS: Record<Competition, { name: string; sport: Sport; season: string }> = {
+  'champions-league': { name: 'Champions League', sport: 'football', season: '2026-27' },
+  euroleague: { name: 'EuroLeague', sport: 'basketball', season: '2026-27' },
+  eurocup: { name: 'EuroCup', sport: 'basketball', season: '2026-27' },
+}
+export const competitionPath = (competition: Competition): string => `${COMPETITIONS[competition].sport}/${competition}`
+
 export interface Team {
   // URL slugs. The path scheme is frozen because subscriptions point at it (docs/development.md, Paths):
-  // the feed is /{country}/{sport}.ics and the team page /{country}/{sport}/.
-  country: string
+  // the feed is /{country}/{sport}.ics and the team page /{country}/{sport}/ for a national team,
+  // /{country}/{sport}/{club}.ics and /{country}/{sport}/{club}/ for a club (teamPath below).
+  country: keyof typeof COUNTRIES
   sport: Sport
-  name: string // "Greece football": how the page and the calendar name call the team
+  // A club: listed under its country, below the national teams, and on its competition's page. Its
+  // path slug, its name as fans say it, its home city and ground (the club's own facts, hand-entered
+  // like TV and tickets), the competition it plays this season, and its crest's file name under
+  // assets/crests/ once one is there (the pages fall back to the kit stripes without it).
+  club?: { slug: string; name: string; city: string; ground: string; competition: Competition; crest?: string }
+  name: string // "Greece football", "Olympiacos basketball": how the page and the calendar name call the team
   side: string // how the feed description calls the team, in full
   // Stripe colours from the flag or kit; the first one is the calendar colour (docs/brand.md).
   colours: [string, string] | [string, string, string]
   // The team's flag as flag-icons names it: the ISO 3166-1 alpha-2 code in lowercase ('gr'), or
   // one of the package's sub-national codes for a team without a country of its own ('gb-eng').
+  // A club carries its country's.
   flag: string
-  source: { kind: 'uefa'; teamId: number } | { kind: 'fiba'; event: string; teamCode: string }
+  // A EuroLeague Basketball season code names its competition too: E2026 is EuroLeague 2026-27,
+  // U2026 EuroCup 2026-27 (src/euroleague.ts).
+  source: { kind: 'uefa'; teamId: number } | { kind: 'fiba'; event: string; teamCode: string } | { kind: 'euroleague'; season: string; clubCode: string }
   // TV and tickets are in no data source. The broadcaster is stable per rights cycle, so it is
   // kept here per team; see docs/research-2026-10-02.md.
   defaults: Pick<Details, 'tv' | 'tickets'>
 }
 
-export const feedPath = (team: Team): string => `${team.country}/${team.sport}.ics`
+// "greece/football", "greece/basketball/olympiacos": where a team's page and feeds live. Frozen.
+export const teamPath = (team: Team): string => (team.club ? `${team.country}/${team.sport}/${team.club.slug}` : `${team.country}/${team.sport}`)
+export const feedPath = (team: Team): string => `${teamPath(team)}.ics`
 // The optional variant with a "New game" entry on the day a game is announced; frozen once published.
-export const alertsFeedPath = (team: Team): string => `${team.country}/${team.sport}-alerts.ics`
+export const alertsFeedPath = (team: Team): string => `${teamPath(team)}-alerts.ics`
 // The calendar name: team first, brand last. The variant says so, so a fan can tell the two apart.
 export const feedName = (team: Team, alerts = false): string => `${team.name}${alerts ? ' + alerts' : ''} · ${siteName}`
-export const sharePath = (team: Team): string => `${team.country}/${team.sport}/share.png`
+export const sharePath = (team: Team): string => `${teamPath(team)}/share.png`
 // The country page at /{country}/ lists the country's teams; its share image sits next to it.
 export const countrySharePath = (team: Team): string => `${team.country}/share.png`
 export const landingSharePath = 'share.png' // the landing page's, at the site root
 export const shareSize = { width: 1200, height: 630 } // the share image, the size chat apps expect
 
-// The countries of the teams added in #76: the name the pages print, the stripes and the flag.
-// Stripes follow docs/brand.md's rule for a flag; Denmark and Serbia take the values listed there,
-// France those of its basketball team below.
-const COUNTRIES = {
+// Every country with a team, by slug: the name the pages print, the stripes and the flag. Its
+// national teams wear the same stripes and flag; a club brings its own stripes. Stripes follow
+// docs/brand.md's rule for a flag; Denmark and Serbia take the values listed there, France those
+// of its basketball team below.
+export const COUNTRIES = {
   albania: { name: 'Albania', colours: ['#FF0000', '#000000'], flag: 'al' },
   andorra: { name: 'Andorra', colours: ['#0018A8', '#FEDF00', '#D0103A'], flag: 'ad' },
   armenia: { name: 'Armenia', colours: ['#D90012', '#0033A0', '#F2A800'], flag: 'am' },
@@ -55,12 +79,15 @@ const COUNTRIES = {
   cyprus: { name: 'Cyprus', colours: ['#D47600', '#FFFFFF'], flag: 'cy' },
   czechia: { name: 'Czechia', colours: ['#D7141A', '#11457E', '#FFFFFF'], flag: 'cz' },
   denmark: { name: 'Denmark', colours: ['#C60C30', '#FFFFFF'], flag: 'dk' },
+  england: { name: 'England', colours: ['#CE1124', '#FFFFFF'], flag: 'gb-eng' },
   estonia: { name: 'Estonia', colours: ['#1791FF', '#000000', '#FFFFFF'], flag: 'ee' },
   'faroe-islands': { name: 'Faroe Islands', colours: ['#D72828', '#003897', '#FFFFFF'], flag: 'fo' },
   finland: { name: 'Finland', colours: ['#002F6C', '#FFFFFF'], flag: 'fi' },
   france: { name: 'France', colours: ['#0055A4', '#FFFFFF', '#EF4135'], flag: 'fr' },
   georgia: { name: 'Georgia', colours: ['#FF0000', '#FFFFFF'], flag: 'ge' },
+  germany: { name: 'Germany', colours: ['#000000', '#DD0000', '#FFCC00'], flag: 'de' },
   gibraltar: { name: 'Gibraltar', colours: ['#DA000C', '#FFFFFF'], flag: 'gi' },
+  greece: { name: 'Greece', colours: ['#0D5EAF', '#FFFFFF'], flag: 'gr' },
   hungary: { name: 'Hungary', colours: ['#D43516', '#FFFFFF', '#388D00'], flag: 'hu' },
   iceland: { name: 'Iceland', colours: ['#003897', '#FFFFFF', '#D72828'], flag: 'is' },
   israel: { name: 'Israel', colours: ['#0038B8', '#FFFFFF'], flag: 'il' },
@@ -87,11 +114,17 @@ const COUNTRIES = {
   serbia: { name: 'Serbia', colours: ['#C6363C', '#0C4076', '#FFFFFF'], flag: 'rs' },
   slovakia: { name: 'Slovakia', colours: ['#0B4EA2', '#EE1C25', '#FFFFFF'], flag: 'sk' },
   slovenia: { name: 'Slovenia', colours: ['#0000BF', '#D50000', '#FFFFFF'], flag: 'si' },
+  spain: { name: 'Spain', colours: ['#AA151B', '#F1BF00'], flag: 'es' },
   sweden: { name: 'Sweden', colours: ['#005293', '#FECB00'], flag: 'se' },
+  switzerland: { name: 'Switzerland', colours: ['#D52B1E', '#FFFFFF'], flag: 'ch' },
   turkiye: { name: 'Türkiye', colours: ['#E30A17', '#FFFFFF'], flag: 'tr' },
   ukraine: { name: 'Ukraine', colours: ['#0057B8', '#FFD700'], flag: 'ua' },
   wales: { name: 'Wales', colours: ['#00AB39', '#D21034', '#FFFFFF'], flag: 'gb-wls' },
 } satisfies Record<string, { name: string; colours: Team['colours']; flag: string }>
+
+// A team's country as the pages draw it: a club's card and bar show the country's flag as a small
+// mark next to its home city, over the club's own stripes.
+export const countryOf = (team: Team) => COUNTRIES[team.country]
 
 // A team of one of those countries. TV and tickets stay empty until an official page confirms them.
 function team(country: keyof typeof COUNTRIES, sport: Sport, source: Team['source']): Team {
@@ -336,4 +369,6 @@ export const teams: Team[] = [
   basketball('sweden', 'SWE'), // L
   basketball('turkiye', 'TUR'), // J
   basketball('ukraine', 'UKR'), // I
+  // The clubs (src/clubs.ts), after every national team.
+  ...clubs,
 ]

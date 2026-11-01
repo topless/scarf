@@ -7,7 +7,7 @@ import { join } from 'node:path'
 import { test } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
-import { alertsFeedPath, countrySharePath, feedPath, landingSharePath, sharePath, teams } from '../src/config.ts'
+import { alertsFeedPath, countrySharePath, feedPath, landingSharePath, sharePath, teamPath, teams } from '../src/config.ts'
 
 // `npm run build:fixtures` with every fetch made to throw, in a folder of its own so the real dist/
 // and known-games.json stay as they were. With a SITE_URL, as a staging build would have, so the
@@ -21,7 +21,7 @@ test('the fixture build writes every feed, page and share image without a single
   await promisify(execFile)(process.execPath, ['--import', noFetch, build, '--fixtures'], { cwd: dir, env })
 
   const files = [
-    ...teams.flatMap((team) => [feedPath(team), alertsFeedPath(team), `${team.country}/${team.sport}/index.html`, sharePath(team)]),
+    ...teams.flatMap((team) => [feedPath(team), alertsFeedPath(team), `${teamPath(team)}/index.html`, sharePath(team)]),
     ...teams.flatMap((team) => [`${team.country}/index.html`, countrySharePath(team)]),
     'index.html',
     landingSharePath,
@@ -52,12 +52,14 @@ test('a played game stays in the feed for 30 days as it was, and is never announ
   const uefa = JSON.stringify([greece('1', -31), greece('2', -2), greece('3', 10)])
   await writeFile(join(dir, 'known-games.json'), JSON.stringify({ 'greece/football': { seeded: '2026-01-01', games: {} } }))
   const fiba = JSON.stringify(fileURLToPath(new URL('./fixtures/fiba-games.html', import.meta.url)))
+  const euroleague = JSON.stringify(fileURLToPath(new URL('./fixtures/euroleague-games.json', import.meta.url)))
   const stub = `import { readFileSync } from 'node:fs'
     globalThis.fetch = async (url) => {
       if (String(url).startsWith('https://scarf.fan/')) return new Response('', { status: 404 })
       console.error('asked ' + url)
       if (String(url).startsWith('https://match.uefa.com/')) return new Response(${JSON.stringify(uefa)})
       if (String(url).startsWith('https://www.fiba.basketball/')) return new Response(readFileSync(${fiba}, 'utf8'))
+      if (String(url).startsWith('https://api-live.euroleague.net/')) return new Response(readFileSync(${euroleague}, 'utf8'))
       throw new Error('asked ' + url)
     }`
   const build = fileURLToPath(new URL('../src/build.ts', import.meta.url))

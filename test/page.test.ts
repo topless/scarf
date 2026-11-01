@@ -39,6 +39,9 @@ function inOrder(html: string, ...needles: string[]): void {
   }
 }
 
+// The national teams: the country cards, chips and the kit's countries are drawn from these.
+const national = teams.filter((team) => !team.club)
+
 test('team page shows venue-local times naming the start and the city, and says when the time is not announced', () => {
   const html = teamPage([timed, unscheduled], site)
   assert.match(html, /<time datetime="2026-10-04T18:45:00Z" data-offset="3">Sun 4 Oct 2026 · Kickoff 21:45 in Thessaloniki<\/time>/)
@@ -196,14 +199,14 @@ test('nothing a fan reads breaks the voice rules', () => {
 test('landing has one card per country in alphabetical order, each with a cell per sport, football first', () => {
   const html = renderLanding(teams.map((team) => ({ team, games: [] })))
   const countries = ['england', 'france', 'germany', 'greece', 'spain', 'switzerland']
-  assert.equal(html.match(/<article class="card country"/g)?.length, new Set(teams.map((team) => team.country)).size)
+  assert.equal(html.match(/<article class="card country"/g)?.length, new Set(national.map((team) => team.country)).size)
   inOrder(html, ...countries.map((country) => `<article class="card country" id="${country}"`))
   // Under the lede, a chip per country that jumps to its card, in the same order.
   inOrder(html, '<p class="lede">', '<nav class="chips" aria-label="Countries">', ...countries.map((country) => `href="#${country}"`), '<article')
   assert.match(html, /<a class="country-chip" href="#england"><img class="flag" src="flags\/gb-eng\.svg" width="20" height="15" alt="">England<\/a>/)
   // Every team has its cell; a sport a country has no team in says so, football before basketball.
-  assert.equal(html.match(/<a class="cell" href="/g)?.length, teams.length)
-  for (const team of teams) assert.ok(html.includes(`<a class="cell" href="${team.country}/${team.sport}/">`), team.name)
+  assert.equal(html.match(/<a class="cell" href="/g)?.length, national.length)
+  for (const team of national) assert.ok(html.includes(`<a class="cell" href="${team.country}/${team.sport}/">`), team.name)
   const card = (country: string) => html.slice(html.indexOf(`id="${country}"`), html.indexOf('<article', html.indexOf(`id="${country}"`)))
   inOrder(card('england'), 'href="england/football/"', '<div class="cell cell-empty">')
   assert.match(card('england'), /<div class="cell cell-empty"><span class="cell-sport"><svg[^>]*>.*?<\/svg>Basketball<\/span><span>Not on scarf yet<\/span><\/div>/)
@@ -397,7 +400,7 @@ test("the next-game card carries the sport's drawing, hidden from screen readers
 
 test('landing shows every country in its own colours', () => {
   const html = renderLanding(teams.map((team) => ({ team, games: [] })))
-  for (const team of teams) {
+  for (const team of national) {
     // One 36 px repeat however many colours (docs/brand.md).
     const [first, second, third] = team.colours
     const stops = third ? `${first} 0px 12px, ${second} 12px 24px, ${third} 24px 36px` : `${first} 0px 18px, ${second} 18px 36px`
@@ -473,7 +476,7 @@ test('the kit shows every team and sport, unlisted and out of search engines', (
   const html = renderKit(teams)
   assert.match(html, /<meta name="robots" content="noindex">/)
   assert.doesNotMatch(renderLanding(teams.map((team) => ({ team, games: [] }))), /noindex|kit\//)
-  for (const team of teams) {
+  for (const team of national) {
     // The country card's flag, country link and team link resolve from /kit/, and the team card names its stripes.
     assert.ok(html.includes(`<img class="flag" src="../flags/${team.flag}.svg" width="44" height="33" alt="">`), team.name)
     assert.ok(html.includes(`<a class="country-name" href="../${team.country}/">`), team.name)
@@ -485,7 +488,7 @@ test('the kit shows every team and sport, unlisted and out of search engines', (
     assert.ok(html.includes(`<dt>Start</dt><dd>${words.start}</dd><dt>Verb</dt><dd>${words.starts}</dd><dt>Ground</dt><dd>${words.ground}</dd>`), sport)
   }
   assert.match(html, /<dt>Source<\/dt><dd>UEFA<\/dd>/)
-  assert.match(html, /<dt>Source<\/dt><dd>FIBA<\/dd>/)
+  assert.match(html, /<dt>Source<\/dt><dd>FIBA and EuroLeague<\/dd>/)
 })
 
 test('the note on TV channels shows only on a page with a TV line', () => {

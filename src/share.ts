@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises'
 import { Resvg, initWasm } from '@resvg/resvg-wasm'
 import satori from 'satori'
 import { html } from 'satori-html'
-import { defaultSiteUrl, shareSize, siteName, type Team } from './config.ts'
+import { defaultSiteUrl, shareSize, siteName, teamPath, type Team } from './config.ts'
 import { readFlag } from './flags.ts'
 import type { Game } from './game.ts'
 import { countryName, esc, federation, federations, kickoffText, landingKind, markDrawing, shortDate, SPORTS, stripes, teamKind } from './page.ts'
@@ -54,7 +54,7 @@ export function renderShareCard(team: Team, next: Game | undefined, siteUrl?: st
       labelColour: RED,
       line: nextGameLine(next),
       mark: teamMark(band, rest),
-      path: `/${team.country}/${team.sport}`,
+      path: `/${teamPath(team)}`,
       source: federation(team),
     },
     siteUrl,
