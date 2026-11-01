@@ -11,13 +11,15 @@ subscribe once, and the calendar they already use keeps itself up to date. Wrapp
 Teams so far: men's football for all 54 UEFA nations in the Nations League, and men's basketball for
 the 24 teams still in the FIBA World Cup 2027 European qualifiers. Pick your team at https://scarf.fan.
 
+The brand as a browsable design system, with every token, the marks and a live preview per component:
+https://claude.ai/artifact/AcsMKUmVFMtBqYnPmt8D3N. Its source is this repository (docs/brand.md).
+
 ## Docs
 
 - [docs/development.md](docs/development.md): how the build works, the paths, one-time setup,
   running it, what done means for a feed change, maintaining it by hand, keeping it running and
   known limits.
-- [docs/brand.md](docs/brand.md): the identity, where it came from, and the link to the published
-  design system.
+- [docs/brand.md](docs/brand.md): the identity, where it came from, and the design system built from it.
 - [docs/calendar-event-spec.md](docs/calendar-event-spec.md): the exact calendar-event copy.
 - [docs/observability.md](docs/observability.md): the plan for counting subscribers, visitors and
   subscribe clicks (#24).
