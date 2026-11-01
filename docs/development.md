@@ -53,7 +53,8 @@ is set in the workflow.
   API Tokens → Create Token, template "Edit Cloudflare Workers", limited to this account and the
   scarf.fan zone; then `gh secret set CLOUDFLARE_API_TOKEN --repo topless/scarf` and paste it.
 - **DNS** is at Cloudflare. `scarf.fan` is the Worker's custom domain (the `routes` entry in
-  wrangler.jsonc), so Cloudflare keeps its record and certificate. `www` is a proxied placeholder
+  wrangler.jsonc), so Cloudflare keeps its record and certificate. `staging.scarf.fan` is the custom
+  domain of the Worker `scarf-staging` the same way (`env.staging`). `www` is a proxied placeholder
   record (`AAAA 100::`) with a redirect rule that sends every request to `https://scarf.fan` with the
   same path. "Always Use HTTPS" is on, so a calendar that asks over `http://` ends on https.
 - **GitHub Pages** stays on, with the custom domain `scarf.fan` and its last deployment, only so the
@@ -85,7 +86,8 @@ npx wrangler dev
 
 then open http://localhost:8787/greece/football/. The fixture build reads the sources' answers saved in
 [test/fixtures/](../test/fixtures/), dated on the day they were saved so their games stay upcoming. It
-makes no request at all and leaves `known-games.json` and `source-answers/` alone.
+makes no request at all and leaves `known-games.json` and `source-answers/` alone. `npm run build:staging`
+builds the same way from the `source-answers/` an earlier `npm run build` left, whatever its age.
 
 To review the pages for drift before a page change ships, run `/ui-review main` in Claude Code, or
 by hand `node .claude/skills/ui-review/measure.ts --base main`. It builds from the fixtures, serves
@@ -95,6 +97,19 @@ measures what drifts (overflow, where the headline starts, red actions per scree
 page height, the Share button's room, each component against [docs/brand.md](brand.md)) and prints
 what changed since the base. The limits sit at the top of the script; the report's shape is in
 [.claude/skills/ui-review/SKILL.md](../.claude/skills/ui-review/SKILL.md). Needs Google Chrome.
+
+To put a branch on https://staging.scarf.fan, add the label `staging` to its pull request (#85). The
+"Deploy staging" workflow builds the branch as merged into main with production's data: the sources'
+answers and the known games the last daily build saved in its Actions cache, taken as they are, so it
+makes no source request (a source the branch adds, which production has no answer for, uses its
+fixture). It writes a `dist/_headers` file with `X-Robots-Tag: noindex` that keeps staging out of
+search engines, and deploys `dist/` to the Worker `scarf-staging`. Nothing deploys on a push: to put a
+newer commit on staging, remove the label and add it again. A pull request from a fork cannot be staged
+(GitHub gives it no secrets), nor one that conflicts with main until the conflict is resolved. A branch
+without a pull request goes the same way from the Actions tab (Deploy staging → Run workflow → pick the
+branch) once it contains the workflow, so merge main into a branch cut before it. A newer run cancels an
+older one, so staging shows the branch asked for last. Why the Worker cannot take scarf.fan:
+`env.staging` in [wrangler.jsonc](../wrangler.jsonc).
 
 ## Definition of done for a feed change
 
