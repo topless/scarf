@@ -97,7 +97,7 @@ for (const event of new Set(teams.flatMap(({ source }) => (source.kind === 'fiba
 // A EuroLeague season's games, which every club playing in it shares.
 const euroleagueSeasons = new Map<string, string>()
 for (const season of new Set(teams.flatMap(({ source }) => (source.kind === 'euroleague' ? [source.season] : [])))) {
-  euroleagueSeasons.set(season, await fetchEuroleagueGames(season, saved('euroleague-games.json', `euroleague-${season}.json`)))
+  euroleagueSeasons.set(season, await fetchEuroleagueGames(season, saved(season.startsWith('U') ? 'eurocup-games.json' : 'euroleague-games.json', `euroleague-${season}.json`)))
 }
 
 function gamesOf({ source }: Team): Game[] {
