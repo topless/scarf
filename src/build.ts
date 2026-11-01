@@ -161,9 +161,9 @@ for (const competition of Object.keys(COMPETITIONS) as Competition[]) {
   const group = sections.filter(({ team }) => team.club?.competition === competition)
   if (group.length === 0) continue
   await mkdir(`dist/${competitionPath(competition)}`, { recursive: true })
-  await writeFile(`dist/${competitionPath(competition)}/index.html`, renderCompetitionPage(competition, group, teams, siteUrl))
+  await writeFile(`dist/${competitionPath(competition)}/index.html`, renderCompetitionPage(competition, group, siteUrl))
 }
-await writeFile('dist/index.html', renderLanding(sections, siteUrl))
+await writeFile('dist/index.html', renderLanding(sections, today, siteUrl))
 await writeFile(`dist/${landingSharePath}`, await renderLandingShareImage(teams, siteUrl))
 await mkdir('dist/how-it-works', { recursive: true })
 await writeFile('dist/how-it-works/index.html', renderHowItWorks(sections, siteUrl))
