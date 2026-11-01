@@ -24,8 +24,8 @@ node .claude/skills/ui-review/measure.ts --base main
 ```
 
 It builds `dist/` from the fixtures with `SITE_URL` set (without it the pages leave out the Share
-button), serves it on 8787 unless something answers there already (the Browser pane's `site` entry
-in `.claude/launch.json` is the same server), and opens every page kind in headless Chrome at
+button), serves it on 8787, or on the next free port while the Browser pane's `site` server
+(`.claude/launch.json`) holds 8787, and opens every page kind in headless Chrome at
 390×844 and 1280×800, team pages also at 360 wide, the narrowest width the Share button must still
 fit at. For each it saves the first screen to `dist/ui-review/<page>-<width>.png` and measures:
 sideways overflow, where the headline starts, red actions on the first screen, whether the top bar

@@ -1,12 +1,12 @@
 // The measuring half of /ui-review (.claude/skills/ui-review/SKILL.md). Builds the site from the
-// fixtures (no source request), serves dist/, opens every page kind in headless Chrome at a phone
+// fixtures (no source request), serves dist/ on a free port, opens every page kind in headless Chrome at a phone
 // and a desktop size, saves the first screen of each and measures what drifts: sideways overflow,
 // where the headline starts, red actions on the first screen, the top bar's rows, the page's height,
 // the Share button's room, and each component against docs/brand.md. With --base <ref> it builds
 // that ref too and prints what changed. Run from the repository root:
 //   node .claude/skills/ui-review/measure.ts [--base main]
 import { execFileSync, spawn, type ChildProcess } from 'node:child_process'
-import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { resolve } from 'node:path'
 
@@ -32,8 +32,7 @@ const RULES: Record<string, { height?: [number, number]; inner?: [number, number
 }
 const CHROME = process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 const OUT = 'dist/ui-review'
-const PORT = 8787 // the Browser pane's "site" entry in .claude/launch.json serves dist/ here too
-const BASE_PORT = 8788
+const PORT = 8787 // as the Browser pane's "site" entry in .claude/launch.json; the next free port while that server is up
 
 // Runs inside the page. Every number is CSS pixels at load, scrolled to the top.
 const MEASURE = `(() => {
@@ -130,10 +129,16 @@ async function capture(cdp: ReturnType<typeof launchChrome>, url: string, { widt
 
 const up = (url: string) => fetch(url).then((r) => r.ok, () => false)
 
-// Serves dir on port unless something answers there already (the Browser pane's "site" server).
-async function serve(dir: string, port: number): Promise<ChildProcess | undefined> {
+// The first port from start that nothing answers on: a server already there may be another worktree's,
+// and its pages must never be measured as ours.
+async function freePort(start: number): Promise<number> {
+  let port = start
+  while (await up(`http://127.0.0.1:${port}/`)) port++
+  return port
+}
+
+async function serve(dir: string, port: number): Promise<ChildProcess> {
   const url = `http://127.0.0.1:${port}/`
-  if (await up(url)) return
   const server = spawn('python3', ['-m', 'http.server', String(port), '--bind', '127.0.0.1', '--directory', dir], { stdio: 'ignore' })
   for (let i = 0; i < 50 && !(await up(url)); i++) await new Promise((r) => setTimeout(r, 100))
   if (!(await up(url))) throw new Error(`no server on ${url}`)
@@ -167,6 +172,8 @@ async function measureSite(cdp: ReturnType<typeof launchChrome>, port: number, p
       shots.push({ page, viewport, shot, m: await capture(cdp, `http://127.0.0.1:${port}${page}`, size, shot) })
     }
   }
+  // Canary for the stylesheet walk in MEASURE: its first version read 0 everywhere and nothing said so.
+  if (!shots.some((s) => s.m.components['.card']?.some((c: any) => c.border))) throw new Error('the border walk found no bordered card')
   return shots
 }
 
@@ -231,22 +238,27 @@ function changed(before: Shot[], after: Shot[]): string[] {
 const list = (title: string, items: string[], empty: string) => `\n### ${title}\n\n${items.length ? items.map((s) => `- ${s}`).join('\n') : empty}\n`
 
 async function main() {
-  const base = process.argv[process.argv.indexOf('--base') + 1 || process.argv.length]
+  const flag = process.argv.indexOf('--base')
+  const base = flag < 0 ? undefined : process.argv[flag + 1]
+  if (flag >= 0 && !base) throw new Error('--base needs a ref, e.g. --base main')
+  if (!existsSync(CHROME)) throw new Error(`no Chrome at ${CHROME}; set CHROME=/path/to/chrome`)
   mkdirSync(OUT, { recursive: true })
   const profile = mkdtempSync(`${tmpdir()}/ui-review-`)
-  const stop: (ChildProcess | undefined)[] = []
+  const stop: ChildProcess[] = []
   try {
-    build('.', PORT)
-    stop.push(await serve('dist', PORT))
+    const port = await freePort(PORT)
+    build('.', port)
+    stop.push(await serve('dist', port))
     const cdp = launchChrome(profile)
     stop.push(cdp.chrome)
-    const shots = await measureSite(cdp, PORT, '')
+    const shots = await measureSite(cdp, port, '')
     let baseShots: Shot[] = []
     if (base) {
       const dir = checkout(base)
-      build(dir, BASE_PORT)
-      stop.push(await serve(`${dir}/dist`, BASE_PORT))
-      baseShots = await measureSite(cdp, BASE_PORT, 'base-')
+      const basePort = await freePort(port + 1)
+      build(dir, basePort)
+      stop.push(await serve(`${dir}/dist`, basePort))
+      baseShots = await measureSite(cdp, basePort, 'base-')
     }
 
     console.log(`## Measurements\n\n| page | viewport | ${METRICS.map(([n]) => n).join(' | ')} | screenshot |\n|${'---|'.repeat(METRICS.length + 3)}`)
@@ -255,8 +267,8 @@ async function main() {
     console.log(list('Components off docs/brand.md', drift(shots), 'None.'))
     if (base) console.log(list(`Changed since ${base}`, changed(baseShots, shots), 'Nothing: every number is the same.'))
   } finally {
-    for (const p of stop) p?.kill()
-    for (const p of stop) if (p && p.exitCode === null && p.signalCode === null) await new Promise((r) => p.once('exit', r)) // Chrome still writes its profile while it quits
+    for (const p of stop) p.kill()
+    for (const p of stop) if (p.exitCode === null && p.signalCode === null) await new Promise((r) => p.once('exit', r)) // Chrome still writes its profile while it quits
     rmSync(profile, { recursive: true, force: true })
   }
 }
