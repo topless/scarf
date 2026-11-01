@@ -88,12 +88,14 @@ test('a played game stays in the feed for 30 days as it was, and is never announ
   await writeFile(join(dir, 'known-games.json'), JSON.stringify({ 'greece/football': { seeded: '2026-01-01', games: {} } }))
   const fiba = JSON.stringify(fileURLToPath(new URL('./fixtures/fiba-games.html', import.meta.url)))
   const euroleague = JSON.stringify(fileURLToPath(new URL('./fixtures/euroleague-games.json', import.meta.url)))
+  const eurocup = JSON.stringify(fileURLToPath(new URL('./fixtures/eurocup-games.json', import.meta.url)))
   const stub = `import { readFileSync } from 'node:fs'
     globalThis.fetch = async (url) => {
       if (String(url).startsWith('https://scarf.fan/')) return new Response('', { status: 404 })
       console.error('asked ' + url)
       if (String(url).startsWith('https://match.uefa.com/')) return new Response(${JSON.stringify(uefa)})
       if (String(url).startsWith('https://www.fiba.basketball/')) return new Response(readFileSync(${fiba}, 'utf8'))
+      if (String(url).includes('/v2/competitions/U/')) return new Response(readFileSync(${eurocup}, 'utf8'))
       if (String(url).startsWith('https://api-live.euroleague.net/')) return new Response(readFileSync(${euroleague}, 'utf8'))
       throw new Error('asked ' + url)
     }`
