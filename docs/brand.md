@@ -99,8 +99,10 @@ Fallback stacks: `'Bricolage Grotesque', system-ui, sans-serif` and `'Albert San
 ## Logo
 
 Mark: a tilted (−14°) striped band with fringe, `assets/scarf-mark.svg` (red band, wool stripes, ink
-outline), drawn from that one file on every page and share image. It stays in brand colours on team
-surfaces too: the stripe carries the team colour, the mark never does.
+outline), drawn from that one file on every page. In the lockup it stays in brand colours on team
+surfaces too: there the stripe carries the team colour. The one place the mark wears a team's colours is
+the large scarf on the right of its share image, band in the first colour and knitted stripes in the rest
+(`teamMark` in `src/share.ts`): each team in its own colours, as the line says.
 
 - On ink backgrounds, outline and fringe become wool `#FBF8F2`.
 - App icon / favicon: red `#D7263D` rounded square (radius ≈ 23 %), mark in wool with ink stripes.
