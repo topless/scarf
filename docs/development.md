@@ -87,6 +87,13 @@ then open http://localhost:8787/greece/football/. The fixture build reads the so
 [test/fixtures/](../test/fixtures/), dated on the day they were saved so their games stay upcoming. It
 makes no request at all and leaves `known-games.json` and `source-answers/` alone.
 
+To put a branch where someone else can open it, run the "Deploy staging" workflow by hand: Actions tab →
+Deploy staging → Run workflow → pick the branch. It builds from the fixtures, so it makes no source
+request, and deploys `dist/` to the Worker `scarf-staging` at https://scarf-staging.topless.workers.dev.
+Each run replaces the last. The `env.staging` block in [wrangler.jsonc](../wrangler.jsonc) sets no routes,
+so scarf.fan stays with the Worker `scarf`, and the workflow writes a `dist/_headers` file with
+`X-Robots-Tag: noindex` that keeps staging out of search engines (#85).
+
 ## Definition of done for a feed change
 
 - `npm test` passes; the ICS validates (an `icalendar` validator or an `ical.js` parse) and the changed

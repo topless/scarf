@@ -7,5 +7,12 @@
   // Cloudflare keeps the DNS record and certificate for a custom domain itself.
   "routes": [{ "pattern": "scarf.fan", "custom_domain": true }],
   // The side-by-side copy at scarf.topless.workers.dev goes once scarf.fan answers here.
-  "workers_dev": false
+  "workers_dev": false,
+  // Staging (#85): "Deploy staging" (.github/workflows/staging.yml) puts any branch, built from the
+  // fixtures, on the Worker scarf-staging at https://scarf-staging.topless.workers.dev. The empty
+  // routes are the point: routes are inherited, so without them this environment would claim the
+  // scarf.fan custom domain for itself.
+  "env": {
+    "staging": { "name": "scarf-staging", "routes": [], "workers_dev": true }
+  }
 }
