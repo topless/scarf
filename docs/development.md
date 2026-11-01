@@ -87,6 +87,15 @@ then open http://localhost:8787/greece/football/. The fixture build reads the so
 [test/fixtures/](../test/fixtures/), dated on the day they were saved so their games stay upcoming. It
 makes no request at all and leaves `known-games.json` and `source-answers/` alone.
 
+To review the pages for drift before a page change ships, run `/ui-review main` in Claude Code, or
+by hand `node .claude/skills/ui-review/measure.ts --base main`. It builds from the fixtures, serves
+`dist/` on 8787 or the next free port (the Browser pane's `site` entry in [.claude/launch.json](../.claude/launch.json)
+serves the same folder, to look at the pages by eye), screenshots every page kind at a phone and a desktop size into `dist/ui-review/`,
+measures what drifts (overflow, where the headline starts, red actions per screen, the top bar's rows,
+page height, the Share button's room, each component against [docs/brand.md](brand.md)) and prints
+what changed since the base. The limits sit at the top of the script; the report's shape is in
+[.claude/skills/ui-review/SKILL.md](../.claude/skills/ui-review/SKILL.md). Needs Google Chrome.
+
 To put a branch where someone else can open it, run the "Deploy staging" workflow by hand: Actions tab →
 Deploy staging → Run workflow → pick the branch. It builds from the fixtures, so it makes no source
 request, and deploys `dist/` to the Worker `scarf-staging` at https://scarf-staging.topless.workers.dev.
