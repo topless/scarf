@@ -48,6 +48,8 @@ const MEASURE = `(() => {
   // The border width the stylesheet declares (its var() resolved on the element), from the last rule
   // that matches: Chrome draws a 1.5 px border as 1 px and reports 1, so the drawn width cannot tell
   // the brand's 1.5 from a typed 1.
+  // shortcut: the last matching rule wins, with no specificity and @media conditions not evaluated; good
+  // while no border is set inside a media query or overridden by an earlier, more specific rule.
   const declaredBorder = (el) => {
     let v = ''
     const walk = (rules) => { for (const r of rules) { if (r.selectorText && el.matches(r.selectorText)) v = r.style.borderTopWidth || r.style.borderWidth || r.style.border.split(' ')[0] || v; if (r.cssRules) walk(r.cssRules) } }
@@ -143,6 +145,7 @@ function build(cwd: string, port: number) {
 }
 
 // The base ref as a plain copy (no worktree, no stash), sharing this checkout's node_modules.
+// shortcut: a base whose dependencies differ builds with the wrong ones; run npm ci in the copy when package-lock.json differs.
 function checkout(ref: string): string {
   const dir = `${OUT}/base`
   rmSync(dir, { recursive: true, force: true })
@@ -245,7 +248,6 @@ async function main() {
       stop.push(await serve(`${dir}/dist`, BASE_PORT))
       baseShots = await measureSite(cdp, BASE_PORT, 'base-')
     }
-    writeFileSync(`${OUT}/measurements.json`, JSON.stringify({ shots, baseShots }, null, 2))
 
     console.log(`## Measurements\n\n| page | viewport | ${METRICS.map(([n]) => n).join(' | ')} | screenshot |\n|${'---|'.repeat(METRICS.length + 3)}`)
     for (const s of shots) console.log(`| ${s.page} | ${s.viewport} | ${METRICS.map(([, get]) => get(s.m)).join(' | ')} | ${s.shot} |`)
