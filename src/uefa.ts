@@ -1,4 +1,4 @@
-import { fetchText, keptSince, type Game } from './game.ts'
+import { fetchText, keptSince, startOf, type Game } from './game.ts'
 
 // Undocumented endpoint behind uefa.com's fixtures pages. `teamId` takes a comma-separated list
 // and answers with every match of any listed team (probed once on 2026-10-17 with
@@ -28,7 +28,13 @@ export interface UefaMatch {
 export async function fetchUefaMatches(teamIds: number[], today: string, saved?: URL): Promise<UefaMatch[]> {
   const to = `${Number(today.slice(0, 4)) + 2}-12-31`
   const url = `https://match.uefa.com/v5/matches?teamId=${teamIds.join(',')}&fromDate=${keptSince(today)}&toDate=${to}&limit=${LIMIT}&offset=0&order=ASC`
-  const matches = JSON.parse(await fetchText(url, saved)) as UefaMatch[]
+  const text = await fetchText(url, saved)
+  let matches: UefaMatch[]
+  try {
+    matches = JSON.parse(text)
+  } catch (error) {
+    throw new Error(`UEFA's answer is not JSON: it starts "${startOf(text)}"`, { cause: error })
+  }
   if (!Array.isArray(matches)) throw new Error('UEFA response format changed: not a list of matches')
   // One team may have nothing scheduled; no match for any team means the request stopped working.
   if (matches.length === 0) throw new Error(`UEFA returned no matches at all for teamId=${teamIds.join(',')}: the request may have stopped working`)

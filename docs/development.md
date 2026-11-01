@@ -173,6 +173,9 @@ The health signals we have today, in the order to check them:
 
 - **Run status.** The Actions tab lists every run of "Build feeds" and "Check feeds" with its outcome,
   and a failed run is also an open `ops` issue.
+- **Source answers.** The log of a "Build feeds" run has one line per request to a source: its host, the
+  status and any `server`, `retry-after` or rate-limit header. When an answer is refused or unreadable,
+  the error quotes its first 200 characters, so a bot-challenge page reads as one.
 - **Freshness.** The log of a "Check feeds" run prints how many hours old each live feed is.
 - **Changes.** The page of each "Build feeds" run shows "What this build changed": the games added,
   changed (with the old and new value) and removed in each feed, compared with what scarf.fan served
