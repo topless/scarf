@@ -28,7 +28,7 @@ an Android 15 emulator signed in to the same account showed it in the Google Cal
 | Apple Calendar, macOS | Not tested yet | |
 | Google Calendar, account (what the web shows) | **Clean.** The same event (same Google event id) became timed, 17:00–19:00 UTC, with the new title and description. Still two events in the calendar. Google fetched v2 about 1.5 h after the swap. | 2026-10-31, read through the Google Calendar API; no web screenshot |
 | Google Calendar, Android app (Android 15 emulator) | **Clean.** The all-day entry is gone; one timed game, 6–8 PM in Zürich time, with the new notes. It arrived about 22.5 h after the swap, with no manual refresh on an idle emulator. | 2026-11-01 |
-| Outlook.com | Pending | |
+| Outlook.com | Not tested (skipped on 2026-11-01) | |
 
 The reminder shows "Alert: None" on iOS because iPhone doesn't schedule a feed's own reminders
 (found 2026-10-30, PR #88). That is a separate question from this one.
@@ -44,5 +44,5 @@ The reminder shows "Alert: None" on iOS because iPhone doesn't schedule a feed's
 ## What it means for the feed
 
 Apple and Google handle the switch with the stable `UID` alone, so the feed keeps `SEQUENCE:0` and a
-build-time `DTSTAMP`. Google's phone app can trail the account by most of a day. If Outlook turns out to
+build-time `DTSTAMP`. Google's phone app can trail the account by most of a day. Outlook was not tested; if it turns out to
 duplicate or ignore the change, the fix is a `SEQUENCE` that rises with the game's data.
