@@ -86,7 +86,6 @@ Chris had both opened on 1 November 2026: #126 and #127.
 
 **Decisions that are Chris's**
 
-1. Open the two follow-ups, or take them as one small PR.
 1. A contact in the User-Agent, `scarf/0.1 (+https://scarf.fan)`: the polite-bot convention, and it
    names the site to the sources.
 2. A guard on `npm run build` outside CI, refusing unless `CI` or an opt-in variable is set, so no
