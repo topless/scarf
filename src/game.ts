@@ -48,6 +48,10 @@ export function byStart(a: Game, b: Game): number {
   return (a.kickoff ?? a.date).localeCompare(b.kickoff ?? b.date)
 }
 
+// An answer's first 200 characters for an error message: enough to tell a bot-challenge page from a
+// changed format.
+export const startOf = (text: string): string => text.replace(/\s+/g, ' ').trim().slice(0, 200)
+
 // A source's answer: read from `saved`, an answer saved earlier, which makes no request (a fixture
 // build reads test/fixtures/), or else fetched from `url`.
 export async function fetchText(url: string, saved?: URL): Promise<string> {
@@ -56,6 +60,12 @@ export async function fetchText(url: string, saved?: URL): Promise<string> {
     headers: { 'User-Agent': 'scarf/0.1 (personal fixture calendar)' },
     signal: AbortSignal.timeout(30_000), // fail in 30 s, not after GitHub's six-hour job limit
   })
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText} for ${url}`)
+  // In the step log: which CDN fronts the source, and any rate limit it announces.
+  const named = [...res.headers].filter(([name]) => name === 'server' || name === 'retry-after' || name.includes('ratelimit'))
+  console.log(`${new URL(url).host} answered ${res.status}${named.map(([name, value]) => ` · ${name}: ${value}`).join('')}`)
+  if (!res.ok) {
+    const retry = res.headers.get('retry-after')
+    throw new Error(`${res.status} ${res.statusText} for ${url}${retry ? ` · retry-after: ${retry}` : ''} · the answer starts "${startOf(await res.text())}"`)
+  }
   return res.text()
 }

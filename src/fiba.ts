@@ -1,4 +1,4 @@
-import { fetchText, type Game } from './game.ts'
+import { fetchText, startOf, type Game } from './game.ts'
 
 // FIBA has no public API. The games page of an event embeds every game of that event as JSON
 // inside the page's Next.js data, so one request per competition is enough: the page is fetched
@@ -29,7 +29,7 @@ export function parseFibaGames(html: string, teamCode: string): Game[] {
     (g) => g.teamA?.code === teamCode || g.teamB?.code === teamCode,
   )
   // The page lists played games too, so a team that is in the event always has some.
-  if (games.length === 0) throw new Error(`FIBA page format changed: no games found for ${teamCode}`)
+  if (games.length === 0) throw new Error(`FIBA page format changed: no games found for ${teamCode}, and the page starts "${startOf(html)}"`)
 
   return games.map((g) => {
     const game: Game = {
