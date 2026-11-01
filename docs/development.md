@@ -86,7 +86,8 @@ npx wrangler dev
 
 then open http://localhost:8787/greece/football/. The fixture build reads the sources' answers saved in
 [test/fixtures/](../test/fixtures/), dated on the day they were saved so their games stay upcoming. It
-makes no request at all and leaves `known-games.json` and `source-answers/` alone.
+makes no request at all and leaves `known-games.json` and `source-answers/` alone. `npm run build:staging`
+builds the same way from the `source-answers/` an earlier `npm run build` left, whatever its age.
 
 To review the pages for drift before a page change ships, run `/ui-review main` in Claude Code, or
 by hand `node .claude/skills/ui-review/measure.ts --base main`. It builds from the fixtures, serves
@@ -98,9 +99,11 @@ what changed since the base. The limits sit at the top of the script; the report
 [.claude/skills/ui-review/SKILL.md](../.claude/skills/ui-review/SKILL.md). Needs Google Chrome.
 
 To put a branch on https://staging.scarf.fan, add the label `staging` to its pull request (#85). The
-"Deploy staging" workflow builds the branch as merged into main from the fixtures, so it makes no source
-request, writes a `dist/_headers` file with `X-Robots-Tag: noindex` that keeps staging out of search
-engines, and deploys `dist/` to the Worker `scarf-staging`. Nothing deploys on a push: to put a newer
+"Deploy staging" workflow builds the branch as merged into main with production's data: the sources'
+answers and the known games the last daily build saved in its Actions cache, taken as they are, so it
+makes no source request (a source the branch adds, which production has no answer for, uses its
+fixture). It writes a `dist/_headers` file with `X-Robots-Tag: noindex` that keeps staging out of
+search engines, and deploys `dist/` to the Worker `scarf-staging`. Nothing deploys on a push: to put a newer
 commit on staging, remove the label and add it again. A branch without a pull request goes the same way
 from the Actions tab (Deploy staging → Run workflow → pick the branch) once it contains the workflow,
 so merge main into a branch cut before it. A newer run cancels an older one, so staging shows the

@@ -9,8 +9,9 @@ motto: docs/brand.md.
 ## Stack and commands
 
 - Node 22.18+, TypeScript. `npm install` · `npm test` · `npm run build:fixtures` (writes `dist/`
-  from the test fixtures and asks no source: the build to check a change with) · `npm run build`
-  (asks UEFA and FIBA: the daily job's build, not a check).
+  from the test fixtures and asks no source: the build to check a change with) · `npm run build:staging`
+  (from the answers a daily build saved in `source-answers/`, no request: the staging deploy's build) ·
+  `npm run build` (asks UEFA and FIBA: the daily job's build, not a check).
 - Sources: UEFA match API (football), FIBA games page (basketball). Both undocumented; **one request
   per source per run**, never more: UEFA takes every team id in one call, and a FIBA page is fetched
   once per competition and parsed for every team in it. If a fetch fails or the shape changes, fail

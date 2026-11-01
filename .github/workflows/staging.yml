@@ -28,9 +28,21 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
-      # From the test fixtures, so this run asks UEFA and FIBA nothing: the one request per source
-      # per run belongs to the daily build. Pages and feeds point at the staging address.
-      - run: npm run build:fixtures
+      # Production's data: the sources' answers and the known games the last "Build feeds" run saved
+      # in its Actions cache on main, which a run on any branch may restore. The build takes them as
+      # they are and asks UEFA and FIBA nothing; a source this branch adds, which production has no
+      # answer for, uses its test fixture. Pages and feeds point at the staging address.
+      - uses: actions/cache/restore@v6
+        with:
+          path: source-answers
+          key: staging-${{ github.run_id }}
+          restore-keys: source-answers-
+      - uses: actions/cache/restore@v6
+        with:
+          path: known-games.json
+          key: staging-${{ github.run_id }}
+          restore-keys: known-games-
+      - run: npm run build:staging
         env:
           SITE_URL: https://staging.scarf.fan
       # Workers reads dist/_headers and adds the header to every asset it serves.

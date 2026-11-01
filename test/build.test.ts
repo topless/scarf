@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { execFile } from 'node:child_process'
 import { existsSync } from 'node:fs'
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { test } from 'node:test'
@@ -33,6 +33,36 @@ test('the fixture build writes every feed, page and share image without a single
   assert.ok(!existsSync(join(dir, 'source-answers')))
   // Dated on the fixtures' own day, so their games are still upcoming: Greece v Serbia, 16 Nov 2026.
   assert.match(await readFile(join(dir, 'dist', 'greece/football.ics'), 'utf8'), /^UID:uefa-2047912@scarf\r$/m)
+})
+
+// The staging build: the answers a daily build saved stand in whatever their age, a source without one
+// gets its fixture, nothing is fetched, and nothing is saved back.
+test('the staging build reuses old saved answers, falls back to the fixture, and makes no request', async (t) => {
+  const dir = await mkdtemp(join(tmpdir(), 'scarf-'))
+  t.after(() => rm(dir, { recursive: true }))
+  const day = new Date(Date.now() + 10 * 86_400_000).toISOString().slice(0, 10)
+  const match = {
+    id: '7',
+    status: 'UPCOMING',
+    homeTeam: { id: '49', internationalName: 'Greece' },
+    awayTeam: { id: '999', internationalName: 'Opponent' },
+    competition: { metaData: { name: 'International Friendly' } },
+    kickOffTime: { date: day, dateTime: `${day}T18:45:00Z`, utcOffsetInHours: 3 },
+  }
+  await mkdir(join(dir, 'source-answers'))
+  await writeFile(join(dir, 'source-answers/uefa.json'), JSON.stringify([match]))
+  // Months old and covering one team: a push build would ask UEFA again; staging takes it as it is.
+  const index = JSON.stringify({ 'uefa.json': { fetched: '2026-01-01T00:00:00Z', teamIds: [49] } })
+  await writeFile(join(dir, 'source-answers/index.json'), index)
+  const noFetch = 'data:text/javascript,globalThis.fetch = () => { process.exitCode = 1; throw new Error("the staging build made a request") }'
+  const build = fileURLToPath(new URL('../src/build.ts', import.meta.url))
+  const env = { ...process.env, SITE_URL: 'https://staging.scarf.fan' }
+  await promisify(execFile)(process.execPath, ['--import', noFetch, build, '--saved'], { cwd: dir, env })
+
+  assert.match(await readFile(join(dir, 'dist/greece/football.ics'), 'utf8'), /^UID:uefa-7@scarf\r$/m)
+  assert.ok(existsSync(join(dir, 'dist/greece/basketball.ics'))) // no FIBA answer was saved: the fixture stood in
+  assert.ok(!existsSync(join(dir, 'known-games.json')))
+  assert.equal(await readFile(join(dir, 'source-answers/index.json'), 'utf8'), index)
 })
 
 // The daily build with Greece's UEFA games played 31 and 2 days ago and one 10 days ahead, dated from
