@@ -138,8 +138,7 @@ Never rotate the mark further, never stretch, never add a drop shadow.
 
 The brand as a browsable design system, built from this file, `assets/brand-tokens.css`, `assets/site.css`
 and the marks, icons and drawings in `assets/` and `src/page.ts`:
-[scarf design system on claude.ai](https://claude.ai/artifact/AcsMKUmVFMtBqYnPmt8D3N) (issue #117; private
-until shared from its Share menu). It holds the tokens with a usage note each, this spec as a brand book,
+[scarf design system on claude.ai](https://claude.ai/artifact/AcsMKUmVFMtBqYnPmt8D3N) (issue #117). It holds the tokens with a usage note each, this spec as a brand book,
 the fonts, the marks, and a live preview per component, rendered with the site's own stylesheet. Its
 `tokens.json` records the commit it was taken from.
 
