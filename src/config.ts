@@ -119,6 +119,8 @@ export const COUNTRIES = {
   switzerland: { name: 'Switzerland', colours: ['#D52B1E', '#FFFFFF'], flag: 'ch' },
   turkiye: { name: 'Türkiye', colours: ['#E30A17', '#FFFFFF'], flag: 'tr' },
   ukraine: { name: 'Ukraine', colours: ['#0057B8', '#FFD700'], flag: 'ua' },
+  // Four colours and a stripe takes three: the hoist's red, the green and the black, without the white.
+  'united-arab-emirates': { name: 'United Arab Emirates', colours: ['#FF0000', '#00732F', '#000000'], flag: 'ae' },
   wales: { name: 'Wales', colours: ['#00AB39', '#D21034', '#FFFFFF'], flag: 'gb-wls' },
 } satisfies Record<string, { name: string; colours: Team['colours']; flag: string }>
 

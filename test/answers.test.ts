@@ -66,7 +66,8 @@ async function pushBuild(t: TestContext, savedTeamIds: number[]) {
     index[`${event}.html`] = { fetched }
   }
   for (const season of euroleagueSeasons) {
-    await copyFile(fixture('euroleague-games.json'), join(answers, `euroleague-${season}.json`))
+    // A season's own answer: the EuroCup's (U2026) holds other clubs than the EuroLeague's (E2026).
+    await copyFile(fixture(season.startsWith('U') ? 'eurocup-games.json' : 'euroleague-games.json'), join(answers, `euroleague-${season}.json`))
     index[`euroleague-${season}.json`] = { fetched }
   }
   await writeFile(join(answers, 'index.json'), JSON.stringify(index))

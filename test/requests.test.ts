@@ -10,8 +10,9 @@ import { teams } from '../src/config.ts'
 
 // The daily build in a folder of its own, every request to a source printed and answered from the
 // fixtures, the live feeds (our own site) answering 404: however many teams there are, one UEFA
-// request carries every football team, one FIBA page serves each competition and one EuroLeague
-// answer each season.
+// request carries every football team, clubs and national teams alike, one FIBA page serves each
+// competition and one EuroLeague answer each season, its letter naming the competition (E2026 the
+// EuroLeague, U2026 the EuroCup).
 test('a daily build asks UEFA once, for every football team, FIBA once per competition and EuroLeague once per season', async (t) => {
   const dir = await mkdtemp(join(tmpdir(), 'scarf-'))
   t.after(() => rm(dir, { recursive: true }))
@@ -22,7 +23,8 @@ test('a daily build asks UEFA once, for every football team, FIBA once per compe
       console.error('asked ' + url)
       if (String(url).startsWith('https://match.uefa.com/')) return new Response(readFileSync(${fixture('uefa-matches.json')}, 'utf8'))
       if (String(url).startsWith('https://www.fiba.basketball/')) return new Response(readFileSync(${fixture('fiba-games.html')}, 'utf8'))
-      if (String(url).startsWith('https://api-live.euroleague.net/')) return new Response(readFileSync(${fixture('euroleague-games.json')}, 'utf8'))
+      if (String(url).startsWith('https://api-live.euroleague.net/v2/competitions/E/')) return new Response(readFileSync(${fixture('euroleague-games.json')}, 'utf8'))
+      if (String(url).startsWith('https://api-live.euroleague.net/v2/competitions/U/')) return new Response(readFileSync(${fixture('eurocup-games.json')}, 'utf8'))
       process.exitCode = 1
       throw new Error('asked ' + url)
     }`
@@ -35,10 +37,11 @@ test('a daily build asks UEFA once, for every football team, FIBA once per compe
   const uefaIds = teams.flatMap(({ source }) => (source.kind === 'uefa' ? [source.teamId] : []))
   const events = [...new Set(teams.flatMap(({ source }) => (source.kind === 'fiba' ? [source.event] : [])))]
   const seasons = [...new Set(teams.flatMap(({ source }) => (source.kind === 'euroleague' ? [source.season] : [])))]
+  assert.deepEqual(seasons, ['E2026', 'U2026'])
   assert.equal(asked.length, 1 + events.length + seasons.length, asked.join('\n'))
   assert.match(asked[0]!, new RegExp(`^asked https://match\\.uefa\\.com/v5/matches\\?teamId=${uefaIds.join(',')}&.*&limit=500&`))
   assert.deepEqual(asked.slice(1), [
     ...events.map((event) => `asked https://www.fiba.basketball/en/events/${event}/games`),
-    ...seasons.map((season) => `asked https://api-live.euroleague.net/v2/competitions/E/seasons/${season}/games`),
+    ...seasons.map((season) => `asked https://api-live.euroleague.net/v2/competitions/${season[0]}/seasons/${season}/games`),
   ])
 })
