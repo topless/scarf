@@ -6,18 +6,22 @@ How scarf is built, set up, run and kept running. The [README](../README.md) say
 
 The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
 
-1. fetches the games from the official sources: one UEFA request for every football team, and one FIBA
-   page per basketball competition, shared by the teams playing in it;
-2. adds what no source provides (TV channel, ticket link) from [src/config.ts](../src/config.ts) and [src/manual.ts](../src/manual.ts);
-3. writes one `dist/{country}/{sport}.ics`, its `-alerts` variant and one team page `dist/{country}/{sport}/index.html`
-   per team, one country page `dist/{country}/index.html` listing that country's teams, the landing page
-   `dist/index.html` listing every team and the How it works page `dist/how-it-works/index.html`, which a
-   Cloudflare Worker serves at scarf.fan;
-4. renders a 1200×630 share image per team at `dist/{country}/{sport}/share.png`, one per country at
-   `dist/{country}/share.png` and one for the landing page at `dist/share.png`, the card a chat app shows
+1. fetches the games from the official sources: one UEFA request for every football team, national or
+   club; one FIBA page per basketball competition, shared by the national teams playing in it; and one
+   EuroLeague Basketball request per season code, shared by the clubs playing in it;
+2. adds what no source provides (TV channel, ticket link) from [src/config.ts](../src/config.ts) (national teams),
+   [src/clubs.ts](../src/clubs.ts) (clubs) and [src/manual.ts](../src/manual.ts);
+3. writes one feed, its `-alerts` variant and one page per team: `dist/{country}/{sport}.ics` and
+   `dist/{country}/{sport}/index.html` for a national team, `dist/{country}/{sport}/{club}.ics` and
+   `dist/{country}/{sport}/{club}/index.html` for a club; one country page `dist/{country}/index.html` listing
+   that country's national teams and clubs, one page per competition `dist/{sport}/{competition}/index.html`
+   listing its clubs, the landing page `dist/index.html` and the How it works page
+   `dist/how-it-works/index.html`, which a Cloudflare Worker serves at scarf.fan;
+4. renders a 1200×630 share image next to each team's page (`share.png`, a club's included), one per country
+   at `dist/{country}/share.png` and one for the landing page at `dist/share.png`, the card a chat app shows
    when someone pastes a page's address, from [src/share.ts](../src/share.ts): a team's in its colours with
-   its next game, a country's in its colours with its teams' names, the landing page's in the brand
-   colours with every team's name;
+   its next game, a country's in its colours with its national teams' names, the landing page's in the brand
+   colours; a competition page has none;
 5. records the games it saw in `known-games.json` and the sources' answers in `source-answers/`, which the
    Actions job keeps in its cache between runs (not in git), so the next run can tell a newly announced game
    from an old one, and a run on a push to `main` can reuse the day's answers instead of asking again.
@@ -26,21 +30,28 @@ If a source cannot be fetched or its format changed, the build fails and the las
 
 ## Paths
 
-Subscriptions point at the feeds, and every event's footer names the team page, so those two paths
-are frozen. Every other page may move, with a redirect from its old address.
+Subscriptions point at the feeds, and every event's footer names the team page, so those paths are
+frozen, a club's as a national team's. Every other page may move, with a redirect from its old address.
 
 - `/{country}/{sport}.ics`: one feed per team, for example `/greece/football.ics` and `/greece/basketball.ics`.
 - `/{country}/{sport}-alerts.ics`: the same feed plus an all-day "New game" entry on the day a game is announced,
   for fans who pick "Games and announcements" on the team page.
 - `/{country}/{sport}/`: the team's page, for example `/greece/football/`, with its share image at
   `/{country}/{sport}/share.png`.
-- `/{country}/`: the country's page listing its teams, for example `/greece/`, with its share image at
-  `/{country}/share.png`.
-- `/`: the page listing every team, with its share image at `/share.png`.
+- `/{country}/{sport}/{club}.ics`, `/{country}/{sport}/{club}-alerts.ics` and `/{country}/{sport}/{club}/`
+  with its `share.png`: a club's feeds and page, the same three as a national team's, for example
+  `/greece/basketball/olympiacos.ics` and `/greece/basketball/olympiacos/`. The path names the club's
+  country and sport, never its competition, so it holds from season to season.
+- `/{country}/`: the country's page listing its national teams, then its clubs, for example `/greece/`,
+  with its share image at `/{country}/share.png`.
+- `/{sport}/{competition}/`: a competition's page listing this season's clubs, each linking to the club's
+  page: `/basketball/euroleague/`, `/basketball/eurocup/`, `/football/champions-league/`. No feed and no
+  share image.
+- `/`: the landing page, with its share image at `/share.png`.
 - `/how-it-works/`: the How it works page, linked from every top bar.
-- `/kit/`: the identity kit, unlisted and `noindex` ([docs/brand.md](brand.md), Countries and sports).
+- `/kit/`: the identity kit, unlisted and `noindex` ([docs/brand.md](brand.md), Countries, clubs and sports).
 
-Each event's `UID` is the source's id (`uefa-…`, `fiba-…`) and never changes, so an updated game
+Each event's `UID` is the source's id (`uefa-…`, `fiba-…`, `euroleague-…`) and never changes, so an updated game
 replaces the old entry instead of duplicating it.
 
 ## One-time setup
@@ -65,7 +76,7 @@ is set in the workflow.
 
 Needs Node 22.18 or newer. The share images need nothing else: they are laid out by Satori and
 rasterised by resvg (WebAssembly), with the two brand fonts bundled in [fonts/](../fonts/) under the
-SIL Open Font License, so no browser and no network beyond the two sources.
+SIL Open Font License, so no browser and no network beyond the sources.
 
 ```bash
 npm install
@@ -75,7 +86,7 @@ npm run build
 
 A local build also writes `known-games.json` and `source-answers/` in the repository root, which git ignores.
 
-`npm run build` asks UEFA and FIBA for live data. To check a page change without asking them, build
+`npm run build` asks UEFA, FIBA and EuroLeague for live data. To check a page change without asking them, build
 from the test fixtures and serve `dist/` the way scarf.fan does:
 
 ```bash
@@ -105,7 +116,8 @@ what changed since the base. The limits sit at the top of the script; the report
 
 ## Maintaining it by hand
 
-- **TV channel and default ticket link** are per team in [src/config.ts](../src/config.ts).
+- **TV channel and default ticket link** are per team in [src/config.ts](../src/config.ts), per club in
+  [src/clubs.ts](../src/clubs.ts).
 - **One game's details** (time, venue, tickets, a note) go in [src/manual.ts](../src/manual.ts), keyed by the game id.
   The id is the first part of the event's `UID` in the calendar file, for example `fiba-127107`.
   Time and venue entered by hand are used only until the official source has its own.
@@ -121,6 +133,16 @@ what changed since the base. The limits sit at the top of the script; the report
   such as `gb-eng`, and the build copies the flags it uses to `dist/flags/` with the licence. A football
   team costs no extra request; a basketball team in a competition that is already fetched costs none
   either, and each new basketball competition costs one.
+- **A new club** is one more entry in [src/clubs.ts](../src/clubs.ts): its country (a `COUNTRIES` row in
+  [src/config.ts](../src/config.ts) first if the country has none), sport, slug, name, home city, ground and
+  competition, the kit colours, and a UEFA team id for football or a EuroLeague season code and club code
+  for basketball. A football club costs no extra request, nor a basketball club in a season already
+  fetched; a new season code costs one. A EuroLeague arena missing from `VENUES` in
+  [src/euroleague.ts](../src/euroleague.ts) shows no city, so its times read "at the venue" until its row
+  is added.
+- **A new season** of the club competitions: once the next season's games are published (July, as a rule),
+  the season codes in [src/clubs.ts](../src/clubs.ts) move on (`E2026` to `E2027`, `U2026` to `U2027`), and
+  the clubs and `COMPETITIONS` in [src/config.ts](../src/config.ts) are refreshed with them.
 
 ## Keeping it running
 
@@ -171,11 +193,14 @@ docs/observability.md is the plan for counting subscribers, visitors and subscri
 
 ## Known limits
 
-- The UEFA endpoint and the FIBA page are undocumented and can change without notice. Their terms do not
-  allow automated collection, so this stays a small friends-only tool: the daily run, and a manual one, make
-  one UEFA request for all football teams together and one FIBA request per basketball competition. A run
-  on a push to `main` reuses the answers the last run saved while they are less than a day old, and asks
-  only for what they don't cover: UEFA again for a new football team, FIBA for a new competition's page.
+- The UEFA endpoint, the FIBA page and EuroLeague Basketball's API (`api-live.euroleague.net`, open and
+  keyless) are undocumented and can change without notice. UEFA's and FIBA's terms do not allow automated
+  collection, and EuroLeague publishes none for its API, so this stays a small friends-only tool: the daily
+  run, and a manual one, make one UEFA request for all football teams together, national and club, one FIBA
+  request per basketball competition, and one EuroLeague request per season code (`E2026` for the
+  EuroLeague, `U2026` for the EuroCup), parsed for every club in it. A run on a push to `main` reuses the
+  answers the last run saved while they are less than a day old, and asks only for what they don't cover:
+  UEFA again for a new football team, FIBA for a new competition's page, EuroLeague for a new season code.
 - Calendar apps refresh subscribed feeds on their own schedule; Google Calendar can take a day. On a Mac,
   choose "Every day" for auto-refresh when subscribing; the default is reportedly weekly.
 - Subscribing in Google Calendar only works in a computer browser, not in the phone app.

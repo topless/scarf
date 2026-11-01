@@ -30,6 +30,25 @@ X-PUBLISHED-TTL:PT12H
 
 Calendar name: team first, brand last, lowercase. Colour: the team's first stripe colour.
 
+## A club's feed
+
+A club's feed follows every rule in this spec; only these values differ (#130). Samples: Olympiacos
+in the EuroLeague.
+
+| Field | A club's value |
+|---|---|
+| `X-WR-CALNAME` | `Olympiacos basketball · scarf` |
+| `X-WR-CALDESC` | `Every game of the Olympiacos men's basketball team: tip-off, venue, TV, tickets. Kept up to date by scarf.` |
+| `X-APPLE-CALENDAR-COLOR` | the kit's first colour, `#E4002B` |
+| `UID` | the source's id: `euroleague-E2026_100@scarf` (EuroLeague), `euroleague-U2026_12@scarf` (EuroCup), `uefa-<matchId>@scarf` for a football club |
+| `SUMMARY` | `Olympiacos vs Crvena Zvezda`: the clubs as the source names them, EuroLeague's short name without sponsor or city |
+| Competition line | the competition, with the round where the source gives one: `EuroLeague · Round 10` |
+| Footer | `Kept up to date by scarf · {canonical}/greece/basketball/olympiacos` |
+
+"We" is the club: `We'll fill in the time as soon as EuroLeague publishes it.` A club has one feed
+across competitions, "Olympiacos in Europe": its path names no competition and its UIDs come from
+the source, so a club that moves from the EuroCup to the EuroLeague keeps its feed and its subscribers.
+
 ## 1 · Timed game (default)
 
 | Field | Value |
@@ -38,7 +57,7 @@ Calendar name: team first, brand last, lowercase. Colour: the team's first strip
 | `SUMMARY` | `Greece vs Serbia`: home team first as the federation lists it; no competition, sport or emoji |
 | `DTSTART`/`DTEND` | UTC; duration 2 h (football and basketball alike) |
 | `LOCATION` | `Panthessaliko Stadium, Volos`: venue and city; the sources name no country |
-| `URL` | the ticket link when there is one (the game's own in `src/manual.ts`, else the team's default in `src/config.ts`), otherwise the team page |
+| `URL` | the ticket link when there is one (the game's own in `src/manual.ts`, else the team's default in `src/config.ts`, a club's in `src/clubs.ts`), otherwise the team page |
 | `DESCRIPTION` | template below |
 | `VALARM` | `TRIGGER:-PT60M`, `DESCRIPTION:Greece vs Serbia kicks off in an hour · Alpha, Novasports` |
 

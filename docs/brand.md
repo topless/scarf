@@ -57,14 +57,24 @@ without its crown.
 Stripe sizes: 12–14 px band as a card header (with a 1.5 px ink border below), 24–28 px band at the
 top of a page or share card.
 
-## Countries and sports
+## Countries, clubs and sports
 
 **Colour says who, lines say what.** Stripes alone collide (England and Switzerland are both red and
-white), so a country is its flag (from flag-icons), its name and its stripes. A sport never takes a
-team colour: it is a ball icon, a line drawing of the pitch or court, and its own words (kickoff and
-stadium, tip-off and arena). The icons and drawings live with each sport's words in `src/page.ts`.
-The identity kit at `/kit/` (unlisted, `noindex`) shows every country, sport and team card side by
-side: check it after adding a team or a sport.
+white), so a mark and a name always go with them (#130):
+
+| Entity | Mark | Stripes |
+|---|---|---|
+| Country | its flag (from flag-icons) and its name | the flag's |
+| Club | its crest and its name; the country's flag only as a small mark beside its home city and ground | the kit's |
+| Competition | a ball icon and its name | none: nothing on it is a team |
+
+A sport never takes a team colour: it is a ball icon, a line drawing of the pitch or court, and its
+own words (kickoff and stadium, tip-off and arena). The icons and drawings live with each sport's
+words in `src/page.ts`. The sport switch always toggles one entity's sports: a country's national
+teams, or a club's own teams (Olympiacos plays both). The tag names the federation for a national team
+("Men's football · UEFA") and the competition for a club ("Men's basketball · EuroLeague").
+The identity kit at `/kit/` (unlisted, `noindex`) shows every country, club, sport and team card side
+by side: check it after adding a team, a club or a sport.
 
 - Ball icons: stroke SVG like the other icons. The football is in ink, its pentagons filled (the
   centre one and the five cut by the rim) so dark and light patches alternate, with its seams at
@@ -115,12 +125,25 @@ Never rotate the mark further, never stretch, never add a drop shadow.
 - **Primary button**: Terrace red fill, white text, 700, height 52–56 px, radius 12 px.
 - **Secondary button**: transparent, 1.5 px ink border, ink text 600, height 44–48 px, radius 12 px.
 - **Nav pill / chip**: height 44 px, radius 999 px, 1.5 px border; a country chip carries its flag
-  (20 × 15 px) at the left. "Add" chips use a dashed red border.
+  (20 × 15 px) at the left, a club chip a 20 × 15 px swatch of its kit stripes. "Add" chips use a
+  dashed red border.
 - **Sport switch**: a white pill holding one 40 px segment per sport (ball icon and name), the
-  current one filled ink. Only on a team page whose country has more than one sport.
+  current one filled ink. Only on a page whose country or club has more than one sport.
 - **Sport tag**: 34 px white pill, 1.5 px ink border, ball icon and "Men's football · UEFA".
 - **Card**: white, 1.5 px ink border, radius 16 px, `overflow: hidden`; team cards open with a 14 px
   stripe header and a 1.5 px ink rule under it. Padding 24–28 px.
+- **Club card**: a card that opens with the sport line (ball icon, Football or Basketball, the
+  competition at the right), then the kit-stripe header, the crest slot (44 px), the club's name, the
+  flag (16 × 12 px) with the home city and ground, the next game and "Games and subscribe".
+- **Club bar**: the top of a club's page: the crest (48 px), the club's name, under it the country line
+  (flag, "Piraeus, Greece") linking to the country page, the club's own sport switch, and Share.
+- **Competition card**: a plain card, no stripes: ball icon and name, a line of facts, six club chips
+  with their kit swatches, "and N more", and "All N clubs".
+- **Crest**: small, beside the club's name, unmodified; until a club's file exists, a round swatch of
+  its kit stripes stands in. Never in scarf's mark, a share image or the favicon, and never a
+  competition's logo. With the crests comes a line in the small print: they are the clubs' trademarks,
+  shown to say whose games these are, scarf is not affiliated with any club or competition, and a crest
+  comes down on request, within days. The files and the go: #132.
 - **Input**: height 44–46 px, 1.5 px chalk border, radius 10 px, white.
 - **Fixture row**: date block (Bricolage 800 28 px + Stand meta), title 22 px 600, meta 14 px Stand,
   tickets as a secondary button; rows divided by 1.5 px chalk.
@@ -134,7 +157,7 @@ Never rotate the mark further, never stretch, never add a drop shadow.
 - Times name their city ("21:45 in Volos"). Unknowns are said plainly: "time not announced",
   "venue not announced". Never TBA, TBC, "don't miss out", "notification".
 - Colour comes from the teams, never from us: no gradients, no decorative red fills, one red element
-  per screen is plenty. The orange basketball is the one sport colour (see Countries and sports).
+  per screen is plenty. The orange basketball is the one sport colour (see Countries, clubs and sports).
 
 ## Design system
 
@@ -146,4 +169,6 @@ the fonts, the marks, and a live preview per component, rendered with the site's
 
 The repository is the source. When a token, a face, a mark or a component changes here, refresh the design
 system from the code rather than editing it on the page: its files mirror the paths above, so a change to
-one of them is a change to the matching file there.
+one of them is a change to the matching file there. The clubs (#130) changed the grammar and added the
+club card, the club bar, the competition card and the crest: refresh the system from the code once they
+have landed, never the other way round.
