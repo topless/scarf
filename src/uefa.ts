@@ -1,15 +1,16 @@
-import { fetchText, type Game } from './game.ts'
+import { fetchText, keptSince, type Game } from './game.ts'
 
 // Undocumented endpoint behind uefa.com's fixtures pages. `teamId` takes a comma-separated list
 // and answers with every match of any listed team (probed once on 2026-10-17 with
 // teamId=49,122,35: six matches, two per team), so one call a day covers every football team:
 // Nations League, qualifiers and friendlies. Each team then picks its own matches out of it.
-// With every UEFA member on scarf the call holds every European national-team match to the end of the
-// year after next, some 250 a year once qualifiers are drawn. Asked for limit=500 on 2026-10-30 (#76,
+// With every UEFA member on scarf the call holds every European national-team match from PLAYED_DAYS
+// ago (game.ts) to the end of the year after next, some 250 a year once qualifiers are drawn. The
+// played ones come back as status "FINISHED" with the same fields, and stay in the feeds as they were. Asked for limit=500 on 2026-10-30 (#76,
 // competitionId=2014), UEFA answered with all 156 games of the Nations League 2026-27 league phase,
 // so one answer can hold more than the 100 the first probes asked for.
 // shortcut: a full 500 is untested, and a quiet cap between 156 and 500 would drop the latest matches
-// without failing; print the match count in the run summary if that ever needs ruling out.
+// without failing; the run summary prints the match count, so watch it there before PLAYED_DAYS grows.
 const LIMIT = 500 // a response this long may have been cut
 
 export interface UefaMatch {
@@ -26,7 +27,7 @@ export interface UefaMatch {
 
 export async function fetchUefaMatches(teamIds: number[], today: string, saved?: URL): Promise<UefaMatch[]> {
   const to = `${Number(today.slice(0, 4)) + 2}-12-31`
-  const url = `https://match.uefa.com/v5/matches?teamId=${teamIds.join(',')}&fromDate=${today}&toDate=${to}&limit=${LIMIT}&offset=0&order=ASC`
+  const url = `https://match.uefa.com/v5/matches?teamId=${teamIds.join(',')}&fromDate=${keptSince(today)}&toDate=${to}&limit=${LIMIT}&offset=0&order=ASC`
   const matches = JSON.parse(await fetchText(url, saved)) as UefaMatch[]
   if (!Array.isArray(matches)) throw new Error('UEFA response format changed: not a list of matches')
   // One team may have nothing scheduled; no match for any team means the request stopped working.

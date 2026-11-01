@@ -36,6 +36,14 @@ export function withDetails(game: Game, teamDefaults: Details, manual: Details =
   }
 }
 
+// A played game stays in the feed this many days, exactly as it was, so it doesn't vanish from
+// fans' calendars the day after (#20). Longer only once UEFA's match count in the run summary
+// shows room under the cap in uefa.ts: the one UEFA request asks from this far back.
+export const PLAYED_DAYS = 30
+
+// The first day (YYYY-MM-DD) a feed still carries: `today` less PLAYED_DAYS.
+export const keptSince = (today: string): string => new Date(Date.parse(today) - PLAYED_DAYS * 86_400_000).toISOString().slice(0, 10)
+
 export function byStart(a: Game, b: Game): number {
   return (a.kickoff ?? a.date).localeCompare(b.kickoff ?? b.date)
 }

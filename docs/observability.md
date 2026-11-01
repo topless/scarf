@@ -14,12 +14,6 @@ visits, which subscribe buttons get pressed, and what each daily build changed. 
 - **Measure first.** A week of Cloudflare's built-in request counts comes before any counting code.
 - **Four signals:** feed subscribers, page visitors, subscribe clicks, build and data changes.
 
-## Why we see nothing today
-
-GitHub Pages keeps no access logs, and scarf.fan's records in Cloudflare are DNS-only: Cloudflare
-answers the lookup, then the visitor talks to GitHub. From 22 to 28 October Cloudflare answered about
-7,000 address lookups for scarf.fan and saw one HTTP request.
-
 ## Signals
 
 | Signal | Questions | Recorded by | Read in |
@@ -31,25 +25,22 @@ answers the lookup, then the visitor talks to GitHub. From 22 to 28 October Clou
 
 The first three are rows in one Workers Analytics Engine dataset, `scarf_events`.
 
-## Hosting (#43)
+## Hosting (#43, landed on 30 October 2026 with #83)
 
-- `wrangler.jsonc` with `assets.directory: "dist"`. The Worker runs first only on the feeds
-  (`run_worker_first: ["/*.ics"]`; check the glob matches `/greece/football.ics`). Every other file is
-  served without it, and a path with no file, such as `/e`, reaches the Worker anyway.
-- `publish.yml` builds as today and deploys with `wrangler deploy`. `SITE_URL` becomes
-  `https://scarf.fan`.
+- `wrangler.jsonc`: `dist/` as static assets on the Worker `scarf`, scarf.fan as its custom domain,
+  no Worker script yet. `publish.yml` builds with `SITE_URL=https://scarf.fan` and deploys with
+  `wrangler deploy`. DNS, the `www` redirect and the GitHub Pages redirects for the old addresses:
+  docs/development.md, One-time setup.
+- When #71 adds the script, it runs first only on the feeds (`run_worker_first: ["/*.ics"]`; check the
+  glob matches `/greece/football.ics`). Every other file is served without it, and a path with no
+  file, such as `/e`, reaches the Worker anyway.
 - No `_headers` file. Wrangler sets `text/calendar` from the file extension, and the default cache
   header (recheck every time, with an ETag) suits feeds. `_headers` rules would not apply to feeds
   anyway once they pass through the Worker.
-- Rollout: serve from `workers.dev` next to GitHub Pages for a few daily builds, then move in one step:
-  delete the nine DNS-only records, attach `scarf.fan` as the Worker's custom domain, redirect `www`
-  to the apex. At a quiet hour; calendar apps retry a failed refresh.
-- GitHub Pages and its custom-domain setting stay, so `topless.github.io/scarf/…` keeps redirecting.
-  Unverified whether GitHub keeps redirecting once scarf.fan points elsewhere: check right after.
 
-**Measure first.** Once scarf.fan runs on Workers, Cloudflare's built-in analytics count every request
-by path, User-Agent, country and status: free, no code, 30 days back. Read a week of feed requests per
-day before #71 turns the Worker on. The feeds already ask calendars to refresh every 12 hours
+**Measure first.** Since the move, Cloudflare's built-in analytics count every request by path,
+User-Agent, country and status: free, no code, 30 days back (docs/development.md, What we can see).
+Read a week of feed requests per day before #71 turns the Worker on. The feeds already ask calendars to refresh every 12 hours
 (`REFRESH-INTERVAL` and `X-PUBLISHED-TTL`, docs/calendar-event-spec.md), so a device that listens
 makes about two requests per feed a day. Workers Free allows 100,000 Worker requests a day; reaching
 that takes tens of thousands of subscriptions, or one misbehaving client. Past it, feeds answer 429
@@ -93,11 +84,11 @@ so the destination can change in one place.
 
 ## Build and data changes (#70)
 
-Already in place: a failed build or a stale feed opens an `ops` issue. New: each build writes a
-summary on its run page. Per source, whether it answered and how many games it gave per team. Per
+A failed build or a stale feed opens an `ops` issue, and since 30 October 2026 each build writes a
+summary on its run page (docs/development.md, What we can see). Per source, whether it answered and how many games it gave per team. Per
 feed, games added, changed ("Greece vs Georgia: kickoff 20:45 → 21:45 in Athens") and removed,
 compared by UID with the live feed on scarf.fan, ignoring `DTSTAMP`. That is our own site, so the
-one-request-per-source rule is untouched. This step does not depend on the move.
+one-request-per-source rule is untouched.
 
 ## The view (#73)
 
@@ -126,5 +117,5 @@ every signal. Analytics Engine keeps three months.
 
 ## Order
 
-#70 now, then #43 and a week of Cloudflare's built-in numbers, then #71 together with the privacy
-page (#78), #72, and #73 once a week of data exists.
+#70 and #43 landed on 30 October 2026. Next a week of Cloudflare's built-in numbers, then #71
+together with the privacy page (#78), #72, and #73 once a week of data exists.

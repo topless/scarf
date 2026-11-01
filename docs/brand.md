@@ -3,11 +3,19 @@
 Direction: **fan culture**. The scarf is the one fan object shared by football and basketball,
 national teams and clubs. The brand stays neutral: wool, ink, one terrace red. Every team
 brings its own colours as a knitted stripe. That stripe becomes the team's calendar colour, the
-card header, the share image and the recoloured mark.
+card header and the share image.
 
 - Name: **scarf**, lowercase wordmark, always. "Scarf" only at the start of a sentence.
 - Line: **Your colours, in your calendar.**
-- Motto: **Wrapped up in the game.**
+- Motto: **Wrapped in the game.**
+- Trademark: a company named Scarf exists (scarf.sh, open-source analytics), a different product.
+  Search EUIPO and the Swiss IGE before spending on anything printed. Not legal advice.
+
+The brand came with the design handover of 16 October 2026. Its canvas, the Claude Design artifact
+"Event schedule · brand directions", holds the same material visually: brand sheet, team page,
+calendar-event spec, share card, product map. The HTML it handed over is in `reference/`: the team
+page and the share card the pages and share images were ported from, and the picker page of the
+#17 spike, which was not built.
 
 ## Colour tokens
 
@@ -90,10 +98,10 @@ Fallback stacks: `'Bricolage Grotesque', system-ui, sans-serif` and `'Albert San
 
 ## Logo
 
-Mark: a tilted (−14°) striped band with fringe. Files in `assets/`:
+Mark: a tilted (−14°) striped band with fringe, `assets/scarf-mark.svg` (red band, wool stripes, ink
+outline), drawn from that one file on every page and share image. It stays in brand colours on team
+surfaces too: the stripe carries the team colour, the mark never does.
 
-- `scarf-mark.svg`: brand colours (red band, wool stripes, ink outline). Use on wool/white.
-- `scarf-mark-greece.svg`: team recolour (blue band, white stripes). Use on team surfaces.
 - On ink backgrounds, outline and fringe become wool `#FBF8F2`.
 - App icon / favicon: red `#D7263D` rounded square (radius ≈ 23 %), mark in wool with ink stripes.
 

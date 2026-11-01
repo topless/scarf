@@ -428,7 +428,7 @@ const GITHUB_MARK = `<svg viewBox="0 0 16 16" width="16" height="16" fill="curre
 // Every page's footer: the motto, and where a fan reports a wrong kickoff or asks for a team.
 function footer(): string {
   return `<footer class="wrap site-footer">
-  <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Wrapped up in the game.</span></div>
+  <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Wrapped in the game.</span></div>
   <a class="footer-link" href="https://github.com/topless/scarf/issues/new/choose">${GITHUB_MARK}Suggest a team or report a bug</a>
 </footer>`
 }
