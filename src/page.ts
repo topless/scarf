@@ -123,7 +123,7 @@ function otherTeams(all: Team[], team: Team, root: string): string {
   <div class="wrap">
     <div class="teams-text">
       <h2>Other teams</h2>
-      <p>Each team is its own feed, in its own colours. Add as many as you follow: national sides today, your club next.</p>
+      <p>Each team is its own feed, in its own colours. Add as many as you follow, national sides and clubs alike.</p>
 ${finder('Find your country')}
     </div>
 ${teamChips(all, team, root)}
