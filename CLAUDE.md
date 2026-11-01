@@ -47,6 +47,8 @@ motto: docs/brand.md.
 
 - Team stripes carry the colour; the brand itself stays neutral. Colours, type, the mark and the
   components are in the spec, not here.
+- The brand as a browsable design system lives on claude.ai (link in docs/brand.md, Design system). The
+  repository is its source: refresh it from the code after a brand change, never the other way round.
 
 ## Don't
 
