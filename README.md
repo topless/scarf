@@ -6,7 +6,7 @@
 
 Your colours, in your calendar. scarf publishes one subscribable calendar feed per national team:
 every game with kickoff, venue, TV channel and ticket link, and a reminder an hour before. Fans
-subscribe once, and the calendar they already use keeps itself up to date. Wrapped up in the game.
+subscribe once, and the calendar they already use keeps itself up to date. Wrapped in the game.
 
 Teams so far: men's football for all 54 UEFA nations in the Nations League, and men's basketball for
 the 24 teams still in the FIBA World Cup 2027 European qualifiers. Pick your team at https://scarf.fan.

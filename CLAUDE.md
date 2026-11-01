@@ -4,7 +4,7 @@ scarf publishes subscribable calendar feeds (.ics) for the national teams fans f
 venue, TV, tickets, a reminder an hour before. It also builds one static page per team and a
 landing page.
 Static output, rebuilt daily by GitHub Actions, served by a Cloudflare Worker. Brand line: "Your
-colours, in your calendar." Motto: "Wrapped up in the game."
+colours, in your calendar." Motto: "Wrapped in the game."
 
 ## Stack and commands
 
