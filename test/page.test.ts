@@ -567,7 +567,7 @@ test("a club's other teams are its neighbours: its next opponents on scarf, its 
   inOrder(
     others,
     '<h3>Next opponents</h3>',
-    '<a class="country-chip" href="../../../greece/basketball/panathinaikos/"><span class="swatch" style="--swatch: repeating-linear-gradient(90deg, #007A33 0px 5px, #FFFFFF 5px 10px)"></span>Panathinaikos</a>',
+    '<a class="country-chip" href="../../../greece/basketball/panathinaikos/"><span class="swatch" style="--swatch: repeating-linear-gradient(90deg, #016A41 0px 5px, #FFFFFF 5px 10px)"></span>Panathinaikos</a>',
     '>Anadolu Efes</a>',
     '>Milan</a>',
     '<a class="country-chip more" href="../../../basketball/euroleague/">All 9 EuroLeague clubs<svg',
@@ -598,7 +598,7 @@ test('a country page shows its clubs in Europe after its national teams, footbal
   )
   assert.equal(html.match(/<article class="card club"/g)?.length, 3)
   // A card: the kit stripes, the sport first, the crest, the name, home with a small flag, the next game, the way in.
-  assert.ok(html.includes('<article class="card club" style="--stripe: repeating-linear-gradient(90deg, #E4002B 0px 18px, #FFFFFF 18px 36px)'))
+  assert.ok(html.includes('<article class="card club" style="--stripe: repeating-linear-gradient(90deg, #D30D24 0px 18px, #FFFFFF 18px 36px)'))
   assert.match(
     html,
     /<span class="cell-sport"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>Basketball<small>EuroLeague<\/small><\/span>\n\s*<div class="club-head"><img class="crest" src="\.\.\/crests\/olympiacos-basketball\.png" width="44" height="44" alt=""><div><h3 class="club-name"><a href="\.\.\/greece\/basketball\/olympiacos\/">Olympiacos<\/a><\/h3><div class="club-home"><img class="flag" src="\.\.\/flags\/gr\.svg" width="16" height="12" alt="">Piraeus · Peace and Friendship Stadium<\/div><\/div><\/div>/,
@@ -745,8 +745,8 @@ test("the kit shows each club's team card after the countries, so a new club's s
     renderKit(teams),
     '<h2 id="kit-countries">Countries</h2>',
     '<h2 id="kit-clubs">Clubs</h2>',
-    '<p class="small">Olympiacos basketball · <span class="num">#E4002B · #FFFFFF</span></p>',
-    '<p class="small">Panathinaikos basketball · <span class="num">#007A33 · #FFFFFF</span></p>',
+    '<p class="small">Olympiacos basketball · <span class="num">#D30D24 · #FFFFFF</span></p>',
+    '<p class="small">Panathinaikos basketball · <span class="num">#016A41 · #FFFFFF</span></p>',
     '<h2 id="kit-sports">Sports</h2>',
   )
   assert.doesNotMatch(renderKit(national), /kit-clubs/)
