@@ -197,6 +197,7 @@ test('every club has a path slug, its home, a competition of its sport and its c
     assert.equal(COMPETITIONS[club.competition].sport, team.sport, team.name)
     assert.equal(team.name, / Basket(ball)?$/.test(club.name) ? club.name : `${club.name} ${team.sport}`, team.name) // "Paris Basketball", not "Paris Basketball basketball"
     assert.equal(team.flag, countryOf(team).flag, team.name)
+    if (club.crest) assert.ok(existsSync(new URL(`../assets/crests/${club.crest}`, import.meta.url)), `${team.name}: no file assets/crests/${club.crest}`)
   }
   // Two clubs on one slug in one country and sport would write the same page and feeds twice.
   assert.equal(new Set(clubs.map(({ team, club }) => `${team.country}/${team.sport}/${club.slug}`)).size, clubs.length)

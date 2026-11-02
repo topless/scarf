@@ -47,6 +47,8 @@ const national = teams.filter((team) => !team.club)
 // two sports, a full competition, a club in another country.
 const olympiacos = teams.find((team) => team.club?.slug === 'olympiacos')!
 const panathinaikos = teams.find((team) => team.club?.slug === 'panathinaikos')!
+// Olympiacos without its crest file: the pages fall back to a round swatch of the kit stripes.
+const bare: Team = { ...olympiacos, club: { ...olympiacos.club!, crest: undefined } }
 const olympiacosFootball: Team = { ...olympiacos, sport: 'football', name: 'Olympiacos football', club: { ...olympiacos.club!, ground: 'Georgios Karaiskakis Stadium', competition: 'champions-league' } }
 function clubTeam(name: string, country: Team['country'] = 'greece', competition: Competition = 'euroleague', sport: Sport = 'basketball'): Team {
   const slug = name.toLowerCase().replaceAll(' ', '-')
@@ -494,7 +496,7 @@ test('the note on TV channels shows only on a page with a TV line', () => {
 const part = (html: string, from: string, to: string) => html.slice(html.indexOf(from), html.indexOf(to, html.indexOf(from)))
 
 test("a club's page carries its crest, name, city and country in the bar, and its competition in the tag and lede", () => {
-  const html = renderTeamPage({ team: olympiacos, games: [derby] }, teams, site)
+  const html = renderTeamPage({ team: bare, games: [derby] }, teams, site)
   const bar = part(html, '<div class="country-bar">', '<main>')
   assert.ok(
     bar.includes('<div class="club-id"><span class="crest crest-kit" aria-hidden="true"></span><div><span class="country-name">Olympiacos</span><a class="club-home" href="../../../greece/"><img class="flag" src="../../../flags/gr.svg" width="16" height="12" alt="">Piraeus, Greece</a></div></div>'),
@@ -599,7 +601,7 @@ test('a country page shows its clubs in Europe after its national teams, footbal
   assert.ok(html.includes('<article class="card club" style="--stripe: repeating-linear-gradient(90deg, #E4002B 0px 18px, #FFFFFF 18px 36px)'))
   assert.match(
     html,
-    /<span class="cell-sport"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>Basketball<small>EuroLeague<\/small><\/span>\n\s*<div class="club-head"><span class="crest crest-kit" aria-hidden="true"><\/span><div><h3 class="club-name"><a href="\.\.\/greece\/basketball\/olympiacos\/">Olympiacos<\/a><\/h3><div class="club-home"><img class="flag" src="\.\.\/flags\/gr\.svg" width="16" height="12" alt="">Piraeus · Peace and Friendship Stadium<\/div><\/div><\/div>/,
+    /<span class="cell-sport"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>Basketball<small>EuroLeague<\/small><\/span>\n\s*<div class="club-head"><img class="crest" src="\.\.\/crests\/olympiacos-basketball\.png" width="44" height="44" alt=""><div><h3 class="club-name"><a href="\.\.\/greece\/basketball\/olympiacos\/">Olympiacos<\/a><\/h3><div class="club-home"><img class="flag" src="\.\.\/flags\/gr\.svg" width="16" height="12" alt="">Piraeus · Peace and Friendship Stadium<\/div><\/div><\/div>/,
   )
   assert.match(html, /<b>Olympiacos vs Panathinaikos<\/b><span class="num"><time datetime="2026-10-02T18:15:00Z" data-offset="3">Fri 2 Oct · Tip-off 21:15 in Piraeus<\/time><\/span>/)
   assert.match(html, /Football<small>Champions League<\/small>/)

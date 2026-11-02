@@ -19,7 +19,7 @@ export const clubs: Team[] = [
     sport: 'basketball',
     // The clubs list of 2026-11-02 names SEF as the club's venue; the season's home games are split,
     // ten there and nine at SUNEL Arena, Athens.
-    club: { slug: 'olympiacos', name: 'Olympiacos', city: 'Piraeus', ground: 'Peace and Friendship Stadium', competition: 'euroleague' },
+    club: { slug: 'olympiacos', name: 'Olympiacos', city: 'Piraeus', ground: 'Peace and Friendship Stadium', competition: 'euroleague', crest: 'olympiacos-basketball.png' },
     name: 'Olympiacos basketball',
     side: "Olympiacos men's basketball team",
     colours: ['#E4002B', '#FFFFFF'], // the kit's red and white; the red is to confirm against the club's own value
@@ -37,7 +37,7 @@ export const clubs: Team[] = [
   {
     country: 'greece',
     sport: 'basketball',
-    club: { slug: 'panathinaikos', name: 'Panathinaikos', city: 'Athens', ground: 'Telekom Center Athens', competition: 'euroleague' },
+    club: { slug: 'panathinaikos', name: 'Panathinaikos', city: 'Athens', ground: 'Telekom Center Athens', competition: 'euroleague', crest: 'panathinaikos-basketball.png' },
     name: 'Panathinaikos basketball',
     side: "Panathinaikos men's basketball team",
     colours: ['#007A33', '#FFFFFF'], // the kit's green and white; the green is to confirm against the club's own value
@@ -160,7 +160,8 @@ export const clubs: Team[] = [
 // when that already says basketball ("Paris Basketball", "Valencia Basket").
 function team(country: Team['country'], flag: string, sport: Sport, club: NonNullable<Team['club']>, colours: Team['colours'], source: Team['source']): Team {
   const name = / Basket(ball)?$/.test(club.name) ? club.name : `${club.name} ${sport}`
-  return { country, sport, club, name, side: `${club.name} men's ${sport} team`, colours, flag, source, defaults: {} }
+  // The crest file scripts/crests.ts fetches, by convention; the config test checks it is there.
+  return { country, sport, club: { crest: `${club.slug}-${sport}.png`, ...club }, name, side: `${club.name} men's ${sport} team`, colours, flag, source, defaults: {} }
 }
 type Club = Omit<NonNullable<Team['club']>, 'competition'>
 function euroleague(country: Team['country'], flag: string, clubCode: string, club: Club, colours: Team['colours']): Team {
