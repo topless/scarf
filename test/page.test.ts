@@ -685,17 +685,17 @@ test('the landing lists the competitions with their clubs, then every country wi
     '<p class="lede">Pick your team, a national side or a club, and subscribe once. Every kickoff or tip-off, venue, channel and ticket sale lands in the calendar you already use, with a nudge an hour before the game. Nothing to install.</p>',
     '<div class="find" hidden><label for="find">Find your team</label>',
     '<h2 id="clubs">Clubs in Europe</h2><p class="aside">Two competitions · 8 clubs</p>',
-    'Champions League</h3>',
+    'Champions League<svg',
     "<p class=\"small\">Men's football · 1 club · Tuesday and Wednesday nights, September to May</p>",
     '<a class="cell-cta" href="football/champions-league/">All 1 club<svg',
-    'EuroLeague</h3>',
+    'EuroLeague<svg',
     `<h2 id="national">National teams</h2><p class="aside">${new Set(national.map((team) => team.country)).size} countries · men's football and basketball</p>`,
     '<a class="country-chip" href="england/"><img class="flag" src="flags/gb-eng.svg" width="20" height="15" alt="">England</a>',
     '<a class="country-chip" href="greece/">',
     '<footer',
   )
   inOrder(
-    part(html, 'EuroLeague</h3>', '</article>'),
+    part(html, 'EuroLeague<svg', '</article>'),
     "<p class=\"small\">Men's basketball · 7 clubs · Thursday and Friday nights, October to May</p>",
     // Six chips A to Z with their kit swatches, the rest counted.
     '<a class="country-chip" href="greece/basketball/anadolu-efes/"><span class="swatch"',
@@ -707,7 +707,8 @@ test('the landing lists the competitions with their clubs, then every country wi
     '<span class="country-chip more">and 1 more</span>',
     '<a class="cell-cta" href="basketball/euroleague/">All 7 clubs<svg',
   )
-  assert.match(html, /<h3 class="comp-name"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>EuroLeague<\/h3>/)
+  // The name is the way in too, with the arrow a country's name carries.
+  assert.match(html, /<h3 class="comp-name"><a href="basketball\/euroleague\/"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>EuroLeague<svg[^>]*>.*?<\/svg><\/a><\/h3>/)
   // The country cards are gone: the chips said the same.
   assert.doesNotMatch(html, /<article class="card country"|href="#|>Panathinaikos</)
   const chips = part(html, '<nav class="chips" aria-label="Countries">', '</nav>')

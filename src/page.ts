@@ -225,7 +225,7 @@ function competitionCard(competition: Competition, clubs: Team[]): string {
   const shown = byName(clubs).slice(0, 6)
   return `  <article class="card">
     <div class="comp-body">
-      <h3 class="comp-name">${WORDS[sport].ball}${esc(name)}</h3>
+      <h3 class="comp-name"><a href="${competitionPath(competition)}/">${WORDS[sport].ball}${esc(name)}${ICON.arrow}</a></h3>
       <p class="small">${capitalise(`men's ${sport}`)} · ${count(clubs.length, 'club')} · ${NIGHTS[competition]}</p>
       <div class="comp-clubs">${shown.map((team) => clubChip(team, '')).join('')}${clubs.length > shown.length ? `<span class="country-chip more">and ${clubs.length - shown.length} more</span>` : ''}</div>
       <a class="cell-cta" href="${competitionPath(competition)}/">All ${count(clubs.length, 'club')}${ICON.arrow}</a>
