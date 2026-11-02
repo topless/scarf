@@ -47,6 +47,7 @@ export function parseEuroleagueGames(json: string, clubCode: string): Game[] {
       // Trimmed: the EuroCup writes " Rostock" and "Siauliai ".
       home: g.local.club.abbreviatedName?.trim(),
       away: g.road.club.abbreviatedName?.trim(),
+      sides: [`euroleague:${g.local.club.code}`, `euroleague:${g.road.club.code}`],
       date: g.localDate?.slice(0, 10),
       kickoff: g.confirmedHour ? g.utcDate : undefined,
       utcOffsetHours: g.confirmedHour ? g.localTimeZone : undefined,

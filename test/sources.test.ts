@@ -36,6 +36,7 @@ test('UEFA matches become games with kickoff and venue', () => {
     competition: 'UEFA Nations League',
     home: 'Greece',
     away: 'Serbia',
+    sides: ['uefa:49', 'uefa:147'],
     date: '2026-11-16',
     kickoff: '2026-11-16T19:45:00Z',
     utcOffsetHours: 2,
@@ -54,6 +55,7 @@ test('a Champions League match rides the same answer: the competition as UEFA na
       competition: 'UEFA Champions League',
       home: 'AEK Athens',
       away: 'Real Madrid',
+      sides: ['uefa:50129', 'uefa:50051'],
       date: '2026-11-04',
       kickoff: '2026-11-04T17:45:00Z',
       utcOffsetHours: 2,
@@ -193,6 +195,7 @@ test('EuroLeague games become games with tip-off, the arena and its city, the cl
     competition: 'EuroLeague · Round 10',
     home: 'Olympiacos',
     away: 'Crvena Zvezda',
+    sides: ['euroleague:OLY', 'euroleague:RED'],
     date: '2026-11-06',
     kickoff: '2026-11-06T19:15:00Z',
     utcOffsetHours: 2,
@@ -237,6 +240,7 @@ test('EuroCup games read as EuroLeague ones do, with their own competition line 
       competition: 'EuroCup · Round 8',
       home: 'Rostock', // the API writes " Rostock"
       away: 'Hapoel JLM',
+      sides: ['euroleague:RTK', 'euroleague:JER'], // the ids, so a page finds Hapoel Jerusalem by its code
       date: '2026-11-17',
       kickoff: '2026-11-17T19:00:00Z',
       utcOffsetHours: 1,

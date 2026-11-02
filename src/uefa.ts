@@ -66,6 +66,7 @@ export function parseUefaMatches(matches: UefaMatch[], teamId: number): Game[] {
         competition: m.competition.metaData.name,
         home: undotted(m.homeTeam.internationalName),
         away: undotted(m.awayTeam.internationalName),
+        sides: [`uefa:${m.homeTeam.id}`, `uefa:${m.awayTeam.id}`],
         date: m.kickOffTime.date,
         kickoff: m.kickOffTime.dateTime,
         utcOffsetHours: m.kickOffTime.utcOffsetInHours,
