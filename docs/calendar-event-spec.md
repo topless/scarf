@@ -39,7 +39,7 @@ in the EuroLeague.
 |---|---|
 | `X-WR-CALNAME` | `Olympiacos basketball · scarf` |
 | `X-WR-CALDESC` | `Every game of the Olympiacos men's basketball team: tip-off, venue, TV, tickets. Kept up to date by scarf.` |
-| `X-APPLE-CALENDAR-COLOR` | the kit's first colour, `#E4002B` |
+| `X-APPLE-CALENDAR-COLOR` | the kit's first colour, `#D30D24` |
 | `UID` | the source's id: `euroleague-E2026_100@scarf` (EuroLeague), `euroleague-U2026_12@scarf` (EuroCup), `uefa-<matchId>@scarf` for a football club |
 | `SUMMARY` | `Olympiacos vs Crvena Zvezda`: the clubs as the source names them, EuroLeague's short name without sponsor or city |
 | Competition line | the competition, with the round where the source gives one: `EuroLeague · Round 10` |

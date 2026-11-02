@@ -47,7 +47,7 @@ Each team has an ordered colour list taken from its flag or kit. Render as hard-
 | Spain | `#AA151B`, `#F1BF00` | `#AA151B` |
 | Denmark | `#C60C30`, `#FFFFFF` | `#C60C30` |
 | Serbia | `#C6363C`, `#0C4076`, `#FFFFFF` | `#C6363C` |
-| A club | from its kit; placeholder stripes `#E6E1D8` / `#FBF8F2` until set | — |
+| A club | from its kit and crest, each line of `src/clubs.ts` naming its source | the first colour, never white |
 
 From a flag: its own colours as flag-icons draws it, in the flag's order (hoist to fly, top to
 bottom), turned so the first, the calendar colour, is never white (Bulgaria's white, green, red
