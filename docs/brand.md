@@ -71,7 +71,7 @@ white), so a mark and a name always go with them (#130):
 A sport never takes a team colour: it is a ball icon, a line drawing of the pitch or court, and its
 own words (kickoff and stadium, tip-off and arena). The icons and drawings live with each sport's
 words in `src/page.ts`. The sport switch always toggles one entity's sports: a country's national
-teams, or a club's own teams (Olympiacos plays both). The tag names the federation for a national team
+teams, or a club's own teams (Real Madrid, Barcelona, Bayern and Fenerbahçe have both on scarf). The tag names the federation for a national team
 ("Men's football · UEFA") and the competition for a club ("Men's basketball · EuroLeague").
 The identity kit at `/kit/` (unlisted, `noindex`) shows every country, club, sport and team card side
 by side: check it after adding a team, a club or a sport.
@@ -141,9 +141,10 @@ Never rotate the mark further, never stretch, never add a drop shadow.
   with their kit swatches, "and N more", and "All N clubs".
 - **Crest**: small, beside the club's name, unmodified; until a club's file exists, a round swatch of
   its kit stripes stands in. Never in scarf's mark, a share image or the favicon, and never a
-  competition's logo. With the crests comes a line in the small print: they are the clubs' trademarks,
-  shown to say whose games these are, scarf is not affiliated with any club or competition, and a crest
-  comes down on request, within days. The files and the go: #132.
+  competition's logo. With the crests comes a line in a club page's small print: they are the clubs'
+  trademarks, shown to say whose games these are, and scarf is not affiliated with any club or
+  competition. A crest comes down on request, within days: the policy, not the page. The files and the
+  go: #132.
 - **Input**: height 44–46 px, 1.5 px chalk border, radius 10 px, white.
 - **Fixture row**: date block (Bricolage 800 28 px + Stand meta), title 22 px 600, meta 14 px Stand,
   tickets as a secondary button; rows divided by 1.5 px chalk.
@@ -170,5 +171,6 @@ the fonts, the marks, and a live preview per component, rendered with the site's
 The repository is the source. When a token, a face, a mark or a component changes here, refresh the design
 system from the code rather than editing it on the page: its files mirror the paths above, so a change to
 one of them is a change to the matching file there. The clubs (#130) changed the grammar and added the
-club card, the club bar, the competition card and the crest: refresh the system from the code once they
-have landed, never the other way round.
+club card, the club bar, the competition card and the crest; the system was refreshed from that code on
+2 November 2026 (version 8, from commit 4f1a301). A later change here goes the same way, never the other
+way round.
