@@ -104,9 +104,9 @@ ${nextGameCard(team, next)}
   <div class="wrap">
     <div class="section-head">
       <h2>Upcoming games</h2>
-      ${games.length ? `<p class="aside">${inTheFeed(games.length)}</p>` : ''}
+      ${games.length ? `<p class="aside">${games.length > GAMES_ROWS ? `The next ${GAMES_ROWS} here · all ${games.length} are already in the feed` : inTheFeed(games.length)}</p>` : ''}
     </div>
-    ${games.length ? `<ul class="rows">\n${games.map((game) => renderRow(game, start)).join('\n')}\n</ul>` : '<p>No games announced yet.</p>'}
+    ${games.length ? `<ul class="rows">\n${games.slice(0, GAMES_ROWS).map((game) => renderRow(game, start)).join('\n')}\n</ul>` : '<p>No games announced yet.</p>'}
     <p class="small">New games and ${start} times appear a day or two after ${from} announces them.${games.some((game) => game.tv) ? ' TV channels are the expected broadcasters. We update them closer to the game.' : ''}</p>
   </div>
 </section>
@@ -233,6 +233,10 @@ function competitionCard(competition: Competition, clubs: Team[]): string {
   </article>`
 }
 
+// A week with 88 clubs runs to fifty games: the landing shows the first few, the rest sit on their pages.
+const WEEK_ROWS = 8
+// A club's season runs to thirty games or more: a page lists the next dozen, the feed has them all.
+const GAMES_ROWS = 12
 // This week on the landing: every game on scarf from today through the sixth day after, once each
 // however many of our teams play in it, with their chips. Without a game in the week it names the
 // day of the next one; without any game at all it is left out.
@@ -250,6 +254,7 @@ function thisWeek(sections: Section[], today: string): string {
   const last = new Date(first.getTime() + 6 * 86_400_000)
   const end = last.toISOString().slice(0, 10)
   const week = upcoming.filter(({ game }) => game.date <= end)
+  const shown = week.slice(0, WEEK_ROWS)
   const range = MONTH.format(first) === MONTH.format(last) ? `${DAY_LONG.format(first)} to ${DAY_LONG.format(last)} ${MONTH.format(last)}` : `${DAY_LONG.format(first)} ${MONTH.format(first)} to ${DAY_LONG.format(last)} ${MONTH.format(last)}`
   const nextDay = (games: typeof upcoming) => games[0] && DAY_MONTH_LONG.format(new Date(games[0].game.date))
   // A week of club games only: say when the national teams are back.
@@ -263,8 +268,8 @@ function thisWeek(sections: Section[], today: string): string {
   return `<section class="games" aria-labelledby="week">
   <div class="wrap">
     <div class="section-head"><h2 id="week">This week</h2><p class="aside">Every game on scarf, ${range}</p></div>
-    ${week.length ? `<ul class="rows">\n${week.map(row).join('\n')}\n</ul>` : `<p>No games this week. The next one is on ${nextDay(upcoming)}.</p>`}
-${week.length && nationalNext ? `    <p class="small">National teams play in windows, not every week. The next one opens on ${nationalNext}.</p>\n` : ''}  </div>
+    ${week.length ? `<ul class="rows">\n${shown.map(row).join('\n')}\n</ul>` : `<p>No games this week. The next one is on ${nextDay(upcoming)}.</p>`}
+${week.length > WEEK_ROWS ? `    <p class="small">The first ${WEEK_ROWS} of ${week.length} this week. Every game is on its team's page.</p>\n` : ''}${week.length && nationalNext ? `    <p class="small">National teams play in windows, not every week. The next one opens on ${nationalNext}.</p>\n` : ''}  </div>
 </section>
 `
 }
