@@ -1,22 +1,24 @@
 # CLAUDE.md · scarf
 
-scarf publishes subscribable calendar feeds (.ics) for the national teams fans follow: kickoff,
-venue, TV, tickets, a reminder an hour before. It also builds static pages: one per team, one per
-country, the landing page and How it works. Static output, rebuilt daily by GitHub Actions, served
-by a Cloudflare Worker at scarf.fan (docs/development.md). The identity, the brand line and the
-motto: docs/brand.md.
+scarf publishes subscribable calendar feeds (.ics) for the national teams and European clubs fans
+follow: kickoff, venue, TV, tickets, a reminder an hour before. It also builds static pages: one per
+team or club, one per country, one per competition, the landing page and How it works. Static output,
+rebuilt daily by GitHub Actions, served by a Cloudflare Worker at scarf.fan (docs/development.md). The
+identity, the brand line and the motto: docs/brand.md.
 
 ## Stack and commands
 
 - Node 22.18+, TypeScript. `npm install` · `npm test` · `npm run build:fixtures` (writes `dist/`
   from the test fixtures and asks no source: the build to check a change with) · `npm run build:staging`
   (from the answers a daily build saved in `source-answers/`, no request: the staging deploy's build) ·
-  `npm run build` (asks UEFA and FIBA: the daily job's build, not a check).
-- Sources: UEFA match API (football), FIBA games page (basketball). Both undocumented; **one request
-  per source per run**, never more: UEFA takes every team id in one call, and a FIBA page is fetched
-  once per competition and parsed for every team in it. If a fetch fails or the shape changes, fail
-  the build. The last published `dist/` stays online.
-- Manual data: `src/config.ts` (teams, ids, TV, ticket URLs), `src/manual.ts` (per-game overrides
+  `npm run build` (asks UEFA, FIBA and EuroLeague: the daily job's build, not a check).
+- Sources: UEFA match API (football), FIBA games page (national basketball), EuroLeague Basketball API
+  (basketball clubs). All undocumented; **one request per source per run**, never more: UEFA takes every
+  team id in one call, a FIBA page is fetched once per competition and a EuroLeague season once per
+  season code (`E2026`, `U2026`), each parsed for every team in it. If a fetch fails or the shape
+  changes, fail the build. The last published `dist/` stays online.
+- Manual data: `src/config.ts` (national teams, countries, competitions, ids, TV, ticket URLs),
+  `src/clubs.ts` (clubs: the same, plus home city and ground), `src/manual.ts` (per-game overrides
   keyed by source id, e.g. `fiba-127107`). Hand-entered time/venue yield to the official source.
 
 ## Paths (frozen: fans' subscriptions point here)
@@ -24,8 +26,10 @@ motto: docs/brand.md.
 - `/{country}/{sport}.ics`: one feed per team, e.g. `/greece/football.ics`, `/greece/basketball.ics`.
 - `/{country}/{sport}-alerts.ics`: the same feed plus a "New game" entry per newly announced game.
 - `/{country}/{sport}/`: the team page, named in every event's footer.
-- Every other page (`/`, `/{country}/`, `/how-it-works/`, `/kit/`) may move, with a redirect.
-  The full list: docs/development.md, Paths.
+- A club's three, one level down, never naming its competition: `/{country}/{sport}/{club}.ics`,
+  `/{country}/{sport}/{club}-alerts.ics`, `/{country}/{sport}/{club}/` (`/greece/basketball/olympiacos/`).
+- Every other page (`/`, `/{country}/`, `/{sport}/{competition}/`, `/how-it-works/`, `/kit/`) may move,
+  with a redirect. The full list: docs/development.md, Paths.
 
 ## ICS rules (every field and the exact copy: docs/calendar-event-spec.md)
 

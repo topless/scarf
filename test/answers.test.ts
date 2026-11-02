@@ -44,12 +44,14 @@ test('the run summary says which answers were reused and how old the oldest is',
 
 // A build on a push to main, in a folder of its own, with source-answers/ as the last run left it
 // 30 h ago, the daily run since having failed: the test fixtures, UEFA's answer covering
-// `savedTeamIds`. The stub prints every request to a source, answers UEFA's with the fixture and
-// fails the run on any other; the live feeds, our own site, answer 404.
+// `savedTeamIds`, a FIBA page per competition and a EuroLeague answer per season. The stub prints
+// every request to a source, answers UEFA's with the fixture and fails the run on any other; the
+// live feeds, our own site, answer 404.
 const fixture = (name: string) => fileURLToPath(new URL(`./fixtures/${name}`, import.meta.url))
 const build = fileURLToPath(new URL('../src/build.ts', import.meta.url))
 const uefaTeamIds = teams.flatMap(({ source }) => (source.kind === 'uefa' ? [source.teamId] : []))
 const fibaEvents = [...new Set(teams.flatMap(({ source }) => (source.kind === 'fiba' ? [source.event] : [])))]
+const euroleagueSeasons = [...new Set(teams.flatMap(({ source }) => (source.kind === 'euroleague' ? [source.season] : [])))]
 
 async function pushBuild(t: TestContext, savedTeamIds: number[]) {
   const dir = await mkdtemp(join(tmpdir(), 'scarf-'))
@@ -62,6 +64,11 @@ async function pushBuild(t: TestContext, savedTeamIds: number[]) {
   for (const event of fibaEvents) {
     await copyFile(fixture('fiba-games.html'), join(answers, `${event}.html`))
     index[`${event}.html`] = { fetched }
+  }
+  for (const season of euroleagueSeasons) {
+    // A season's own answer: the EuroCup's (U2026) holds other clubs than the EuroLeague's (E2026).
+    await copyFile(fixture(season.startsWith('U') ? 'eurocup-games.json' : 'euroleague-games.json'), join(answers, `euroleague-${season}.json`))
+    index[`euroleague-${season}.json`] = { fetched }
   }
   await writeFile(join(answers, 'index.json'), JSON.stringify(index))
   const stub = `import { readFileSync } from 'node:fs'
@@ -89,16 +96,22 @@ describe('a push build', { concurrency: true }, () => {
   test('a push the day after a failed daily run asks no source, and its summary says the answers were reused and how old they are', async (t) => {
     const { index, asked, summary, saved } = await pushBuild(t, uefaTeamIds)
     assert.deepEqual(asked, [])
-    assert.match(summary, /UEFA answered one request for \d+ football teams with \d+ matches \(reused, 30\.0 h old\) · FIBA answered \d+ competition pages? \(reused, 30\.0 h old\)\./)
+    assert.match(
+      summary,
+      /UEFA answered one request for \d+ football teams with \d+ matches \(reused, 30\.0 h old\) · FIBA answered \d+ competition pages? \(reused, 30\.0 h old\) · EuroLeague answered \d+ season schedules? \(reused, 30\.0 h old\)\./,
+    )
     // Saved again as they were, so the next summary still counts their age from when they were fetched.
     assert.deepEqual(saved, index)
   })
 
-  test('a push that adds a football team asks UEFA once, for every team, and reuses the FIBA pages', async (t) => {
+  test('a push that adds a football team asks UEFA once, for every team, and reuses the FIBA pages and the EuroLeague seasons', async (t) => {
     const { index, asked, summary, saved, savedUefa } = await pushBuild(t, uefaTeamIds.slice(1))
     assert.equal(asked.length, 1)
     assert.match(asked[0], new RegExp(`^asked https://match\\.uefa\\.com/v5/matches\\?teamId=${uefaTeamIds.join(',')}&`))
-    assert.match(summary, /UEFA answered one request for \d+ football teams with \d+ matches · FIBA answered \d+ competition pages? \(reused, 30\.0 h old\)\./)
+    assert.match(
+      summary,
+      /UEFA answered one request for \d+ football teams with \d+ matches · FIBA answered \d+ competition pages? \(reused, 30\.0 h old\) · EuroLeague answered \d+ season schedules? \(reused, 30\.0 h old\)\./,
+    )
     // Saved with UEFA's new answer, which covers every team, so the next push reuses it too.
     assert.deepEqual(saved, { ...index, 'uefa.json': { fetched: saved['uefa.json'].fetched, teamIds: uefaTeamIds } })
     assert.ok(saved['uefa.json'].fetched > index['uefa.json'].fetched)

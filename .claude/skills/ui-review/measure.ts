@@ -15,7 +15,7 @@ const PHONE = { width: 390, height: 844 }
 const NARROW = { width: 360, height: 780 } // team pages only: the width the Share button must still fit at
 const DESKTOP = { width: 1280, height: 800 }
 const LIMIT = { h1Top: 300, pageHeight: 6000, redInView: 1, topBarRows: 1, shareGap: 16, shareLines: 1 }
-const PAGES = ['/', '/greece/', '/greece/football/', '/england/football/', '/bosnia-and-herzegovina/football/', '/how-it-works/']
+const PAGES = ['/', '/greece/', '/greece/football/', '/england/football/', '/bosnia-and-herzegovina/football/', '/greece/basketball/olympiacos/', '/united-arab-emirates/', '/basketball/euroleague/', '/football/champions-league/', '/how-it-works/']
 // docs/brand.md, Components: height as [min, max] (inner: without the border, for the stripe band), radius and
 // border in px, the card's border in ink. A kind with a height rule must also be one height per page.
 const RULES: Record<string, { height?: [number, number]; inner?: [number, number]; radius?: number; border?: number; borderColor?: string }> = {

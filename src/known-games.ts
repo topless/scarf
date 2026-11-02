@@ -10,7 +10,7 @@ export interface KnownFeed {
   games: Record<string, string> // game id → the day (YYYY-MM-DD, UTC) a build first saw it
 }
 
-// Keyed by "{country}/{sport}", the frozen path prefix, so a team added later seeds on its own day
+// Keyed by teamPath ("greece/football", "greece/basketball/olympiacos"), the frozen path, so a team added later seeds on its own day
 // instead of announcing its whole fixture list.
 export type KnownGames = Record<string, KnownFeed>
 

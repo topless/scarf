@@ -1,0 +1,5380 @@
+{
+  "data": [
+    {
+      "identifier": "U2026_213",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 0,
+      "localDate": "2027-01-13T20:00:00",
+      "utcDate": "2027-01-13T20:00:00Z",
+      "local": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "venue": {
+        "code": "AID1",
+        "name": "PABELLON SANTIAGO MARTIN"
+      }
+    },
+    {
+      "identifier": "U2026_209",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-13T20:30:00",
+      "utcDate": "2027-01-13T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "venue": {
+        "code": "AII1",
+        "name": "COLISEUM BURGOS"
+      }
+    },
+    {
+      "identifier": "U2026_219",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-13T20:00:00",
+      "utcDate": "2027-01-13T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "venue": {
+        "code": "AIB1",
+        "name": "ALCOTT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_211",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-13T20:00:00",
+      "utcDate": "2027-01-13T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "venue": {
+        "code": "AUL",
+        "name": "HALA SPORTOVA RANKO ZERAVICA"
+      }
+    },
+    {
+      "identifier": "U2026_224",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-13T19:30:00",
+      "utcDate": "2027-01-13T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "venue": {
+        "code": "AHX1",
+        "name": "ZETRA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_220",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-13T19:00:00",
+      "utcDate": "2027-01-13T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "venue": {
+        "code": "AUA",
+        "name": "MORACA"
+      }
+    },
+    {
+      "identifier": "U2026_223",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-13T19:30:00",
+      "utcDate": "2027-01-13T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "venue": {
+        "code": "AAI1",
+        "name": "PAOK SPORTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_212",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-13T18:30:00",
+      "utcDate": "2027-01-13T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "venue": {
+        "code": "AKX2",
+        "name": "ARENA STOZICE"
+      }
+    },
+    {
+      "identifier": "U2026_221",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-13T19:00:00",
+      "utcDate": "2027-01-13T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "venue": {
+        "code": "ASS2",
+        "name": "KALNAPILIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_216",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2027-01-13T19:30:00",
+      "utcDate": "2027-01-13T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "venue": {
+        "code": "ATT2",
+        "name": "ANKARA SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_215",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-12T20:30:00",
+      "utcDate": "2027-01-12T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "venue": {
+        "code": "AJK",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_214",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-12T20:00:00",
+      "utcDate": "2027-01-12T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "venue": {
+        "code": "ARE",
+        "name": "PALASPORT TALIERCIO"
+      }
+    },
+    {
+      "identifier": "U2026_222",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-12T19:00:00",
+      "utcDate": "2027-01-12T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "venue": {
+        "code": "ATE6",
+        "name": "RATIOPHARM ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_217",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-12T19:00:00",
+      "utcDate": "2027-01-12T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "venue": {
+        "code": "ACQ2",
+        "name": "HALA ORBITA"
+      }
+    },
+    {
+      "identifier": "U2026_218",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2027-01-12T20:00:00",
+      "utcDate": "2027-01-12T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "venue": {
+        "code": "ATG2",
+        "name": "TOFAS SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_210",
+      "roundName": "Round 14",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-12T19:00:00",
+      "utcDate": "2027-01-12T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "venue": {
+        "code": "AHO2",
+        "name": "XIAOMI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_207",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-06T20:00:00",
+      "utcDate": "2027-01-06T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "venue": {
+        "code": "AOR1",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_201",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-06T19:30:00",
+      "utcDate": "2027-01-06T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "venue": {
+        "code": "AUJ",
+        "name": "EKINOX"
+      }
+    },
+    {
+      "identifier": "U2026_198",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-06T19:30:00",
+      "utcDate": "2027-01-06T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "venue": {
+        "code": "ATN1",
+        "name": "SUWAG ENERGIE ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_194",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-06T19:30:00",
+      "utcDate": "2027-01-06T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "venue": {
+        "code": "AIF1",
+        "name": "NOVA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_205",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-06T19:00:00",
+      "utcDate": "2027-01-06T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "venue": {
+        "code": "AVM1",
+        "name": "PAVELLO NOU CONGOST"
+      }
+    },
+    {
+      "identifier": "U2026_206",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-06T19:00:00",
+      "utcDate": "2027-01-06T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "venue": {
+        "code": "AVN2",
+        "name": "ARENA BOTEVGRAD"
+      }
+    },
+    {
+      "identifier": "U2026_200",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-06T18:30:00",
+      "utcDate": "2027-01-06T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "road": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "venue": {
+        "code": "AHP1",
+        "name": "SIAULIAI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_208",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2027-01-06T19:00:00",
+      "utcDate": "2027-01-06T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "venue": {
+        "code": "ATK2",
+        "name": "SINAN ERDEM SPORTS HALL"
+      }
+    },
+    {
+      "identifier": "U2026_199",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 0,
+      "localDate": "2027-01-05T19:30:00",
+      "utcDate": "2027-01-05T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "venue": {
+        "code": "AUW3",
+        "name": "COPPER BOX ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_203",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-05T20:00:00",
+      "utcDate": "2027-01-05T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "venue": {
+        "code": "ATS3",
+        "name": "BTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_196",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-05T20:00:00",
+      "utcDate": "2027-01-05T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "venue": {
+        "code": "ACU1",
+        "name": "ANTARES ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_193",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-05T20:00:00",
+      "utcDate": "2027-01-05T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "venue": {
+        "code": "AIH2",
+        "name": "STADTHALLE ROSTOCK"
+      }
+    },
+    {
+      "identifier": "U2026_202",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2027-01-05T19:00:00",
+      "utcDate": "2027-01-05T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "venue": {
+        "code": "AVL2",
+        "name": "MESSE CHEMNITZ"
+      }
+    },
+    {
+      "identifier": "U2026_195",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-05T20:00:00",
+      "utcDate": "2027-01-05T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "venue": {
+        "code": "AFZ3",
+        "name": "ALEXANDREIO ATHLITIKO MELATHRO"
+      }
+    },
+    {
+      "identifier": "U2026_204",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-05T19:00:00",
+      "utcDate": "2027-01-05T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "venue": {
+        "code": "AOL1",
+        "name": "SVYTURIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_197",
+      "roundName": "Round 13",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2027-01-05T19:00:00",
+      "utcDate": "2027-01-05T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "venue": {
+        "code": "AUV4",
+        "name": "BT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_186",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-30T20:00:00",
+      "utcDate": "2026-12-30T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "venue": {
+        "code": "AIB1",
+        "name": "ALCOTT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_178",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-30T20:00:00",
+      "utcDate": "2026-12-30T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "venue": {
+        "code": "AUL",
+        "name": "HALA SPORTOVA RANKO ZERAVICA"
+      }
+    },
+    {
+      "identifier": "U2026_191",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-30T19:30:00",
+      "utcDate": "2026-12-30T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "venue": {
+        "code": "AHX1",
+        "name": "ZETRA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_189",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-30T19:00:00",
+      "utcDate": "2026-12-30T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "venue": {
+        "code": "ATE6",
+        "name": "RATIOPHARM ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_179",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-30T18:30:00",
+      "utcDate": "2026-12-30T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "venue": {
+        "code": "AKX2",
+        "name": "ARENA STOZICE"
+      }
+    },
+    {
+      "identifier": "U2026_185",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-12-30T20:00:00",
+      "utcDate": "2026-12-30T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "venue": {
+        "code": "ATG2",
+        "name": "TOFAS SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_184",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-30T19:00:00",
+      "utcDate": "2026-12-30T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "venue": {
+        "code": "AUV4",
+        "name": "BT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_177",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-30T19:00:00",
+      "utcDate": "2026-12-30T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "venue": {
+        "code": "AHO2",
+        "name": "XIAOMI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_192",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-29T20:30:00",
+      "utcDate": "2026-12-29T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "venue": {
+        "code": "AVM1",
+        "name": "PAVELLO NOU CONGOST"
+      }
+    },
+    {
+      "identifier": "U2026_182",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-29T20:30:00",
+      "utcDate": "2026-12-29T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "venue": {
+        "code": "AJK",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_181",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-29T20:00:00",
+      "utcDate": "2026-12-29T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "venue": {
+        "code": "ARE",
+        "name": "PALASPORT TALIERCIO"
+      }
+    },
+    {
+      "identifier": "U2026_180",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-29T20:00:00",
+      "utcDate": "2026-12-29T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "venue": {
+        "code": "AIH2",
+        "name": "STADTHALLE ROSTOCK"
+      }
+    },
+    {
+      "identifier": "U2026_190",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-29T20:30:00",
+      "utcDate": "2026-12-29T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "venue": {
+        "code": "AAI1",
+        "name": "PAOK SPORTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_188",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-29T19:30:00",
+      "utcDate": "2026-12-29T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "venue": {
+        "code": "AUJ",
+        "name": "EKINOX"
+      }
+    },
+    {
+      "identifier": "U2026_187",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-29T19:00:00",
+      "utcDate": "2026-12-29T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "venue": {
+        "code": "AUA",
+        "name": "MORACA"
+      }
+    },
+    {
+      "identifier": "U2026_183",
+      "roundName": "Round 12",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-12-29T19:30:00",
+      "utcDate": "2026-12-29T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "venue": {
+        "code": "ATT2",
+        "name": "ANKARA SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_165",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 0,
+      "localDate": "2026-12-23T20:00:00",
+      "utcDate": "2026-12-23T20:00:00Z",
+      "local": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "venue": {
+        "code": "AID1",
+        "name": "PABELLON SANTIAGO MARTIN"
+      }
+    },
+    {
+      "identifier": "U2026_166",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 0,
+      "localDate": "2026-12-23T19:30:00",
+      "utcDate": "2026-12-23T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "venue": {
+        "code": "AUW3",
+        "name": "COPPER BOX ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_168",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-23T20:00:00",
+      "utcDate": "2026-12-23T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "venue": {
+        "code": "ARE",
+        "name": "PALASPORT TALIERCIO"
+      }
+    },
+    {
+      "identifier": "U2026_163",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 0,
+      "localDate": "2026-12-23T19:00:00",
+      "utcDate": "2026-12-23T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "venue": {
+        "code": "ACU1",
+        "name": "ANTARES ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_176",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-23T19:00:00",
+      "utcDate": "2026-12-23T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "venue": {
+        "code": "ATE6",
+        "name": "RATIOPHARM ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_172",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-12-23T20:00:00",
+      "utcDate": "2026-12-23T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "venue": {
+        "code": "ATG2",
+        "name": "TOFAS SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_164",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-23T19:00:00",
+      "utcDate": "2026-12-23T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "venue": {
+        "code": "AHO2",
+        "name": "XIAOMI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_167",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-23T18:30:00",
+      "utcDate": "2026-12-23T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "venue": {
+        "code": "AHP1",
+        "name": "SIAULIAI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_174",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-22T21:00:00",
+      "utcDate": "2026-12-22T20:00:00Z",
+      "local": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "venue": {
+        "code": "AOR1",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_161",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-22T20:30:00",
+      "utcDate": "2026-12-22T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "venue": {
+        "code": "AII1",
+        "name": "COLISEUM BURGOS"
+      }
+    },
+    {
+      "identifier": "U2026_170",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-22T19:00:00",
+      "utcDate": "2026-12-22T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "venue": {
+        "code": "ATS3",
+        "name": "BTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_169",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-22T19:00:00",
+      "utcDate": "2026-12-22T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "venue": {
+        "code": "ACQ2",
+        "name": "HALA ORBITA"
+      }
+    },
+    {
+      "identifier": "U2026_162",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-22T20:00:00",
+      "utcDate": "2026-12-22T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "venue": {
+        "code": "AFZ3",
+        "name": "ALEXANDREIO ATHLITIKO MELATHRO"
+      }
+    },
+    {
+      "identifier": "U2026_173",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-22T19:00:00",
+      "utcDate": "2026-12-22T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "venue": {
+        "code": "ASS2",
+        "name": "KALNAPILIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_171",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-22T19:00:00",
+      "utcDate": "2026-12-22T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "venue": {
+        "code": "AOL1",
+        "name": "SVYTURIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_175",
+      "roundName": "Round 11",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-12-22T19:00:00",
+      "utcDate": "2026-12-22T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "venue": {
+        "code": "ATK2",
+        "name": "SINAN ERDEM SPORTS HALL"
+      }
+    },
+    {
+      "identifier": "U2026_149",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-16T20:30:00",
+      "utcDate": "2026-12-16T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "venue": {
+        "code": "AJK",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_145",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-16T20:00:00",
+      "utcDate": "2026-12-16T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "venue": {
+        "code": "AUL",
+        "name": "HALA SPORTOVA RANKO ZERAVICA"
+      }
+    },
+    {
+      "identifier": "U2026_158",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-16T19:30:00",
+      "utcDate": "2026-12-16T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "venue": {
+        "code": "AHX1",
+        "name": "ZETRA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_155",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-16T19:30:00",
+      "utcDate": "2026-12-16T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "venue": {
+        "code": "AUJ",
+        "name": "EKINOX"
+      }
+    },
+    {
+      "identifier": "U2026_157",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-16T20:00:00",
+      "utcDate": "2026-12-16T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "venue": {
+        "code": "AAI1",
+        "name": "PAOK SPORTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_156",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-16T19:00:00",
+      "utcDate": "2026-12-16T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "venue": {
+        "code": "AVL2",
+        "name": "MESSE CHEMNITZ"
+      }
+    },
+    {
+      "identifier": "U2026_154",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-16T19:00:00",
+      "utcDate": "2026-12-16T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "venue": {
+        "code": "AUA",
+        "name": "MORACA"
+      }
+    },
+    {
+      "identifier": "U2026_146",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-16T18:30:00",
+      "utcDate": "2026-12-16T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "venue": {
+        "code": "AKX2",
+        "name": "ARENA STOZICE"
+      }
+    },
+    {
+      "identifier": "U2026_151",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-16T19:00:00",
+      "utcDate": "2026-12-16T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "venue": {
+        "code": "AUV4",
+        "name": "BT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_150",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-12-16T19:30:00",
+      "utcDate": "2026-12-16T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "venue": {
+        "code": "ATT2",
+        "name": "ANKARA SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_159",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-15T20:30:00",
+      "utcDate": "2026-12-15T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "venue": {
+        "code": "AVM1",
+        "name": "PAVELLO NOU CONGOST"
+      }
+    },
+    {
+      "identifier": "U2026_153",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-15T20:00:00",
+      "utcDate": "2026-12-15T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "venue": {
+        "code": "AIB1",
+        "name": "ALCOTT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_147",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-15T20:00:00",
+      "utcDate": "2026-12-15T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "venue": {
+        "code": "AIH2",
+        "name": "STADTHALLE ROSTOCK"
+      }
+    },
+    {
+      "identifier": "U2026_152",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-15T19:30:00",
+      "utcDate": "2026-12-15T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "venue": {
+        "code": "ATN1",
+        "name": "SUWAG ENERGIE ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_148",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-15T19:30:00",
+      "utcDate": "2026-12-15T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "venue": {
+        "code": "AIF1",
+        "name": "NOVA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_160",
+      "roundName": "Round 10",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-15T19:00:00",
+      "utcDate": "2026-12-15T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "venue": {
+        "code": "AVN2",
+        "name": "ARENA BOTEVGRAD"
+      }
+    },
+    {
+      "identifier": "U2026_136",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-09T20:30:00",
+      "utcDate": "2026-12-09T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "venue": {
+        "code": "ACS1",
+        "name": "PALAEUR"
+      }
+    },
+    {
+      "identifier": "U2026_129",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-09T20:30:00",
+      "utcDate": "2026-12-09T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "venue": {
+        "code": "AII1",
+        "name": "COLISEUM BURGOS"
+      }
+    },
+    {
+      "identifier": "U2026_140",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-09T20:00:00",
+      "utcDate": "2026-12-09T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "venue": {
+        "code": "AIB1",
+        "name": "ALCOTT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_135",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-09T20:00:00",
+      "utcDate": "2026-12-09T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "venue": {
+        "code": "ARE",
+        "name": "PALASPORT TALIERCIO"
+      }
+    },
+    {
+      "identifier": "U2026_132",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-09T20:00:00",
+      "utcDate": "2026-12-09T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "venue": {
+        "code": "AUL",
+        "name": "HALA SPORTOVA RANKO ZERAVICA"
+      }
+    },
+    {
+      "identifier": "U2026_143",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-09T19:00:00",
+      "utcDate": "2026-12-09T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "venue": {
+        "code": "ATE6",
+        "name": "RATIOPHARM ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_137",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-09T19:00:00",
+      "utcDate": "2026-12-09T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "venue": {
+        "code": "ACQ2",
+        "name": "HALA ORBITA"
+      }
+    },
+    {
+      "identifier": "U2026_141",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-09T19:00:00",
+      "utcDate": "2026-12-09T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "venue": {
+        "code": "ASS2",
+        "name": "KALNAPILIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_139",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-12-09T20:00:00",
+      "utcDate": "2026-12-09T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "venue": {
+        "code": "ATG2",
+        "name": "TOFAS SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_131",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-09T19:00:00",
+      "utcDate": "2026-12-09T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "venue": {
+        "code": "AHO2",
+        "name": "XIAOMI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_133",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 0,
+      "localDate": "2026-12-08T20:00:00",
+      "utcDate": "2026-12-08T20:00:00Z",
+      "local": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "venue": {
+        "code": "AID1",
+        "name": "PABELLON SANTIAGO MARTIN"
+      }
+    },
+    {
+      "identifier": "U2026_130",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-12-08T20:00:00",
+      "utcDate": "2026-12-08T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "venue": {
+        "code": "ACU1",
+        "name": "ANTARES ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_144",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-08T20:00:00",
+      "utcDate": "2026-12-08T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "venue": {
+        "code": "AAI1",
+        "name": "PAOK SPORTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_138",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-08T19:00:00",
+      "utcDate": "2026-12-08T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "venue": {
+        "code": "AOL1",
+        "name": "SVYTURIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_134",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-12-08T18:30:00",
+      "utcDate": "2026-12-08T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "road": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "venue": {
+        "code": "AHP1",
+        "name": "SIAULIAI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_142",
+      "roundName": "Round 9",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-12-08T19:00:00",
+      "utcDate": "2026-12-08T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "venue": {
+        "code": "ATK2",
+        "name": "SINAN ERDEM SPORTS HALL"
+      }
+    },
+    {
+      "identifier": "U2026_126",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-18T20:30:00",
+      "utcDate": "2026-11-18T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "venue": {
+        "code": "AVM1",
+        "name": "PAVELLO NOU CONGOST"
+      }
+    },
+    {
+      "identifier": "U2026_124",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-18T20:00:00",
+      "utcDate": "2026-11-18T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "venue": {
+        "code": "ATS3",
+        "name": "BTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_125",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-18T19:30:00",
+      "utcDate": "2026-11-18T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "venue": {
+        "code": "AHX1",
+        "name": "ZETRA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_122",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-18T19:30:00",
+      "utcDate": "2026-11-18T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "venue": {
+        "code": "AUJ",
+        "name": "EKINOX"
+      }
+    },
+    {
+      "identifier": "U2026_119",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-18T19:30:00",
+      "utcDate": "2026-11-18T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "venue": {
+        "code": "ATN1",
+        "name": "SUWAG ENERGIE ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_123",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-18T19:00:00",
+      "utcDate": "2026-11-18T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "venue": {
+        "code": "AVL2",
+        "name": "MESSE CHEMNITZ"
+      }
+    },
+    {
+      "identifier": "U2026_121",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-18T19:00:00",
+      "utcDate": "2026-11-18T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "venue": {
+        "code": "AUA",
+        "name": "MORACA"
+      }
+    },
+    {
+      "identifier": "U2026_116",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-18T20:00:00",
+      "utcDate": "2026-11-18T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "venue": {
+        "code": "AFZ3",
+        "name": "ALEXANDREIO ATHLITIKO MELATHRO"
+      }
+    },
+    {
+      "identifier": "U2026_113",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-18T18:30:00",
+      "utcDate": "2026-11-18T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "venue": {
+        "code": "AKX2",
+        "name": "ARENA STOZICE"
+      }
+    },
+    {
+      "identifier": "U2026_118",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-18T19:00:00",
+      "utcDate": "2026-11-18T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "venue": {
+        "code": "AUV4",
+        "name": "BT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_115",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-18T17:30:00",
+      "utcDate": "2026-11-18T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "venue": {
+        "code": "AIF1",
+        "name": "NOVA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_120",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 0,
+      "localDate": "2026-11-17T19:30:00",
+      "utcDate": "2026-11-17T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "venue": {
+        "code": "AUW3",
+        "name": "COPPER BOX ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_128",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-17T20:00:00",
+      "utcDate": "2026-11-17T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "venue": {
+        "code": "AOR1",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_114",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-17T20:00:00",
+      "utcDate": "2026-11-17T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "venue": {
+        "code": "AIH2",
+        "name": "STADTHALLE ROSTOCK"
+      }
+    },
+    {
+      "identifier": "U2026_127",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-17T19:00:00",
+      "utcDate": "2026-11-17T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "venue": {
+        "code": "AVN2",
+        "name": "ARENA BOTEVGRAD"
+      }
+    },
+    {
+      "identifier": "U2026_117",
+      "roundName": "Round 8",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-11-17T19:30:00",
+      "utcDate": "2026-11-17T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "venue": {
+        "code": "ATT2",
+        "name": "ANKARA SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_103",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-12T20:00:00",
+      "utcDate": "2026-11-12T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "venue": {
+        "code": "ATN1",
+        "name": "SUWAG ENERGIE ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_110",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-11T20:00:00",
+      "utcDate": "2026-11-11T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "venue": {
+        "code": "AOR1",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_97",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-11T20:00:00",
+      "utcDate": "2026-11-11T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "venue": {
+        "code": "ACU1",
+        "name": "ANTARES ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_99",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-11T19:30:00",
+      "utcDate": "2026-11-11T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "venue": {
+        "code": "AIF1",
+        "name": "NOVA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_107",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-11T19:00:00",
+      "utcDate": "2026-11-11T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "venue": {
+        "code": "AVL2",
+        "name": "MESSE CHEMNITZ"
+      }
+    },
+    {
+      "identifier": "U2026_98",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-11T20:00:00",
+      "utcDate": "2026-11-11T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "venue": {
+        "code": "AFZ3",
+        "name": "ALEXANDREIO ATHLITIKO MELATHRO"
+      }
+    },
+    {
+      "identifier": "U2026_101",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-11T18:30:00",
+      "utcDate": "2026-11-11T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "venue": {
+        "code": "AHP1",
+        "name": "SIAULIAI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_109",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-11-11T19:00:00",
+      "utcDate": "2026-11-11T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "venue": {
+        "code": "ATK2",
+        "name": "SINAN ERDEM SPORTS HALL"
+      }
+    },
+    {
+      "identifier": "U2026_112",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-10T20:30:00",
+      "utcDate": "2026-11-10T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "venue": {
+        "code": "AVM1",
+        "name": "PAVELLO NOU CONGOST"
+      }
+    },
+    {
+      "identifier": "U2026_102",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 0,
+      "localDate": "2026-11-10T19:30:00",
+      "utcDate": "2026-11-10T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "venue": {
+        "code": "AUW3",
+        "name": "COPPER BOX ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_106",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-10T20:00:00",
+      "utcDate": "2026-11-10T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "venue": {
+        "code": "ATS3",
+        "name": "BTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_100",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-10T21:00:00",
+      "utcDate": "2026-11-10T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "venue": {
+        "code": "AIH2",
+        "name": "STADTHALLE ROSTOCK"
+      }
+    },
+    {
+      "identifier": "U2026_108",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-10T19:30:00",
+      "utcDate": "2026-11-10T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "venue": {
+        "code": "AUJ",
+        "name": "EKINOX"
+      }
+    },
+    {
+      "identifier": "U2026_111",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-10T19:00:00",
+      "utcDate": "2026-11-10T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "venue": {
+        "code": "AVN2",
+        "name": "ARENA BOTEVGRAD"
+      }
+    },
+    {
+      "identifier": "U2026_105",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-10T19:00:00",
+      "utcDate": "2026-11-10T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "venue": {
+        "code": "AOL1",
+        "name": "SVYTURIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_104",
+      "roundName": "Round 7",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-10T19:00:00",
+      "utcDate": "2026-11-10T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "venue": {
+        "code": "AUV4",
+        "name": "BT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_85",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 0,
+      "localDate": "2026-11-05T20:00:00",
+      "utcDate": "2026-11-05T20:00:00Z",
+      "local": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "venue": {
+        "code": "AID1",
+        "name": "PABELLON SANTIAGO MARTIN"
+      }
+    },
+    {
+      "identifier": "U2026_87",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-04T20:30:00",
+      "utcDate": "2026-11-04T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "venue": {
+        "code": "AJK",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_81",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-04T20:30:00",
+      "utcDate": "2026-11-04T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "venue": {
+        "code": "AII1",
+        "name": "COLISEUM BURGOS"
+      }
+    },
+    {
+      "identifier": "U2026_88",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-04T20:00:00",
+      "utcDate": "2026-11-04T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "venue": {
+        "code": "ARE",
+        "name": "PALASPORT TALIERCIO"
+      }
+    },
+    {
+      "identifier": "U2026_83",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-04T20:00:00",
+      "utcDate": "2026-11-04T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "venue": {
+        "code": "AUL",
+        "name": "HALA SPORTOVA RANKO ZERAVICA"
+      }
+    },
+    {
+      "identifier": "U2026_94",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-04T19:30:00",
+      "utcDate": "2026-11-04T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "venue": {
+        "code": "AHX1",
+        "name": "ZETRA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_89",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-04T19:00:00",
+      "utcDate": "2026-11-04T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "venue": {
+        "code": "ACQ2",
+        "name": "HALA ORBITA"
+      }
+    },
+    {
+      "identifier": "U2026_82",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-04T18:30:00",
+      "utcDate": "2026-11-04T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "venue": {
+        "code": "AKX2",
+        "name": "ARENA STOZICE"
+      }
+    },
+    {
+      "identifier": "U2026_93",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-04T19:00:00",
+      "utcDate": "2026-11-04T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "venue": {
+        "code": "ASS2",
+        "name": "KALNAPILIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_84",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-04T19:00:00",
+      "utcDate": "2026-11-04T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "venue": {
+        "code": "AHO2",
+        "name": "XIAOMI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_86",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-11-04T19:30:00",
+      "utcDate": "2026-11-04T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "venue": {
+        "code": "ATT2",
+        "name": "ANKARA SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_91",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-03T20:00:00",
+      "utcDate": "2026-11-03T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "venue": {
+        "code": "AIB1",
+        "name": "ALCOTT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_96",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-03T19:30:00",
+      "utcDate": "2026-11-03T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "venue": {
+        "code": "ATE6",
+        "name": "RATIOPHARM ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_95",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-11-03T20:00:00",
+      "utcDate": "2026-11-03T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "venue": {
+        "code": "AAI1",
+        "name": "PAOK SPORTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_90",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-11-03T19:00:00",
+      "utcDate": "2026-11-03T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "venue": {
+        "code": "AUA",
+        "name": "MORACA"
+      }
+    },
+    {
+      "identifier": "U2026_92",
+      "roundName": "Round 6",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-11-03T20:00:00",
+      "utcDate": "2026-11-03T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "venue": {
+        "code": "ATG2",
+        "name": "TOFAS SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_69",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 0,
+      "localDate": "2026-10-28T20:00:00",
+      "utcDate": "2026-10-28T20:00:00Z",
+      "local": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "venue": {
+        "code": "AID1",
+        "name": "PABELLON SANTIAGO MARTIN"
+      }
+    },
+    {
+      "identifier": "U2026_71",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 0,
+      "localDate": "2026-10-28T19:30:00",
+      "utcDate": "2026-10-28T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "venue": {
+        "code": "AUW3",
+        "name": "COPPER BOX ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_65",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-10-28T20:30:00",
+      "utcDate": "2026-10-28T19:30:00Z",
+      "local": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "venue": {
+        "code": "AII1",
+        "name": "COLISEUM BURGOS"
+      }
+    },
+    {
+      "identifier": "U2026_66",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-10-28T20:00:00",
+      "utcDate": "2026-10-28T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "venue": {
+        "code": "ACU1",
+        "name": "ANTARES ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_68",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-10-28T19:30:00",
+      "utcDate": "2026-10-28T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "venue": {
+        "code": "AIF1",
+        "name": "NOVA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_76",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-10-28T19:00:00",
+      "utcDate": "2026-10-28T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "venue": {
+        "code": "AVL2",
+        "name": "MESSE CHEMNITZ"
+      }
+    },
+    {
+      "identifier": "U2026_73",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-10-28T18:30:00",
+      "utcDate": "2026-10-28T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "venue": {
+        "code": "ACQ2",
+        "name": "HALA ORBITA"
+      }
+    },
+    {
+      "identifier": "U2026_67",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-28T19:30:00",
+      "utcDate": "2026-10-28T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "venue": {
+        "code": "AFZ3",
+        "name": "ALEXANDREIO ATHLITIKO MELATHRO"
+      }
+    },
+    {
+      "identifier": "U2026_74",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-28T19:00:00",
+      "utcDate": "2026-10-28T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "venue": {
+        "code": "AOL1",
+        "name": "SVYTURIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_70",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-28T18:30:00",
+      "utcDate": "2026-10-28T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "venue": {
+        "code": "AHP1",
+        "name": "SIAULIAI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_79",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-10-27T20:00:00",
+      "utcDate": "2026-10-27T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "venue": {
+        "code": "AOR1",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_75",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-10-27T20:00:00",
+      "utcDate": "2026-10-27T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "venue": {
+        "code": "ATS3",
+        "name": "BTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_72",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-10-27T19:30:00",
+      "utcDate": "2026-10-27T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "venue": {
+        "code": "ATN1",
+        "name": "SUWAG ENERGIE ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_80",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-27T19:00:00",
+      "utcDate": "2026-10-27T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "venue": {
+        "code": "AVN2",
+        "name": "ARENA BOTEVGRAD"
+      }
+    },
+    {
+      "identifier": "U2026_77",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-27T19:00:00",
+      "utcDate": "2026-10-27T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "venue": {
+        "code": "ASS2",
+        "name": "KALNAPILIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_78",
+      "roundName": "Round 5",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-27T19:00:00",
+      "utcDate": "2026-10-27T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "venue": {
+        "code": "ATK2",
+        "name": "SINAN ERDEM SPORTS HALL"
+      }
+    },
+    {
+      "identifier": "U2026_56",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-21T20:30:00",
+      "utcDate": "2026-10-21T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "venue": {
+        "code": "ACS1",
+        "name": "PALAEUR"
+      }
+    },
+    {
+      "identifier": "U2026_60",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-21T20:00:00",
+      "utcDate": "2026-10-21T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "venue": {
+        "code": "AIB1",
+        "name": "ALCOTT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_52",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-21T20:00:00",
+      "utcDate": "2026-10-21T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "venue": {
+        "code": "AUL",
+        "name": "HALA SPORTOVA RANKO ZERAVICA"
+      }
+    },
+    {
+      "identifier": "U2026_63",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-21T19:30:00",
+      "utcDate": "2026-10-21T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "venue": {
+        "code": "AHX1",
+        "name": "ZETRA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_58",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-21T19:30:00",
+      "utcDate": "2026-10-21T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "venue": {
+        "code": "AUJ",
+        "name": "EKINOX"
+      }
+    },
+    {
+      "identifier": "U2026_53",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-21T19:30:00",
+      "utcDate": "2026-10-21T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "venue": {
+        "code": "ATN1",
+        "name": "SUWAG ENERGIE ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_64",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-21T20:00:00",
+      "utcDate": "2026-10-21T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "venue": {
+        "code": "AAI1",
+        "name": "PAOK SPORTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_57",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-21T19:00:00",
+      "utcDate": "2026-10-21T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "venue": {
+        "code": "AVL2",
+        "name": "MESSE CHEMNITZ"
+      }
+    },
+    {
+      "identifier": "U2026_49",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-21T19:00:00",
+      "utcDate": "2026-10-21T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "venue": {
+        "code": "AIF1",
+        "name": "NOVA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_51",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-21T18:30:00",
+      "utcDate": "2026-10-21T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "venue": {
+        "code": "AKX2",
+        "name": "ARENA STOZICE"
+      }
+    },
+    {
+      "identifier": "U2026_54",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-21T19:00:00",
+      "utcDate": "2026-10-21T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "venue": {
+        "code": "AUV4",
+        "name": "BT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_62",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-20T20:30:00",
+      "utcDate": "2026-10-20T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "venue": {
+        "code": "AVM1",
+        "name": "PAVELLO NOU CONGOST"
+      }
+    },
+    {
+      "identifier": "U2026_50",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-20T20:00:00",
+      "utcDate": "2026-10-20T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "venue": {
+        "code": "AIH2",
+        "name": "STADTHALLE ROSTOCK"
+      }
+    },
+    {
+      "identifier": "U2026_59",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-20T19:00:00",
+      "utcDate": "2026-10-20T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "venue": {
+        "code": "AUA",
+        "name": "MORACA"
+      }
+    },
+    {
+      "identifier": "U2026_55",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-20T19:30:00",
+      "utcDate": "2026-10-20T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "venue": {
+        "code": "ATT2",
+        "name": "ANKARA SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_61",
+      "roundName": "Round 4",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-20T19:00:00",
+      "utcDate": "2026-10-20T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "venue": {
+        "code": "AVN2",
+        "name": "ARENA BOTEVGRAD"
+      }
+    },
+    {
+      "identifier": "U2026_40",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-10-15T19:30:00",
+      "utcDate": "2026-10-15T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "venue": {
+        "code": "AUW3",
+        "name": "COPPER BOX ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_38",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-14T21:00:00",
+      "utcDate": "2026-10-14T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "venue": {
+        "code": "ARE",
+        "name": "PALASPORT TALIERCIO"
+      }
+    },
+    {
+      "identifier": "U2026_37",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-10-14T20:00:00",
+      "utcDate": "2026-10-14T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "venue": {
+        "code": "AID1",
+        "name": "PABELLON SANTIAGO MARTIN"
+      }
+    },
+    {
+      "identifier": "U2026_33",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-14T20:30:00",
+      "utcDate": "2026-10-14T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "venue": {
+        "code": "AII1",
+        "name": "COLISEUM BURGOS"
+      }
+    },
+    {
+      "identifier": "U2026_35",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-14T20:00:00",
+      "utcDate": "2026-10-14T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "venue": {
+        "code": "ACU1",
+        "name": "ANTARES ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_42",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-14T20:00:00",
+      "utcDate": "2026-10-14T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "venue": {
+        "code": "ATG2",
+        "name": "TOFAS SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_41",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-14T19:00:00",
+      "utcDate": "2026-10-14T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "venue": {
+        "code": "ACQ2",
+        "name": "HALA ORBITA"
+      }
+    },
+    {
+      "identifier": "U2026_36",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-14T20:00:00",
+      "utcDate": "2026-10-14T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "venue": {
+        "code": "AFZ3",
+        "name": "ALEXANDREIO ATHLITIKO MELATHRO"
+      }
+    },
+    {
+      "identifier": "U2026_46",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-14T18:30:00",
+      "utcDate": "2026-10-14T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "venue": {
+        "code": "ATE6",
+        "name": "RATIOPHARM ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_34",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-14T19:00:00",
+      "utcDate": "2026-10-14T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "venue": {
+        "code": "AHO2",
+        "name": "XIAOMI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_39",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-14T18:30:00",
+      "utcDate": "2026-10-14T15:30:00Z",
+      "local": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "road": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "venue": {
+        "code": "AHP1",
+        "name": "SIAULIAI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_48",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-13T20:00:00",
+      "utcDate": "2026-10-13T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "venue": {
+        "code": "AOR1",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_44",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-13T20:00:00",
+      "utcDate": "2026-10-13T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "venue": {
+        "code": "ATS3",
+        "name": "BTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_47",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-13T19:00:00",
+      "utcDate": "2026-10-13T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "venue": {
+        "code": "ATK2",
+        "name": "SINAN ERDEM SPORTS HALL"
+      }
+    },
+    {
+      "identifier": "U2026_45",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-13T19:00:00",
+      "utcDate": "2026-10-13T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "venue": {
+        "code": "ASS2",
+        "name": "KALNAPILIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_43",
+      "roundName": "Round 3",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-13T19:00:00",
+      "utcDate": "2026-10-13T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "venue": {
+        "code": "AOL1",
+        "name": "SVYTURIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_31",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-07T20:30:00",
+      "utcDate": "2026-10-07T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "venue": {
+        "code": "AVM1",
+        "name": "PAVELLO NOU CONGOST"
+      }
+    },
+    {
+      "identifier": "U2026_29",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-07T20:00:00",
+      "utcDate": "2026-10-07T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "venue": {
+        "code": "AOR1",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_18",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-07T19:30:00",
+      "utcDate": "2026-10-07T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "venue": {
+        "code": "AIF1",
+        "name": "NOVA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_26",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-07T19:00:00",
+      "utcDate": "2026-10-07T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "venue": {
+        "code": "AVL2",
+        "name": "MESSE CHEMNITZ"
+      }
+    },
+    {
+      "identifier": "U2026_17",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-07T20:00:00",
+      "utcDate": "2026-10-07T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "venue": {
+        "code": "AFZ3",
+        "name": "ALEXANDREIO ATHLITIKO MELATHRO"
+      }
+    },
+    {
+      "identifier": "U2026_30",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-07T19:00:00",
+      "utcDate": "2026-10-07T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "venue": {
+        "code": "AVN2",
+        "name": "ARENA BOTEVGRAD"
+      }
+    },
+    {
+      "identifier": "U2026_23",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-07T19:00:00",
+      "utcDate": "2026-10-07T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "venue": {
+        "code": "AUV4",
+        "name": "BT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_21",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-10-06T19:30:00",
+      "utcDate": "2026-10-06T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "venue": {
+        "code": "AUW3",
+        "name": "COPPER BOX ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_25",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-06T20:00:00",
+      "utcDate": "2026-10-06T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "venue": {
+        "code": "ATS3",
+        "name": "BTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_19",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-06T20:00:00",
+      "utcDate": "2026-10-06T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "venue": {
+        "code": "AIH2",
+        "name": "STADTHALLE ROSTOCK"
+      }
+    },
+    {
+      "identifier": "U2026_32",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-06T19:30:00",
+      "utcDate": "2026-10-06T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "venue": {
+        "code": "AHX1",
+        "name": "ZETRA ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_27",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-06T19:30:00",
+      "utcDate": "2026-10-06T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "venue": {
+        "code": "AUJ",
+        "name": "EKINOX"
+      }
+    },
+    {
+      "identifier": "U2026_22",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-06T19:30:00",
+      "utcDate": "2026-10-06T17:30:00Z",
+      "local": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "venue": {
+        "code": "ATN1",
+        "name": "SUWAG ENERGIE ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_28",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-06T19:00:00",
+      "utcDate": "2026-10-06T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "venue": {
+        "code": "AUA",
+        "name": "MORACA"
+      }
+    },
+    {
+      "identifier": "U2026_24",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-10-06T19:30:00",
+      "utcDate": "2026-10-06T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "venue": {
+        "code": "ATT2",
+        "name": "ANKARA SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_20",
+      "roundName": "Round 2",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-10-06T18:30:00",
+      "utcDate": "2026-10-06T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "venue": {
+        "code": "AKX2",
+        "name": "ARENA STOZICE"
+      }
+    },
+    {
+      "identifier": "U2026_6",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-09-30T21:00:00",
+      "utcDate": "2026-09-30T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "MRO",
+          "abbreviatedName": "Maxima Roma"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "CLU",
+          "abbreviatedName": "U-BT Cluj"
+        }
+      },
+      "venue": {
+        "code": "AJK",
+        "name": "PALAZZETTO DELLO SPORT"
+      }
+    },
+    {
+      "identifier": "U2026_5",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 1,
+      "localDate": "2026-09-30T20:00:00",
+      "utcDate": "2026-09-30T19:00:00Z",
+      "local": {
+        "club": {
+          "code": "TNF",
+          "abbreviatedName": "LL Tenerife"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TTK",
+          "abbreviatedName": "Turk Telekom"
+        }
+      },
+      "venue": {
+        "code": "AID1",
+        "name": "PABELLON SANTIAGO MARTIN"
+      }
+    },
+    {
+      "identifier": "U2026_1",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-09-30T20:30:00",
+      "utcDate": "2026-09-30T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "BGS",
+          "abbreviatedName": "Burgos"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LJU",
+          "abbreviatedName": "Cedevita Olimp"
+        }
+      },
+      "venue": {
+        "code": "AII1",
+        "name": "COLISEUM BURGOS"
+      }
+    },
+    {
+      "identifier": "U2026_10",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-09-30T20:00:00",
+      "utcDate": "2026-09-30T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "NAP",
+          "abbreviatedName": "Napoli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOU",
+          "abbreviatedName": "Cosea JL Bourg"
+        }
+      },
+      "venue": {
+        "code": "AIB1",
+        "name": "ALCOTT ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_15",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-09-30T19:00:00",
+      "utcDate": "2026-09-30T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "ULM",
+          "abbreviatedName": "Ulm"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BLK",
+          "abbreviatedName": "Balkan"
+        }
+      },
+      "venue": {
+        "code": "ATE6",
+        "name": "RATIOPHARM ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_9",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-09-30T19:00:00",
+      "utcDate": "2026-09-30T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "WRO",
+          "abbreviatedName": "Slask"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BUD",
+          "abbreviatedName": "Buducnost VOLI"
+        }
+      },
+      "venue": {
+        "code": "ACQ2",
+        "name": "HALA ORBITA"
+      }
+    },
+    {
+      "identifier": "U2026_14",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-09-30T19:30:00",
+      "utcDate": "2026-09-30T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "PAO",
+          "abbreviatedName": "PAOK"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "MAN",
+          "abbreviatedName": "K&U Manresa"
+        }
+      },
+      "venue": {
+        "code": "AAI1",
+        "name": "PAOK SPORTS ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_13",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-09-30T19:30:00",
+      "utcDate": "2026-09-30T16:30:00Z",
+      "local": {
+        "club": {
+          "code": "LKB",
+          "abbreviatedName": "Lietkabelis"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BOS",
+          "abbreviatedName": "BOSNA"
+        }
+      },
+      "venue": {
+        "code": "ASS2",
+        "name": "KALNAPILIO ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_16",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-09-30T19:00:00",
+      "utcDate": "2026-09-30T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "BAH",
+          "abbreviatedName": "Bahcesehir"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "BCR",
+          "abbreviatedName": "Roma"
+        }
+      },
+      "venue": {
+        "code": "ATK2",
+        "name": "SINAN ERDEM SPORTS HALL"
+      }
+    },
+    {
+      "identifier": "U2026_3",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-09-30T19:00:00",
+      "utcDate": "2026-09-30T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "RIG",
+          "abbreviatedName": "Riga Zelli"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRT",
+          "abbreviatedName": "Derthona"
+        }
+      },
+      "venue": {
+        "code": "AHO2",
+        "name": "XIAOMI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_8",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-09-30T18:30:00",
+      "utcDate": "2026-09-30T15:30:00Z",
+      "local": {
+        "club": {
+          "code": "SIA",
+          "abbreviatedName": "Siauliai "
+        }
+      },
+      "road": {
+        "club": {
+          "code": "LLI",
+          "abbreviatedName": "London"
+        }
+      },
+      "venue": {
+        "code": "AHP1",
+        "name": "SIAULIAI ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_7",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-09-29T20:30:00",
+      "utcDate": "2026-09-29T18:30:00Z",
+      "local": {
+        "club": {
+          "code": "VNC",
+          "abbreviatedName": "Reyer Venice"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "FRA",
+          "abbreviatedName": "Skyliners"
+        }
+      },
+      "venue": {
+        "code": "ARE",
+        "name": "PALASPORT TALIERCIO"
+      }
+    },
+    {
+      "identifier": "U2026_4",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-09-29T20:00:00",
+      "utcDate": "2026-09-29T18:00:00Z",
+      "local": {
+        "club": {
+          "code": "LEM",
+          "abbreviatedName": "Le Mans Sarthe"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "ARI",
+          "abbreviatedName": "Aris"
+        }
+      },
+      "venue": {
+        "code": "ACU1",
+        "name": "ANTARES ARENA"
+      }
+    },
+    {
+      "identifier": "U2026_11",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-09-29T20:00:00",
+      "utcDate": "2026-09-29T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "BUR",
+          "abbreviatedName": "Tofas Bursa"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "NIN",
+          "abbreviatedName": "Chemnitz"
+        }
+      },
+      "venue": {
+        "code": "ATG2",
+        "name": "TOFAS SPOR SALONU"
+      }
+    },
+    {
+      "identifier": "U2026_2",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 2,
+      "localDate": "2026-09-29T19:00:00",
+      "utcDate": "2026-09-29T17:00:00Z",
+      "local": {
+        "club": {
+          "code": "JER",
+          "abbreviatedName": "Hapoel JLM"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "RTK",
+          "abbreviatedName": " Rostock"
+        }
+      },
+      "venue": {
+        "code": "AUL",
+        "name": "HALA SPORTOVA RANKO ZERAVICA"
+      }
+    },
+    {
+      "identifier": "U2026_12",
+      "roundName": "Round 1",
+      "confirmedHour": true,
+      "localTimeZone": 3,
+      "localDate": "2026-09-29T19:00:00",
+      "utcDate": "2026-09-29T16:00:00Z",
+      "local": {
+        "club": {
+          "code": "KLA",
+          "abbreviatedName": "Neptunas"
+        }
+      },
+      "road": {
+        "club": {
+          "code": "TRN",
+          "abbreviatedName": "Trento"
+        }
+      },
+      "venue": {
+        "code": "AOL1",
+        "name": "SVYTURIO ARENA"
+      }
+    }
+  ]
+}

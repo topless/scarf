@@ -7,6 +7,10 @@ export interface Game {
   competition: string
   home: string
   away: string
+  // The two sides as the source identifies them, home then away ("uefa:50051", "euroleague:OLY",
+  // "fiba:GRE": config.ts's sourceKey), so a page can tell which other teams on scarf played whatever
+  // the source calls them. A game made by hand may lack it.
+  sides?: [string, string]
   date: string // YYYY-MM-DD at the venue
   kickoff?: string // ISO instant in UTC; missing while the time is not announced
   utcOffsetHours?: number // the venue's offset from UTC at kickoff

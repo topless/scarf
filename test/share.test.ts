@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { shareSize, teams } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
+import { landingKind, stripes, teamKind } from '../src/page.ts'
 import {
   headlineSize,
   nextGameLine,
@@ -16,6 +17,8 @@ import {
 } from '../src/share.ts'
 
 const [football, basketball] = teams
+const olympiacos = teams.find((team) => team.club?.slug === 'olympiacos')!
+const panathinaikos = teams.find((team) => team.club?.slug === 'panathinaikos')!
 const site = 'https://example.github.io/scarf'
 
 const timed: Game = {
@@ -76,7 +79,8 @@ test('share card escapes text from the sources', () => {
 
 test('nothing on a share card breaks the voice rules', () => {
   const cards = [timed, noCity, unscheduled, undefined].map((game) => renderShareCard(football, game, site, flag))
-  for (const card of [...cards, renderLandingShareCard(teams, site), renderCountryShareCard([football, basketball], site, flag)]) {
+  const more = [renderShareCard(olympiacos, timed, site, flag), renderLandingShareCard(teams, site), renderCountryShareCard([football, basketball], site, flag)]
+  for (const card of [...cards, ...more]) {
     const copy = text(card)
     assert.doesNotMatch(copy, /!|\bTBA\b|\bTBC\b|\bTBD\b|don't miss|notification/i)
     assert.doesNotMatch(copy, /\bv\b/)
@@ -88,9 +92,13 @@ test('landing card carries the brand line, how many teams each sport has and no 
   // Two teams stand in for the whole list, so adding a team does not touch this test.
   const card = renderLandingShareCard([football, basketball], site)
   assert.match(text(card), /scarf .*National teams · Football and basketball .*Your colours, in your calendar\. .*TEAMS 1 in football · 1 in basketball /)
-  // Every team by name would run off the card: there are some eighty.
-  const sport = (name: string) => teams.filter((team) => team.sport === name).length
-  assert.match(text(renderLandingShareCard(teams, site)), new RegExp(`TEAMS ${sport('football')} in football · ${sport('basketball')} in basketball `))
+  // Every team by name would run off the card: there are some eighty. The national teams by sport,
+  // then the clubs.
+  const sport = (name: string) => teams.filter((team) => !team.club && team.sport === name).length
+  const clubs = teams.filter((team) => team.club).length
+  assert.match(text(renderLandingShareCard(teams, site)), new RegExp(`TEAMS ${sport('football')} in football · ${sport('basketball')} in basketball · ${clubs} clubs `))
+  assert.match(text(renderLandingShareCard([football, olympiacos], site)), /TEAMS 1 in football · 1 club /)
+  assert.match(text(renderLandingShareCard([olympiacos, panathinaikos], site)), /TEAMS 2 clubs /)
   assert.match(text(renderLandingShareCard([football], site)), /TEAMS 1 in football example/)
   assert.match(text(renderLandingShareCard([football], site)), /National teams · Football /)
   // An ink band where a team's stripe would be, the large mark in terrace red and wool.
@@ -105,7 +113,7 @@ test('landing card carries the brand line, how many teams each sport has and no 
 
 test('landing card footer prints the site without the scheme, and every federation', () => {
   const copy = text(renderLandingShareCard(teams, site))
-  assert.match(copy, /example\.github\.io\/scarf Free · updated daily from UEFA and FIBA/)
+  assert.match(copy, /example\.github\.io\/scarf Free · updated daily from UEFA, FIBA and EuroLeague/)
   assert.doesNotMatch(copy, /https?:/)
   assert.match(text(renderLandingShareCard(teams, `${site}/`)), /example\.github\.io\/scarf Free/)
   assert.match(text(renderLandingShareCard([football], site)), /scarf Free · updated daily from UEFA /)
@@ -134,6 +142,41 @@ test("country card carries the country's stripes, flag and name, and its teams b
   // A country with one team names it as that team's card does.
   const england = teams.find((team) => team.country === 'england')!
   assert.match(text(renderCountryShareCard([england], site, flag)), /National team · Men's football .*England, in your calendar\. .*TEAMS England football .*updated daily from UEFA /)
+})
+
+test("a club's card is a team's card in its kit, under its country's flag, its page under the country and sport", () => {
+  const card = renderShareCard(olympiacos, timed, site, flag)
+  assert.match(text(card), new RegExp(`scarf .*${teamKind(olympiacos)} .*Olympiacos basketball, in your calendar\\. .*NEXT Netherlands vs Greece`))
+  assert.ok(card.includes(`<img src="${flag}" width="32" height="24">`))
+  assert.equal(olympiacos.flag, 'gr') // the tag the build draws is the country's flag
+  assert.ok(card.includes(`background: ${stripes(olympiacos.colours, 80)}`))
+  assert.doesNotMatch(card, /#0D5EAF/) // the kit, not the country's stripes
+  assert.match(svgs(card).at(-1)!, new RegExp(`fill="${olympiacos.colours[0]}"`))
+  assert.match(text(card), /example\.github\.io\/scarf\/greece\/basketball\/olympiacos Free · updated daily from EuroLeague/)
+})
+
+test("country card lists the national teams only, in the country's stripes, whatever comes first", () => {
+  const national = renderCountryShareCard([football, basketball], site, flag)
+  assert.equal(renderCountryShareCard([olympiacos, basketball, panathinaikos, football], site, flag), national)
+  assert.match(national, /repeating-linear-gradient\(90deg, #0D5EAF 0px 40px, #FFFFFF 40px 80px\)/)
+  assert.doesNotMatch(national, /Olympiacos|Panathinaikos|EuroLeague/)
+  // One national team and a club: the card reads as that team's alone.
+  assert.equal(renderCountryShareCard([olympiacos, football], site, flag), renderCountryShareCard([football], site, flag))
+})
+
+// Monaco and the United Arab Emirates have a club on scarf and no national team. Greece's clubs on
+// their own stand in for such a country, so the test does not wait for the data.
+test('a country with clubs only names its clubs, in the country stripes, and still renders', async () => {
+  const two = renderCountryShareCard([panathinaikos, olympiacos], site, flag)
+  assert.match(text(two), new RegExp(`${landingKind([panathinaikos, olympiacos])} .*Greece, in your calendar\\. .*TEAMS Panathinaikos basketball · Olympiacos basketball `))
+  assert.match(two, /repeating-linear-gradient\(90deg, #0D5EAF 0px 40px, #FFFFFF 40px 80px\)/)
+  assert.ok(two.includes(`<img src="${flag}" width="32" height="24">`))
+  assert.match(text(two), /example\.github\.io\/scarf\/greece Free · updated daily from EuroLeague/)
+  const one = text(renderCountryShareCard([olympiacos], site, flag))
+  assert.match(one, new RegExp(`${teamKind(olympiacos)} .*Greece, in your calendar\\. .*TEAMS Olympiacos basketball `))
+  const png = await renderCountryShareImage([olympiacos], site)
+  assert.equal(png.readUInt32BE(16), shareSize.width)
+  assert.ok(png.byteLength < SHARE_MAX_BYTES)
 })
 
 test('every team, country and the landing page render as 1200×630 PNGs under the size limit without a browser', async () => {

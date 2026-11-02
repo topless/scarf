@@ -1,5 +1,1949 @@
 [
   {
+    "id": "2049577",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52277",
+      "internationalName": "Lens"
+    },
+    "awayTeam": {
+      "id": "50149",
+      "internationalName": "Sporting CP"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-13",
+      "dateTime": "2026-10-13T16:45:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stade Bollaert-Delelis"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Lens Agglo"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049579",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "2609356",
+      "internationalName": "Sabah"
+    },
+    "awayTeam": {
+      "id": "52498",
+      "internationalName": "Slavia Praha"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-13",
+      "dateTime": "2026-10-13T16:45:00Z",
+      "utcOffsetInHours": 4
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Baku Olympic Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Baku"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049571",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50138",
+      "internationalName": "Inter"
+    },
+    "awayTeam": {
+      "id": "50043",
+      "internationalName": "Club Brugge"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-13",
+      "dateTime": "2026-10-13T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio San Siro"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Milan"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049572",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52280",
+      "internationalName": "Arsenal"
+    },
+    "awayTeam": {
+      "id": "75797",
+      "internationalName": "Lille"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-13",
+      "dateTime": "2026-10-13T19:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Arsenal Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "London"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049573",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50124",
+      "internationalName": "Atleti"
+    },
+    "awayTeam": {
+      "id": "52682",
+      "internationalName": "Man Utd"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-13",
+      "dateTime": "2026-10-13T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio Metropolitano"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Madrid"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049574",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "2603790",
+      "internationalName": "Leipzig"
+    },
+    "awayTeam": {
+      "id": "50062",
+      "internationalName": "PSV"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-13",
+      "dateTime": "2026-10-13T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "RB Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Leipzig"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049575",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "70691",
+      "internationalName": "Villarreal"
+    },
+    "awayTeam": {
+      "id": "50136",
+      "internationalName": "Napoli"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-13",
+      "dateTime": "2026-10-13T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio de la Cerámica"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Villarreal"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049576",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50067",
+      "internationalName": "Galatasaray"
+    },
+    "awayTeam": {
+      "id": "50080",
+      "internationalName": "Barcelona"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-13",
+      "dateTime": "2026-10-13T19:00:00Z",
+      "utcOffsetInHours": 3
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Ali Sami Yen Spor Kompleksi"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Istanbul"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049578",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52319",
+      "internationalName": "Viking"
+    },
+    "awayTeam": {
+      "id": "50037",
+      "internationalName": "Bayern München"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-13",
+      "dateTime": "2026-10-13T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Viking Stadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Stavanger"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049584",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52749",
+      "internationalName": "Feyenoord"
+    },
+    "awayTeam": {
+      "id": "79946",
+      "internationalName": "Como"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-14",
+      "dateTime": "2026-10-14T16:45:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadion Feijenoord 'De Kuip'"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Rotterdam"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049588",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "63405",
+      "internationalName": "LASK"
+    },
+    "awayTeam": {
+      "id": "7889",
+      "internationalName": "Liverpool"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-14",
+      "dateTime": "2026-10-14T16:45:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Oberösterreich Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Linz"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049580",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52919",
+      "internationalName": "Man City"
+    },
+    "awayTeam": {
+      "id": "52747",
+      "internationalName": "Paris"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-14",
+      "dateTime": "2026-10-14T19:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "City of Manchester Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Manchester"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049581",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50137",
+      "internationalName": "Roma"
+    },
+    "awayTeam": {
+      "id": "50051",
+      "internationalName": "Real Madrid"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-14",
+      "dateTime": "2026-10-14T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio Olimpico"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Rome"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049582",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52683",
+      "internationalName": "Aston Villa"
+    },
+    "awayTeam": {
+      "id": "52692",
+      "internationalName": "Fenerbahçe"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-14",
+      "dateTime": "2026-10-14T19:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Villa Park"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Birmingham"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049583",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52265",
+      "internationalName": "Real Betis"
+    },
+    "awayTeam": {
+      "id": "50064",
+      "internationalName": "Porto"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-14",
+      "dateTime": "2026-10-14T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": " La Cartuja de Sevilla"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Seville"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049585",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "59333",
+      "internationalName": "Bodø/Glimt"
+    },
+    "awayTeam": {
+      "id": "52758",
+      "internationalName": "B. Dortmund"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-14",
+      "dateTime": "2026-10-14T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Aspmyra"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bodø"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049586",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52707",
+      "internationalName": "Shakhtar"
+    },
+    "awayTeam": {
+      "id": "50129",
+      "internationalName": "AEK Athens"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-14",
+      "dateTime": "2026-10-14T19:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stamford Bridge"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "London"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049587",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52797",
+      "internationalName": "S. Bratislava"
+    },
+    "awayTeam": {
+      "id": "50107",
+      "internationalName": "Stuttgart"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-14",
+      "dateTime": "2026-10-14T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Národný futbalový štadión "
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bratislava"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049595",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52692",
+      "internationalName": "Fenerbahçe"
+    },
+    "awayTeam": {
+      "id": "52498",
+      "internationalName": "Slavia Praha"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-20",
+      "dateTime": "2026-10-20T16:45:00Z",
+      "utcOffsetInHours": 3
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Fenerbahçe Şükrü Saracoğlu Spor Kompleksi"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Istanbul"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049597",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "2609356",
+      "internationalName": "Sabah"
+    },
+    "awayTeam": {
+      "id": "52758",
+      "internationalName": "B. Dortmund"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-20",
+      "dateTime": "2026-10-20T16:45:00Z",
+      "utcOffsetInHours": 4
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Baku Olympic Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Baku"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049589",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52747",
+      "internationalName": "Paris"
+    },
+    "awayTeam": {
+      "id": "50080",
+      "internationalName": "Barcelona"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-20",
+      "dateTime": "2026-10-20T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Parc des Princes"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Paris"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049590",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "7889",
+      "internationalName": "Liverpool"
+    },
+    "awayTeam": {
+      "id": "70691",
+      "internationalName": "Villarreal"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-20",
+      "dateTime": "2026-10-20T19:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Anfield"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Liverpool"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049591",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52919",
+      "internationalName": "Man City"
+    },
+    "awayTeam": {
+      "id": "50129",
+      "internationalName": "AEK Athens"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-20",
+      "dateTime": "2026-10-20T19:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "City of Manchester Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Manchester"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049592",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50137",
+      "internationalName": "Roma"
+    },
+    "awayTeam": {
+      "id": "52797",
+      "internationalName": "S. Bratislava"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-20",
+      "dateTime": "2026-10-20T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio Olimpico"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Rome"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049593",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50064",
+      "internationalName": "Porto"
+    },
+    "awayTeam": {
+      "id": "50062",
+      "internationalName": "PSV"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-20",
+      "dateTime": "2026-10-20T19:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estádio do Dragão"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Porto"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049594",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50136",
+      "internationalName": "Napoli"
+    },
+    "awayTeam": {
+      "id": "59333",
+      "internationalName": "Bodø/Glimt"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-20",
+      "dateTime": "2026-10-20T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio Diego Armando Maradona"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Naples"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049596",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50107",
+      "internationalName": "Stuttgart"
+    },
+    "awayTeam": {
+      "id": "50124",
+      "internationalName": "Atleti"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-20",
+      "dateTime": "2026-10-20T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Arena Stuttgart"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Stuttgart"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049605",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "75797",
+      "internationalName": "Lille"
+    },
+    "awayTeam": {
+      "id": "50067",
+      "internationalName": "Galatasaray"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-21",
+      "dateTime": "2026-10-21T16:45:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stade Pierre Mauroy"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Villeneuve d'Ascq"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049606",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "79946",
+      "internationalName": "Como"
+    },
+    "awayTeam": {
+      "id": "52682",
+      "internationalName": "Man Utd"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-21",
+      "dateTime": "2026-10-21T16:45:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Giuseppe Sinigaglia"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Como"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049598",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50037",
+      "internationalName": "Bayern München"
+    },
+    "awayTeam": {
+      "id": "52280",
+      "internationalName": "Arsenal"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-21",
+      "dateTime": "2026-10-21T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Fußball Arena München"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Munich"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049599",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50051",
+      "internationalName": "Real Madrid"
+    },
+    "awayTeam": {
+      "id": "2603790",
+      "internationalName": "Leipzig"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-21",
+      "dateTime": "2026-10-21T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio Santiago Bernabéu"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Madrid"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049600",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50138",
+      "internationalName": "Inter"
+    },
+    "awayTeam": {
+      "id": "52707",
+      "internationalName": "Shakhtar"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-21",
+      "dateTime": "2026-10-21T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio San Siro"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Milan"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049601",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50149",
+      "internationalName": "Sporting CP"
+    },
+    "awayTeam": {
+      "id": "63405",
+      "internationalName": "LASK"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-21",
+      "dateTime": "2026-10-21T19:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estádio José Alvalade"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Lisbon"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049602",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52683",
+      "internationalName": "Aston Villa"
+    },
+    "awayTeam": {
+      "id": "52319",
+      "internationalName": "Viking"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-21",
+      "dateTime": "2026-10-21T19:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Villa Park"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Birmingham"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049603",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "50043",
+      "internationalName": "Club Brugge"
+    },
+    "awayTeam": {
+      "id": "52277",
+      "internationalName": "Lens"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-21",
+      "dateTime": "2026-10-21T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Jan Breydelstadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bruges"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049604",
+    "status": "FINISHED",
+    "homeTeam": {
+      "id": "52265",
+      "internationalName": "Real Betis"
+    },
+    "awayTeam": {
+      "id": "52749",
+      "internationalName": "Feyenoord"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-10-21",
+      "dateTime": "2026-10-21T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": " La Cartuja de Sevilla"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Seville"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049613",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52707",
+      "internationalName": "Shakhtar"
+    },
+    "awayTeam": {
+      "id": "50149",
+      "internationalName": "Sporting CP"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-03",
+      "dateTime": "2026-11-03T17:45:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stamford Bridge"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "London"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049614",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50067",
+      "internationalName": "Galatasaray"
+    },
+    "awayTeam": {
+      "id": "50107",
+      "internationalName": "Stuttgart"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-03",
+      "dateTime": "2026-11-03T17:45:00Z",
+      "utcOffsetInHours": 3
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Ali Sami Yen Spor Kompleksi"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Istanbul"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049607",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50080",
+      "internationalName": "Barcelona"
+    },
+    "awayTeam": {
+      "id": "52683",
+      "internationalName": "Aston Villa"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-03",
+      "dateTime": "2026-11-03T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Camp Nou"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Barcelona"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049608",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50124",
+      "internationalName": "Atleti"
+    },
+    "awayTeam": {
+      "id": "50037",
+      "internationalName": "Bayern München"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-03",
+      "dateTime": "2026-11-03T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio Metropolitano"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Madrid"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049609",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52682",
+      "internationalName": "Man Utd"
+    },
+    "awayTeam": {
+      "id": "50137",
+      "internationalName": "Roma"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-03",
+      "dateTime": "2026-11-03T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Old Trafford"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Manchester"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049610",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52749",
+      "internationalName": "Feyenoord"
+    },
+    "awayTeam": {
+      "id": "50138",
+      "internationalName": "Inter"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-03",
+      "dateTime": "2026-11-03T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadion Feijenoord 'De Kuip'"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Rotterdam"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049611",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "59333",
+      "internationalName": "Bodø/Glimt"
+    },
+    "awayTeam": {
+      "id": "75797",
+      "internationalName": "Lille"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-03",
+      "dateTime": "2026-11-03T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Aspmyra"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bodø"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049612",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "70691",
+      "internationalName": "Villarreal"
+    },
+    "awayTeam": {
+      "id": "52747",
+      "internationalName": "Paris"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-03",
+      "dateTime": "2026-11-03T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio de la Cerámica"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Villarreal"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049615",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "63405",
+      "internationalName": "LASK"
+    },
+    "awayTeam": {
+      "id": "52797",
+      "internationalName": "S. Bratislava"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-03",
+      "dateTime": "2026-11-03T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Oberösterreich Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Linz"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049620",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52692",
+      "internationalName": "Fenerbahçe"
+    },
+    "awayTeam": {
+      "id": "7889",
+      "internationalName": "Liverpool"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-04",
+      "dateTime": "2026-11-04T17:45:00Z",
+      "utcOffsetInHours": 3
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Fenerbahçe Şükrü Saracoğlu Spor Kompleksi"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Istanbul"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049622",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50129",
+      "internationalName": "AEK Athens"
+    },
+    "awayTeam": {
+      "id": "50051",
+      "internationalName": "Real Madrid"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-04",
+      "dateTime": "2026-11-04T17:45:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "AEK Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Athens"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049616",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52758",
+      "internationalName": "B. Dortmund"
+    },
+    "awayTeam": {
+      "id": "52265",
+      "internationalName": "Real Betis"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-04",
+      "dateTime": "2026-11-04T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "BVB Stadion Dortmund"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Dortmund"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049617",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50064",
+      "internationalName": "Porto"
+    },
+    "awayTeam": {
+      "id": "50136",
+      "internationalName": "Napoli"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-04",
+      "dateTime": "2026-11-04T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estádio do Dragão"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Porto"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049618",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50062",
+      "internationalName": "PSV"
+    },
+    "awayTeam": {
+      "id": "50043",
+      "internationalName": "Club Brugge"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-04",
+      "dateTime": "2026-11-04T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "PSV Stadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Eindhoven"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049619",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "2603790",
+      "internationalName": "Leipzig"
+    },
+    "awayTeam": {
+      "id": "52919",
+      "internationalName": "Man City"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-04",
+      "dateTime": "2026-11-04T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "RB Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Leipzig"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049621",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52498",
+      "internationalName": "Slavia Praha"
+    },
+    "awayTeam": {
+      "id": "52280",
+      "internationalName": "Arsenal"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-04",
+      "dateTime": "2026-11-04T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Eden Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Prague"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049623",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52277",
+      "internationalName": "Lens"
+    },
+    "awayTeam": {
+      "id": "79946",
+      "internationalName": "Como"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-04",
+      "dateTime": "2026-11-04T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stade Bollaert-Delelis"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Lens Agglo"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049624",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52319",
+      "internationalName": "Viking"
+    },
+    "awayTeam": {
+      "id": "2609356",
+      "internationalName": "Sabah"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-04",
+      "dateTime": "2026-11-04T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Viking Stadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Stavanger"
+          }
+        }
+      }
+    }
+  },
+  {
     "id": "2047873",
     "status": "UPCOMING",
     "homeTeam": {
@@ -1866,6 +3810,2598 @@
         "translations": {
           "name": {
             "EN": "Dublin"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049629",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "59333",
+      "internationalName": "Bodø/Glimt"
+    },
+    "awayTeam": {
+      "id": "63405",
+      "internationalName": "LASK"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-24",
+      "dateTime": "2026-11-24T17:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Aspmyra"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bodø"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049631",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50067",
+      "internationalName": "Galatasaray"
+    },
+    "awayTeam": {
+      "id": "52683",
+      "internationalName": "Aston Villa"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-24",
+      "dateTime": "2026-11-24T17:45:00Z",
+      "utcOffsetInHours": 3
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Ali Sami Yen Spor Kompleksi"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Istanbul"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049625",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50051",
+      "internationalName": "Real Madrid"
+    },
+    "awayTeam": {
+      "id": "50062",
+      "internationalName": "PSV"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-24",
+      "dateTime": "2026-11-24T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio Santiago Bernabéu"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Madrid"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049626",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52919",
+      "internationalName": "Man City"
+    },
+    "awayTeam": {
+      "id": "50136",
+      "internationalName": "Napoli"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-24",
+      "dateTime": "2026-11-24T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "City of Manchester Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Manchester"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049627",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52280",
+      "internationalName": "Arsenal"
+    },
+    "awayTeam": {
+      "id": "52758",
+      "internationalName": "B. Dortmund"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-24",
+      "dateTime": "2026-11-24T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Arsenal Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "London"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049628",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52749",
+      "internationalName": "Feyenoord"
+    },
+    "awayTeam": {
+      "id": "50064",
+      "internationalName": "Porto"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-24",
+      "dateTime": "2026-11-24T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadion Feijenoord 'De Kuip'"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Rotterdam"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049630",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "2603790",
+      "internationalName": "Leipzig"
+    },
+    "awayTeam": {
+      "id": "52277",
+      "internationalName": "Lens"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-24",
+      "dateTime": "2026-11-24T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "RB Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Leipzig"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049632",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52797",
+      "internationalName": "S. Bratislava"
+    },
+    "awayTeam": {
+      "id": "52265",
+      "internationalName": "Real Betis"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-24",
+      "dateTime": "2026-11-24T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Národný futbalový štadión "
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bratislava"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049633",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "79946",
+      "internationalName": "Como"
+    },
+    "awayTeam": {
+      "id": "50129",
+      "internationalName": "AEK Athens"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-24",
+      "dateTime": "2026-11-24T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Giuseppe Sinigaglia"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Como"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049641",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52498",
+      "internationalName": "Slavia Praha"
+    },
+    "awayTeam": {
+      "id": "70691",
+      "internationalName": "Villarreal"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-25",
+      "dateTime": "2026-11-25T17:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Eden Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Prague"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049642",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "2609356",
+      "internationalName": "Sabah"
+    },
+    "awayTeam": {
+      "id": "50080",
+      "internationalName": "Barcelona"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-25",
+      "dateTime": "2026-11-25T17:45:00Z",
+      "utcOffsetInHours": 4
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Baku Olympic Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Baku"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049634",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52747",
+      "internationalName": "Paris"
+    },
+    "awayTeam": {
+      "id": "50137",
+      "internationalName": "Roma"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-25",
+      "dateTime": "2026-11-25T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Parc des Princes"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Paris"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049635",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50138",
+      "internationalName": "Inter"
+    },
+    "awayTeam": {
+      "id": "50107",
+      "internationalName": "Stuttgart"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-25",
+      "dateTime": "2026-11-25T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio San Siro"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Milan"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049636",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50124",
+      "internationalName": "Atleti"
+    },
+    "awayTeam": {
+      "id": "52319",
+      "internationalName": "Viking"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-25",
+      "dateTime": "2026-11-25T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio Metropolitano"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Madrid"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049637",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50149",
+      "internationalName": "Sporting CP"
+    },
+    "awayTeam": {
+      "id": "52682",
+      "internationalName": "Man Utd"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-25",
+      "dateTime": "2026-11-25T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estádio José Alvalade"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Lisbon"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049638",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50043",
+      "internationalName": "Club Brugge"
+    },
+    "awayTeam": {
+      "id": "7889",
+      "internationalName": "Liverpool"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-25",
+      "dateTime": "2026-11-25T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Jan Breydelstadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bruges"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049639",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "75797",
+      "internationalName": "Lille"
+    },
+    "awayTeam": {
+      "id": "50037",
+      "internationalName": "Bayern München"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-25",
+      "dateTime": "2026-11-25T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stade Pierre Mauroy"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Villeneuve d'Ascq"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049640",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52707",
+      "internationalName": "Shakhtar"
+    },
+    "awayTeam": {
+      "id": "52692",
+      "internationalName": "Fenerbahçe"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-11-25",
+      "dateTime": "2026-11-25T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stamford Bridge"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "London"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049649",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "70691",
+      "internationalName": "Villarreal"
+    },
+    "awayTeam": {
+      "id": "2609356",
+      "internationalName": "Sabah"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-08",
+      "dateTime": "2026-12-08T17:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio de la Cerámica"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Villarreal"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049651",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52319",
+      "internationalName": "Viking"
+    },
+    "awayTeam": {
+      "id": "52749",
+      "internationalName": "Feyenoord"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-08",
+      "dateTime": "2026-12-08T17:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Viking Stadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Stavanger"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049643",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50037",
+      "internationalName": "Bayern München"
+    },
+    "awayTeam": {
+      "id": "52498",
+      "internationalName": "Slavia Praha"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-08",
+      "dateTime": "2026-12-08T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Fußball Arena München"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Munich"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049644",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50080",
+      "internationalName": "Barcelona"
+    },
+    "awayTeam": {
+      "id": "52919",
+      "internationalName": "Man City"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-08",
+      "dateTime": "2026-12-08T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Camp Nou"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Barcelona"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049645",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50137",
+      "internationalName": "Roma"
+    },
+    "awayTeam": {
+      "id": "50149",
+      "internationalName": "Sporting CP"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-08",
+      "dateTime": "2026-12-08T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio Olimpico"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Rome"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049646",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52683",
+      "internationalName": "Aston Villa"
+    },
+    "awayTeam": {
+      "id": "52747",
+      "internationalName": "Paris"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-08",
+      "dateTime": "2026-12-08T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Villa Park"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Birmingham"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049647",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52682",
+      "internationalName": "Man Utd"
+    },
+    "awayTeam": {
+      "id": "2603790",
+      "internationalName": "Leipzig"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-08",
+      "dateTime": "2026-12-08T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Old Trafford"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Manchester"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049648",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50136",
+      "internationalName": "Napoli"
+    },
+    "awayTeam": {
+      "id": "50043",
+      "internationalName": "Club Brugge"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-08",
+      "dateTime": "2026-12-08T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio Diego Armando Maradona"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Naples"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049650",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50129",
+      "internationalName": "AEK Athens"
+    },
+    "awayTeam": {
+      "id": "50067",
+      "internationalName": "Galatasaray"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-08",
+      "dateTime": "2026-12-08T20:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "AEK Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Athens"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049655",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52265",
+      "internationalName": "Real Betis"
+    },
+    "awayTeam": {
+      "id": "79946",
+      "internationalName": "Como"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-09",
+      "dateTime": "2026-12-09T17:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": " La Cartuja de Sevilla"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Seville"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049657",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52797",
+      "internationalName": "S. Bratislava"
+    },
+    "awayTeam": {
+      "id": "52707",
+      "internationalName": "Shakhtar"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-09",
+      "dateTime": "2026-12-09T17:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Národný futbalový štadión "
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bratislava"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049652",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "7889",
+      "internationalName": "Liverpool"
+    },
+    "awayTeam": {
+      "id": "50064",
+      "internationalName": "Porto"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-09",
+      "dateTime": "2026-12-09T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Anfield"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Liverpool"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049653",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52280",
+      "internationalName": "Arsenal"
+    },
+    "awayTeam": {
+      "id": "50051",
+      "internationalName": "Real Madrid"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-09",
+      "dateTime": "2026-12-09T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Arsenal Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "London"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049654",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52758",
+      "internationalName": "B. Dortmund"
+    },
+    "awayTeam": {
+      "id": "50138",
+      "internationalName": "Inter"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-09",
+      "dateTime": "2026-12-09T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "BVB Stadion Dortmund"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Dortmund"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049656",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50062",
+      "internationalName": "PSV"
+    },
+    "awayTeam": {
+      "id": "50124",
+      "internationalName": "Atleti"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-09",
+      "dateTime": "2026-12-09T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "PSV Stadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Eindhoven"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049658",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50107",
+      "internationalName": "Stuttgart"
+    },
+    "awayTeam": {
+      "id": "75797",
+      "internationalName": "Lille"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-09",
+      "dateTime": "2026-12-09T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Arena Stuttgart"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Stuttgart"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049659",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "63405",
+      "internationalName": "LASK"
+    },
+    "awayTeam": {
+      "id": "52692",
+      "internationalName": "Fenerbahçe"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-09",
+      "dateTime": "2026-12-09T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Oberösterreich Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Linz"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049660",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52277",
+      "internationalName": "Lens"
+    },
+    "awayTeam": {
+      "id": "59333",
+      "internationalName": "Bodø/Glimt"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2026-12-09",
+      "dateTime": "2026-12-09T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stade Bollaert-Delelis"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Lens Agglo"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049666",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "59333",
+      "internationalName": "Bodø/Glimt"
+    },
+    "awayTeam": {
+      "id": "50124",
+      "internationalName": "Atleti"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-19",
+      "dateTime": "2027-01-19T17:45:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Aspmyra"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bodø"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049667",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50067",
+      "internationalName": "Galatasaray"
+    },
+    "awayTeam": {
+      "id": "52749",
+      "internationalName": "Feyenoord"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-19",
+      "dateTime": "2027-01-19T17:45:00Z",
+      "utcOffsetInHours": 3
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Ali Sami Yen Spor Kompleksi"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Istanbul"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049661",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50051",
+      "internationalName": "Real Madrid"
+    },
+    "awayTeam": {
+      "id": "63405",
+      "internationalName": "LASK"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-19",
+      "dateTime": "2027-01-19T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio Santiago Bernabéu"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Madrid"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049662",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50138",
+      "internationalName": "Inter"
+    },
+    "awayTeam": {
+      "id": "7889",
+      "internationalName": "Liverpool"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-19",
+      "dateTime": "2027-01-19T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio San Siro"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Milan"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049663",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52683",
+      "internationalName": "Aston Villa"
+    },
+    "awayTeam": {
+      "id": "52758",
+      "internationalName": "B. Dortmund"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-19",
+      "dateTime": "2027-01-19T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Villa Park"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Birmingham"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049664",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50064",
+      "internationalName": "Porto"
+    },
+    "awayTeam": {
+      "id": "52498",
+      "internationalName": "Slavia Praha"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-19",
+      "dateTime": "2027-01-19T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estádio do Dragão"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Porto"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049665",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "75797",
+      "internationalName": "Lille"
+    },
+    "awayTeam": {
+      "id": "52797",
+      "internationalName": "S. Bratislava"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-19",
+      "dateTime": "2027-01-19T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stade Pierre Mauroy"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Villeneuve d'Ascq"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049668",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50107",
+      "internationalName": "Stuttgart"
+    },
+    "awayTeam": {
+      "id": "50043",
+      "internationalName": "Club Brugge"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-19",
+      "dateTime": "2027-01-19T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Arena Stuttgart"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Stuttgart"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049669",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50129",
+      "internationalName": "AEK Athens"
+    },
+    "awayTeam": {
+      "id": "50137",
+      "internationalName": "Roma"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-19",
+      "dateTime": "2027-01-19T20:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "AEK Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Athens"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049674",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52692",
+      "internationalName": "Fenerbahçe"
+    },
+    "awayTeam": {
+      "id": "70691",
+      "internationalName": "Villarreal"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-20",
+      "dateTime": "2027-01-20T17:45:00Z",
+      "utcOffsetInHours": 3
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Fenerbahçe Şükrü Saracoğlu Spor Kompleksi"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Istanbul"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049678",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "2609356",
+      "internationalName": "Sabah"
+    },
+    "awayTeam": {
+      "id": "50136",
+      "internationalName": "Napoli"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-20",
+      "dateTime": "2027-01-20T17:45:00Z",
+      "utcOffsetInHours": 4
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Baku Olympic Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Baku"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049670",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50149",
+      "internationalName": "Sporting CP"
+    },
+    "awayTeam": {
+      "id": "50080",
+      "internationalName": "Barcelona"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-20",
+      "dateTime": "2027-01-20T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estádio José Alvalade"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Lisbon"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049671",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52682",
+      "internationalName": "Man Utd"
+    },
+    "awayTeam": {
+      "id": "50037",
+      "internationalName": "Bayern München"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-20",
+      "dateTime": "2027-01-20T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Old Trafford"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Manchester"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049672",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52265",
+      "internationalName": "Real Betis"
+    },
+    "awayTeam": {
+      "id": "52280",
+      "internationalName": "Arsenal"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-20",
+      "dateTime": "2027-01-20T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": " La Cartuja de Sevilla"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Seville"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049673",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "2603790",
+      "internationalName": "Leipzig"
+    },
+    "awayTeam": {
+      "id": "52707",
+      "internationalName": "Shakhtar"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-20",
+      "dateTime": "2027-01-20T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "RB Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Leipzig"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049675",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "79946",
+      "internationalName": "Como"
+    },
+    "awayTeam": {
+      "id": "52747",
+      "internationalName": "Paris"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-20",
+      "dateTime": "2027-01-20T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Giuseppe Sinigaglia"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Como"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049676",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52277",
+      "internationalName": "Lens"
+    },
+    "awayTeam": {
+      "id": "52919",
+      "internationalName": "Man City"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-20",
+      "dateTime": "2027-01-20T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stade Bollaert-Delelis"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Lens Agglo"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049677",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52319",
+      "internationalName": "Viking"
+    },
+    "awayTeam": {
+      "id": "50062",
+      "internationalName": "PSV"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-20",
+      "dateTime": "2027-01-20T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Viking Stadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Stavanger"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049679",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52747",
+      "internationalName": "Paris"
+    },
+    "awayTeam": {
+      "id": "50067",
+      "internationalName": "Galatasaray"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Parc des Princes"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Paris"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049680",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50037",
+      "internationalName": "Bayern München"
+    },
+    "awayTeam": {
+      "id": "52265",
+      "internationalName": "Real Betis"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Fußball Arena München"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Munich"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049681",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "7889",
+      "internationalName": "Liverpool"
+    },
+    "awayTeam": {
+      "id": "52277",
+      "internationalName": "Lens"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Anfield"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Liverpool"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049682",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52919",
+      "internationalName": "Man City"
+    },
+    "awayTeam": {
+      "id": "50149",
+      "internationalName": "Sporting CP"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "City of Manchester Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Manchester"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049683",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52280",
+      "internationalName": "Arsenal"
+    },
+    "awayTeam": {
+      "id": "2609356",
+      "internationalName": "Sabah"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Arsenal Stadium"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "London"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049684",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50080",
+      "internationalName": "Barcelona"
+    },
+    "awayTeam": {
+      "id": "79946",
+      "internationalName": "Como"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Camp Nou"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Barcelona"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049685",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50124",
+      "internationalName": "Atleti"
+    },
+    "awayTeam": {
+      "id": "52692",
+      "internationalName": "Fenerbahçe"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio Metropolitano"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Madrid"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049686",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52758",
+      "internationalName": "B. Dortmund"
+    },
+    "awayTeam": {
+      "id": "50129",
+      "internationalName": "AEK Athens"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "BVB Stadion Dortmund"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Dortmund"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049687",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50137",
+      "internationalName": "Roma"
+    },
+    "awayTeam": {
+      "id": "75797",
+      "internationalName": "Lille"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio Olimpico"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Rome"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049688",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50043",
+      "internationalName": "Club Brugge"
+    },
+    "awayTeam": {
+      "id": "59333",
+      "internationalName": "Bodø/Glimt"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Jan Breydelstadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bruges"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049689",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50062",
+      "internationalName": "PSV"
+    },
+    "awayTeam": {
+      "id": "50107",
+      "internationalName": "Stuttgart"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "PSV Stadion"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Eindhoven"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049690",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52749",
+      "internationalName": "Feyenoord"
+    },
+    "awayTeam": {
+      "id": "2603790",
+      "internationalName": "Leipzig"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadion Feijenoord 'De Kuip'"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Rotterdam"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049691",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "50136",
+      "internationalName": "Napoli"
+    },
+    "awayTeam": {
+      "id": "52319",
+      "internationalName": "Viking"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stadio Diego Armando Maradona"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Naples"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049692",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "70691",
+      "internationalName": "Villarreal"
+    },
+    "awayTeam": {
+      "id": "52682",
+      "internationalName": "Man Utd"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Estadio de la Cerámica"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Villarreal"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049693",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52707",
+      "internationalName": "Shakhtar"
+    },
+    "awayTeam": {
+      "id": "50051",
+      "internationalName": "Real Madrid"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 0
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Stamford Bridge"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "London"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049694",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52498",
+      "internationalName": "Slavia Praha"
+    },
+    "awayTeam": {
+      "id": "52683",
+      "internationalName": "Aston Villa"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Eden Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Prague"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049695",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "52797",
+      "internationalName": "S. Bratislava"
+    },
+    "awayTeam": {
+      "id": "50138",
+      "internationalName": "Inter"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Národný futbalový štadión "
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Bratislava"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "2049696",
+    "status": "UPCOMING",
+    "homeTeam": {
+      "id": "63405",
+      "internationalName": "LASK"
+    },
+    "awayTeam": {
+      "id": "50064",
+      "internationalName": "Porto"
+    },
+    "competition": {
+      "metaData": {
+        "name": "UEFA Champions League"
+      }
+    },
+    "kickOffTime": {
+      "date": "2027-01-27",
+      "dateTime": "2027-01-27T20:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "stadium": {
+      "translations": {
+        "officialName": {
+          "EN": "Oberösterreich Arena"
+        }
+      },
+      "city": {
+        "translations": {
+          "name": {
+            "EN": "Linz"
           }
         }
       }

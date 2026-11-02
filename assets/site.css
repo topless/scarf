@@ -140,6 +140,7 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-h
 .find:not([hidden]) { display: flex; flex-direction: column; gap: 6px; max-width: 360px; font-size: 13px; font-weight: 600; color: var(--stand); }
 .find input { height: 46px; box-sizing: border-box; padding: 0 12px; border: var(--border) solid var(--chalk); border-radius: var(--radius-input); background: var(--white); color: var(--ink); font: 400 16px var(--font-body); }
 .country-chip[hidden], .card[hidden] { display: none; }
+.find:not([hidden]) .small:empty { display: none; }
 
 /* Other teams: the text, then every country's chip across the full width */
 .teams { background: var(--ink); color: var(--wool); }
@@ -152,7 +153,7 @@ h2 { font-family: var(--font-display); font-weight: 700; font-size: 34px; line-h
 .teams .country-chip:hover { color: var(--wool); border-color: var(--ink-muted); }
 .teams .country-chip[aria-current] { background: var(--wool); color: var(--ink); }
 
-/* Landing: one card per country, one cell per sport */
+/* A country card, on its page and in the kit: one cell per sport */
 .countries { padding-bottom: 56px; display: flex; flex-direction: column; gap: 16px; }
 .country-body { padding: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 16px; }
 .country-body .country-name { align-self: center; gap: 14px; }
@@ -170,6 +171,43 @@ a.cell:hover { color: var(--ink); border-color: var(--ink); }
 /* A sport the country has no team in: greyed out, the ball too. */
 .cell-empty { justify-content: center; border-style: dashed; background: transparent; color: var(--stand); font-size: 14px; }
 .cell-empty .cell-sport svg { stroke: currentColor; }
+
+/* Clubs: a club is its crest, its name and its kit stripes, with its country's flag as a small mark
+   by its home city. Its chip carries a swatch of the stripes where a country's carries its flag. */
+.section { padding-bottom: 56px; display: flex; flex-direction: column; gap: 20px; }
+.swatch { flex: none; width: 20px; height: 15px; border-radius: 3px; background: var(--swatch); box-shadow: 0 0 0 1px rgba(23, 23, 28, 0.2); }
+.teams .swatch { box-shadow: 0 0 0 1px rgba(251, 248, 242, 0.35); }
+/* The crest, or until its file is in assets/crests/ a round swatch of the kit stripes. */
+.crest { flex: none; object-fit: contain; }
+.crest-kit { box-sizing: border-box; border: var(--border) solid var(--ink); border-radius: 50%; background: var(--stripe); }
+.club-grid, .comps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; }
+.club-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+.club-head, .club-id { display: flex; align-items: center; gap: 12px; }
+.club-head .crest { width: 44px; height: 44px; }
+.club-id .crest { width: 48px; height: 48px; }
+.club-name { font-family: var(--font-display); font-weight: 800; font-size: 24px; letter-spacing: -0.03em; line-height: 1; }
+.club-name a { color: var(--ink); text-decoration: none; }
+.club-name a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.club-home { display: flex; align-items: center; gap: 6px; margin-top: 5px; font-size: 13px; color: var(--stand); text-decoration: none; }
+.club-id .club-home { margin-top: 3px; }
+.club-home .flag { border-radius: 2px; }
+.club-body .cell-cta, .comp-body .cell-cta { margin-top: auto; }
+a.cell-cta { color: var(--ink); text-decoration: none; }
+/* A competition's card: no stripe header, nothing on it is a team. */
+.comp-body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+.comp-name { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -0.03em; line-height: 1; }
+.comp-name svg { width: 26px; height: 26px; }
+/* The competition's clubs and This week's teams: smaller chips. */
+.comp-clubs, .row-teams { display: flex; flex-wrap: wrap; gap: 8px; }
+.comp-clubs .country-chip, .row-teams .country-chip { padding: 0 12px 0 10px; font-size: 14px; }
+.comp-clubs .country-chip { border-color: var(--chalk); }
+/* "and 14 more", "All 20 EuroLeague clubs", "Every team on scarf": dashed, quieter. */
+.country-chip.more { border-style: dashed; color: var(--stand); }
+.teams .country-chip.more { color: var(--ink-muted); }
+.country-chip.more svg { width: 16px; height: 16px; }
+/* Other teams on a club page: the neighbours in small groups, not the whole site. */
+.teams-group { display: flex; flex-direction: column; gap: 10px; }
+.teams-group h3 { font-size: 14px; font-weight: 600; color: var(--ink-muted); }
 
 /* Identity kit (/kit/): every country, sport and team card side by side */
 .kit { padding-bottom: 56px; display: flex; flex-direction: column; gap: 16px; }

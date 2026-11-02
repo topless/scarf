@@ -7,7 +7,7 @@ import { join } from 'node:path'
 import { test } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
-import { alertsFeedPath, countrySharePath, feedPath, landingSharePath, sharePath, teams } from '../src/config.ts'
+import { alertsFeedPath, competitionPath, countrySharePath, feedPath, landingSharePath, sharePath, teamPath, teams } from '../src/config.ts'
 
 // `npm run build:fixtures` with every fetch made to throw, in a folder of its own so the real dist/
 // and known-games.json stay as they were. With a SITE_URL, as a staging build would have, so the
@@ -20,15 +20,20 @@ test('the fixture build writes every feed, page and share image without a single
   const env = { ...process.env, SITE_URL: 'https://scarf.fan' }
   await promisify(execFile)(process.execPath, ['--import', noFetch, build, '--fixtures'], { cwd: dir, env })
 
+  // A competition with clubs this season gets a page and nothing else: no feed, no share image.
+  const competitions = [...new Set(teams.flatMap((team) => (team.club ? [competitionPath(team.club.competition)] : [])))]
   const files = [
-    ...teams.flatMap((team) => [feedPath(team), alertsFeedPath(team), `${team.country}/${team.sport}/index.html`, sharePath(team)]),
+    ...teams.flatMap((team) => [feedPath(team), alertsFeedPath(team), `${teamPath(team)}/index.html`, sharePath(team)]),
     ...teams.flatMap((team) => [`${team.country}/index.html`, countrySharePath(team)]),
+    ...competitions.map((competition) => `${competition}/index.html`),
     'index.html',
     landingSharePath,
     'how-it-works/index.html',
     'kit/index.html',
   ]
   for (const file of files) assert.ok(existsSync(join(dir, 'dist', file)), file)
+  assert.ok(competitions.includes('basketball/euroleague'))
+  for (const competition of competitions) assert.ok(!existsSync(join(dir, 'dist', competition, 'share.png')), competition)
   assert.ok(!existsSync(join(dir, 'known-games.json')))
   assert.ok(!existsSync(join(dir, 'source-answers')))
   // Dated on the fixtures' own day, so their games are still upcoming: Greece v Serbia, 16 Nov 2026.
@@ -82,12 +87,16 @@ test('a played game stays in the feed for 30 days as it was, and is never announ
   const uefa = JSON.stringify([greece('1', -31), greece('2', -2), greece('3', 10)])
   await writeFile(join(dir, 'known-games.json'), JSON.stringify({ 'greece/football': { seeded: '2026-01-01', games: {} } }))
   const fiba = JSON.stringify(fileURLToPath(new URL('./fixtures/fiba-games.html', import.meta.url)))
+  const euroleague = JSON.stringify(fileURLToPath(new URL('./fixtures/euroleague-games.json', import.meta.url)))
+  const eurocup = JSON.stringify(fileURLToPath(new URL('./fixtures/eurocup-games.json', import.meta.url)))
   const stub = `import { readFileSync } from 'node:fs'
     globalThis.fetch = async (url) => {
       if (String(url).startsWith('https://scarf.fan/')) return new Response('', { status: 404 })
       console.error('asked ' + url)
       if (String(url).startsWith('https://match.uefa.com/')) return new Response(${JSON.stringify(uefa)})
       if (String(url).startsWith('https://www.fiba.basketball/')) return new Response(readFileSync(${fiba}, 'utf8'))
+      if (String(url).includes('/v2/competitions/U/')) return new Response(readFileSync(${eurocup}, 'utf8'))
+      if (String(url).startsWith('https://api-live.euroleague.net/')) return new Response(readFileSync(${euroleague}, 'utf8'))
       throw new Error('asked ' + url)
     }`
   const build = fileURLToPath(new URL('../src/build.ts', import.meta.url))
@@ -114,4 +123,9 @@ test('a played game stays in the feed for 30 days as it was, and is never announ
   assert.doesNotMatch(page, /Opponent 2/)
   // The run summary counts UEFA's matches, to watch for a quiet cap below 500 (src/uefa.ts).
   assert.match(await read('summary.md'), /UEFA answered one request for \d+ football teams with 3 matches/)
+  // A club's known games are kept under its own frozen path, apart from its country's national team.
+  const known = JSON.parse(await read('known-games.json'))
+  for (const team of teams) assert.ok(Object.hasOwn(known, teamPath(team)), team.name)
+  assert.ok(Object.keys(known['greece/basketball/olympiacos'].games).every((id) => id.startsWith('euroleague-E2026_')))
+  assert.ok(Object.keys(known['greece/basketball'].games).every((id) => id.startsWith('fiba-')))
 })
