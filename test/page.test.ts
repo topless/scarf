@@ -666,6 +666,17 @@ test('a competition page lists its clubs A to Z under a find field, with no stri
   assert.match(crested, /<p class="lede">One club, one calendar\. Pick yours/)
 })
 
+test("a This week row puts the home side's chip first by the source's ids, whatever the source calls the clubs", () => {
+  const home = clubTeam('Hapoel Tel Aviv', 'israel')
+  const away = clubTeam('Olimpia Milano', 'italy')
+  const game: Game = { ...derby, id: 'euroleague-E2026_77', home: 'Hapoel TLV', away: 'Milan', date: today, sides: [sourceKey(home), sourceKey(away)] }
+  // The away club is listed first; the row still leads with the home side.
+  const html = renderLanding([{ team: away, games: [game] }, { team: home, games: [game] }], today)
+  const row = part(html, '<li class="row">', '</li>')
+  inOrder(row, 'Hapoel TLV vs Milan', '>Hapoel Tel Aviv</a>', '>Olimpia Milano</a>')
+  assert.equal(row.match(/class="swatch"/g)?.length, 2)
+})
+
 test('the landing lists the competitions with their clubs, then every country with a national team as a chip to its page', () => {
   const rivals = ['Milan', 'Baskonia', 'Barcelona', 'Fenerbahce', 'Anadolu Efes'].map((name) => clubTeam(name))
   const html = renderLanding([...national, olympiacos, panathinaikos, olympiacosFootball, ...rivals].map((team) => ({ team, games: [] })), today)

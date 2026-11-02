@@ -261,8 +261,10 @@ function thisWeek(sections: Section[], today: string): string {
   const nationalNext = week.some(({ teams }) => teams.some((team) => !team.club)) ? undefined : nextDay(upcoming.filter(({ game, teams }) => game.date > end && teams.some((team) => !team.club)))
   const row = ({ game, teams }: (typeof upcoming)[number]) => {
     const [team] = teams
+    // Home side first, by the source's own ids: the source rarely names a club as fans do ("Hapoel TLV").
     const name = (other: Team) => other.club?.name ?? countryName(other)
-    const chips = [...teams].sort((a, b) => Number(game.away === name(a)) - Number(game.away === name(b))).map((other) => (other.club ? clubChip(other, '') : countryChip(other, '', `${teamPath(other)}/`)))
+    const side = (other: Team) => (game.sides ? game.sides.indexOf(sourceKey(other)) : Number(game.away === name(other)))
+    const chips = [...teams].sort((a, b) => side(a) - side(b)).map((other) => (other.club ? clubChip(other, '') : countryChip(other, '', `${teamPath(other)}/`)))
     return renderRow(game, WORDS[team!.sport].start, [team!.club ? COMPETITIONS[team!.club.competition].name : game.competition, place(game)], `<div class="row-teams">${chips.join('')}</div>`)
   }
   return `<section class="games" aria-labelledby="week">
@@ -274,8 +276,8 @@ ${week.length > WEEK_ROWS ? `    <p class="small">The first ${WEEK_ROWS} of ${we
 `
 }
 
-// A country's page at /{country}/: its national teams on the same card as on the landing, then its
-// clubs in Europe, under the country's stripes. A country with clubs and no national team on scarf
+// A country's page at /{country}/: its national teams on one card (the landing shows countries as
+// chips), then its clubs in Europe, under the country's stripes. A country with clubs and no national team on scarf
 // shows only its clubs.
 export function renderCountryPage(all: Section[], siteUrl?: string): string {
   const group = national(all)
