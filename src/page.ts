@@ -356,9 +356,9 @@ export function renderHowItWorks(sections: Section[], siteUrl?: string): string 
 </section>
 <section class="wrap how">
   <ol class="steps">
-${step(1, '<h3>Subscribe once</h3><p>Pick your team, tap Add to my calendar and pick your app. That is the whole setup: no account, no download.</p>')}
-${step(2, `<h3>Your calendar keeps itself current</h3><p>We rebuild the feeds every day from ${federations(teams)}. New games, times and venues land in place, in your time zone.</p>`)}
-${step(3, `<h3>A nudge an hour before the game</h3><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>${GOOGLE_NOTE}</p>`)}
+${step(1, '<h2>Subscribe once</h2><p>Pick your team, tap Add to my calendar and pick your app. That is the whole setup: no account, no download.</p>')}
+${step(2, `<h2>Your calendar keeps itself current</h2><p>We rebuild the feeds every day from ${federations(teams)}. New games, times and venues land in place, in your time zone.</p>`)}
+${step(3, `<h2>A nudge an hour before the game</h2><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>${GOOGLE_NOTE}</p>`)}
   </ol>
 </section>
 <section class="teams">
@@ -550,7 +550,7 @@ const ALERTS_SCRIPT = `
         if (el.tagName === 'INPUT') el.value = address
         else el.setAttribute('href', address)
       }
-      for (const button of document.querySelectorAll('button[data-copy]')) button.textContent = 'Copy'
+      for (const button of document.querySelectorAll('button[data-copy]')) { if (button.textContent === 'Copied') button.textContent = 'Copy' }
     }
     choice.addEventListener('change', apply)
     apply()
@@ -639,7 +639,7 @@ ${
   feed.https && alerts.https
     ? `      <div class="paste">
         <label for="feed-url">Or paste into any calendar app</label>
-        <div class="paste-row"><input id="feed-url" type="text" readonly value="${esc(feed.https)}" data-alerts="${esc(alerts.https)}"><button class="btn-secondary" type="button" data-copy="feed-url">Copy</button></div>
+        <div class="paste-row"><input id="feed-url" type="text" readonly value="${esc(feed.https)}" data-alerts="${esc(alerts.https)}"><button class="btn-secondary" type="button" aria-live="polite" data-copy="feed-url">Copy</button></div>
       </div>
 `
     : ''
