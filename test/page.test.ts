@@ -66,6 +66,7 @@ const derby: Game = {
   venue: 'Peace and Friendship Stadium',
   city: 'Piraeus',
   tv: 'Novasports (Greek TV)',
+  sides: [sourceKey(olympiacos), sourceKey(panathinaikos)],
 }
 
 test('team page shows venue-local times naming the start and the city, and says when the time is not announced', () => {
@@ -81,6 +82,11 @@ test('team page shows venue-local times naming the start and the city, and says 
 test('a kickoff without a city reads "at the venue", as in the feed', () => {
   const html = teamPage([{ ...timed, venue: undefined, city: undefined }], site)
   assert.match(html, /<time datetime="2026-10-04T18:45:00Z" data-offset="3">Sun 4 Oct 2026 · Kickoff 21:45 at the venue<\/time>/)
+})
+
+test('a kickoff without a venue offset reads in UTC', () => {
+  const html = teamPage([{ ...timed, utcOffsetHours: undefined }], site)
+  assert.match(html, /<time datetime="2026-10-04T18:45:00Z">Sun 4 Oct 2026 · Kickoff 18:45 UTC<\/time>/)
 })
 
 test('team page escapes text from the sources', () => {
@@ -210,8 +216,9 @@ test('nothing a fan reads breaks the voice rules', () => {
     renderCompetitionPage('euroleague', [{ team: olympiacos, games: [derby] }], site),
   ]
   for (const html of pages) {
-    const text = copy(html)
-    assert.doesNotMatch(text, /!|\u2014|event-schedule|Event schedule|\bTBA\b|\bTBC\b|\bTBD\b|don't miss/i)
+    // The spec's one exception: the Google Calendar line names Google's own setting.
+    const text = copy(html).replace(/set a notification for this calendar once/g, '')
+    assert.doesNotMatch(text, /!|\u2014|event-schedule|Event schedule|\bTBA\b|\bTBC\b|\bTBD\b|don't miss|notification/i)
     assert.doesNotMatch(text, /\bv\b/)
   }
 })

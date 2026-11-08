@@ -39,12 +39,13 @@ export function parseFibaGames(html: string, teamCode: string): Game[] {
       home: g.teamA?.officialName ?? 'Opponent not announced',
       away: g.teamB?.officialName ?? 'opponent not announced',
       date: g.gameDateTime?.slice(0, 10),
+      sides: g.teamA && g.teamB ? [`fiba:${g.teamA.code}`, `fiba:${g.teamB.code}`] : undefined,
       kickoff: g.hasTimeGameDateTime ? `${g.gameDateTimeUTC}Z` : undefined,
       utcOffsetHours: g.hasTimeGameDateTime ? (g.utcOffset ?? undefined) : undefined,
       venue: g.venueName?.trim() || undefined,
       city: g.hostCity?.trim() || undefined, // the page has "Farum " for Denmark's home games
     }
-    if (!game.competition || !/^\d{4}-\d{2}-\d{2}$/.test(game.date)) {
+    if (!game.competition || !/^\d{4}-\d{2}-\d{2}$/.test(game.date) || (game.kickoff !== undefined && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(game.kickoff))) {
       throw new Error(`FIBA game format changed: ${JSON.stringify(game)}`)
     }
     return game

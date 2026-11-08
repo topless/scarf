@@ -242,12 +242,12 @@ async function main() {
   const base = flag < 0 ? undefined : process.argv[flag + 1]
   if (flag >= 0 && !base) throw new Error('--base needs a ref, e.g. --base main')
   if (!existsSync(CHROME)) throw new Error(`no Chrome at ${CHROME}; set CHROME=/path/to/chrome`)
-  mkdirSync(OUT, { recursive: true })
   const profile = mkdtempSync(`${tmpdir()}/ui-review-`)
   const stop: ChildProcess[] = []
   try {
     const port = await freePort(PORT)
     build('.', port)
+    mkdirSync(OUT, { recursive: true }) // the build clears dist/
     stop.push(await serve('dist', port))
     const cdp = launchChrome(profile)
     stop.push(cdp.chrome)

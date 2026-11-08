@@ -129,3 +129,27 @@ test('a played game stays in the feed for 30 days as it was, and is never announ
   assert.ok(Object.keys(known['greece/basketball/olympiacos'].games).every((id) => id.startsWith('euroleague-E2026_')))
   assert.ok(Object.keys(known['greece/basketball'].games).every((id) => id.startsWith('fiba-')))
 })
+
+test('a team whose upcoming games all vanish from the source fails the build', async (t) => {
+  const dir = await mkdtemp(join(tmpdir(), 'scarf-'))
+  t.after(() => rm(dir, { recursive: true }))
+  const day = (offset: number) => new Date(Date.now() + offset * 86_400_000).toISOString().slice(0, 10).replaceAll('-', '')
+  const event = (id: number) =>
+    `BEGIN:VEVENT\r\nUID:uefa-${id}@scarf\r\nSUMMARY:Greece vs Opponent ${id}\r\nDTSTART;VALUE=DATE:${day(id + 5)}\r\nEND:VEVENT\r\n`
+  const live = `BEGIN:VCALENDAR\r\n${event(1)}${event(2)}END:VCALENDAR\r\n`
+  const other = { id: '1', status: 'UPCOMING', homeTeam: { id: '122', internationalName: 'Albania' }, awayTeam: { id: '999', internationalName: 'Opponent' }, competition: { metaData: { name: 'International Friendly' } }, kickOffTime: { date: '2099-01-01', dateTime: '2099-01-01T18:45:00Z', utcOffsetInHours: 1 } }
+  const fixture = (name: string) => JSON.stringify(fileURLToPath(new URL(`./fixtures/${name}`, import.meta.url)))
+  const stub = `import { readFileSync } from 'node:fs'
+    globalThis.fetch = async (url) => {
+      if (String(url) === 'https://scarf.fan/greece/football.ics') return new Response(${JSON.stringify(live)})
+      if (String(url).startsWith('https://scarf.fan/')) return new Response('', { status: 404 })
+      if (String(url).startsWith('https://match.uefa.com/')) return new Response(${JSON.stringify(JSON.stringify([other]))})
+      if (String(url).startsWith('https://www.fiba.basketball/')) return new Response(readFileSync(${fixture('fiba-games.html')}, 'utf8'))
+      if (String(url).includes('/v2/competitions/U/')) return new Response(readFileSync(${fixture('eurocup-games.json')}, 'utf8'))
+      if (String(url).startsWith('https://api-live.euroleague.net/')) return new Response(readFileSync(${fixture('euroleague-games.json')}, 'utf8'))
+      throw new Error('asked ' + url)
+    }`
+  const build = fileURLToPath(new URL('../src/build.ts', import.meta.url))
+  const env = { ...process.env, SITE_URL: 'https://scarf.fan', GITHUB_EVENT_NAME: 'schedule' }
+  await assert.rejects(promisify(execFile)(process.execPath, ['--import', `data:text/javascript,${encodeURIComponent(stub)}`, build], { cwd: dir, env }), /vanished/)
+})

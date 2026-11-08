@@ -262,8 +262,7 @@ function thisWeek(sections: Section[], today: string): string {
   const row = ({ game, teams }: (typeof upcoming)[number]) => {
     const [team] = teams
     // Home side first, by the source's own ids: the source rarely names a club as fans do ("Hapoel TLV").
-    const name = (other: Team) => other.club?.name ?? countryName(other)
-    const side = (other: Team) => (game.sides ? game.sides.indexOf(sourceKey(other)) : Number(game.away === name(other)))
+    const side = (other: Team) => game.sides?.indexOf(sourceKey(other)) ?? 0
     const chips = [...teams].sort((a, b) => side(a) - side(b)).map((other) => (other.club ? clubChip(other, '') : countryChip(other, '', `${teamPath(other)}/`)))
     return renderRow(game, WORDS[team!.sport].start, [team!.club ? COMPETITIONS[team!.club.competition].name : game.competition, place(game)], `<div class="row-teams">${chips.join('')}</div>`)
   }
@@ -478,7 +477,7 @@ ${p.noindex ? '<meta name="robots" content="noindex">\n' : ''}${socialMeta(p)}<l
 <body${p.stripes ? ` style="${stripeVars(p.stripes)}"` : ''}>
 ${p.body}
 <script>
-  for (const el of document.querySelectorAll('time[data-offset]')) {
+  for (const el of document.querySelectorAll('time[datetime]')) {
     const kickoff = new Date(el.dateTime)
     if (-kickoff.getTimezoneOffset() / 60 === Number(el.dataset.offset)) continue
     const yours = document.createElement('span')
@@ -860,6 +859,12 @@ function byCountry<T>(items: T[], teamOf: (item: T) => Team): T[][] {
 // The kickoff as a clock at the venue reads it.
 const shift = (game: Game) => new Date(new Date(game.kickoff!).getTime() + game.utcOffsetHours! * 60 * 60 * 1000)
 
+// "21:45 in Volos", "21:45 at the venue"; undefined while the kickoff or the offset is unknown. Shared with the feed.
+export function venueTime(game: Game): string | undefined {
+  if (!game.kickoff || game.utcOffsetHours === undefined) return undefined
+  return `${TIME.format(shift(game))} ${game.city ? `in ${game.city}` : 'at the venue'}`
+}
+
 // Venue time with the city, so "20:45 in Amsterdam" cannot be mistaken for the reader's own time.
 // The caller picks how the date part reads, and may name the sport's start before the clock
 // ("Kickoff 20:45 in Amsterdam"); the time part is the clock at the venue with its city, the UTC
@@ -869,8 +874,7 @@ export function kickoffText(game: Game, date: (d: Date) => string, start?: strin
   const label = start ? `${capitalise(start)} ` : ''
   const kickoff = new Date(game.kickoff)
   if (game.utcOffsetHours === undefined) return `${date(kickoff)} · ${label}${TIME.format(kickoff)} UTC`
-  const local = shift(game)
-  return `${date(local)} · ${label}${TIME.format(local)} ${game.city ? `in ${game.city}` : 'at the venue'}`
+  return `${date(shift(game))} · ${label}${venueTime(game)}`
 }
 
 // Same, marked up so the page's script can add the reader's own time when their zone differs.

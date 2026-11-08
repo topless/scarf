@@ -1,4 +1,4 @@
-import { appendFile, cp, mkdir, readFile, writeFile } from 'node:fs/promises'
+import { appendFile, cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { setTimeout as pause } from 'node:timers/promises'
 import { pathToFileURL } from 'node:url'
 import { reusable, reusedNote, type SavedAnswers } from './answers.ts'
@@ -121,6 +121,7 @@ async function liveFeed(team: Team): Promise<string> {
 
 const sections: Section[] = []
 const changes: string[] = [] // a Markdown block per team whose feed changed, for the run summary
+await rm('dist', { recursive: true, force: true }) // a file from an older build must not keep answering
 for (const team of teams) {
   // The feed keeps the games played since `since` exactly as they were. The pages and the record of
   // known games take only those still to come, so a played game is never announced as new.
@@ -140,9 +141,12 @@ for (const team of teams) {
   console.log(`${team.name}: ${games.length} upcoming games, ${seen.fresh.length} new`)
   if (siteUrl && live) {
     const lines = await liveFeed(team).then(
-      (live) => feedChanges(live, ics, today),
+      (live) => feedChanges(live, ics, since),
       (error: Error) => [`Couldn't read the live feed: ${error.message}`],
     )
+    const vanished = lines.filter((line) => line.startsWith('Removed:')).length
+    // Two, not one: a single cancelled last friendly must not block every build.
+    if (games.length === 0 && vanished >= 2) throw new Error(`${team.name}: every upcoming game vanished at once (${vanished} removed); the last published feeds stay online`)
     if (lines.length) changes.push(`**${team.name}**`, ...lines.map((line) => `- ${line}`), '')
   }
 }

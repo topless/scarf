@@ -1,7 +1,7 @@
 import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar, type ICalEventData } from 'ical-generator'
 import { defaultSiteUrl, feedName, siteName, teamPath, type Team } from './config.ts'
 import type { Game } from './game.ts'
-import { capitalise, federation, reminder, REMINDER_HOURS, shortDate, WORDS } from './page.ts'
+import { capitalise, federation, reminder, REMINDER_HOURS, shortDate, venueTime, WORDS } from './page.ts'
 
 const GAME_HOURS = 2
 const SALE_REMINDER_HOUR = 9 // 09:00 at the venue on the day tickets go on sale
@@ -31,13 +31,12 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
   })
   for (const game of games) {
     const title = `${game.home} vs ${game.away}`
-    const city = game.city?.trim()
     const details = {
       // The source id keeps the UID stable, so a changed game replaces the old entry in place.
       // The sources name no country for the venue, so LOCATION stops at the city.
       id: `${game.id}@${siteName}`,
       stamp: now,
-      location: [game.venue, city].filter(Boolean).join(', ') || undefined,
+      location: [game.venue, game.city].filter(Boolean).join(', ') || undefined,
       url: game.tickets ?? `${teamPage}/`,
     }
     if (game.kickoff) {
@@ -45,7 +44,7 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
       const end = new Date(start.getTime() + GAME_HOURS * 60 * 60 * 1000)
       const description = [
         game.competition,
-        kickoffLine(game, city, words.start),
+        kickoffLine(game, words.start),
         game.tv ? `TV: ${game.tv}` : undefined,
         game.tickets ? `Tickets: ${ticketHost(game.tickets)}` : undefined,
         '',
@@ -105,17 +104,9 @@ function newGameEvent(team: Team, game: Game, firstSeen: string, now: Date, team
 // never pretends to be the reader's time; "at the venue" until the city is known, as on the page.
 // Dropped while the venue's offset is unknown; the calendar still shows the start in the reader's
 // own zone.
-function kickoffLine(game: Game, city: string | undefined, start: string): string | undefined {
-  const time = localTime(game, city)
+function kickoffLine(game: Game, start: string): string | undefined {
+  const time = venueTime(game)
   return time && `${capitalise(start)} ${time}`
-}
-
-// "21:45 in Volos", "21:45 at the venue" while the city is unknown, or undefined while the kickoff
-// or the venue's offset is unknown.
-function localTime(game: Game, city: string | undefined): string | undefined {
-  if (!game.kickoff || game.utcOffsetHours === undefined) return undefined
-  const local = new Date(new Date(game.kickoff).getTime() + game.utcOffsetHours * 60 * 60 * 1000)
-  return `${local.toISOString().slice(11, 16)} ${city ? `in ${city}` : 'at the venue'}`
 }
 
 // Spec section 3: an all-day event on the day tickets go on sale, with a reminder at 09:00 at the
@@ -150,7 +141,7 @@ function ticketSaleEvent(calendar: ICalCalendar, game: Game, now: Date, footer: 
 // "The game: Mon 16 Nov, 21:45 in Volos, Panthessaliko Stadium". The time reads as on the kickoff
 // line; "time not announced" while there is none; the venue only when known.
 function gameLine(game: Game): string {
-  const time = game.kickoff ? localTime(game, game.city?.trim()) : 'time not announced'
+  const time = game.kickoff ? venueTime(game) : 'time not announced'
   return `The game: ${[shortDate(new Date(game.date)), time, game.venue].filter(Boolean).join(', ')}`
 }
 
