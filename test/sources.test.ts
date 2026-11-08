@@ -115,6 +115,7 @@ test('FIBA page yields only the requested team, with time and venue once announc
     home: 'Greece',
     away: 'Spain',
     date: '2026-08-31',
+    sides: ['fiba:GRE', 'fiba:ESP'],
     kickoff: '2026-08-31T16:00:00Z',
     utcOffsetHours: 3,
     venue: 'Telekom Center Athens',
@@ -160,6 +161,10 @@ test('a FIBA team not known yet reads "opponent not announced", capitalised when
   assert.equal(`${away.home} vs ${away.away}`, 'Greece vs opponent not announced')
   const [home] = parseFibaGames(page({ ...georgia, teamA: null, teamB: georgia.teamA }), 'GRE')
   assert.equal(`${home.home} vs ${home.away}`, 'Opponent not announced vs Greece')
+  // A quote and a brace inside a string must not end the object early.
+  assert.equal(parseFibaGames(page({ ...georgia, venueName: 'Hall "A}" wing' }), 'GRE')[0]!.venue, 'Hall "A}" wing')
+  // A Z or an offset in the UTC time fails as a format change, naming the game.
+  assert.throws(() => parseFibaGames(page({ ...georgia, hasTimeGameDateTime: true, gameDateTimeUTC: '2026-11-26T18:00:00Z' }), 'GRE'), /FIBA game format changed/)
 })
 
 test('a FIBA page without games for the team fails loudly instead of emptying the calendar', () => {
