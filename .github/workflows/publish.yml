@@ -12,14 +12,19 @@ permissions:
 
 concurrency:
   group: deploy
-  cancel-in-progress: false
+  # GitHub keeps one pending run per group and a newer run cancels it; with queue: max a scheduled
+  # run queued behind a push build waits instead of being cancelled silently.
+  queue: max
 
 jobs:
   publish:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      # Pinned to commit SHAs because this job holds the Cloudflare token; bumped by hand. The other
+      # workflows hold no token and keep their tags.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
@@ -27,18 +32,20 @@ jobs:
       - run: npm test
       # The games earlier runs saw, so the build can tell a newly announced game from an old one for
       # the -alerts feeds (src/known-games.ts). They live in the Actions cache because the
-      # protect-main ruleset rejects a commit back to main. With no cache (the first run, or GitHub
-      # dropped it after 7 days unused) the build seeds the file again and announces nothing.
-      - uses: actions/cache/restore@v6
+      # protect-main ruleset rejects a commit back to main. A missing cache now fails a scheduled or
+      # push run (the alert opens the ops issue), so a lost cache cannot silently reseed every team.
+      # Seeding afresh, on the first run or after deleting the known-games caches, is a manual run.
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: known-games.json
           key: known-games-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: known-games-
+          fail-on-cache-miss: ${{ github.event_name != 'workflow_dispatch' }}
       # The sources' answers the last run used, so a push reuses them, however old, instead of asking
       # UEFA and FIBA again (src/answers.ts); the daily and manual runs always ask. A cache of its own:
       # a path added to the one above would change its version and lose the known games. As for any
       # cache, main restores only what main's own runs saved, never a pull request's.
-      - uses: actions/cache/restore@v6
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         if: github.event_name == 'push'
         with:
           path: source-answers
@@ -54,16 +61,16 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           WRANGLER_SEND_METRICS: 'false'
-        run: npx --yes wrangler@4.151.0 deploy
+        run: npx wrangler deploy
       # Saved only once the feeds are live, so a failed run leaves the known games as they were. A
       # cache entry cannot be overwritten: each run saves its own, and restore-keys above picks the
       # newest. The concurrency group keeps two runs from interleaving.
-      - uses: actions/cache/save@v6
+      - uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: known-games.json
           key: known-games-${{ github.run_id }}-${{ github.run_attempt }}
       # Every run saves the answers it used, a push too, so a push that had to ask spares the next one.
-      - uses: actions/cache/save@v6
+      - uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: source-answers
           key: source-answers-${{ github.run_id }}-${{ github.run_attempt }}
