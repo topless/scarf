@@ -836,7 +836,7 @@ export function landingKind(teams: Team[]): string {
 }
 
 // "Greece", for a national team or a club of the country.
-export const countryName = (team: Team) => countryOf(team).name
+const countryName = (team: Team) => countryOf(team).name
 
 // "1 club", "20 clubs"; in words, "One club", "Twenty clubs".
 const count = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`

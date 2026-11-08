@@ -1,5 +1,8 @@
 # Spike: staying welcome at UEFA and FIBA (#114)
 
+**Archived.** Both recommendations shipped (#128, #129). Two items were left open and are not tracked: a
+contact in the User-Agent, and a guard on `npm run build` outside CI.
+
 **Date.** 1 November 2026. The figures come from the Actions history and the code as of that day. The
 spike sent no request to either source; their robots files were read from the Wayback archive.
 
@@ -96,7 +99,7 @@ Chris had both opened on 1 November 2026: #126 and #127.
 
 - A 403 or 429 appears: do nothing for a day; the daily run is the retry. Two in a row point at the
   address, and the exits are the build on Cloudflare's network (options B and C in
-  [spike-build-platform.md](archive/spike-build-platform.md)) or FIFA's API for football (#38).
+  [spike-build-platform.md](spike-build-platform.md)) or FIFA's API for football (#38).
 - The UEFA match count in the run summary passes 400.
 - A third source arrives (#113): the same rules, written once for the new site.
 

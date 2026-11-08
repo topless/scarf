@@ -36,7 +36,7 @@ export function withDetails(game: Game, teamDefaults: Details, manual: Details =
     tv: manual.tv ?? teamDefaults.tv,
     tickets: manual.tickets ?? teamDefaults.tickets,
     note: manual.note,
-    onSale: manual.onSale ?? game.onSale,
+    onSale: manual.onSale,
   }
 }
 
