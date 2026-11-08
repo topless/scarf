@@ -3,11 +3,19 @@
 Direction: **fan culture**. The scarf is the one fan object shared by football and basketball,
 national teams and clubs. The brand stays neutral: wool, ink, one terrace red. Every team
 brings its own colours as a knitted stripe. That stripe becomes the team's calendar colour, the
-card header, the share image and the recoloured mark.
+card header and the share image.
 
 - Name: **scarf**, lowercase wordmark, always. "Scarf" only at the start of a sentence.
 - Line: **Your colours, in your calendar.**
-- Motto: **Wrapped up in the game.**
+- Motto: **Wrapped in the game.**
+- Trademark: a company named Scarf exists (scarf.sh, open-source analytics), a different product.
+  Search EUIPO and the Swiss IGE before spending on anything printed. Not legal advice.
+
+The brand came with the design handover of 16 October 2026. Its canvas, the Claude Design artifact
+"Event schedule · brand directions", holds the same material visually: brand sheet, team page,
+calendar-event spec, share card, product map. The HTML it handed over is in `reference/`: the team
+page and the share card the pages and share images were ported from, and the picker page of the
+#17 spike, which was not built.
 
 ## Colour tokens
 
@@ -39,19 +47,34 @@ Each team has an ordered colour list taken from its flag or kit. Render as hard-
 | Spain | `#AA151B`, `#F1BF00` | `#AA151B` |
 | Denmark | `#C60C30`, `#FFFFFF` | `#C60C30` |
 | Serbia | `#C6363C`, `#0C4076`, `#FFFFFF` | `#C6363C` |
-| A club | from its kit; placeholder stripes `#E6E1D8` / `#FBF8F2` until set | — |
+| A club | from its kit and crest, each line of `src/clubs.ts` naming its source | the first colour, never white |
+
+From a flag: its own colours as flag-icons draws it, in the flag's order (hoist to fly, top to
+bottom), turned so the first, the calendar colour, is never white (Bulgaria's white, green, red
+becomes `#00966E`, `#D62612`, `#FFFFFF`). Small emblems are left out: Liechtenstein is blue and red,
+without its crown.
 
 Stripe sizes: 12–14 px band as a card header (with a 1.5 px ink border below), 24–28 px band at the
 top of a page or share card.
 
-## Countries and sports
+## Countries, clubs and sports
 
 **Colour says who, lines say what.** Stripes alone collide (England and Switzerland are both red and
-white), so a country is its flag (from flag-icons), its name and its stripes. A sport never takes a
-team colour: it is a ball icon, a line drawing of the pitch or court, and its own words (kickoff and
-stadium, tip-off and arena). The icons and drawings live with each sport's words in `src/page.ts`.
-The identity kit at `/kit/` (unlisted, `noindex`) shows every country, sport and team card side by
-side: check it after adding a team or a sport.
+white), so a mark and a name always go with them (#130):
+
+| Entity | Mark | Stripes |
+|---|---|---|
+| Country | its flag (from flag-icons) and its name | the flag's |
+| Club | its crest and its name; the country's flag only as a small mark beside its home city and ground | the kit's |
+| Competition | a ball icon and its name | none: nothing on it is a team |
+
+A sport never takes a team colour: it is a ball icon, a line drawing of the pitch or court, and its
+own words (kickoff and stadium, tip-off and arena). The icons and drawings live with each sport's
+words in `src/page.ts`. The sport switch always toggles one entity's sports: a country's national
+teams, or a club's own teams (Real Madrid, Barcelona, Bayern and Fenerbahçe have both on scarf). The tag names the federation for a national team
+("Men's football · UEFA") and the competition for a club ("Men's basketball · EuroLeague").
+The identity kit at `/kit/` (unlisted, `noindex`) shows every country, club, sport and team card side
+by side: check it after adding a team, a club or a sport.
 
 - Ball icons: stroke SVG like the other icons. The football is in ink, its pentagons filled (the
   centre one and the five cut by the rim) so dark and light patches alternate, with its seams at
@@ -85,10 +108,12 @@ Fallback stacks: `'Bricolage Grotesque', system-ui, sans-serif` and `'Albert San
 
 ## Logo
 
-Mark: a tilted (−14°) striped band with fringe. Files in `assets/`:
+Mark: a tilted (−14°) striped band with fringe, `assets/scarf-mark.svg` (red band, wool stripes, ink
+outline), drawn from that one file on every page. In the lockup it stays in brand colours on team
+surfaces too: there the stripe carries the team colour. The one place the mark wears a team's colours is
+the large scarf on the right of its share image, band in the first colour and knitted stripes in the rest
+(`teamMark` in `src/share.ts`): each team in its own colours, as the line says.
 
-- `scarf-mark.svg`: brand colours (red band, wool stripes, ink outline). Use on wool/white.
-- `scarf-mark-greece.svg`: team recolour (blue band, white stripes). Use on team surfaces.
 - On ink backgrounds, outline and fringe become wool `#FBF8F2`.
 - App icon / favicon: red `#D7263D` rounded square (radius ≈ 23 %), mark in wool with ink stripes.
 
@@ -100,12 +125,26 @@ Never rotate the mark further, never stretch, never add a drop shadow.
 - **Primary button**: Terrace red fill, white text, 700, height 52–56 px, radius 12 px.
 - **Secondary button**: transparent, 1.5 px ink border, ink text 600, height 44–48 px, radius 12 px.
 - **Nav pill / chip**: height 44 px, radius 999 px, 1.5 px border; a country chip carries its flag
-  (20 × 15 px) at the left. "Add" chips use a dashed red border.
+  (20 × 15 px) at the left, a club chip a 20 × 15 px swatch of its kit stripes. "Add" chips use a
+  dashed red border.
 - **Sport switch**: a white pill holding one 40 px segment per sport (ball icon and name), the
-  current one filled ink. Only on a team page whose country has more than one sport.
+  current one filled ink. Only on a page whose country or club has more than one sport.
 - **Sport tag**: 34 px white pill, 1.5 px ink border, ball icon and "Men's football · UEFA".
 - **Card**: white, 1.5 px ink border, radius 16 px, `overflow: hidden`; team cards open with a 14 px
   stripe header and a 1.5 px ink rule under it. Padding 24–28 px.
+- **Club card**: a card that opens with the sport line (ball icon, Football or Basketball, the
+  competition at the right), then the kit-stripe header, the crest slot (44 px), the club's name, the
+  flag (16 × 12 px) with the home city and ground, the next game and "Games and subscribe".
+- **Club bar**: the top of a club's page: the crest (48 px), the club's name, under it the country line
+  (flag, "Piraeus, Greece") linking to the country page, the club's own sport switch, and Share.
+- **Competition card**: a plain card, no stripes: ball icon and name, a line of facts, six club chips
+  with their kit swatches, "and N more", and "All N clubs".
+- **Crest**: small, beside the club's name, unmodified; until a club's file exists, a round swatch of
+  its kit stripes stands in. Never in scarf's mark, a share image or the favicon, and never a
+  competition's logo. With the crests comes a line in a club page's small print: they are the clubs'
+  trademarks, shown to say whose games these are, and scarf is not affiliated with any club or
+  competition. A crest comes down on request, within days: the policy, not the page. The files and the
+  go: #132.
 - **Input**: height 44–46 px, 1.5 px chalk border, radius 10 px, white.
 - **Fixture row**: date block (Bricolage 800 28 px + Stand meta), title 22 px 600, meta 14 px Stand,
   tickets as a secondary button; rows divided by 1.5 px chalk.
@@ -119,4 +158,19 @@ Never rotate the mark further, never stretch, never add a drop shadow.
 - Times name their city ("21:45 in Volos"). Unknowns are said plainly: "time not announced",
   "venue not announced". Never TBA, TBC, "don't miss out", "notification".
 - Colour comes from the teams, never from us: no gradients, no decorative red fills, one red element
-  per screen is plenty. The orange basketball is the one sport colour (see Countries and sports).
+  per screen is plenty. The orange basketball is the one sport colour (see Countries, clubs and sports).
+
+## Design system
+
+The brand as a browsable design system, built from this file, `assets/brand-tokens.css`, `assets/site.css`
+and the marks, icons and drawings in `assets/` and `src/page.ts`:
+[scarf design system on claude.ai](https://claude.ai/artifact/AcsMKUmVFMtBqYnPmt8D3N) (issue #117). It holds the tokens with a usage note each, this spec as a brand book,
+the fonts, the marks, and a live preview per component, rendered with the site's own stylesheet. Its
+`tokens.json` records the commit it was taken from.
+
+The repository is the source. When a token, a face, a mark or a component changes here, refresh the design
+system from the code rather than editing it on the page: its files mirror the paths above, so a change to
+one of them is a change to the matching file there. The clubs (#130) changed the grammar and added the
+club card, the club bar, the competition card and the crest; the system was refreshed from that code on
+2 November 2026 (version 8, from commit 4f1a301). A later change here goes the same way, never the other
+way round.

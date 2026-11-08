@@ -7,7 +7,7 @@ type CalendarEvent = Map<string, string>
 const FIELDS: Record<string, string> = { SUMMARY: 'title', DTSTART: 'start', LOCATION: 'venue', DESCRIPTION: '', URL: 'link' }
 
 // Every VEVENT's own properties by UID, unfolded and unescaped.
-export function calendarEvents(ics: string): Map<string, CalendarEvent> {
+function calendarEvents(ics: string): Map<string, CalendarEvent> {
   const found = new Map<string, CalendarEvent>()
   let event: CalendarEvent | undefined
   let inAlarm = false
@@ -27,9 +27,10 @@ export function calendarEvents(ics: string): Map<string, CalendarEvent> {
   return found
 }
 
-// One line per added, changed or removed event; games already played leave the feed every day,
-// so they are counted, not listed. `today` is YYYY-MM-DD in UTC, as the build uses it.
-export function feedChanges(before: string, after: string, today: string): string[] {
+// One line per added, changed or removed event; played games leave the feed PLAYED_DAYS after they
+// are played (game.ts), so a game dated inside the window that leaves was dropped by the source and is
+// listed; one that left after its time is counted. `since` is the first day the feed still carries, YYYY-MM-DD.
+export function feedChanges(before: string, after: string, since: string): string[] {
   const was = calendarEvents(before)
   const now = calendarEvents(after)
   const lines: string[] = []
@@ -45,7 +46,9 @@ export function feedChanges(before: string, after: string, today: string): strin
   let played = 0
   for (const [uid, event] of was) {
     if (now.has(uid)) continue
-    if (day(event.get('DTSTART') ?? '') < today) played++
+    const sale = uid.includes('-tickets@') // a sale day leaves with its game, which is counted or listed once
+    if (sale && !now.has(uid.replace('-tickets@', '@'))) continue
+    if (!sale && day(event.get('DTSTART') ?? '') < since) played++
     else lines.push(`Removed: ${label(event)}`)
   }
   if (played) lines.push(`${played} played ${played === 1 ? 'game' : 'games'} left the feed`)

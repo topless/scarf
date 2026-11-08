@@ -7,6 +7,10 @@ export interface Game {
   competition: string
   home: string
   away: string
+  // The two sides as the source identifies them, home then away ("uefa:50051", "euroleague:OLY",
+  // "fiba:GRE": config.ts's sourceKey), so a page can tell which other teams on scarf played whatever
+  // the source calls them. A game made by hand may lack it.
+  sides?: [string, string]
   date: string // YYYY-MM-DD at the venue
   kickoff?: string // ISO instant in UTC; missing while the time is not announced
   utcOffsetHours?: number // the venue's offset from UTC at kickoff
@@ -32,13 +36,25 @@ export function withDetails(game: Game, teamDefaults: Details, manual: Details =
     tv: manual.tv ?? teamDefaults.tv,
     tickets: manual.tickets ?? teamDefaults.tickets,
     note: manual.note,
-    onSale: manual.onSale ?? game.onSale,
+    onSale: manual.onSale,
   }
 }
+
+// A played game stays in the feed this many days, exactly as it was, so it doesn't vanish from
+// fans' calendars the day after (#20). Longer only once UEFA's match count in the run summary
+// shows room under the cap in uefa.ts: the one UEFA request asks from this far back.
+export const PLAYED_DAYS = 30
+
+// The first day (YYYY-MM-DD) a feed still carries: `today` less PLAYED_DAYS.
+export const keptSince = (today: string): string => new Date(Date.parse(today) - PLAYED_DAYS * 86_400_000).toISOString().slice(0, 10)
 
 export function byStart(a: Game, b: Game): number {
   return (a.kickoff ?? a.date).localeCompare(b.kickoff ?? b.date)
 }
+
+// An answer's first 200 characters for an error message: enough to tell a bot-challenge page from a
+// changed format.
+export const startOf = (text: string): string => text.replace(/\s+/g, ' ').trim().slice(0, 200)
 
 // A source's answer: read from `saved`, an answer saved earlier, which makes no request (a fixture
 // build reads test/fixtures/), or else fetched from `url`.
@@ -48,6 +64,12 @@ export async function fetchText(url: string, saved?: URL): Promise<string> {
     headers: { 'User-Agent': 'scarf/0.1 (personal fixture calendar)' },
     signal: AbortSignal.timeout(30_000), // fail in 30 s, not after GitHub's six-hour job limit
   })
-  if (!res.ok) throw new Error(`${res.status} ${res.statusText} for ${url}`)
+  // In the step log: which CDN fronts the source, and any rate limit it announces.
+  const named = [...res.headers].filter(([name]) => name === 'server' || name === 'retry-after' || name.includes('ratelimit'))
+  console.log(`${new URL(url).host} answered ${res.status}${named.map(([name, value]) => ` · ${name}: ${value}`).join('')}`)
+  if (!res.ok) {
+    const retry = res.headers.get('retry-after')
+    throw new Error(`${res.status} ${res.statusText} for ${url}${retry ? ` · retry-after: ${retry}` : ''} · the answer starts "${startOf(await res.text())}"`)
+  }
   return res.text()
 }

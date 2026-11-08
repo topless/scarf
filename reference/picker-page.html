@@ -6,7 +6,7 @@
 <title>Pick your teams · scarf</title>
 <meta name="description" content="Follow more than one team with one calendar: pick your teams and subscribe once.">
 <!--
-  Reference for the team picker at /my/ (issue #17, docs/spike-team-picker.md). Same header, footer,
+  Reference for the team picker at /my/ (issue #17, docs/archive/spike-team-picker.md). Same header, footer,
   tokens and layout as reference/team-page.html; the page-specific styles are in the <style> below.
   Port, don't redesign. The build emits one chip per team in src/config.ts, in config order; names,
   slugs, feed paths and stripe colours below are copied from the six teams there on 2026-10-22. At
@@ -141,11 +141,11 @@
 </section>
 </main>
 <footer class="wrap site-footer">
-  <div class="footer-brand"><svg viewBox="0 0 64 64" width="28" height="28" fill="none" aria-hidden="true"><g transform="rotate(-14 32 32)"><rect x="8" y="22" width="48" height="20" rx="7" fill="#D7263D"/><rect x="17" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="29" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="41" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="8" y="22" width="48" height="20" rx="7" stroke="#17171C" stroke-width="3"/><path d="M8 27H2M8 32H2M8 37H2M56 27h6M56 32h6M56 37h6" stroke="#17171C" stroke-width="3" stroke-linecap="round"/></g></svg><span class="wordmark">scarf</span><span>· Wrapped up in the game.</span></div>
+  <div class="footer-brand"><svg viewBox="0 0 64 64" width="28" height="28" fill="none" aria-hidden="true"><g transform="rotate(-14 32 32)"><rect x="8" y="22" width="48" height="20" rx="7" fill="#D7263D"/><rect x="17" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="29" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="41" y="22" width="7" height="20" fill="#FBF8F2"/><rect x="8" y="22" width="48" height="20" rx="7" stroke="#17171C" stroke-width="3"/><path d="M8 27H2M8 32H2M8 37H2M56 27h6M56 32h6M56 37h6" stroke="#17171C" stroke-width="3" stroke-linecap="round"/></g></svg><span class="wordmark">scarf</span><span>· Wrapped in the game.</span></div>
   <p>Updated daily from UEFA and FIBA · last run Sat 17 Oct 2026, 04:31 UTC</p>
 </footer>
 <script>
-  // ---- URL scheme: the one thing that changes with the approach picked in docs/spike-team-picker.md ----
+  // ---- URL scheme: the one thing that changes with the approach picked in docs/archive/spike-team-picker.md ----
   const SITE = 'https://scarf.fan' // the canonical host; the build fills this in from SITE_URL
   const SCHEME = 'static' // 'static': pre-built files (approach a) · 'worker': merged on request (approach b)
   const MAX_TEAMS = 3

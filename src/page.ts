@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs'
-import { alertsFeedPath, countrySharePath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, type Sport, type Team } from './config.ts'
+import { alertsFeedPath, COMPETITIONS, competitionPath, countryOf, countrySharePath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, sourceKey, teamPath, type Competition, type Sport, type Team } from './config.ts'
 import { flagPath } from './flags.ts'
-import type { Game } from './game.ts'
+import { byStart, type Game } from './game.ts'
 
-// Team pages and the landing page, ported from reference/team-page.html. Styles live in
+// Team and club pages, country and competition pages and the landing page, ported from reference/team-page.html. Styles live in
 // assets/site.css on top of assets/brand-tokens.css; both are copied into dist/ by the build.
 
 export interface Section {
@@ -16,10 +16,15 @@ const WEEKDAY = utc({ weekday: 'short' })
 const DAY_MONTH = utc({ day: 'numeric', month: 'short' })
 const YEAR = utc({ year: 'numeric' })
 const TIME = utc({ hour: '2-digit', minute: '2-digit' })
+const DAY_LONG = utc({ weekday: 'long', day: 'numeric' }) // "Monday 2"
+const MONTH = utc({ month: 'long' })
+const DAY_MONTH_LONG = utc({ day: 'numeric', month: 'long' }) // "13 November"
 export const shortDate = (d: Date) => `${WEEKDAY.format(d)} ${DAY_MONTH.format(d)}` // "Fri 13 Nov"
 const longDate = (d: Date) => `${shortDate(d)} ${YEAR.format(d)}`
 
 const GOOGLE_NOTE = 'On Google Calendar, set a notification for this calendar once. It applies to every game.'
+// On every club page, under the subscribe buttons (#132). "Scarf" at the start of a sentence, as docs/brand.md has it.
+const CREST_NOTE = `Crests are the clubs' trademarks, shown to say whose games these are. Scarf is not affiliated with any club or competition.`
 
 const icon = (paths: string, stroke = 'currentColor') =>
   `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`
@@ -64,28 +69,33 @@ export const reminder = (game: Game, sport: Sport) => ({
 
 // siteUrl is the public address of the site; without it (local builds) the subscribe links are
 // relative and the ones that need a public address (Google, Outlook, the paste field) are left out.
+// A club's page is the same page one folder deeper, with its crest and city in the bar and its
+// competition where a national team names its federation.
 export function renderTeamPage(section: Section, all: Team[], siteUrl?: string): string {
   const { team, games } = section
   const from = federation(team)
   const { start, ground, ball } = WORDS[team.sport]
   const next = games[0]
+  const root = '../'.repeat(teamPath(team).split('/').length)
+  const url = siteUrl && `${siteUrl}/${teamPath(team)}/`
+  const competition = team.club && COMPETITIONS[team.club.competition].name
   return page({
-    root: '../../',
+    root,
     title: `${team.name} · ${siteName}`,
     description: `Every game of the ${team.side} in your calendar: ${start}, venue, TV and tickets, updated daily.`,
     // The share image sits next to the page; chat apps need both addresses absolute, so a local
     // build (no public address) leaves them out rather than printing relative ones.
-    share: { url: siteUrl && `${siteUrl}/${team.country}/${team.sport}/`, image: siteUrl && `${siteUrl}/${sharePath(team)}` },
+    share: { url, image: siteUrl && `${siteUrl}/${sharePath(team)}` },
     stripes: team.colours,
     body: `<div class="band"></div>
-${header('../../', '<a class="pill pill-primary" href="#subscribe">Add to my calendar</a>')}
-${countryBar(team, all)}
+${header(root, '<a class="pill pill-primary" href="#subscribe">Add to my calendar</a>')}
+${teamBar(team, all, root, url)}
 <main>
 <section class="wrap hero">
   <div class="hero-text">
-    <p class="sport-tag">${ball}<span>${capitalise(`men's ${team.sport}`)} · ${from}</span></p>
+    <p class="sport-tag">${ball}<span>${capitalise(`men's ${team.sport}`)} · ${competition ?? from}</span></p>
     <h1>${esc(team.name)}, in your calendar.</h1>
-    <p class="lede">Every ${start}, ${ground}, channel and ticket sale for the national team, kept current in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
+    <p class="lede">Every ${start}, ${ground}, channel and ticket sale ${competition ? `of our ${competition} season` : 'for the national team'}, kept current in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
 ${subscribePanel(team, siteUrl)}
   </div>
 ${nextGameCard(team, next)}
@@ -94,33 +104,80 @@ ${nextGameCard(team, next)}
   <div class="wrap">
     <div class="section-head">
       <h2>Upcoming games</h2>
-      ${games.length ? `<p class="aside">${inTheFeed(games.length)}</p>` : ''}
+      ${games.length ? `<p class="aside">${games.length > GAMES_ROWS ? `The next ${GAMES_ROWS} here · all ${games.length} are already in the feed` : inTheFeed(games.length)}</p>` : ''}
     </div>
-    ${games.length ? `<ul class="rows">\n${games.map((game) => renderRow(game, start)).join('\n')}\n</ul>` : '<p>No games announced yet.</p>'}
-    <p class="small">New games and ${start} times appear a day or two after ${from} announces them. TV channels are the expected broadcasters. We update them closer to the game.</p>
+    ${games.length ? `<ul class="rows">\n${games.slice(0, GAMES_ROWS).map((game) => renderRow(game, start)).join('\n')}\n</ul>` : '<p>No games announced yet.</p>'}
+    <p class="small">New games and ${start} times appear a day or two after ${from} announces them.${games.some((game) => game.tv) ? ' TV channels are the expected broadcasters. We update them closer to the game.' : ''}</p>
   </div>
 </section>
-<section class="teams" id="teams">
-  <div class="wrap">
-    <div class="teams-text">
-      <h2>Other teams</h2>
-      <p>Each team is its own feed, in its own colours. Add as many as you follow: national sides today, your club next.</p>
-    </div>
-${teamChips(all, team)}
-  </div>
-</section>
+${team.club ? neighbours(section, all, root) : otherTeams(all, team, root)}
 </main>
 ${footer()}`,
-    script: COPY_SCRIPT + ALERTS_SCRIPT,
+    script: COPY_SCRIPT + ALERTS_SCRIPT + SHARE_SCRIPT + (team.club ? '' : FIND_SCRIPT),
   })
 }
 
-export function renderLanding(sections: Section[], siteUrl?: string): string {
-  const countries = byCountry(sections, ({ team }) => team)
+// Other teams on a national team's page: every country, as on the landing.
+function otherTeams(all: Team[], team: Team, root: string): string {
+  return `<section class="teams" id="teams">
+  <div class="wrap">
+    <div class="teams-text">
+      <h2>Other teams</h2>
+      <p>Each team is its own feed, in its own colours. Add as many as you follow, national sides and clubs alike.</p>
+${finder('Find your country')}
+    </div>
+${teamChips(all, team, root)}
+  </div>
+</section>`
+}
+
+// Other teams on a club's page: only the neighbours. The clubs it plays next (the other side of
+// each upcoming game that is on scarf too, by the name the source gives it), a way to the rest of
+// its competition, then its country's national teams and a way to every team.
+function neighbours({ team, games }: Section, all: Team[], root: string): string {
+  const club = team.club!
+  // The other side of each game, matched by the source's own id: the source rarely calls a club what
+  // fans do ("Hapoel TLV", "Cosea JL Bourg"), and a club not on scarf matches nothing.
+  const mine = sourceKey(team)
+  const others = new Map(all.filter((other) => other !== team && other.sport === team.sport).map((other) => [sourceKey(other), other]))
+  const opponents = [...new Set(games.flatMap((game) => (game.sides ?? []).filter((side) => side !== mine).flatMap((side) => others.get(side) ?? [])))].slice(0, 6)
+  const rivals = all.filter((other) => other.club?.competition === club.competition).length
+  const nationals = siblings({ ...team, club: undefined }, all)
+  const more = (href: string, text: string) => `      <a class="country-chip more" href="${href}">${text}${ICON.arrow}</a>`
+  const add = ['the rivals', nationals.length && 'the national side', siblings(team, all).length > 1 && 'the other half of the club'].filter(Boolean).join(', ')
+  return `<section class="teams" id="teams">
+  <div class="wrap">
+    <div class="teams-text">
+      <h2>Other teams</h2>
+      <p>Each team is its own feed, in its own colours. Add as many as you follow: ${add}.</p>
+    </div>
+    <div class="teams-group">
+      <h3>Next opponents</h3>
+      <div class="chips">
+${[...opponents.map((other) => clubChip(other, root)), more(`${root}${competitionPath(club.competition)}/`, `All ${rivals} ${esc(COMPETITIONS[club.competition].name)} clubs`)].join('\n')}
+      </div>
+    </div>
+    <div class="teams-group">
+      <h3>${esc(countryName(team))}</h3>
+      <div class="chips">
+${[...nationals.map((other) => countryChip(other, root, `${root}${teamPath(other)}/`, false, other.name)), more(root, 'Every team on scarf')].join('\n')}
+      </div>
+    </div>
+  </div>
+</section>`
+}
+
+// The landing: the competitions with their clubs, the countries with their national teams, and
+// every game of the week ahead. today (YYYY-MM-DD) is the build's day, the week's first.
+export function renderLanding(sections: Section[], today: string, siteUrl?: string): string {
+  const countries = byCountry(national(sections), ({ team }) => team)
+  const clubs = sections.filter(({ team }) => team.club)
+  const competitions = (Object.keys(COMPETITIONS) as Competition[]).filter((competition) => clubs.some(({ team }) => team.club!.competition === competition))
+  const nationalSports = SPORTS.filter((sport) => countries.some((group) => group.some(({ team }) => team.sport === sport)))
   return page({
     root: '',
     title: `${siteName} · Your colours, in your calendar`,
-    description: 'Every game of the national teams we follow in your calendar: kickoff or tip-off, venue, TV and tickets, updated daily.',
+    description: 'Every game of the national teams and clubs we follow in your calendar: kickoff or tip-off, venue, TV and tickets, updated daily.',
     // The landing page's share image sits at the site root, next to it.
     share: { url: siteUrl && `${siteUrl}/`, image: siteUrl && `${siteUrl}/${landingSharePath}` },
     body: `${header('', '')}
@@ -128,35 +185,115 @@ export function renderLanding(sections: Section[], siteUrl?: string): string {
 <section class="wrap hero">
   <div class="hero-text">
     <h1>Your colours, in your calendar.</h1>
-    <p class="lede">Pick your team and subscribe once. Every kickoff or tip-off, venue, channel and ticket sale lands in the calendar you already use, with a nudge an hour before the game. Nothing to install.</p>
-    <nav class="chips" aria-label="Countries">
-${countries.map((group) => countryChip(group[0]!.team, '', `#${group[0]!.team.country}`)).join('\n')}
-    </nav>
+    <p class="lede">Pick your team, a national side or a club, and subscribe once. Every kickoff or tip-off, venue, channel and ticket sale lands in the calendar you already use, with a nudge an hour before the game. Nothing to install.</p>
+${finder('Find your team')}
   </div>
 </section>
-<section class="wrap countries" aria-label="Teams by country">
-${countries.map((group) => countryCard(group)).join('\n')}
+${
+  competitions.length
+    ? `<section class="wrap section" aria-labelledby="clubs">
+  <div class="section-head"><h2 id="clubs">Clubs in Europe</h2><p class="aside">${inWords(competitions.length, 'competition')} · ${count(clubs.length, 'club')}</p></div>
+  <div class="comps">
+${competitions.map((competition) => competitionCard(competition, clubs.filter(({ team }) => team.club!.competition === competition).map(({ team }) => team))).join('\n')}
+  </div>
 </section>
-</main>
+`
+    : ''
+}<section class="wrap section" aria-labelledby="national">
+  <div class="section-head"><h2 id="national">National teams</h2><p class="aside">${count(countries.length, 'country', 'countries')} · men's ${and(nationalSports)}</p></div>
+  <nav class="chips" aria-label="Countries">
+${countries.map((group) => countryChip(group[0]!.team, '', `${group[0]!.team.country}/`)).join('\n')}
+  </nav>
+</section>
+${thisWeek(sections, today)}</main>
 ${footer()}`,
+    script: FIND_SCRIPT,
   })
 }
 
-// A country's page at /{country}/: its teams on the same card as on the landing, under the
-// country's stripes. Room for its clubs later, so the landing keeps one card per country.
-export function renderCountryPage(group: Section[], siteUrl?: string): string {
-  const { team } = group[0]!
-  const name = esc(countryName(team))
+// When the competitions play, for their card on the landing.
+const NIGHTS: Record<Competition, string> = {
+  'champions-league': 'Tuesday and Wednesday nights, September to May',
+  euroleague: 'Thursday and Friday nights, October to May',
+  eurocup: 'Tuesday and Wednesday nights, October to April',
+}
+
+// A competition on the landing: no stripes, nothing on it is a team. Six of its clubs, A to Z, and
+// the way to all of them.
+function competitionCard(competition: Competition, clubs: Team[]): string {
+  const { name, sport } = COMPETITIONS[competition]
+  const shown = byName(clubs).slice(0, 6)
+  return `  <article class="card">
+    <div class="comp-body">
+      <h3 class="comp-name"><a href="${competitionPath(competition)}/">${WORDS[sport].ball}${esc(name)}${ICON.arrow}</a></h3>
+      <p class="small">${capitalise(`men's ${sport}`)} · ${count(clubs.length, 'club')} · ${NIGHTS[competition]}</p>
+      <div class="comp-clubs">${shown.map((team) => clubChip(team, '')).join('')}${clubs.length > shown.length ? `<span class="country-chip more">and ${clubs.length - shown.length} more</span>` : ''}</div>
+      <a class="cell-cta" href="${competitionPath(competition)}/">All ${count(clubs.length, 'club')}${ICON.arrow}</a>
+    </div>
+  </article>`
+}
+
+// A week with 88 clubs runs to fifty games: the landing shows the first few, the rest sit on their pages.
+const WEEK_ROWS = 8
+// A club's season runs to thirty games or more: a page lists the next dozen, the feed has them all.
+const GAMES_ROWS = 12
+// This week on the landing: every game on scarf from today through the sixth day after, once each
+// however many of our teams play in it, with their chips. Without a game in the week it names the
+// day of the next one; without any game at all it is left out.
+function thisWeek(sections: Section[], today: string): string {
+  const byId = new Map<string, { game: Game; teams: Team[] }>()
+  for (const { team, games } of sections) {
+    for (const game of games.filter((game) => game.date >= today)) {
+      const entry = byId.get(game.id) ?? byId.set(game.id, { game, teams: [] }).get(game.id)!
+      entry.teams.push(team)
+    }
+  }
+  const upcoming = [...byId.values()].sort((a, b) => byStart(a.game, b.game))
+  if (!upcoming.length) return ''
+  const first = new Date(today)
+  const last = new Date(first.getTime() + 6 * 86_400_000)
+  const end = last.toISOString().slice(0, 10)
+  const week = upcoming.filter(({ game }) => game.date <= end)
+  const shown = week.slice(0, WEEK_ROWS)
+  const range = MONTH.format(first) === MONTH.format(last) ? `${DAY_LONG.format(first)} to ${DAY_LONG.format(last)} ${MONTH.format(last)}` : `${DAY_LONG.format(first)} ${MONTH.format(first)} to ${DAY_LONG.format(last)} ${MONTH.format(last)}`
+  const nextDay = (games: typeof upcoming) => games[0] && DAY_MONTH_LONG.format(new Date(games[0].game.date))
+  // A week of club games only: say when the national teams are back.
+  const nationalNext = week.some(({ teams }) => teams.some((team) => !team.club)) ? undefined : nextDay(upcoming.filter(({ game, teams }) => game.date > end && teams.some((team) => !team.club)))
+  const row = ({ game, teams }: (typeof upcoming)[number]) => {
+    const [team] = teams
+    // Home side first, by the source's own ids: the source rarely names a club as fans do ("Hapoel TLV").
+    const side = (other: Team) => game.sides?.indexOf(sourceKey(other)) ?? 0
+    const chips = [...teams].sort((a, b) => side(a) - side(b)).map((other) => (other.club ? clubChip(other, '') : countryChip(other, '', `${teamPath(other)}/`)))
+    return renderRow(game, WORDS[team!.sport].start, [team!.club ? COMPETITIONS[team!.club.competition].name : game.competition, place(game)], `<div class="row-teams">${chips.join('')}</div>`)
+  }
+  return `<section class="games" aria-labelledby="week">
+  <div class="wrap">
+    <div class="section-head"><h2 id="week">This week</h2><p class="aside">Every game on scarf, ${range}</p></div>
+    ${week.length ? `<ul class="rows">\n${shown.map(row).join('\n')}\n</ul>` : `<p>No games this week. The next one is on ${nextDay(upcoming)}.</p>`}
+${week.length > WEEK_ROWS ? `    <p class="small">The first ${WEEK_ROWS} of ${week.length} this week. Every game is on its team's page.</p>\n` : ''}${week.length && nationalNext ? `    <p class="small">National teams play in windows, not every week. The next one opens on ${nationalNext}.</p>\n` : ''}  </div>
+</section>
+`
+}
+
+// A country's page at /{country}/: its national teams on one card (the landing shows countries as
+// chips), then its clubs in Europe, under the country's stripes. A country with clubs and no national team on scarf
+// shows only its clubs.
+export function renderCountryPage(all: Section[], siteUrl?: string): string {
+  const group = national(all)
+  const clubs = all.filter(({ team }) => team.club).sort((a, b) => SPORTS.indexOf(a.team.sport) - SPORTS.indexOf(b.team.sport) || a.team.club!.name.localeCompare(b.team.club!.name))
+  const { team } = all[0]!
+  const country = countryOf(team)
+  const name = esc(country.name)
   // "kickoff or tip-off", or only the words of the sports the country has a team in.
-  const starts = SPORTS.filter((sport) => group.some((section) => section.team.sport === sport))
+  const starts = SPORTS.filter((sport) => all.some((section) => section.team.sport === sport))
     .map((sport) => WORDS[sport].start)
     .join(' or ')
   return page({
     root: '../',
-    title: `${countryName(team)} · ${siteName}`,
-    description: `Every ${countryName(team)} game in your calendar: ${starts}, venue, TV and tickets, updated daily.`,
+    title: `${country.name} · ${siteName}`,
+    description: `Every ${country.name} game in your calendar: ${starts}, venue, TV and tickets, updated daily.`,
     share: { url: siteUrl && `${siteUrl}/${team.country}/`, image: siteUrl && `${siteUrl}/${countrySharePath(team)}` },
-    stripes: team.colours,
+    stripes: country.colours,
     body: `<div class="band"></div>
 ${header('../', '')}
 <main>
@@ -166,10 +303,17 @@ ${header('../', '')}
     <p class="lede">Pick a team and subscribe once. Every ${starts}, venue, channel and ticket sale lands in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
   </div>
 </section>
-<section class="wrap countries" aria-label="${name} teams">
-${countryCard(group, '../', true)}
+${group.length ? `<section class="wrap countries" aria-label="${name} teams">\n${countryCard(group, '../', true)}\n</section>\n` : ''}${
+      clubs.length
+        ? `<section class="wrap section" aria-labelledby="europe">
+  <div class="section-head"><h2 id="europe">In Europe this season</h2><p class="aside">${inWords(clubs.length, 'club')} · ${and([...new Set(clubs.map(({ team }) => COMPETITIONS[team.club!.competition].name))])}</p></div>
+  <div class="club-grid">
+${clubs.map((section) => clubCard(section, '../')).join('\n')}
+  </div>
 </section>
-</main>
+`
+        : ''
+    }</main>
 ${footer()}`,
   })
 }
@@ -211,9 +355,9 @@ export function renderHowItWorks(sections: Section[], siteUrl?: string): string 
 </section>
 <section class="wrap how">
   <ol class="steps">
-${step(1, '<h3>Subscribe once</h3><p>Pick your team, tap Add to my calendar and pick your app. That is the whole setup: no account, no download.</p>')}
-${step(2, `<h3>Your calendar keeps itself current</h3><p>We rebuild the feeds every day from ${federations(teams)}. New games, times and venues land in place, in your time zone.</p>`)}
-${step(3, `<h3>A nudge an hour before the game</h3><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>${GOOGLE_NOTE}</p>`)}
+${step(1, '<h2>Subscribe once</h2><p>Pick your team, tap Add to my calendar and pick your app. That is the whole setup: no account, no download.</p>')}
+${step(2, `<h2>Your calendar keeps itself current</h2><p>We rebuild the feeds every day from ${federations(teams)}. New games, times and venues land in place, in your time zone.</p>`)}
+${step(3, `<h2>A nudge an hour before the game</h2><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>${GOOGLE_NOTE}</p>`)}
   </ol>
 </section>
 <section class="teams">
@@ -221,14 +365,16 @@ ${step(3, `<h3>A nudge an hour before the game</h3><p>The channel and the ticket
     <div class="teams-text">
       <h2>Pick your team</h2>
       <p>Each team is its own feed, in its own colours. Add as many as you follow.</p>
+${finder('Find your country')}
     </div>
     <nav class="chips" aria-label="Countries">
-${byCountry(teams, (team) => team).map((group) => countryChip(group[0]!, '../', `../#${group[0]!.country}`)).join('\n')}
+${byCountry(teams.filter((team) => !team.club), (team) => team).map((group) => countryChip(group[0]!, '../', `../${group[0]!.country}/`)).join('\n')}
     </nav>
   </div>
 </section>
 </main>
 ${footer()}`,
+    script: FIND_SCRIPT,
   })
 }
 
@@ -236,7 +382,8 @@ ${footer()}`,
 // so a clashing stripe, a missing flag or a missing sport mark shows here first. Unlisted and kept
 // out of search engines: it is a test page for us, not for fans.
 export function renderKit(all: Team[]): string {
-  const countries = byCountry(all.map((team): Section => ({ team, games: [] })), ({ team }) => team)
+  const countries = byCountry(all.filter((team) => !team.club).map((team): Section => ({ team, games: [] })), ({ team }) => team)
+  const clubs = all.filter((team) => team.club).map((team): Section => ({ team, games: [] }))
   const sport = (name: Sport) => {
     const { ball, surface, start, starts, ground } = WORDS[name]
     return `  <div class="card">
@@ -271,7 +418,17 @@ ${countries.map((group) => countryChip(group[0]!.team, '../', `#${group[0]!.team
   </nav>
 ${countries.map((group) => countryCard(group, '../')).join('\n')}
 </section>
-<section class="wrap kit" aria-labelledby="kit-sports">
+${
+  clubs.length
+    ? `<section class="wrap kit" aria-labelledby="kit-clubs">
+  <h2 id="kit-clubs">Clubs</h2>
+  <div class="kit-grid">
+${clubs.map(team).join('\n')}
+  </div>
+</section>
+`
+    : ''
+}<section class="wrap kit" aria-labelledby="kit-sports">
   <h2 id="kit-sports">Sports</h2>
   <div class="kit-grid">
 ${SPORTS.map(sport).join('\n')}
@@ -320,7 +477,7 @@ ${p.noindex ? '<meta name="robots" content="noindex">\n' : ''}${socialMeta(p)}<l
 <body${p.stripes ? ` style="${stripeVars(p.stripes)}"` : ''}>
 ${p.body}
 <script>
-  for (const el of document.querySelectorAll('time[data-offset]')) {
+  for (const el of document.querySelectorAll('time[datetime]')) {
     const kickoff = new Date(el.dateTime)
     if (-kickoff.getTimezoneOffset() / 60 === Number(el.dataset.offset)) continue
     const yours = document.createElement('span')
@@ -362,6 +519,21 @@ const COPY_SCRIPT = `
     })
   }`
 
+// Share opens the share sheet on a touch screen (phones, tablets). A desktop copies the address and
+// says "Copied", even where it has a share menu of its own (Safari and Chrome on a Mac, Windows), as
+// it does where there is no share sheet at all. The button stays hidden in a browser that can do neither.
+export const SHARE_SCRIPT = `
+  const share = document.querySelector('button[data-share]')
+  const shareSheet = navigator.share && matchMedia('(pointer: coarse)').matches
+  if (share && (shareSheet || navigator.clipboard)) {
+    share.addEventListener('click', () => {
+      const url = share.dataset.share
+      if (shareSheet) navigator.share({ title: document.title, text: share.dataset.text, url }).catch(() => {})
+      else navigator.clipboard.writeText(url).then(() => { share.lastChild.textContent = 'Copied' }, () => {}) // the word, not the icon
+    })
+    share.hidden = false
+  }`
+
 // Picking "Games and announcements" points every subscribe link and the paste field at the -alerts
 // feed. Without JavaScript the choice stays hidden and the default links stand (a noscript line
 // links the variant).
@@ -377,11 +549,43 @@ const ALERTS_SCRIPT = `
         if (el.tagName === 'INPUT') el.value = address
         else el.setAttribute('href', address)
       }
-      for (const button of document.querySelectorAll('button[data-copy]')) button.textContent = 'Copy'
+      for (const button of document.querySelectorAll('button[data-copy]')) { if (button.textContent === 'Copied') button.textContent = 'Copy' }
     }
     choice.addEventListener('change', apply)
     apply()
     choice.hidden = false
+  }`
+
+// A field over a long list of countries or clubs (fifty-odd country chips, the competitions' club
+// chips, a competition's club cards): typing keeps only those whose name holds what was typed, accents
+// aside. A chip's name is its text, a card's its heading; a club is a club card or a chip with a kit
+// swatch. The chips of "This week" and the dashed "more" chips stay. Without JavaScript it stays
+// hidden and everything stays listed.
+const finder = (label: string) =>
+  `      <div class="find" hidden><label for="find">${label}</label><input id="find" type="search" autocomplete="off" spellcheck="false"><p class="small" role="status" id="find-status"></p></div>`
+const FIND_SCRIPT = `
+  const findField = document.getElementById('find')
+  if (findField) {
+    const fold = (text) => text.normalize('NFD').replace(/\\p{M}/gu, '').toLowerCase()
+    const named = [...document.querySelectorAll('.chips .country-chip:not(.more), .comp-clubs .country-chip:not(.more), article.country, article.club')].map((el) => [
+      el,
+      fold((el.querySelector('h2, .club-name') ?? el).textContent),
+      el.matches('.club') || el.querySelector('.swatch') ? 'club' : 'country',
+    ])
+    const status = document.getElementById('find-status')
+    const count = (n, one, many) => (n === 0 ? '' : n === 1 ? '1 ' + one : n + ' ' + many)
+    const apply = () => {
+      const query = fold(findField.value.trim())
+      const shown = { country: new Set(), club: new Set() }
+      for (const [el, name, kind] of named) {
+        el.hidden = !name.includes(query)
+        if (!el.hidden) shown[kind].add(name)
+      }
+      status.textContent = !query ? '' : [count(shown.country.size, 'country', 'countries'), count(shown.club.size, 'club', 'clubs')].filter(Boolean).join(' · ') || 'Not on scarf yet'
+    }
+    findField.addEventListener('input', apply)
+    apply()
+    findField.parentElement.hidden = false
   }`
 
 // Every page's top bar: the logo goes home and How it works is one page for every team. A team
@@ -399,7 +603,7 @@ const GITHUB_MARK = `<svg viewBox="0 0 16 16" width="16" height="16" fill="curre
 // Every page's footer: the motto, and where a fan reports a wrong kickoff or asks for a team.
 function footer(): string {
   return `<footer class="wrap site-footer">
-  <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Wrapped up in the game.</span></div>
+  <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Wrapped in the game.</span></div>
   <a class="footer-link" href="https://github.com/topless/scarf/issues/new/choose">${GITHUB_MARK}Suggest a team or report a bug</a>
 </footer>`
 }
@@ -434,11 +638,11 @@ ${
   feed.https && alerts.https
     ? `      <div class="paste">
         <label for="feed-url">Or paste into any calendar app</label>
-        <div class="paste-row"><input id="feed-url" type="text" readonly value="${esc(feed.https)}" data-alerts="${esc(alerts.https)}"><button class="btn-secondary" type="button" data-copy="feed-url">Copy</button></div>
+        <div class="paste-row"><input id="feed-url" type="text" readonly value="${esc(feed.https)}" data-alerts="${esc(alerts.https)}"><button class="btn-secondary" type="button" aria-live="polite" data-copy="feed-url">Copy</button></div>
       </div>
 `
     : ''
-}      <p class="small">Free. Updated daily from ${federation(team)}. Leave any time by deleting the calendar. ${GOOGLE_NOTE}</p>
+}      <p class="small">Free. Updated daily from ${federation(team)}. Leave any time by deleting the calendar. ${team.club ? `${CREST_NOTE} ` : ''}${GOOGLE_NOTE}</p>
     </div>`
 }
 
@@ -460,16 +664,27 @@ function feedLinks(team: Team, alerts: boolean, siteUrl?: string): { webcal: str
   }
 }
 
-// The country under the header, with a switch to its other sports when it has more than one.
-function countryBar(team: Team, all: Team[]): string {
-  const name = esc(countryName(team))
-  const sports = SPORTS.flatMap((sport) => all.filter((other) => other.country === team.country && other.sport === sport))
+// A team's own sports, in the order sports are listed: a country's national teams, or a club's teams
+// (those of its country with its slug).
+const siblings = (team: Team, all: Team[]) =>
+  SPORTS.flatMap((sport) => all.filter((other) => other.country === team.country && other.sport === sport && other.club?.slug === team.club?.slug))
+
+// The country under the header, or for a club its crest and name over its city and country, with a
+// switch to the team's other sport when it has two. url is the team page's public address, which the
+// Share button sends; local builds have none and leave the button out.
+function teamBar(team: Team, all: Team[], root: string, url?: string): string {
+  const name = esc(team.club?.name ?? countryName(team))
+  const sports = siblings(team, all)
   const link = (other: Team) =>
-    `<a href="../../${other.country}/${other.sport}/"${other === team ? ' aria-current="page"' : ''}>${WORDS[other.sport].ball}${capitalise(other.sport)}</a>`
+    `<a href="${root}${teamPath(other)}/"${other === team ? ' aria-current="page"' : ''}>${WORDS[other.sport].ball}${capitalise(other.sport)}</a>`
+  const identity = team.club
+    ? `<div class="club-id">${crest(team, root, 48)}<div><span class="country-name">${name}</span><a class="club-home" href="${root}${team.country}/">${flag(team, root, 16, 12)}${esc(team.club.city)}, ${esc(countryName(team))}</a></div></div>`
+    : `<a class="country-name" href="${root}${team.country}/">${flag(team, root, 32, 24)}${name}</a>`
   return `<div class="wrap">
   <div class="country-bar">
-    <a class="country-name" href="../"><img class="flag" src="../../${flagPath(team.flag)}" width="32" height="24" alt="">${name}</a>
+    ${identity}
     ${sports.length > 1 ? `<nav class="switch" aria-label="${name} teams">${sports.map(link).join('')}</nav>` : ''}
+    ${url ? `<button class="btn-secondary share" type="button" data-share="${esc(url)}" data-text="${esc(`${team.name} in your calendar · ${siteName}`)}" aria-live="polite" hidden>${ICON.share}Share</button>` : ''}
   </div>
 </div>`
 }
@@ -505,31 +720,68 @@ function nextGameCard(team: Team, game?: Game): string {
   </div>`
 }
 
-function renderRow(game: Game, start: string): string {
+// A fixture row. A team page's rows end with the tickets; the landing's week gives its own meta
+// and ends each row with the chips of the teams playing.
+function renderRow(
+  game: Game,
+  start: string,
+  meta: (string | undefined)[] = [game.competition, place(game), game.tv],
+  end = game.tickets ? `<a class="row-tickets" href="${esc(game.tickets)}">Tickets</a>` : '',
+): string {
   const day = new Date(game.kickoff && game.utcOffsetHours !== undefined ? shift(game) : game.kickoff ?? game.date)
-  const meta = [game.competition, place(game), game.tv].filter(Boolean).map((s) => esc(s!)).join(' · ')
   return `<li class="row">
   <div class="row-date"><span class="row-day">${DAY_MONTH.format(day)}</span><span class="row-time num">${when(game, WEEKDAY.format, start)}</span></div>
-  <div class="row-main"><span class="row-title">${matchTitle(game)}</span><span class="row-meta">${meta}</span>${game.note ? `<span class="row-meta">${esc(game.note)}</span>` : ''}</div>
-  ${game.tickets ? `<a class="row-tickets" href="${esc(game.tickets)}">Tickets</a>` : ''}
+  <div class="row-main"><span class="row-title">${matchTitle(game)}</span><span class="row-meta">${meta.filter(Boolean).map((s) => esc(s!)).join(' · ')}</span>${game.note ? `<span class="row-meta">${esc(game.note)}</span>` : ''}</div>
+  ${end}
 </li>`
 }
 
-// One chip per country, the same chips as on the landing. Each opens that country in the sport
-// of this page, or in its other sport when it has no team in this one.
-function teamChips(all: Team[], current: Team): string {
+// One chip per country with a national team, the same chips as on the landing. Each opens that
+// country in the sport of this page, or in its other sport when it has no team in this one.
+function teamChips(all: Team[], current: Team, root: string): string {
   const chip = (group: Team[]) => {
     const team = group.find((other) => other.sport === current.sport) ?? group[0]!
-    return countryChip(team, '../../', `../../${team.country}/${team.sport}/`, team === current)
+    return countryChip(team, root, `${root}${teamPath(team)}/`, team === current)
   }
   return `    <div class="chips">
-${byCountry(all, (team) => team).map(chip).join('\n')}
+${byCountry(all.filter((team) => !team.club), (team) => team).map(chip).join('\n')}
     </div>`
 }
 
-// A country's flag and name. root is the way from the page to the site root, for the flag.
-function countryChip(team: Team, root: string, href: string, current = false): string {
-  return `      <a class="country-chip" href="${href}"${current ? ' aria-current="page"' : ''}><img class="flag" src="${root}${flagPath(team.flag)}" width="20" height="15" alt="">${esc(countryName(team))}</a>`
+// root is the way from the page to the site root, for the flag, the crest and the links.
+const flag = (team: Team, root: string, width: number, height: number) => `<img class="flag" src="${root}${flagPath(team.flag)}" width="${width}" height="${height}" alt="">`
+
+// A country's flag and name, or another label after the flag ("Greece football").
+function countryChip(team: Team, root: string, href: string, current = false, label = countryName(team)): string {
+  return `      <a class="country-chip" href="${href}"${current ? ' aria-current="page"' : ''}>${flag(team, root, 20, 15)}${esc(label)}</a>`
+}
+
+// A club's chip: a swatch of its kit stripes where a country's chip has its flag, and its name.
+function clubChip(team: Team, root: string): string {
+  return `      <a class="country-chip" href="${root}${teamPath(team)}/"><span class="swatch" style="--swatch: ${stripes(team.colours, 10)}"></span>${esc(team.club!.name)}</a>`
+}
+
+// A club's crest from assets/crests/, or until its file is there a round swatch of its kit stripes.
+const crest = (team: Team, root: string, size: number) =>
+  team.club?.crest ? `<img class="crest" src="${root}crests/${esc(team.club.crest)}" width="${size}" height="${size}" alt="">` : '<span class="crest crest-kit" aria-hidden="true"></span>'
+
+// A club's card, on its country's page and its competition's: its kit stripes, the sport first as on
+// a country's cells (so two teams of one club read as two), the crest and name, its home with the
+// country's flag as a small mark, and its next game.
+function clubCard({ team, games }: Section, root: string): string {
+  const club = team.club!
+  const { ball, start } = WORDS[team.sport]
+  const href = `${root}${teamPath(team)}/`
+  const next = games[0]
+  return `  <article class="card club" style="${stripeVars(team.colours)}">
+    <div class="card-stripe"></div>
+    <div class="club-body">
+      <span class="cell-sport">${ball}${capitalise(team.sport)}<small>${esc(COMPETITIONS[club.competition].name)}</small></span>
+      <div class="club-head">${crest(team, root, 44)}<div><h3 class="club-name"><a href="${href}">${esc(club.name)}</a></h3><div class="club-home">${flag(team, root, 16, 12)}${esc(club.city)} · ${esc(club.ground)}</div></div></div>
+      <div class="cell-next">${next ? `<b>${matchTitle(next)}</b><span class="num">${when(next, shortDate, start)}</span>` : '<span>No games announced yet.</span>'}</div>
+      <a class="cell-cta" href="${href}">Games and subscribe${ICON.arrow}</a>
+    </div>
+  </article>`
 }
 
 // A country's card on the landing page: its stripes, flag and name, then one cell per sport. The
@@ -566,21 +818,35 @@ function sportCell(sport: Sport, section?: Section, root = ''): string {
 
 const matchTitle = (game: Game) => `${esc(game.home)} vs ${esc(game.away)}`
 const place = (game: Game) => [game.venue, game.city].filter(Boolean).join(', ') || 'Venue not announced'
-export const federation = (team: Team) => team.source.kind.toUpperCase()
+const SOURCES = { uefa: 'UEFA', fiba: 'FIBA', euroleague: 'EuroLeague' } as const
+export const federation = (team: Team) => SOURCES[team.source.kind]
 // "UEFA and FIBA", "football, basketball and handball".
 const and = (items: string[]) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`)
 // "UEFA and FIBA": every source behind a list of teams, once each, in the teams' order.
 export const federations = (teams: Team[]) => and([...new Set(teams.map(federation))])
 export const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
-// "National team · Men's football": the eyebrow over a team's name on its share image.
-export const teamKind = (team: Team) => `National team · ${capitalise(`men's ${team.sport}`)}`
-// "National teams · Football and basketball": the same over the landing page's share image.
-export const landingKind = (teams: Team[]) => `National teams · ${capitalise(and([...new Set(teams.map((team) => team.sport))]))}`
+// "National team · Men's football", "Club · Men's basketball": the eyebrow over a team's name on its share image.
+export const teamKind = (team: Team) => `${team.club ? 'Club' : 'National team'} · ${capitalise(`men's ${team.sport}`)}`
+// "National teams · Football and basketball", "National teams and clubs · …" or "Clubs · …": the
+// same over the landing's and a country's share image, for the teams it lists.
+export function landingKind(teams: Team[]): string {
+  const clubs = teams.filter((team) => team.club).length
+  const kind = clubs === 0 ? 'National teams' : clubs === teams.length ? 'Clubs' : 'National teams and clubs'
+  return `${kind} · ${capitalise(and([...new Set(teams.map((team) => team.sport))]))}`
+}
 
-// "Greece" from "Greece football".
-// shortcut: assumes every team name is "{Country} {sport}", as config.ts names them; give Team a
-// country name of its own when a team is named otherwise.
-export const countryName = (team: Team) => team.name.slice(0, -team.sport.length - 1)
+// "Greece", for a national team or a club of the country.
+const countryName = (team: Team) => countryOf(team).name
+
+// "1 club", "20 clubs"; in words, "One club", "Twenty clubs".
+const count = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`
+const ONES = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen']
+const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+const inWords = (n: number, one: string, many = `${one}s`) =>
+  `${capitalise(n < 20 ? ONES[n]! : n < 100 ? TENS[Math.floor(n / 10)]! + (n % 10 ? `-${ONES[n % 10]}` : '') : String(n))} ${n === 1 ? one : many}`
+
+// Clubs A to Z by the name fans call them.
+const byName = (teams: Team[]) => [...teams].sort((a, b) => a.club!.name.localeCompare(b.club!.name))
 
 // Items grouped by country, the countries in alphabetical order of their names.
 function byCountry<T>(items: T[], teamOf: (item: T) => Team): T[][] {
@@ -593,6 +859,12 @@ function byCountry<T>(items: T[], teamOf: (item: T) => Team): T[][] {
 // The kickoff as a clock at the venue reads it.
 const shift = (game: Game) => new Date(new Date(game.kickoff!).getTime() + game.utcOffsetHours! * 60 * 60 * 1000)
 
+// "21:45 in Volos", "21:45 at the venue"; undefined while the kickoff or the offset is unknown. Shared with the feed.
+export function venueTime(game: Game): string | undefined {
+  if (!game.kickoff || game.utcOffsetHours === undefined) return undefined
+  return `${TIME.format(shift(game))} ${game.city ? `in ${game.city}` : 'at the venue'}`
+}
+
 // Venue time with the city, so "20:45 in Amsterdam" cannot be mistaken for the reader's own time.
 // The caller picks how the date part reads, and may name the sport's start before the clock
 // ("Kickoff 20:45 in Amsterdam"); the time part is the clock at the venue with its city, the UTC
@@ -602,8 +874,7 @@ export function kickoffText(game: Game, date: (d: Date) => string, start?: strin
   const label = start ? `${capitalise(start)} ` : ''
   const kickoff = new Date(game.kickoff)
   if (game.utcOffsetHours === undefined) return `${date(kickoff)} · ${label}${TIME.format(kickoff)} UTC`
-  const local = shift(game)
-  return `${date(local)} · ${label}${TIME.format(local)} ${game.city ? `in ${game.city}` : 'at the venue'}`
+  return `${date(shift(game))} · ${label}${venueTime(game)}`
 }
 
 // Same, marked up so the page's script can add the reader's own time when their zone differs.
@@ -641,6 +912,8 @@ const ICON = {
   place: icon('<path d="M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/>'),
   tv: icon('<rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 3l4 4 4-4"/>'),
   ticket: icon('<path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4V7z"/><path d="M10 7v10" stroke-dasharray="2 2"/>'),
+  // The share glyph phones and Macs use: an arrow rising out of an open box.
+  share: icon('<path d="M12 3v12M8 7l4-4 4 4"/><path d="M8 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-2"/>'),
 }
 
 export function esc(text: string): string {
@@ -649,4 +922,42 @@ export function esc(text: string): string {
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
+}
+
+// The national teams among a page's sections: the country cards, the chips of every country and the
+// country bar's switch draw countries from those. Clubs have cards, chips and a bar of their own.
+const national = (sections: Section[]) => sections.filter(({ team }) => !team.club)
+
+// A competition's page at /{sport}/{competition}/: this season's clubs A to Z, each card linking to
+// the club's page under its country. No stripes and no share image: nothing on it is one team.
+export function renderCompetitionPage(competition: Competition, group: Section[], siteUrl?: string): string {
+  const { name, sport, season } = COMPETITIONS[competition]
+  const { ball, start, ground } = WORDS[sport]
+  const clubs = [...group].sort((a, b) => a.team.club!.name.localeCompare(b.team.club!.name))
+  const lede = group.length === 1 ? 'One club, one calendar.' : `${inWords(group.length, 'club')}, one calendar each.`
+  return page({
+    root: '../../',
+    title: `${name} · ${siteName}`,
+    description: `Every ${name} club's games in your calendar: ${start}, ${ground}, TV and tickets, updated daily.`,
+    share: { url: siteUrl && `${siteUrl}/${competitionPath(competition)}/` },
+    body: `${header('../../', '')}
+<main>
+<section class="wrap hero">
+  <div class="hero-text">
+    <p class="sport-tag">${ball}<span>${capitalise(`men's ${sport}`)} · ${count(group.length, 'club')}</span></p>
+    <h1>${esc(name)}, club by club.</h1>
+    <p class="lede">${lede} Pick yours and every ${start}, ${ground}, channel and ticket sale of its European nights lands in the calendar you already use, with a nudge an hour before. Nothing to install.</p>
+${finder('Find your club')}
+  </div>
+</section>
+<section class="wrap section" aria-labelledby="the-clubs">
+  <div class="section-head"><h2 id="the-clubs">The clubs</h2><p class="aside">${season} season · A to Z</p></div>
+  <div class="club-grid">
+${clubs.map((section) => clubCard(section, '../../')).join('\n')}
+  </div>
+</section>
+</main>
+${footer()}`,
+    script: FIND_SCRIPT,
+  })
 }

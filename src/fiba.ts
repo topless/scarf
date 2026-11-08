@@ -1,4 +1,4 @@
-import { fetchText, type Game } from './game.ts'
+import { fetchText, startOf, type Game } from './game.ts'
 
 // FIBA has no public API. The games page of an event embeds every game of that event as JSON
 // inside the page's Next.js data, so one request per competition is enough: the page is fetched
@@ -29,7 +29,7 @@ export function parseFibaGames(html: string, teamCode: string): Game[] {
     (g) => g.teamA?.code === teamCode || g.teamB?.code === teamCode,
   )
   // The page lists played games too, so a team that is in the event always has some.
-  if (games.length === 0) throw new Error(`FIBA page format changed: no games found for ${teamCode}`)
+  if (games.length === 0) throw new Error(`FIBA page format changed: no games found for ${teamCode}, and the page starts "${startOf(html)}"`)
 
   return games.map((g) => {
     const game: Game = {
@@ -39,12 +39,13 @@ export function parseFibaGames(html: string, teamCode: string): Game[] {
       home: g.teamA?.officialName ?? 'Opponent not announced',
       away: g.teamB?.officialName ?? 'opponent not announced',
       date: g.gameDateTime?.slice(0, 10),
+      sides: g.teamA && g.teamB ? [`fiba:${g.teamA.code}`, `fiba:${g.teamB.code}`] : undefined,
       kickoff: g.hasTimeGameDateTime ? `${g.gameDateTimeUTC}Z` : undefined,
       utcOffsetHours: g.hasTimeGameDateTime ? (g.utcOffset ?? undefined) : undefined,
       venue: g.venueName?.trim() || undefined,
       city: g.hostCity?.trim() || undefined, // the page has "Farum " for Denmark's home games
     }
-    if (!game.competition || !/^\d{4}-\d{2}-\d{2}$/.test(game.date)) {
+    if (!game.competition || !/^\d{4}-\d{2}-\d{2}$/.test(game.date) || (game.kickoff !== undefined && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(game.kickoff))) {
       throw new Error(`FIBA game format changed: ${JSON.stringify(game)}`)
     }
     return game

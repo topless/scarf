@@ -23,26 +23,28 @@ const game: Game = {
 const feed = (games: Game[], now = today) => toIcs(football!, games, now)
 
 test('a rebuild that only restamps DTSTAMP changes nothing', () => {
-  assert.deepEqual(feedChanges(feed([game], yesterday), feed([game]), '2026-10-03'), [])
+  assert.deepEqual(feedChanges(feed([game], yesterday), feed([game]), '2026-09-03'), [])
 })
 
 test('a moved kickoff reads as the description line that changed, with its city', () => {
   const moved = { ...game, kickoff: '2026-10-04T19:45:00Z' }
-  assert.deepEqual(feedChanges(feed([game]), feed([moved]), '2026-10-03'), [
+  assert.deepEqual(feedChanges(feed([game]), feed([moved]), '2026-09-03'), [
     'Changed: Greece vs Germany: start 2026-10-04 18:45 UTC → 2026-10-04 19:45 UTC; Kickoff 21:45 in Thessaloniki → Kickoff 22:45 in Thessaloniki',
   ])
 })
 
 test('new, dropped and played games are told apart', () => {
   const later: Game = { id: 'uefa-2', competition: 'UEFA Nations League', home: 'Greece', away: 'Georgia', date: '2026-11-26' }
-  const played: Game = { ...game, id: 'uefa-0', away: 'Spain', date: '2026-10-01', kickoff: '2026-10-01T18:45:00Z' }
-  assert.deepEqual(feedChanges(feed([played, game]), feed([later]), '2026-10-03'), [
+  const played: Game = { ...game, id: 'uefa-0', away: 'Spain', date: '2026-08-01', kickoff: '2026-08-01T18:45:00Z', tickets: 'https://tickets.example/', onSale: '2026-07-01' }
+  const dropped: Game = { ...game, id: 'uefa-3', away: 'Malta', date: '2026-09-30', kickoff: '2026-09-30T18:45:00Z' }
+  assert.deepEqual(feedChanges(feed([played, dropped, game]), feed([later]), '2026-09-03'), [
     'Added: Greece vs Georgia · time not announced on 2026-11-26',
+    'Removed: Greece vs Malta on 2026-09-30',
     'Removed: Greece vs Germany on 2026-10-04',
     '1 played game left the feed',
   ])
 })
 
 test('an empty live feed lists every game as added', () => {
-  assert.deepEqual(feedChanges('', feed([game]), '2026-10-03'), ['Added: Greece vs Germany on 2026-10-04'])
+  assert.deepEqual(feedChanges('', feed([game]), '2026-09-03'), ['Added: Greece vs Germany on 2026-10-04'])
 })
