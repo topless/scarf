@@ -59,7 +59,7 @@ the source, so a club that moves from the EuroCup to the EuroLeague keeps its fe
 | `LOCATION` | `Panthessaliko Stadium, Volos`: venue and city; the sources name no country |
 | `URL` | the ticket link when there is one (the game's own in `src/manual.ts`, else the team's default in `src/config.ts`, a club's in `src/clubs.ts`), otherwise the team page |
 | `DESCRIPTION` | template below |
-| `VALARM` | `TRIGGER:-PT60M`, `DESCRIPTION:Greece vs Serbia kicks off in an hour · Alpha, Novasports` |
+| `VALARM` | `TRIGGER:-PT1H`, `DESCRIPTION:Greece vs Serbia kicks off in an hour · Alpha, Novasports` |
 
 ```
 UEFA Nations League
@@ -162,6 +162,6 @@ applies to every game."
 
 ## Voice checks (test these as string assertions)
 
-- No `!`, no em dash, no emoji, no "notification", no "TBA"/"TBC"/"TBD", no "don't miss".
-- Every time is followed by ` in <City>`, or ` at the venue` until the city is announced.
+- No `!`, no em dash, no emoji, no "notification", no "TBA"/"TBC"/"TBD", no "don't miss", except "set a notification" in the Google Calendar line above, which names Google's own setting.
+- Every time is followed by ` in <City>`, or ` at the venue` until the city is announced. A time may read ` UTC` while the venue's offset is unknown, on the page and the share card only (the feed drops the line).
 - Summary never contains the competition or the sport.
