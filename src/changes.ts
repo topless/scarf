@@ -7,7 +7,7 @@ type CalendarEvent = Map<string, string>
 const FIELDS: Record<string, string> = { SUMMARY: 'title', DTSTART: 'start', LOCATION: 'venue', DESCRIPTION: '', URL: 'link' }
 
 // Every VEVENT's own properties by UID, unfolded and unescaped.
-export function calendarEvents(ics: string): Map<string, CalendarEvent> {
+function calendarEvents(ics: string): Map<string, CalendarEvent> {
   const found = new Map<string, CalendarEvent>()
   let event: CalendarEvent | undefined
   let inAlarm = false

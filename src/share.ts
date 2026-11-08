@@ -120,7 +120,7 @@ export const teamsLine = (teams: Team[]): string => teams.map((team) => team.nam
 
 // "54 in football · 24 in basketball · 2 clubs": the landing card's national teams by sport, then
 // the clubs, too many to name on one card.
-export function sportsLine(teams: Team[]): string {
+function sportsLine(teams: Team[]): string {
   const clubs = teams.filter((team) => team.club).length
   return [
     ...SPORTS.map((sport) => [sport, teams.filter((team) => !team.club && team.sport === sport).length] as const)
@@ -138,7 +138,7 @@ export function nextGameLine(game?: Game): string {
 
 // Rasterises a card into a PNG and refuses one over the size limit, so an oversized image fails
 // the build instead of being deployed (the same policy as a failed fetch).
-export async function renderSharePng(card: string): Promise<Buffer> {
+async function renderSharePng(card: string): Promise<Buffer> {
   const svg = await satori(html(card), { width: WIDTH, height: HEIGHT, fonts: await fonts() })
   await wasm()
   const png = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH } }).render().asPng()
