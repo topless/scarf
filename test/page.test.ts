@@ -66,6 +66,7 @@ const derby: Game = {
   venue: 'Peace and Friendship Stadium',
   city: 'Piraeus',
   tv: 'Novasports (Greek TV)',
+  sides: [sourceKey(olympiacos), sourceKey(panathinaikos)],
 }
 
 test('team page shows venue-local times naming the start and the city, and says when the time is not announced', () => {
