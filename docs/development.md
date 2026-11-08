@@ -188,7 +188,7 @@ publishing without anyone pushing a commit:
   than 36 hours the check fails and the alert above fires. This is what catches a build that was
   disabled, skipped or stuck rather than one that failed.
 
-To force a build: Actions → Build feeds → Run workflow. To test that a failure reaches you: Actions →
+To force a build: Actions → Build feeds → Run workflow, from main. To test that a failure reaches you: Actions →
 Check feeds → Run workflow with `max_age_hours` set to `0`. Within a few minutes an issue "Check feeds
 failed" appears and lands in your inbox; close it once seen, and the next real failure opens a new one.
 
@@ -236,7 +236,8 @@ docs/observability.md is the plan for counting subscribers, visitors and subscri
 - Games with no announced time appear as all-day entries marked "time not announced".
 - The `-alerts` feeds rely on the `known-games-…` entries under Actions → Caches. GitHub drops a cache
   unused for 7 days, and the daily run uses it every day. If it is lost anyway, or deleted to start afresh,
-  the next run seeds it again: it announces nothing, the "New game" entries already in the alerts feeds
+  a scheduled or push run fails (the alert opens the ops issue) rather than seed it again. Seeding afresh
+  is a manual run of Build feeds: it announces nothing, the "New game" entries already in the alerts feeds
   disappear, and only games first seen from the next day on are announced.
 
 Background on the data sources: [docs/research-2026-10-02.md](research-2026-10-02.md).

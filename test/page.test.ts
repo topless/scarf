@@ -66,6 +66,7 @@ const derby: Game = {
   venue: 'Peace and Friendship Stadium',
   city: 'Piraeus',
   tv: 'Novasports (Greek TV)',
+  sides: [sourceKey(olympiacos), sourceKey(panathinaikos)],
 }
 
 test('team page shows venue-local times naming the start and the city, and says when the time is not announced', () => {
@@ -83,6 +84,11 @@ test('a kickoff without a city reads "at the venue", as in the feed', () => {
   assert.match(html, /<time datetime="2026-10-04T18:45:00Z" data-offset="3">Sun 4 Oct 2026 · Kickoff 21:45 at the venue<\/time>/)
 })
 
+test('a kickoff without a venue offset reads in UTC', () => {
+  const html = teamPage([{ ...timed, utcOffsetHours: undefined }], site)
+  assert.match(html, /<time datetime="2026-10-04T18:45:00Z">Sun 4 Oct 2026 · Kickoff 18:45 UTC<\/time>/)
+})
+
 test('team page escapes text from the sources', () => {
   const html = teamPage([{ ...timed, away: 'A <b> & "C"' }], site)
   assert.match(html, /Greece vs A &lt;b&gt; &amp; &quot;C&quot;/)
@@ -97,7 +103,7 @@ test('subscribe links point at the feed the build writes, on the public address'
   assert.ok(html.includes(`href="https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}" data-alerts=`))
   assert.ok(html.includes(`addfromweb?url=${encodeURIComponent(`${site}/greece/football.ics`)}&amp;name=${encodeURIComponent('Greece football · scarf')}"`))
   assert.match(html, /<input id="feed-url" type="text" readonly value="https:\/\/example\.github\.io\/scarf\/greece\/football\.ics" data-alerts="[^"]+">/)
-  assert.match(html, /<button class="btn-secondary" type="button" data-copy="feed-url">Copy<\/button>/)
+  assert.match(html, /<button class="btn-secondary" type="button" aria-live="polite" data-copy="feed-url">Copy<\/button>/)
   assert.match(html, /On Google Calendar, set a notification for this calendar once\. It applies to every game\./)
 })
 
@@ -210,8 +216,9 @@ test('nothing a fan reads breaks the voice rules', () => {
     renderCompetitionPage('euroleague', [{ team: olympiacos, games: [derby] }], site),
   ]
   for (const html of pages) {
-    const text = copy(html)
-    assert.doesNotMatch(text, /!|\u2014|event-schedule|Event schedule|\bTBA\b|\bTBC\b|\bTBD\b|don't miss/i)
+    // The spec's one exception: the Google Calendar line names Google's own setting.
+    const text = copy(html).replace(/set a notification for this calendar once/g, '')
+    assert.doesNotMatch(text, /!|\u2014|event-schedule|Event schedule|\bTBA\b|\bTBC\b|\bTBD\b|don't miss|notification/i)
     assert.doesNotMatch(text, /\bv\b/)
   }
 })
@@ -246,7 +253,7 @@ test('how it works pictures the soonest timed game in its own words, and every t
   // The steps name both sports and both sources; the chips open the country pages.
   assert.match(html, /every kickoff or tip-off/)
   assert.match(html, /We rebuild the feeds every day from UEFA and FIBA\./)
-  assert.match(html, /<h3>A nudge an hour before the game<\/h3>/)
+  assert.match(html, /<h2>A nudge an hour before the game<\/h2>/)
   assert.match(html, /<a class="country-chip" href="\.\.\/greece\/">/)
   // A nudge before midnight falls on the day before.
   const late = renderHowItWorks([{ team: football, games: [{ ...timed, kickoff: '2026-10-04T21:15:00Z' }] }])
@@ -750,6 +757,20 @@ test('This week lists every game of the next seven days once, with the chips of 
   assert.doesNotMatch(renderLanding([{ team: football, games: [] }], today), /This week/)
   // A week across two months names both.
   assert.match(renderLanding([club], '2026-09-28'), /Every game on scarf, Monday 28 September to Sunday 4 October/)
+})
+
+test('the overflow asides say how many rows are shown and that every game is still in the feed', () => {
+  const many = Array.from({ length: 13 }, (_, i) => ({ ...timed, id: `uefa-${i}` }))
+  const full = teamPage(many)
+  assert.equal(full.match(/<li class="row">/g)?.length, 12)
+  assert.match(full, /The next 12 here · all 13 are already in the feed/)
+  const exact = teamPage(many.slice(0, 12))
+  assert.equal(exact.match(/<li class="row">/g)?.length, 12)
+  assert.match(exact, /All 12 are already in the feed/)
+  const busy = Array.from({ length: 10 }, (_, i) => ({ ...timed, id: `uefa-${i}`, date: today, kickoff: `${today}T18:45:00Z` }))
+  const week = part(renderLanding([{ team: football, games: busy }], today), 'aria-labelledby="week"', '</section>')
+  assert.equal(week.match(/<li class="row">/g)?.length, 8)
+  assert.match(week, /The first 8 of 10 this week\. Every game is on its team's page\./)
 })
 
 test("the kit shows each club's team card after the countries, so a new club's stripes can be checked", () => {
