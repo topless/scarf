@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process'
-import { access, mkdir, stat, writeFile } from 'node:fs/promises'
+import { access, mkdir, rm, stat, writeFile } from 'node:fs/promises'
 import { promisify } from 'node:util'
 import { clubs } from '../src/clubs.ts'
 import type { Team } from '../src/config.ts'
@@ -14,16 +14,15 @@ import type { Team } from '../src/config.ts'
 //   node scripts/crests.ts --force    fetches them all again (a rebrand, a new season)
 //
 // The crest is shown small, beside the club's name, unmodified, with the trademark line on the page;
-// a club that asks has its file removed. A crest the CDN cannot give stays missing and the page falls
-// back to the kit stripes: the summary says which.
+// a club that asks has its file removed and its `crest` unset. A crest the CDN cannot give stays missing
+// and fails config.test until the club's `crest` is set to undefined by hand, then the page falls back
+// to the kit stripes: the summary says which.
 
 const SIZE = 192
 const DIR = new URL('../assets/crests/', import.meta.url)
 const force = process.argv.includes('--force')
 const run = promisify(execFile)
 const headers = { 'User-Agent': 'scarf/0.1 (personal fixture calendar)' }
-
-export const crestFile = (team: Team) => `${team.club!.slug}-${team.sport}.png`
 
 async function get(url: string): Promise<Response> {
   const res = await fetch(url, { headers, signal: AbortSignal.timeout(30_000) })
@@ -57,7 +56,8 @@ const done: string[] = []
 const failed: string[] = []
 const seen = new Set<string>()
 for (const team of clubs) {
-  const file = crestFile(team)
+  const file = team.club!.crest
+  if (!file) continue // removed on request, or unset by hand after the CDN could not give it
   if (seen.has(file)) continue // a club in two sports has two files; the same file twice would be a slug clash
   seen.add(file)
   const path = new URL(file, DIR)
@@ -65,7 +65,11 @@ for (const team of clubs) {
   try {
     const res = await get(await crestUrl(team))
     await writeFile(path, Buffer.from(await res.arrayBuffer()))
-    await run('sips', ['-Z', String(SIZE), path.pathname]) // in place; sips keeps PNG as PNG
+    // in place; sips keeps PNG as PNG. A half-made crest must not count as done next run.
+    await run('sips', ['-Z', String(SIZE), path.pathname]).catch(async (error) => {
+      await rm(path, { force: true })
+      throw error
+    })
     done.push(`${file} ${Math.round((await stat(path)).size / 1024)} KB`)
   } catch (error) {
     failed.push(`${file}: ${(error as Error).message}`)
