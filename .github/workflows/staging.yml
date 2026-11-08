@@ -21,8 +21,10 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'staging'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      # Pinned to commit SHAs because this job holds the Cloudflare token; bumped by hand. The other
+      # workflows hold no token and keep their tags.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
@@ -32,12 +34,12 @@ jobs:
       # in its Actions cache on main, which a run on any branch may restore. The build takes them as
       # they are and asks UEFA and FIBA nothing; a source this branch adds, which production has no
       # answer for, uses its test fixture. Pages and feeds point at the staging address.
-      - uses: actions/cache/restore@v6
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: source-answers
           key: staging-${{ github.run_id }}
           restore-keys: source-answers-
-      - uses: actions/cache/restore@v6
+      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: known-games.json
           key: staging-${{ github.run_id }}
@@ -53,4 +55,4 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           WRANGLER_SEND_METRICS: 'false'
-        run: npx --yes wrangler@4.151.0 deploy --env staging
+        run: npx wrangler deploy --env staging
