@@ -252,7 +252,8 @@ test('hand-kept ticket links are https pages, and no TV line is a guess', () => 
 
 // Runs before every build, so a typo stops the build instead of shipping a sale on the wrong day.
 test('hand-kept game details: ticket links are https pages, on-sale days are real YYYY-MM-DD dates', () => {
-  for (const [id, { tickets, onSale }] of Object.entries(manual)) {
+  for (const [id, { kickoff, tickets, onSale }] of Object.entries(manual)) {
+    if (kickoff) assert.equal(new Date(kickoff).toISOString().replace('.000Z', 'Z'), kickoff, id)
     if (tickets) assert.match(tickets, /^https:\/\/[^ ]+$/, id)
     if (onSale === undefined) continue
     assert.match(onSale, /^\d{4}-\d{2}-\d{2}$/, id)
