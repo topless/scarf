@@ -80,7 +80,7 @@ is set in the workflow.
 ## Running it
 
 Needs Node 22.18 or newer. The share images need nothing else: they are laid out by Satori and
-rasterised by resvg (WebAssembly), with the two brand fonts bundled in [fonts/](../fonts/) under the
+rasterised by resvg (WebAssembly) and saved with 256 colours by upng-js (#162), with the two brand fonts bundled in [fonts/](../fonts/) under the
 SIL Open Font License, so no browser and no network beyond the sources.
 
 ```bash
@@ -160,7 +160,7 @@ older one, so staging shows the branch asked for last. Why the Worker cannot tak
   [src/euroleague.ts](../src/euroleague.ts) shows no city, so its times read "at the venue" until its row
   is added. Then `node scripts/crests.ts` once: it fetches the crests that are missing from
   [assets/crests/](../assets/crests/) (UEFA by team id, the EuroLeague clubs endpoint by club code), scales
-  each to 192 px and leaves the rest alone; the club's `crest` names its file. Without one the pages show
+  each to 192 px with 256 colours and leaves the rest alone; the club's `crest` names its file. Without one the pages show
   the kit stripes. Never in the build, which keeps to its one request per source (#132).
 - **A new season** of the club competitions: once the next season's games are published (July, as a rule),
   the season codes in [src/clubs.ts](../src/clubs.ts) move on (`E2026` to `E2027`, `U2026` to `U2027`), and
