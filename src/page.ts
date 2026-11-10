@@ -383,6 +383,40 @@ ${footer()}`,
   })
 }
 
+// Privacy at /privacy/: what scarf counts, what it never does, who handles it and how to stop it. A
+// change to what is recorded changes this and docs/observability.md, Privacy. Feed refreshes only
+// until page views are counted (#72), which adds its paragraph here.
+export function renderPrivacy(siteUrl?: string): string {
+  return page({
+    root: '../',
+    title: `Privacy · ${siteName}`,
+    description: 'What scarf counts when a calendar refreshes a feed, what it never records, and how to stop it.',
+    share: { url: siteUrl && `${siteUrl}/privacy/`, image: siteUrl && `${siteUrl}/${landingSharePath}` },
+    body: `${header('../')}
+<main>
+<section class="wrap hero">
+  <div class="hero-text">
+    <h1>Privacy</h1>
+    <p class="lede">scarf counts how many calendars follow each team, so it knows the feeds are used. It does not follow anyone.</p>
+  </div>
+</section>
+<section class="wrap how">
+  <h2>What scarf records</h2>
+  <p>Each time a calendar refreshes a feed, scarf writes one line: which feed, which calendar app, the country, the time, and whether the calendar already had the newest version of the feed.</p>
+  <h2>What scarf never records</h2>
+  <p>No cookies, no browser storage, no IP addresses, no accounts, and nothing that follows a person beyond one day. To tell one calendar from another within a day, scarf keeps a short code made from a key that changes every day, so the same calendar gets a different code tomorrow.</p>
+  <h2>Who handles the data</h2>
+  <p>Cloudflare serves the site and keeps the counts for three months. The fonts come from scarf.fan too, so no other company sees your visit.</p>
+  <h2>How to opt out</h2>
+  <p>A calendar refresh is counted whenever the calendar fetches the feed, so the only way out is to unsubscribe from the feed in your calendar app.</p>
+  <h2>Questions</h2>
+  <p>Ask on the <a href="https://github.com/topless/scarf/issues/new/choose">scarf repository</a>.</p>
+</section>
+</main>
+${footer()}`,
+  })
+}
+
 // The identity kit at /kit/: every country and sport, drawn by the same helpers as the real pages,
 // so a clashing stripe, a missing flag or a missing sport mark shows here first. Unlisted and kept
 // out of search engines: it is a test page for us, not for fans.
@@ -618,6 +652,7 @@ const GITHUB_MARK = `<svg viewBox="0 0 16 16" width="16" height="16" fill="curre
 function footer(): string {
   return `<footer class="wrap site-footer">
   <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Wrapped in the game.</span></div>
+  <a class="footer-link" href="/privacy/">Privacy</a>
   <a class="footer-link" href="https://github.com/topless/scarf/issues/new/choose">${GITHUB_MARK}Suggest a team or report a bug</a>
 </footer>`
 }

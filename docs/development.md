@@ -49,6 +49,7 @@ frozen, a club's as a national team's. Every other page may move, with a redirec
   share image.
 - `/`: the landing page, with its share image at `/share.png`.
 - `/how-it-works/`: the How it works page, linked from every top bar.
+- `/privacy/`: the privacy page, linked from every footer.
 - `/kit/`: the identity kit, unlisted and `noindex` ([docs/brand.md](brand.md), Countries, clubs and sports).
 
 Each event's `UID` is the source's id (`uefa-…`, `fiba-…`, `euroleague-…`) and never changes, so an updated game
@@ -72,6 +73,9 @@ is set in the workflow.
   addresses from before 22 October 2026 (`topless.github.io/scarf/…`) keep redirecting to scarf.fan.
   That needs the repository public (GitHub Pages on a free plan), and the
   `_github-pages-challenge-topless` TXT record keeps the domain verified to this GitHub account.
+- **Visitor key (#71).** The Worker's daily visitor hash needs a secret, a random 32-byte hex string:
+  `npx wrangler secret put VISITOR_KEY` for scarf.fan and `npx wrangler secret put VISITOR_KEY --env staging`
+  for staging. Until it is set the Worker still counts, with an empty hash.
 
 ## Running it
 
@@ -209,6 +213,9 @@ The health signals we have today, in the order to check them:
 - **Requests.** Cloudflare counts every request to scarf.fan, by path, browser or calendar app,
   country and status, 30 days back: dashboard → scarf.fan → Analytics → Traffic. How often the feeds
   are fetched is the closest thing to a subscriber count.
+
+- **Feed fetches.** The Worker writes one row per `.ics` request to the Analytics Engine dataset
+  `scarf_events`, which the Analytics Engine SQL API reads until the dashboard exists (#73). Staging writes to `scarf_events_staging`.
 
 docs/observability.md is the plan for counting subscribers, visitors and subscribe clicks (#24).
 
