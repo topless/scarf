@@ -35,7 +35,7 @@ frozen, a club's as a national team's. Every other page may move, with a redirec
 
 - `/{country}/{sport}.ics`: one feed per team, for example `/greece/football.ics` and `/greece/basketball.ics`.
 - `/{country}/{sport}-alerts.ics`: the same feed plus an all-day "New game" entry on the day a game is announced,
-  for fans who pick "Games and announcements" on the team page.
+  kept for the fans who subscribed to it. The team page no longer offers it (#157).
 - `/{country}/{sport}/`: the team's page, for example `/greece/football/`, with its share image at
   `/{country}/{sport}/share.png`.
 - `/{country}/{sport}/{club}.ics`, `/{country}/{sport}/{club}-alerts.ics` and `/{country}/{sport}/{club}/`
