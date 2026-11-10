@@ -55,6 +55,12 @@ identity, the brand line and the motto: docs/brand.md.
 - The brand as a browsable design system lives on claude.ai (link in docs/brand.md, Design system). The
   repository is its source: refresh it from the code after a brand change, never the other way round.
 
+## Pull requests
+
+- A change with visual impact (anything a fan can see on a page) carries a before and after
+  screenshot of each affected page at phone width, in the template's Screenshots section.
+  `/ui-review main` takes both sides into `dist/ui-review/`.
+
 ## Don't
 
 - Don't add a request to a source "just to check". Don't scrape anything new without an issue first.
