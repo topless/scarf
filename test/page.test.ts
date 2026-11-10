@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { COUNTRIES, sourceKey, teamPath, teams, type Competition, type Sport, type Team } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
-import { landingKind, renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderTeamPage, SHARE_SCRIPT, teamKind, WORDS } from '../src/page.ts'
+import { landingKind, renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderPrivacy, renderTeamPage, SHARE_SCRIPT, teamKind, WORDS } from '../src/page.ts'
 
 const [football, basketball] = teams
 const site = 'https://example.github.io/scarf'
@@ -105,6 +105,10 @@ test('subscribe links point at the feed the build writes, on the public address'
   assert.match(html, /<input id="feed-url" type="text" readonly value="https:\/\/example\.github\.io\/scarf\/greece\/football\.ics" data-alerts="[^"]+">/)
   assert.match(html, /<button class="btn-secondary" type="button" aria-live="polite" data-copy="feed-url">Copy<\/button>/)
   assert.match(html, /On Google Calendar, set a notification for this calendar once\. It applies to every game\./)
+  assert.match(html, /On iPhone, set Default Alert Times for events to 1 hour before in the Calendar settings, or the hour-before reminder stays off\./)
+  assert.match(html, /Android\/\.test\(navigator\.userAgent\)/)
+  assert.match(html, /querySelectorAll\('\.subscribe \.android'\)/)
+  assert.match(html, /<div class="android small" hidden>\s*<p>On Android, Google Calendar adds a calendar from a computer\. Open this page there and tap Google, and every game shows up on your phone too\.<\/p>\s*<p>Games not on your phone\? In the Calendar app, open Settings, tap the calendar and turn on Sync\.<\/p>/)
 })
 
 test('a choice before the buttons offers the alerts feed: every link and the paste field carry its address', () => {
@@ -214,6 +218,7 @@ test('nothing a fan reads breaks the voice rules', () => {
     renderLanding([{ team: football, games: [{ ...timed, date: '2026-10-20' }] }], today),
     renderCountryPage([football, basketball, olympiacos, panathinaikos].map((team) => ({ team, games: [] })), site),
     renderCompetitionPage('euroleague', [{ team: olympiacos, games: [derby] }], site),
+    renderPrivacy(site),
   ]
   for (const html of pages) {
     // The spec's one exception: the Google Calendar line names Google's own setting.
@@ -436,10 +441,12 @@ test('every footer carries the motto and a link to suggest a team or report a bu
     renderKit(teams),
     renderTeamPage({ team: olympiacos, games: [] }, teams, site),
     renderCompetitionPage('euroleague', [{ team: olympiacos, games: [] }]),
+    renderPrivacy(),
   ]
   for (const html of pages) {
     const footer = html.slice(html.indexOf('<footer'), html.indexOf('</footer>'))
     assert.match(footer, /<span>· Wrapped in the game\.<\/span>/)
+    assert.match(footer, /<a class="footer-link" href="\/privacy\/">Privacy<\/a>/)
     assert.match(footer, /<a class="footer-link" href="https:\/\/github\.com\/topless\/scarf\/issues\/new\/choose"><svg [^>]*aria-hidden="true">.*<\/svg>Suggest a team or report a bug<\/a>/)
   }
 })
@@ -515,7 +522,7 @@ test("a club's page carries its crest, name, city and country in the bar, and it
   assert.match(html, /<h1>Olympiacos basketball, in your calendar\.<\/h1>/)
   assert.match(html, /<p class="lede">Every tip-off, arena, channel and ticket sale of our EuroLeague season, kept current in the calendar you already use, with a nudge an hour before we play\. Nothing to install\.<\/p>/)
   // The small print names the source, and the crests' owners (#132); a national team's does not.
-  assert.match(html, /Free\. Updated daily from EuroLeague\. Leave any time by deleting the calendar\. Crests are the clubs' trademarks, shown to say whose games these are\. Scarf is not affiliated with any club or competition\. On Google Calendar/)
+  assert.match(html, /Free\. Updated daily from EuroLeague\. Leave any time by deleting the calendar\. Crests are the clubs' trademarks, shown to say whose games these are\. Scarf is not affiliated with any club or competition\. On iPhone, set Default Alert Times[^<]*On Google Calendar/)
   assert.doesNotMatch(teamPage([timed], site), /trademarks|affiliated/)
   // With its file in assets/crests/, the crest takes the swatch's place.
   const crested = renderTeamPage({ team: { ...olympiacos, club: { ...olympiacos.club!, crest: 'olympiacos-basketball.png' } }, games: [] }, teams, site)
@@ -673,6 +680,17 @@ test('a competition page lists its clubs A to Z under a find field, with no stri
   assert.match(crested, /<p class="lede">One club, one calendar\. Pick yours/)
 })
 
+test('the landing carries a chip for every club, the ones beyond six hidden, each found by name, city and country', () => {
+  const clubs = teams.filter((team) => team.club)
+  const html = renderLanding(teams.map((team) => ({ team, games: [] })), today)
+  const chips = html.match(/<a class="country-chip" href="[^"]*"( data-find="[^"]*")?( data-extra hidden)?><span class="swatch"/g) ?? []
+  assert.equal(chips.length, clubs.length)
+  assert.ok(chips.some((chip) => chip.includes('data-extra hidden')))
+  assert.ok(chips.every((chip) => chip.includes('data-find=')))
+  assert.match(html, /data-find="Olympiacos Piraeus Greece"/)
+  assert.ok(html.includes('el.dataset.find ?? '))
+})
+
 test("a This week row puts the home side's chip first by the source's ids, whatever the source calls the clubs", () => {
   const home = clubTeam('Hapoel Tel Aviv', 'israel')
   const away = clubTeam('Olimpia Milano', 'italy')
@@ -705,7 +723,7 @@ test('the landing lists the competitions with their clubs, then every country wi
     part(html, 'EuroLeague<svg', '</article>'),
     "<p class=\"small\">Men's basketball · 7 clubs · Thursday and Friday nights, October to May</p>",
     // Six chips A to Z with their kit swatches, the rest counted.
-    '<a class="country-chip" href="greece/basketball/anadolu-efes/"><span class="swatch"',
+    '<a class="country-chip" href="greece/basketball/anadolu-efes/" data-find="Anadolu Efes',
     '>Barcelona</a>',
     '>Baskonia</a>',
     '>Fenerbahce</a>',
@@ -717,7 +735,9 @@ test('the landing lists the competitions with their clubs, then every country wi
   // The name is the way in too, with the arrow a country's name carries.
   assert.match(html, /<h3 class="comp-name"><a href="basketball\/euroleague\/"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>EuroLeague<svg[^>]*>.*?<\/svg><\/a><\/h3>/)
   // The country cards are gone: the chips said the same.
-  assert.doesNotMatch(html, /<article class="card country"|href="#|>Panathinaikos</)
+  assert.doesNotMatch(html, /<article class="card country"|href="#/)
+  // The seventh club is in the page for the Find field, hidden, and "and 1 more" stays for the default view.
+  assert.match(html, /<a class="country-chip" href="greece\/basketball\/panathinaikos\/" data-find="Panathinaikos Athens Greece" data-extra hidden>/)
   const chips = part(html, '<nav class="chips" aria-label="Countries">', '</nav>')
   assert.equal(chips.match(/class="country-chip"/g)?.length, new Set(national.map((team) => team.country)).size)
   // Without clubs there is no clubs section.
@@ -791,4 +811,11 @@ test('the share images name a team a national team or a club, and say what a lis
   assert.equal(landingKind([football, basketball]), 'National teams · Football and basketball')
   assert.equal(landingKind(teams), 'National teams and clubs · Football and basketball')
   assert.equal(landingKind([olympiacos, panathinaikos]), 'Clubs · Basketball')
+})
+
+test('the privacy page says what is counted, in scarf\'s own voice', () => {
+  const html = renderPrivacy(site)
+  assert.match(html, /<title>Privacy · scarf<\/title>/)
+  for (const heading of ['What scarf records', 'What scarf never records', 'Who handles the data', 'How to opt out']) assert.match(html, new RegExp(`<h2>${heading}</h2>`))
+  assert.doesNotMatch(copy(html), /\bwe\b|\bour\b|Google|Grafana|dashboard/i)
 })

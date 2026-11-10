@@ -11,13 +11,15 @@ import { byStart, keptSince, withDetails, type Game } from './game.ts'
 import { toIcs } from './ics.ts'
 import { announced, recordSeen, type KnownGames } from './known-games.ts'
 import { manual } from './manual.ts'
-import { renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderTeamPage, type Section } from './page.ts'
+import { renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderPrivacy, renderTeamPage, type Section } from './page.ts'
 import { renderCountryShareImage, renderLandingShareImage, renderShareImage } from './share.ts'
+import { feedVersion } from './version.ts'
 import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
 
 // Fetches every team's games and writes one calendar feed, one page and one share image
 // per team, the landing page with its own share image, How it works at /how-it-works/, the
-// unlisted identity kit at /kit/, and
+// unlisted identity kit at /kit/, the privacy page at /privacy/, versions.json (each feed's version, for the
+// Worker's count), and
 // next to them the brand assets (stylesheets, icons) and the flags the teams use, copied out of
 // flag-icons with its licence.
 // Each country gets a page and a share image of its own too, listing its teams.
@@ -120,6 +122,7 @@ async function liveFeed(team: Team): Promise<string> {
 }
 
 const sections: Section[] = []
+const versions: Record<string, string> = {} // each feed's version, for the Worker's count (src/version.ts)
 const changes: string[] = [] // a Markdown block per team whose feed changed, for the run summary
 await rm('dist', { recursive: true, force: true }) // a file from an older build must not keep answering
 for (const team of teams) {
@@ -136,7 +139,10 @@ for (const team of teams) {
   await mkdir(`dist/${key}`, { recursive: true })
   const ics = toIcs(team, feed, now, siteUrl)
   await writeFile(`dist/${feedPath(team)}`, ics)
-  await writeFile(`dist/${alertsFeedPath(team)}`, toIcs(team, feed, now, siteUrl, announced(seen.feed)))
+  const alerts = toIcs(team, feed, now, siteUrl, announced(seen.feed))
+  await writeFile(`dist/${alertsFeedPath(team)}`, alerts)
+  versions[feedPath(team)] = feedVersion(ics)
+  versions[alertsFeedPath(team)] = feedVersion(alerts)
   sections.push({ team, games })
   console.log(`${team.name}: ${games.length} upcoming games, ${seen.fresh.length} new`)
   if (siteUrl && live) {
@@ -171,6 +177,9 @@ await writeFile('dist/index.html', renderLanding(sections, today, siteUrl))
 await writeFile(`dist/${landingSharePath}`, await renderLandingShareImage(teams, siteUrl))
 await mkdir('dist/how-it-works', { recursive: true })
 await writeFile('dist/how-it-works/index.html', renderHowItWorks(sections, siteUrl))
+await writeFile('dist/versions.json', JSON.stringify(versions))
+await mkdir('dist/privacy', { recursive: true })
+await writeFile('dist/privacy/index.html', renderPrivacy(siteUrl))
 await mkdir('dist/kit', { recursive: true })
 await writeFile('dist/kit/index.html', renderKit(teams))
 await cp(new URL('../assets', import.meta.url), 'dist', { recursive: true }) // found from any working folder
