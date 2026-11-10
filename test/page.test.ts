@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { COUNTRIES, sourceKey, teamPath, teams, type Competition, type Sport, type Team } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
-import { landingKind, renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderTeamPage, SHARE_SCRIPT, teamKind, WORDS } from '../src/page.ts'
+import { landingKind, renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderPrivacy, renderTeamPage, SHARE_SCRIPT, teamKind, WORDS } from '../src/page.ts'
 
 const [football, basketball] = teams
 const site = 'https://example.github.io/scarf'
@@ -218,6 +218,7 @@ test('nothing a fan reads breaks the voice rules', () => {
     renderLanding([{ team: football, games: [{ ...timed, date: '2026-10-20' }] }], today),
     renderCountryPage([football, basketball, olympiacos, panathinaikos].map((team) => ({ team, games: [] })), site),
     renderCompetitionPage('euroleague', [{ team: olympiacos, games: [derby] }], site),
+    renderPrivacy(site),
   ]
   for (const html of pages) {
     // The spec's one exception: the Google Calendar line names Google's own setting.
@@ -440,10 +441,12 @@ test('every footer carries the motto and a link to suggest a team or report a bu
     renderKit(teams),
     renderTeamPage({ team: olympiacos, games: [] }, teams, site),
     renderCompetitionPage('euroleague', [{ team: olympiacos, games: [] }]),
+    renderPrivacy(),
   ]
   for (const html of pages) {
     const footer = html.slice(html.indexOf('<footer'), html.indexOf('</footer>'))
     assert.match(footer, /<span>· Wrapped in the game\.<\/span>/)
+    assert.match(footer, /<a class="footer-link" href="\/privacy\/">Privacy<\/a>/)
     assert.match(footer, /<a class="footer-link" href="https:\/\/github\.com\/topless\/scarf\/issues\/new\/choose"><svg [^>]*aria-hidden="true">.*<\/svg>Suggest a team or report a bug<\/a>/)
   }
 })
@@ -808,4 +811,11 @@ test('the share images name a team a national team or a club, and say what a lis
   assert.equal(landingKind([football, basketball]), 'National teams · Football and basketball')
   assert.equal(landingKind(teams), 'National teams and clubs · Football and basketball')
   assert.equal(landingKind([olympiacos, panathinaikos]), 'Clubs · Basketball')
+})
+
+test('the privacy page says what is counted, in scarf\'s own voice', () => {
+  const html = renderPrivacy(site)
+  assert.match(html, /<title>Privacy · scarf<\/title>/)
+  for (const heading of ['What scarf records', 'What scarf never records', 'Who handles the data', 'How to opt out']) assert.match(html, new RegExp(`<h2>${heading}</h2>`))
+  assert.doesNotMatch(copy(html), /\bwe\b|\bour\b|Google|Grafana|dashboard/i)
 })
