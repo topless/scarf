@@ -105,6 +105,7 @@ test('subscribe links point at the feed the build writes, on the public address'
   assert.match(html, /<input id="feed-url" type="text" readonly value="https:\/\/example\.github\.io\/scarf\/greece\/football\.ics" data-alerts="[^"]+">/)
   assert.match(html, /<button class="btn-secondary" type="button" aria-live="polite" data-copy="feed-url">Copy<\/button>/)
   assert.match(html, /On Google Calendar, set a notification for this calendar once\. It applies to every game\./)
+  assert.match(html, /On iPhone, set Default Alert Times for events to 1 hour before in the Calendar settings, or the hour-before reminder stays off\./)
   assert.match(html, /Android\/\.test\(navigator\.userAgent\)/)
   assert.match(html, /querySelectorAll\('\.subscribe \.android'\)/)
   assert.match(html, /<div class="android small" hidden>\s*<p>On Android, Google Calendar adds a calendar from a computer\. Open this page there and tap Google, and every game shows up on your phone too\.<\/p>\s*<p>Games not on your phone\? In the Calendar app, open Settings, tap the calendar and turn on Sync\.<\/p>/)
@@ -518,7 +519,7 @@ test("a club's page carries its crest, name, city and country in the bar, and it
   assert.match(html, /<h1>Olympiacos basketball, in your calendar\.<\/h1>/)
   assert.match(html, /<p class="lede">Every tip-off, arena, channel and ticket sale of our EuroLeague season, kept current in the calendar you already use, with a nudge an hour before we play\. Nothing to install\.<\/p>/)
   // The small print names the source, and the crests' owners (#132); a national team's does not.
-  assert.match(html, /Free\. Updated daily from EuroLeague\. Leave any time by deleting the calendar\. Crests are the clubs' trademarks, shown to say whose games these are\. Scarf is not affiliated with any club or competition\. On Google Calendar/)
+  assert.match(html, /Free\. Updated daily from EuroLeague\. Leave any time by deleting the calendar\. Crests are the clubs' trademarks, shown to say whose games these are\. Scarf is not affiliated with any club or competition\. On iPhone, set Default Alert Times[^<]*On Google Calendar/)
   assert.doesNotMatch(teamPage([timed], site), /trademarks|affiliated/)
   // With its file in assets/crests/, the crest takes the swatch's place.
   const crested = renderTeamPage({ team: { ...olympiacos, club: { ...olympiacos.club!, crest: 'olympiacos-basketball.png' } }, games: [] }, teams, site)
