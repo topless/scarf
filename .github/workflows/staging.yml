@@ -55,5 +55,4 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           WRANGLER_SEND_METRICS: 'false'
-        # The version repeats package.json's exact pin so a scanner sees it; bump both together. npx runs the local install.
-        run: npx wrangler@4.151.0 deploy --env staging
+        run: npm run deploy:staging # the lockfile's wrangler, nothing fetched at deploy time

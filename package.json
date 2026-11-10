@@ -10,7 +10,9 @@
     "build": "node src/build.ts",
     "build:fixtures": "node src/build.ts --fixtures",
     "build:staging": "node src/build.ts --saved",
-    "test": "tsc && node --test \"test/*.test.ts\""
+    "test": "tsc && node --test \"test/*.test.ts\"",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging"
   },
   "dependencies": {
     "@resvg/resvg-wasm": "^2.6.2",
