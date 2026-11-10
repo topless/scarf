@@ -67,7 +67,8 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
     // drops a game PLAYED_DAYS after it is played (game.ts), and a sale day with no game has nothing to sell.
     if (game.onSale && game.tickets) ticketSaleEvent(calendar, game, now, footer)
   }
-  return calendar.toString()
+  // RFC 5545 §3.1 ends every line, the last included, with CRLF; ical-generator leaves the last one off.
+  return `${calendar.toString()}\r\n`
 }
 
 // "Kickoff 21:45 in Volos", "Tip-off 20:00 in Athens": venue-local time with the city, so the copy

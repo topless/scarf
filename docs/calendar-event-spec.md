@@ -3,6 +3,11 @@
 Team names are joined with "vs" ("Greece vs Serbia"): decided by Chris on 2026-10-17; the design
 originally wrote "v".
 
+The feeds are iCalendar, [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545) (it replaced RFC 2445),
+written by ical-generator, plus two properties from [RFC 7986](https://www.rfc-editor.org/rfc/rfc7986):
+`NAME` and `REFRESH-INTERVAL`. The other RFCs that update 5545 (scheduling, tasks, availability,
+relationships, alarm and publishing extensions) add nothing a subscribed feed uses. Checked 2026-11-11.
+
 This is the surface every subscriber sees, every match week. No logo lives here; the brand is the
 team's colour and the voice. All strings below are exact. `{canonical}` is the canonical domain,
 `scarf.fan`.
@@ -21,6 +26,7 @@ Each sport speaks its own words, the same in the feed as on its team page (`WORD
 
 ```
 PRODID:-//scarf//feeds//EN
+NAME:Greece football · scarf
 X-WR-CALNAME:Greece football · scarf
 X-WR-CALDESC:Every game of the Greece men's national football team: kickoff, venue, TV, tickets. Kept up to date by scarf.
 X-APPLE-CALENDAR-COLOR:#0D5EAF

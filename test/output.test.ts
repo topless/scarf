@@ -55,6 +55,12 @@ test('feed header names the team then the brand, and carries the team colour', (
   assert.ok(lines.includes('REFRESH-INTERVAL;VALUE=DURATION:PT12H'))
 })
 
+test('every line of the feed ends in CRLF, the last one too (RFC 5545 §3.1)', () => {
+  const ics = toIcs(football, [timed, unscheduled], now)
+  assert.ok(ics.endsWith('END:VCALENDAR\r\n'))
+  assert.doesNotMatch(ics, /[^\r]\n/)
+})
+
 test('calendar has a timed event in UTC and an all-day placeholder while the time is unknown', () => {
   const lines = icsLines(toIcs(football, [timed, unscheduled], now))
   assert.ok(lines.includes('UID:uefa-1@scarf'))

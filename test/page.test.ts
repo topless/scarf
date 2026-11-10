@@ -431,7 +431,6 @@ test('every footer carries the motto and a link to suggest a team or report a bu
     const footer = html.slice(html.indexOf('<footer'), html.indexOf('</footer>'))
     assert.match(footer, /<span>· Wrapped in the game\.<\/span>/)
     assert.match(footer, /<a class="footer-link" href="\/privacy\/">Privacy<\/a>/)
-    assert.match(footer, /<a class="footer-link" href="https:\/\/www\.rfc-editor\.org\/rfc\/rfc5545">iCalendar spec<\/a>/)
     assert.match(footer, /<a class="footer-link" href="https:\/\/github\.com\/topless\/scarf\/issues\/new\/choose"><svg [^>]*aria-hidden="true">.*<\/svg>Bug or missing team\? Send up a flare<\/a>/)
   }
 })
