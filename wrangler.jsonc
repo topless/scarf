@@ -14,13 +14,14 @@
   // Staging (#85): "Deploy staging" (.github/workflows/staging.yml) puts one branch, built from the
   // fixtures, on the Worker scarf-staging at https://staging.scarf.fan. Routes are inherited, so this
   // environment must name its own: left out, it would claim the scarf.fan custom domain for itself.
-  // Bindings are not inherited either, so it repeats the assets binding and the dataset.
+  // Bindings are not inherited either, so it repeats the assets binding and the dataset, under its own
+  // name (scarf_events_staging) so staging fetches never count as subscribers.
   "env": {
     "staging": {
       "name": "scarf-staging",
       "routes": [{ "pattern": "staging.scarf.fan", "custom_domain": true }],
       "assets": { "directory": "./dist", "binding": "ASSETS", "run_worker_first": ["/*.ics"] },
-      "analytics_engine_datasets": [{ "binding": "SCARF_EVENTS", "dataset": "scarf_events" }]
+      "analytics_engine_datasets": [{ "binding": "SCARF_EVENTS", "dataset": "scarf_events_staging" }]
     }
   }
 }

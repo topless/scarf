@@ -215,7 +215,7 @@ The health signals we have today, in the order to check them:
   are fetched is the closest thing to a subscriber count.
 
 - **Feed fetches.** The Worker writes one row per `.ics` request to the Analytics Engine dataset
-  `scarf_events`, which the Analytics Engine SQL API reads until the dashboard exists (#73).
+  `scarf_events`, which the Analytics Engine SQL API reads until the dashboard exists (#73). Staging writes to `scarf_events_staging`.
 
 docs/observability.md is the plan for counting subscribers, visitors and subscribe clicks (#24).
 
