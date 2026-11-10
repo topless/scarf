@@ -3,13 +3,12 @@ import { setTimeout as pause } from 'node:timers/promises'
 import { pathToFileURL } from 'node:url'
 import { reusable, reusedNote, type SavedAnswers } from './answers.ts'
 import { feedChanges } from './changes.ts'
-import { alertsFeedPath, COMPETITIONS, competitionPath, countrySharePath, feedPath, landingSharePath, sharePath, teamPath, teams, type Competition, type Team } from './config.ts'
+import { COMPETITIONS, competitionPath, countrySharePath, feedPath, landingSharePath, sharePath, teamPath, teams, type Competition, type Team } from './config.ts'
 import { fetchEuroleagueGames, parseEuroleagueGames } from './euroleague.ts'
 import { fetchFibaPage, parseFibaGames } from './fiba.ts'
 import { flagFile, flagLicenseFile, flagPath } from './flags.ts'
 import { byStart, keptSince, withDetails, type Game } from './game.ts'
 import { toIcs } from './ics.ts'
-import { announced, recordSeen, type KnownGames } from './known-games.ts'
 import { manual } from './manual.ts'
 import { renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderPrivacy, renderTeamPage, type Section } from './page.ts'
 import { renderCountryShareImage, renderLandingShareImage, renderShareImage } from './share.ts'
@@ -52,16 +51,9 @@ const readSaved = async (file: string) =>
     }),
   )
 
-// The games earlier builds saw, so this one can tell a newly announced game from an old one for
-// the -alerts feeds. Not in git: the Actions job keeps it in its cache (.github/workflows/publish.yml).
-// Missing on the first build, or once the cache is lost, which seeds it again and announces nothing.
-// A fixture build starts from none and saves none, so the developer's own file stays as it was.
-const KNOWN_GAMES = 'known-games.json'
-const known: KnownGames = fixtures ? {} : await readSaved(KNOWN_GAMES)
-
 // The sources' answers, which a live build saves in source-answers/ with what each covers and when it
-// was fetched (src/answers.ts). Not in git: the Actions job keeps the folder in its cache next to
-// known-games.json and restores it for a push to main, whose build reuses the answers that cover its
+// was fetched (src/answers.ts). Not in git: the Actions job keeps the folder in its cache and
+// restores it for a push to main, whose build reuses the answers that cover its
 // requests, and for a staging build, which takes them as they are, both whatever their age. The daily,
 // manual and local builds always ask the sources.
 const ANSWERS = 'source-answers'
@@ -126,25 +118,20 @@ const versions: Record<string, string> = {} // each feed's version, for the Work
 const changes: string[] = [] // a Markdown block per team whose feed changed, for the run summary
 await rm('dist', { recursive: true, force: true }) // a file from an older build must not keep answering
 for (const team of teams) {
-  // The feed keeps the games played since `since` exactly as they were. The pages and the record of
-  // known games take only those still to come, so a played game is never announced as new.
+  // The feed keeps the games played since `since` exactly as they were. The pages take only
+  // those still to come.
   const feed = gamesOf(team)
     .filter((game) => game.date >= since)
     .map((game) => withDetails(game, team.defaults, manual[game.id]))
     .sort(byStart)
   const games = feed.filter((game) => game.date >= today)
   const key = teamPath(team)
-  const seen = recordSeen(known[key], games.map((game) => game.id), today)
-  known[key] = seen.feed
   await mkdir(`dist/${key}`, { recursive: true })
   const ics = toIcs(team, feed, now, siteUrl)
   await writeFile(`dist/${feedPath(team)}`, ics)
-  const alerts = toIcs(team, feed, now, siteUrl, announced(seen.feed))
-  await writeFile(`dist/${alertsFeedPath(team)}`, alerts)
   versions[feedPath(team)] = feedVersion(ics)
-  versions[alertsFeedPath(team)] = feedVersion(alerts)
   sections.push({ team, games })
-  console.log(`${team.name}: ${games.length} upcoming games, ${seen.fresh.length} new`)
+  console.log(`${team.name}: ${games.length} upcoming games`)
   if (siteUrl && live) {
     const lines = await liveFeed(team).then(
       (live) => feedChanges(live, ics, since),
@@ -211,7 +198,6 @@ if (siteUrl && live) {
 }
 // Last, so a build that fails part-way leaves the files as they were; the job caches them after the deploy.
 if (live) {
-  await writeFile(KNOWN_GAMES, JSON.stringify(known, null, 2) + '\n')
   // Every answer this build used, for a push build to reuse; a reused one keeps the time it was fetched.
   await mkdir(ANSWERS, { recursive: true })
   if (uefaTeamIds.length) await writeFile(`${ANSWERS}/uefa.json`, JSON.stringify(uefaMatches))

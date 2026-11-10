@@ -1,31 +1,22 @@
-import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar, type ICalEventData } from 'ical-generator'
+import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar } from 'ical-generator'
 import { defaultSiteUrl, feedName, siteName, teamPath, type Team } from './config.ts'
 import type { Game } from './game.ts'
 import { capitalise, federation, reminder, REMINDER_HOURS, shortDate, venueTime, WORDS } from './page.ts'
 
 const GAME_HOURS = 2
 const SALE_REMINDER_HOUR = 9 // 09:00 at the venue on the day tickets go on sale
-const DAY_MONTH_YEAR = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' })
-
-// Game id → the day (YYYY-MM-DD) the build first saw it, for games announced after scarf started
-// watching the team (src/known-games.ts).
-export type Announced = Record<string, string>
 
 // Event copy follows docs/calendar-event-spec.md, with "vs" between the teams and each sport's own
 // words, the same as on its page (WORDS in page.ts).
-// With `alerts` this is the -alerts variant: the same events under their own calendar name, plus
-// one all-day "New game" entry per announced game (spec § 4). The default feed never carries those.
-export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSiteUrl, alerts?: Announced): string {
+export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSiteUrl): string {
   const words = WORDS[team.sport]
   const teamPage = `${siteUrl}/${teamPath(team)}`
   const footer = `Kept up to date by ${siteName} · ${teamPage.replace(/^https?:\/\//, '')}`
   // Header fields: team first, brand last, the team's colour.
   const calendar = ical({
     prodId: { company: siteName, product: 'feeds', language: 'EN' },
-    name: feedName(team, alerts !== undefined),
-    description: alerts
-      ? `Every game of the ${team.side}: ${words.start}, venue, TV, tickets, and a note on the day a new game is announced. Kept up to date by ${siteName}.`
-      : `Every game of the ${team.side}: ${words.start}, venue, TV, tickets. Kept up to date by ${siteName}.`,
+    name: feedName(team),
+    description: `Every game of the ${team.side}: ${words.start}, venue, TV, tickets. Kept up to date by ${siteName}.`,
     color: team.colours[0],
     ttl: 12 * 60 * 60,
   })
@@ -76,28 +67,7 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
     // drops a game PLAYED_DAYS after it is played (game.ts), and a sale day with no game has nothing to sell.
     if (game.onSale && game.tickets) ticketSaleEvent(calendar, game, now, footer)
   }
-  // Only games still in the feed are announced, so an alert leaves with its game.
-  for (const game of games) {
-    const firstSeen = alerts?.[game.id]
-    if (firstSeen) calendar.createEvent(newGameEvent(team, game, firstSeen, now, teamPage, footer))
-  }
   return calendar.toString()
-}
-
-// An all-day entry on the day the build first saw the game. It says what is still to come; the
-// game itself sits in the same calendar under its own UID.
-function newGameEvent(team: Team, game: Game, firstSeen: string, now: Date, teamPage: string, footer: string): ICalEventData {
-  const { ground } = WORDS[team.sport]
-  const toFollow = game.kickoff ? undefined : game.venue ? 'time to follow' : `time and ${ground} to follow`
-  return {
-    id: `${game.id}-new@${siteName}`,
-    stamp: now,
-    start: new Date(firstSeen),
-    allDay: true,
-    summary: `New game · ${game.home} vs ${game.away}, ${DAY_MONTH_YEAR.format(new Date(game.date))}`,
-    description: lines([`Just announced by ${federation(team)}. It's already in this calendar${toFollow ? `, with ${toFollow}` : ''}.`, '', footer]),
-    url: `${teamPage}/`,
-  }
 }
 
 // "Kickoff 21:45 in Volos", "Tip-off 20:00 in Athens": venue-local time with the city, so the copy

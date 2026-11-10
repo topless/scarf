@@ -1,6 +1,6 @@
 // The sources' answers a build used, saved in source-answers/ so that a build on a push to main can
-// reuse them instead of asking UEFA and FIBA again. The Actions job keeps the folder in its cache
-// next to known-games.json. Pure functions; the build reads and writes the files.
+// reuse them instead of asking UEFA and FIBA again. The Actions job keeps the folder in its cache.
+// Pure functions; the build reads and writes the files.
 
 // What one saved answer covers, kept by file name in source-answers/index.json. UEFA's one answer
 // lists the football teams it was asked for; a FIBA page covers the competition it is named after.

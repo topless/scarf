@@ -51,10 +51,8 @@ export interface Team {
 // "greece/football", "greece/basketball/olympiacos": where a team's page and feeds live. Frozen.
 export const teamPath = (team: Team): string => (team.club ? `${team.country}/${team.sport}/${team.club.slug}` : `${team.country}/${team.sport}`)
 export const feedPath = (team: Team): string => `${teamPath(team)}.ics`
-// The optional variant with a "New game" entry on the day a game is announced; frozen once published.
-export const alertsFeedPath = (team: Team): string => `${teamPath(team)}-alerts.ics`
-// The calendar name: team first, brand last. The variant says so, so a fan can tell the two apart.
-export const feedName = (team: Team, alerts = false): string => `${team.name}${alerts ? ' + alerts' : ''} · ${siteName}`
+// The calendar name: team first, brand last.
+export const feedName = (team: Team): string => `${team.name} · ${siteName}`
 export const sharePath = (team: Team): string => `${teamPath(team)}/share.png`
 // The country page at /{country}/ lists the country's teams; its share image sits next to it.
 export const countrySharePath = (team: Team): string => `${team.country}/share.png`

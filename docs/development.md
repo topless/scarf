@@ -11,7 +11,7 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
    EuroLeague Basketball request per season code, shared by the clubs playing in it;
 2. adds what no source provides (TV channel, ticket link) from [src/config.ts](../src/config.ts) (national teams),
    [src/clubs.ts](../src/clubs.ts) (clubs) and [src/manual.ts](../src/manual.ts);
-3. writes one feed, its `-alerts` variant and one page per team: `dist/{country}/{sport}.ics` and
+3. writes one feed and one page per team: `dist/{country}/{sport}.ics` and
    `dist/{country}/{sport}/index.html` for a national team, `dist/{country}/{sport}/{club}.ics` and
    `dist/{country}/{sport}/{club}/index.html` for a club; one country page `dist/{country}/index.html` listing
    that country's national teams and clubs, one page per competition `dist/{sport}/{competition}/index.html`
@@ -22,9 +22,8 @@ The "Build feeds" GitHub Actions job runs `npm run build` once a day. The build:
    when someone pastes a page's address, from [src/share.ts](../src/share.ts): a team's in its colours with
    its next game, a country's in its colours with its national teams' names, the landing page's in the brand
    colours; a competition page has none;
-5. records the games it saw in `known-games.json` and the sources' answers in `source-answers/`, which the
-   Actions job keeps in its cache between runs (not in git), so the next run can tell a newly announced game
-   from an old one, and a run on a push to `main` can reuse the last run's answers instead of asking again.
+5. records the sources' answers in `source-answers/`, which the Actions job keeps in its cache between runs
+   (not in git), so a run on a push to `main` can reuse the last run's answers instead of asking again.
 
 If a source cannot be fetched or its format changed, the build fails and the last published files stay online.
 
@@ -34,12 +33,10 @@ Subscriptions point at the feeds, and every event's footer names the team page, 
 frozen, a club's as a national team's. Every other page may move, with a redirect from its old address.
 
 - `/{country}/{sport}.ics`: one feed per team, for example `/greece/football.ics` and `/greece/basketball.ics`.
-- `/{country}/{sport}-alerts.ics`: the same feed plus an all-day "New game" entry on the day a game is announced,
-  kept for the fans who subscribed to it. The team page no longer offers it (#157).
 - `/{country}/{sport}/`: the team's page, for example `/greece/football/`, with its share image at
   `/{country}/{sport}/share.png`.
-- `/{country}/{sport}/{club}.ics`, `/{country}/{sport}/{club}-alerts.ics` and `/{country}/{sport}/{club}/`
-  with its `share.png`: a club's feeds and page, the same three as a national team's, for example
+- `/{country}/{sport}/{club}.ics` and `/{country}/{sport}/{club}/` with its `share.png`: a club's feed and
+  page, the same two as a national team's, for example
   `/greece/basketball/olympiacos.ics` and `/greece/basketball/olympiacos/`. The path names the club's
   country and sport, never its competition, so it holds from season to season.
 - `/{country}/`: the country's page listing its national teams, then its clubs, for example `/greece/`,
@@ -89,7 +86,7 @@ npm test
 npm run build
 ```
 
-A local build also writes `known-games.json` and `source-answers/` in the repository root, which git ignores.
+A local build also writes `source-answers/` in the repository root, which git ignores.
 
 `npm run build` asks UEFA, FIBA and EuroLeague for live data. To check a page change without asking them, build
 from the test fixtures and serve `dist/` the way scarf.fan does:
@@ -101,7 +98,7 @@ npx wrangler dev
 
 then open http://localhost:8787/greece/football/. The fixture build reads the sources' answers saved in
 [test/fixtures/](../test/fixtures/), dated on the day they were saved so their games stay upcoming. It
-makes no request at all and leaves `known-games.json` and `source-answers/` alone. `npm run build:staging`
+makes no request at all and leaves `source-answers/` alone. `npm run build:staging`
 builds the same way from the `source-answers/` an earlier `npm run build` left, whatever its age.
 
 To review the pages for drift before a page change ships, run `/ui-review main` in Claude Code, or
@@ -115,7 +112,7 @@ what changed since the base. The limits sit at the top of the script; the report
 
 To put a branch on https://staging.scarf.fan, add the label `staging` to its pull request (#85). The
 "Deploy staging" workflow builds the branch as merged into main with production's data: the sources'
-answers and the known games the last daily build saved in its Actions cache, taken as they are, so it
+answers the last daily build saved in its Actions cache, taken as they are, so it
 makes no source request (a source the branch adds, which production has no answer for, uses its
 fixture). It writes a `dist/_headers` file with `X-Robots-Tag: noindex` that keeps staging out of
 search engines, and deploys `dist/` to the Worker `scarf-staging`. Nothing deploys on a push: to put a
@@ -244,10 +241,5 @@ docs/observability.md is the plan for counting subscribers, visitors and subscri
   subscription or a Mac. Google Calendar is believed to ignore embedded reminders but lets you set a
   notification for the whole calendar once, as the team page says. Outlook is unverified.
 - Games with no announced time appear as all-day entries marked "time not announced".
-- The `-alerts` feeds rely on the `known-games-…` entries under Actions → Caches. GitHub drops a cache
-  unused for 7 days, and the daily run uses it every day. If it is lost anyway, or deleted to start afresh,
-  a scheduled or push run fails (the alert opens the ops issue) rather than seed it again. Seeding afresh
-  is a manual run of Build feeds: it announces nothing, the "New game" entries already in the alerts feeds
-  disappear, and only games first seen from the next day on are announced.
 
 Background on the data sources: [docs/research-2026-10-02.md](research-2026-10-02.md).

@@ -24,10 +24,9 @@ identity, the brand line and the motto: docs/brand.md.
 ## Paths (frozen: fans' subscriptions point here)
 
 - `/{country}/{sport}.ics`: one feed per team, e.g. `/greece/football.ics`, `/greece/basketball.ics`.
-- `/{country}/{sport}-alerts.ics`: the same feed plus a "New game" entry per newly announced game.
 - `/{country}/{sport}/`: the team page, named in every event's footer.
-- A club's three, one level down, never naming its competition: `/{country}/{sport}/{club}.ics`,
-  `/{country}/{sport}/{club}-alerts.ics`, `/{country}/{sport}/{club}/` (`/greece/basketball/olympiacos/`).
+- A club's two, one level down, never naming its competition: `/{country}/{sport}/{club}.ics`,
+  `/{country}/{sport}/{club}/` (`/greece/basketball/olympiacos/`).
 - Every other page (`/`, `/{country}/`, `/{sport}/{competition}/`, `/how-it-works/`, `/kit/`) may move,
   with a redirect. The full list: docs/development.md, Paths.
 

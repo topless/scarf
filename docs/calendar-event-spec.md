@@ -15,7 +15,7 @@ Each sport speaks its own words, the same in the feed as on its team page (`WORD
 | `kickoff` (feed header) | `tip-off` |
 | `Kickoff 21:45 in Volos` | `Tip-off 20:00 in Athens` |
 | `Greece vs Serbia kicks off in an hour` | `Greece vs Ukraine tips off in an hour` |
-| `time and stadium` (placeholder, new game) | `time and arena` |
+| `time and stadium` (placeholder) | `time and arena` |
 
 ## Feed header
 
@@ -137,22 +137,6 @@ kickoff line, and is left out while the venue's UTC offset is unknown.
 The reminder is 09:00 at the venue, from the game's UTC offset, so it lands an hour off when the
 clocks change between the sale day and the game; without one it is nine hours into the
 all-day event (`TRIGGER;RELATED=START:PT9H`), which is 09:00 in the reader's own zone.
-
-## 4 · New game announced (optional, off by default)
-
-All-day event on the day the build first sees a new `UID`. Only in the `-alerts` feed variant
-(e.g. `/greece/football-alerts.ics`), never in the default feed.
-
-| Field | Value |
-|---|---|
-| `UID` | `<game uid>-new@scarf` |
-| `SUMMARY` | `New game · Georgia vs Greece, 1 Mar 2027` |
-
-```
-Just announced by FIBA. It's already in this calendar, with time and arena to follow.
-
-Kept up to date by scarf · {canonical}/greece/basketball
-```
 
 ## Reminder behaviour
 
