@@ -124,6 +124,9 @@ Never rotate the mark further, never stretch, never add a drop shadow.
 
 - **Primary button**: Terrace red fill, white text, 700, height 52–56 px, radius 12 px.
 - **Secondary button**: transparent, 1.5 px ink border, ink text 600, height 44–48 px, radius 12 px.
+- **Scan tile**: beside the subscribe buttons on a screen with a mouse, never on a phone: white,
+  1.5 px chalk border, radius 10 px, as tall as the two rows of buttons; the team page's QR code in
+  ink (76 px) over "Scan on your phone" (12 px, 600, stand).
 - **Nav pill / chip**: height 44 px, radius 999 px, 1.5 px border; a country chip carries its flag
   (20 × 15 px) at the left, a club chip a 20 × 15 px swatch of its kit stripes. "Add" chips use a
   dashed red border.
