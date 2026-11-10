@@ -138,7 +138,7 @@ Never rotate the mark further, never stretch, never add a drop shadow.
 - **Club bar**: the top of a club's page: the crest (48 px), the club's name, under it the country line
   (flag, "Piraeus, Greece") linking to the country page, the club's own sport switch, and Share.
 - **Competition card**: a plain card, no stripes: ball icon and name, a line of facts, six club chips
-  with their kit swatches, "and N more", and "All N clubs".
+  with their kit swatches, and "All N clubs".
 - **Crest**: small, beside the club's name, unmodified; until a club's file exists, a round swatch of
   its kit stripes stands in. Never in scarf's mark, a share image or the favicon, and never a
   competition's logo. With the crests comes a line in a club page's small print: they are the clubs'
