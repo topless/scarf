@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { test } from 'node:test'
 import { COUNTRIES, sourceKey, teamPath, teams, type Competition, type Sport, type Team } from '../src/config.ts'
 import type { Game } from '../src/game.ts'
-import { landingKind, minify, renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderPrivacy, renderTeamPage, SHARE_SCRIPT, teamKind, WORDS } from '../src/page.ts'
+import { landingKind, renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderPrivacy, renderTeamPage, SHARE_SCRIPT, teamKind, WORDS } from '../src/page.ts'
 
 const [football, basketball] = teams
 const site = 'https://example.github.io/scarf'
@@ -811,11 +811,6 @@ test('the share images name a team a national team or a club, and say what a lis
   assert.equal(landingKind([football, basketball]), 'National teams · Football and basketball')
   assert.equal(landingKind(teams), 'National teams and clubs · Football and basketball')
   assert.equal(landingKind([olympiacos, panathinaikos]), 'Clubs · Basketball')
-})
-
-test('minify drops indentation, blank lines and CSS comments, and keeps the line breaks', () => {
-  assert.equal(minify('<p>\n  <a>We</a>\n\n  <b>play</b>  \n</p>'), '<p>\n<a>We</a>\n<b>play</b>\n</p>')
-  assert.equal(minify('/* "a" */\n.a {\n  color: red; /* b */\n}\n', true), '\n.a {\ncolor: red;\n}\n')
 })
 
 test('the privacy page says what is counted, in scarf\'s own voice', () => {

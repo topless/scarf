@@ -1,4 +1,4 @@
-import { appendFile, cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { appendFile, cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { setTimeout as pause } from 'node:timers/promises'
 import { pathToFileURL } from 'node:url'
 import { reusable, reusedNote, type SavedAnswers } from './answers.ts'
@@ -11,7 +11,7 @@ import { byStart, keptSince, withDetails, type Game } from './game.ts'
 import { toIcs } from './ics.ts'
 import { announced, recordSeen, type KnownGames } from './known-games.ts'
 import { manual } from './manual.ts'
-import { minify, renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderPrivacy, renderTeamPage, type Section } from './page.ts'
+import { renderCompetitionPage, renderCountryPage, renderHowItWorks, renderKit, renderLanding, renderPrivacy, renderTeamPage, type Section } from './page.ts'
 import { renderCountryShareImage, renderLandingShareImage, renderShareImage } from './share.ts'
 import { feedVersion } from './version.ts'
 import { fetchUefaMatches, parseUefaMatches } from './uefa.ts'
@@ -187,9 +187,6 @@ await cp(new URL('../assets', import.meta.url), 'dist', { recursive: true }) // 
 // MIT asks. Every flag was already read for its share image, so a wrong code failed before this.
 for (const code of new Set(teams.map((team) => team.flag))) await cp(flagFile(code), `dist/${flagPath(code)}`)
 await cp(flagLicenseFile(), 'dist/flags/LICENSE')
-for (const file of await readdir('dist', { recursive: true })) {
-  if (/\.(html|css)$/.test(file)) await writeFile(`dist/${file}`, minify(await readFile(`dist/${file}`, 'utf8'), file.endsWith('.css')))
-}
 // On the run's page in Actions (GITHUB_STEP_SUMMARY), printed elsewhere. A local build has no
 // SITE_URL, so nothing to compare with and no summary; nor has a fixture or staging build, whatever its SITE_URL.
 if (siteUrl && live) {
