@@ -23,6 +23,10 @@ export const shortDate = (d: Date) => `${WEEKDAY.format(d)} ${DAY_MONTH.format(d
 const longDate = (d: Date) => `${shortDate(d)} ${YEAR.format(d)}`
 
 const GOOGLE_NOTE = 'On Google Calendar, set a notification for this calendar once. It applies to every game.'
+const IPHONE_NOTE = 'On iPhone, set Default Alert Times for events to 1 hour before in the Calendar settings, or the hour-before reminder stays off.'
+// Shown by ANDROID_SCRIPT only: the webcal: buttons do nothing there and the phone app cannot subscribe to a feed.
+const ANDROID_NOTE = `<p>On Android, Google Calendar adds a calendar from a computer. Open this page there and tap Google, and every game shows up on your phone too.</p>
+        <p>Games not on your phone? In the Calendar app, open Settings, tap the calendar and turn on Sync.</p>`
 // On every club page, under the subscribe buttons (#132). "Scarf" at the start of a sentence, as docs/brand.md has it.
 const CREST_NOTE = `Crests are the clubs' trademarks, shown to say whose games these are. Scarf is not affiliated with any club or competition.`
 
@@ -113,7 +117,7 @@ ${nextGameCard(team, next)}
 ${team.club ? neighbours(section, all, root) : otherTeams(all, team, root)}
 </main>
 ${footer()}`,
-    script: COPY_SCRIPT + ALERTS_SCRIPT + SHARE_SCRIPT + (team.club ? '' : FIND_SCRIPT),
+    script: COPY_SCRIPT + (siteUrl ? ANDROID_SCRIPT : '') + ALERTS_SCRIPT + SHARE_SCRIPT + (team.club ? '' : FIND_SCRIPT),
   })
 }
 
@@ -357,7 +361,7 @@ export function renderHowItWorks(sections: Section[], siteUrl?: string): string 
   <ol class="steps">
 ${step(1, '<h2>Subscribe once</h2><p>Pick your team, tap Add to my calendar and pick your app. That is the whole setup: no account, no download.</p>')}
 ${step(2, `<h2>Your calendar keeps itself current</h2><p>We rebuild the feeds every day from ${federations(teams)}. New games, times and venues land in place, in your time zone.</p>`)}
-${step(3, `<h2>A nudge an hour before the game</h2><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>${GOOGLE_NOTE}</p>`)}
+${step(3, `<h2>A nudge an hour before the game</h2><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>${IPHONE_NOTE} ${GOOGLE_NOTE}</p>`)}
   </ol>
 </section>
 <section class="teams">
@@ -519,6 +523,12 @@ const COPY_SCRIPT = `
     })
   }`
 
+const ANDROID_SCRIPT = `
+  if (/Android/.test(navigator.userAgent)) {
+    for (const a of document.querySelectorAll('.subscribe a[href^="webcal:"]')) a.style.display = 'none'
+    for (const note of document.querySelectorAll('.subscribe .android')) note.hidden = false
+  }`
+
 // Share opens the share sheet on a touch screen (phones, tablets). A desktop copies the address and
 // says "Copied", even where it has a share menu of its own (Safari and Chrome on a Mac, Windows), as
 // it does where there is no share sheet at all. The button stays hidden in a browser that can do neither.
@@ -633,7 +643,7 @@ function subscribePanel(team: Team, siteUrl?: string): string {
       <div class="apps">
       ${secondary}
       </div>
-      <noscript><p class="small">Want a “New game” entry on the day each game is announced too? <a href="${esc(alerts.webcal)}">Add games and announcements</a> instead.</p></noscript>
+${feed.apps ? `      <div class="android small" hidden>\n        ${ANDROID_NOTE}\n      </div>\n` : ''}      <noscript><p class="small">Want a “New game” entry on the day each game is announced too? <a href="${esc(alerts.webcal)}">Add games and announcements</a> instead.</p></noscript>
 ${
   feed.https && alerts.https
     ? `      <div class="paste">
@@ -642,7 +652,7 @@ ${
       </div>
 `
     : ''
-}      <p class="small">Free. Updated daily from ${federation(team)}. Leave any time by deleting the calendar. ${team.club ? `${CREST_NOTE} ` : ''}${GOOGLE_NOTE}</p>
+}      <p class="small">Free. Updated daily from ${federation(team)}. Leave any time by deleting the calendar. ${team.club ? `${CREST_NOTE} ` : ''}${IPHONE_NOTE} ${GOOGLE_NOTE}</p>
     </div>`
 }
 

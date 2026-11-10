@@ -225,7 +225,10 @@ docs/observability.md is the plan for counting subscribers, visitors and subscri
   how old the reused answers are.
 - Calendar apps refresh subscribed feeds on their own schedule; Google Calendar can take a day. On a Mac,
   choose "Every day" for auto-refresh when subscribing; the default is reportedly weekly.
-- Subscribing in Google Calendar only works in a computer browser, not in the phone app.
+- Subscribing in Google Calendar only works in a computer browser, not in the phone app. On Android the
+  `webcal:` buttons do nothing (no app handles them) and the Calendar app cannot subscribe to a feed, so
+  the page script hides them for an Android browser and tells the fan to open the page on a computer and
+  tap Google; the calendar then syncs to the phone. Not yet checked on a device (#112).
 - Each timed game carries a reminder one hour before kickoff (`VALARM`); what happens next is up to the
   calendar app. iPhone Calendar stores it but never schedules it: in the iOS Simulator (iOS 17.5 and 18.0,
   subscription stored "On My iPhone", 30 October 2026) every game shows "Alert: None" and nothing fires,
