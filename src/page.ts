@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs'
-import { alertsFeedPath, COMPETITIONS, competitionPath, countryOf, countrySharePath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, sourceKey, teamPath, type Competition, type Sport, type Team } from './config.ts'
+import { COMPETITIONS, competitionPath, countryOf, countrySharePath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, sourceKey, teamPath, type Competition, type Sport, type Team } from './config.ts'
 import { flagPath } from './flags.ts'
 import { byStart, type Game } from './game.ts'
 
@@ -92,7 +92,7 @@ export function renderTeamPage(section: Section, all: Team[], siteUrl?: string):
     share: { url, image: siteUrl && `${siteUrl}/${sharePath(team)}` },
     stripes: team.colours,
     body: `<div class="band"></div>
-${header(root, '<a class="pill pill-primary" href="#subscribe">Add to my calendar</a>')}
+${header(root)}
 ${teamBar(team, all, root, url)}
 <main>
 <section class="wrap hero">
@@ -117,7 +117,7 @@ ${nextGameCard(team, next)}
 ${team.club ? neighbours(section, all, root) : otherTeams(all, team, root)}
 </main>
 ${footer()}`,
-    script: COPY_SCRIPT + (siteUrl ? ANDROID_SCRIPT : '') + ALERTS_SCRIPT + SHARE_SCRIPT + (team.club ? '' : FIND_SCRIPT),
+    script: COPY_SCRIPT + (siteUrl ? ANDROID_SCRIPT : '') + SHARE_SCRIPT + (team.club ? '' : FIND_SCRIPT),
   })
 }
 
@@ -184,7 +184,7 @@ export function renderLanding(sections: Section[], today: string, siteUrl?: stri
     description: 'Every game of the national teams and clubs we follow in your calendar: kickoff or tip-off, venue, TV and tickets, updated daily.',
     // The landing page's share image sits at the site root, next to it.
     share: { url: siteUrl && `${siteUrl}/`, image: siteUrl && `${siteUrl}/${landingSharePath}` },
-    body: `${header('', '')}
+    body: `${header('')}
 <main>
 <section class="wrap hero">
   <div class="hero-text">
@@ -298,7 +298,7 @@ export function renderCountryPage(all: Section[], siteUrl?: string): string {
     share: { url: siteUrl && `${siteUrl}/${team.country}/`, image: siteUrl && `${siteUrl}/${countrySharePath(team)}` },
     stripes: country.colours,
     body: `<div class="band"></div>
-${header('../', '')}
+${header('../')}
 <main>
 <section class="wrap hero">
   <div class="hero-text">
@@ -440,7 +440,7 @@ ${nextGameCard(team)}
     title: `Identity kit · ${siteName}`,
     description: 'Every team and sport on scarf, side by side.',
     noindex: true,
-    body: `${header('../', '')}
+    body: `${header('../')}
 <main>
 <section class="wrap hero">
   <div class="hero-text">
@@ -577,28 +577,6 @@ export const SHARE_SCRIPT = `
     share.hidden = false
   }`
 
-// Picking "Games and announcements" points every subscribe link and the paste field at the -alerts
-// feed. Without JavaScript the choice stays hidden and the default links stand (a noscript line
-// links the variant).
-const ALERTS_SCRIPT = `
-  const alertsToggle = document.getElementById('alerts-toggle')
-  if (alertsToggle) {
-    const choice = alertsToggle.closest('fieldset')
-    const targets = [...document.querySelectorAll('[data-alerts]')]
-    for (const el of targets) el.dataset.feed = el.tagName === 'INPUT' ? el.value : el.getAttribute('href')
-    const apply = () => {
-      for (const el of targets) {
-        const address = alertsToggle.checked ? el.dataset.alerts : el.dataset.feed
-        if (el.tagName === 'INPUT') el.value = address
-        else el.setAttribute('href', address)
-      }
-      for (const button of document.querySelectorAll('button[data-copy]')) { if (button.textContent === 'Copied') button.textContent = 'Copy' }
-    }
-    choice.addEventListener('change', apply)
-    apply()
-    choice.hidden = false
-  }`
-
 // A field over a long list of countries or clubs (fifty-odd country chips, the competitions' club
 // chips, a competition's club cards): typing keeps only those whose name holds what was typed, accents
 // aside. A chip's name is its text, a card's its heading; a club is a club card or a chip with a kit
@@ -631,12 +609,11 @@ const FIND_SCRIPT = `
     findField.parentElement.hidden = false
   }`
 
-// Every page's top bar: the logo goes home and How it works is one page for every team. A team
-// page adds its subscribe button.
-function header(root: string, nav = ''): string {
+// Every page's top bar: the logo goes home and How it works is one page for every team.
+function header(root: string): string {
   return `<header class="wrap site-header">
   <a class="brand" href="${root || './'}">${mark(38)}<span class="wordmark">${siteName}</span></a>
-  <nav class="site-nav" aria-label="Site"><a class="pill" href="${root}how-it-works/">How it works</a>${nav}</nav>
+  <nav class="site-nav" aria-label="Site"><a class="pill" href="${root}how-it-works/">How it works</a></nav>
 </header>`
 }
 
@@ -652,37 +629,24 @@ function footer(): string {
 </footer>`
 }
 
-const ALERTS_LABEL = 'Games and announcements'
-const ALERTS_NOTE = 'The same games, plus an all-day “New game” entry on the day each one is announced.'
-
 function subscribePanel(team: Team, siteUrl?: string): string {
-  const feed = feedLinks(team, false, siteUrl)
-  const alerts = feedLinks(team, true, siteUrl)
-  // Every link carries the -alerts address as well; ALERTS_SCRIPT swaps them when the box is ticked.
-  const link = (cls: string, href: string, alt: string, text: string) =>
-    `<a class="${cls}" href="${esc(href)}" data-alerts="${esc(alt)}">${text}</a>`
-  const secondary =
-    feed.apps && alerts.apps
-      ? `${link('btn-secondary', feed.webcal, alerts.webcal, 'Apple')}
-      ${link('btn-secondary', feed.apps.google, alerts.apps.google, 'Google')}
-      ${link('btn-secondary', feed.apps.outlook, alerts.apps.outlook, 'Outlook')}`
-      : link('btn-secondary', feed.webcal, alerts.webcal, 'Calendar file')
-  // The choice comes before the buttons, so a fan picks a calendar before adding it.
+  const feed = feedLinks(team, siteUrl)
+  const link = (cls: string, href: string, text: string) => `<a class="${cls}" href="${esc(href)}">${text}</a>`
+  const secondary = feed.apps
+    ? `${link('btn-secondary', feed.webcal, 'Apple')}
+      ${link('btn-secondary', feed.apps.google, 'Google')}
+      ${link('btn-secondary', feed.apps.outlook, 'Outlook')}`
+    : link('btn-secondary', feed.webcal, 'Calendar file')
   return `    <div class="subscribe" id="subscribe">
-      <fieldset class="feed-choice" hidden><legend>Pick your calendar</legend>
-        <label><input type="radio" name="feed-choice" checked autocomplete="off"><span>Games<span class="small">Every game, with a nudge an hour before.</span></span></label>
-        <label><input type="radio" name="feed-choice" id="alerts-toggle" autocomplete="off"><span>${ALERTS_LABEL}<span class="small">${ALERTS_NOTE}</span></span></label>
-      </fieldset>
-      ${link('btn-primary', feed.webcal, alerts.webcal, 'Add to my calendar')}
+      ${link('btn-primary', feed.webcal, 'Add to my calendar')}
       <div class="apps">
       ${secondary}
       </div>
-${feed.apps ? `      <div class="android small" hidden>\n        ${ANDROID_NOTE}\n      </div>\n` : ''}      <noscript><p class="small">Want a “New game” entry on the day each game is announced too? <a href="${esc(alerts.webcal)}">Add games and announcements</a> instead.</p></noscript>
-${
-  feed.https && alerts.https
+${feed.apps ? `      <div class="android small" hidden>\n        ${ANDROID_NOTE}\n      </div>\n` : ''}${
+  feed.https
     ? `      <div class="paste">
         <label for="feed-url">Or paste into any calendar app</label>
-        <div class="paste-row"><input id="feed-url" type="text" readonly value="${esc(feed.https)}" data-alerts="${esc(alerts.https)}"><button class="btn-secondary" type="button" aria-live="polite" data-copy="feed-url">Copy</button></div>
+        <div class="paste-row"><input id="feed-url" type="text" readonly value="${esc(feed.https)}"><button class="btn-secondary" type="button" aria-live="polite" data-copy="feed-url">Copy</button></div>
       </div>
 `
     : ''
@@ -690,11 +654,11 @@ ${
     </div>`
 }
 
-// The addresses of one feed, default or -alerts. The page sits at /{country}/{sport}/ and the
-// feeds next to that folder, so without a public address the link is relative and the app links,
-// which need one, are left out.
-function feedLinks(team: Team, alerts: boolean, siteUrl?: string): { webcal: string; https?: string; apps?: { google: string; outlook: string } } {
-  const path = alerts ? alertsFeedPath(team) : feedPath(team)
+// The addresses of a team's feed. The page sits at /{country}/{sport}/ and the feed next to that
+// folder, so without a public address the link is relative and the app links, which need one, are
+// left out.
+function feedLinks(team: Team, siteUrl?: string): { webcal: string; https?: string; apps?: { google: string; outlook: string } } {
+  const path = feedPath(team)
   if (!siteUrl) return { webcal: path.replace(/^.*\//, '../') }
   const https = `${siteUrl}/${path}`
   const webcal = https.replace(/^https?:/, 'webcal:')
@@ -703,7 +667,7 @@ function feedLinks(team: Team, alerts: boolean, siteUrl?: string): { webcal: str
     https,
     apps: {
       google: `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}`,
-      outlook: `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(https)}&name=${encodeURIComponent(feedName(team, alerts))}`,
+      outlook: `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(https)}&name=${encodeURIComponent(feedName(team))}`,
     },
   }
 }
@@ -987,7 +951,7 @@ export function renderCompetitionPage(competition: Competition, group: Section[]
     title: `${name} · ${siteName}`,
     description: `Every ${name} club's games in your calendar: ${start}, ${ground}, TV and tickets, updated daily.`,
     share: { url: siteUrl && `${siteUrl}/${competitionPath(competition)}/` },
-    body: `${header('../../', '')}
+    body: `${header('../../')}
 <main>
 <section class="wrap hero">
   <div class="hero-text">

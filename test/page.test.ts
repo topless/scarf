@@ -98,11 +98,11 @@ test('team page escapes text from the sources', () => {
 test('subscribe links point at the feed the build writes, on the public address', () => {
   const html = teamPage([timed], site)
   const webcal = 'webcal://example.github.io/scarf/greece/football.ics'
-  assert.match(html, new RegExp(`<a class="btn-primary" href="${webcal}" data-alerts="[^"]+">Add to my calendar</a>`))
-  assert.match(html, new RegExp(`<a class="btn-secondary" href="${webcal}" data-alerts="[^"]+">Apple</a>`))
-  assert.ok(html.includes(`href="https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}" data-alerts=`))
+  assert.match(html, new RegExp(`<a class="btn-primary" href="${webcal}">Add to my calendar</a>`))
+  assert.match(html, new RegExp(`<a class="btn-secondary" href="${webcal}">Apple</a>`))
+  assert.ok(html.includes(`href="https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}"`))
   assert.ok(html.includes(`addfromweb?url=${encodeURIComponent(`${site}/greece/football.ics`)}&amp;name=${encodeURIComponent('Greece football · scarf')}"`))
-  assert.match(html, /<input id="feed-url" type="text" readonly value="https:\/\/example\.github\.io\/scarf\/greece\/football\.ics" data-alerts="[^"]+">/)
+  assert.match(html, /<input id="feed-url" type="text" readonly value="https:\/\/example\.github\.io\/scarf\/greece\/football\.ics">/)
   assert.match(html, /<button class="btn-secondary" type="button" aria-live="polite" data-copy="feed-url">Copy<\/button>/)
   assert.match(html, /On Google Calendar, set a notification for this calendar once\. It applies to every game\./)
   assert.match(html, /On iPhone, set Default Alert Times for events to 1 hour before in the Calendar settings, or the hour-before reminder stays off\./)
@@ -111,31 +111,15 @@ test('subscribe links point at the feed the build writes, on the public address'
   assert.match(html, /<div class="android small" hidden>\s*<p>On Android, Google Calendar adds a calendar from a computer\. Open this page there and tap Google, and every game shows up on your phone too\.<\/p>\s*<p>Games not on your phone\? In the Calendar app, open Settings, tap the calendar and turn on Sync\.<\/p>/)
 })
 
-test('a choice before the buttons offers the alerts feed: every link and the paste field carry its address', () => {
+test('one calendar and no choice: the page never offers the alerts feed', () => {
   const html = teamPage([timed], site)
-  const alerts = 'webcal://example.github.io/scarf/greece/football-alerts.ics'
-  assert.match(html, /<fieldset class="feed-choice" hidden><legend>Pick your calendar<\/legend>/)
-  assert.match(html, /<input type="radio" name="feed-choice" checked autocomplete="off"><span>Games<span class="small">Every game, with a nudge an hour before\.<\/span>/)
-  assert.match(
-    html,
-    /<input type="radio" name="feed-choice" id="alerts-toggle" autocomplete="off"><span>Games and announcements<span class="small">The same games, plus an all-day “New game” entry on the day each one is announced\.<\/span>/,
-  )
-  inOrder(html, 'Pick your calendar', '<a class="btn-primary"')
-  assert.match(html, new RegExp(`<a class="btn-primary" href="[^"]+" data-alerts="${alerts}">Add to my calendar</a>`))
-  assert.match(html, new RegExp(`<a class="btn-secondary" href="[^"]+" data-alerts="${alerts}">Apple</a>`))
-  assert.ok(html.includes(`data-alerts="https://calendar.google.com/calendar/render?cid=${encodeURIComponent(alerts)}">Google</a>`))
-  const outlook = `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(`${site}/greece/football-alerts.ics`)}&amp;name=${encodeURIComponent('Greece football + alerts · scarf')}`
-  assert.ok(html.includes(`data-alerts="${outlook}">Outlook</a>`))
-  assert.match(html, /<input id="feed-url" type="text" readonly value="[^"]+" data-alerts="https:\/\/example\.github\.io\/scarf\/greece\/football-alerts\.ics">/)
-  // The script reveals the choice and swaps the links; without it a plain link still reaches the variant.
-  assert.match(html, /getElementById\('alerts-toggle'\)/)
-  assert.match(html, new RegExp(`<noscript><p class="small">Want a “New game” entry on the day each game is announced too\\? <a href="${alerts}">Add games and announcements</a> instead\\.</p></noscript>`))
+  assert.doesNotMatch(html, /alerts|Pick your calendar|<fieldset|<noscript/)
 })
 
 test('without a public address the page links the feed relative to /greece/football/', () => {
   const html = teamPage([timed])
-  assert.match(html, /<a class="btn-primary" href="\.\.\/football\.ics" data-alerts="\.\.\/football-alerts\.ics">/)
-  assert.match(html, /<a class="btn-secondary" href="\.\.\/football\.ics" data-alerts="\.\.\/football-alerts\.ics">Calendar file<\/a>/)
+  assert.match(html, /<a class="btn-primary" href="\.\.\/football\.ics">/)
+  assert.match(html, /<a class="btn-secondary" href="\.\.\/football\.ics">Calendar file<\/a>/)
   assert.doesNotMatch(html, /webcal:|calendar\.google\.com|outlook|feed-url/)
 })
 
@@ -228,11 +212,11 @@ test('nothing a fan reads breaks the voice rules', () => {
   }
 })
 
-test('every top bar has the logo home and How it works; a team page adds only its subscribe button', () => {
+test('every top bar has the logo home and How it works; a team page adds nothing, its subscribe button is on the first screen', () => {
   const nav = (html: string) => html.slice(html.indexOf('<header'), html.indexOf('</header>'))
   const team = nav(teamPage([timed], site))
   assert.match(team, /<a class="brand" href="\.\.\/\.\.\/">/)
-  assert.match(team, /<nav class="site-nav" aria-label="Site"><a class="pill" href="\.\.\/\.\.\/how-it-works\/">How it works<\/a><a class="pill pill-primary" href="#subscribe">Add to my calendar<\/a><\/nav>/)
+  assert.match(team, /<nav class="site-nav" aria-label="Site"><a class="pill" href="\.\.\/\.\.\/how-it-works\/">How it works<\/a><\/nav>/)
   assert.doesNotMatch(team, /#teams|#how/)
   assert.doesNotMatch(teamPage([timed], site), /id="how"/)
   assert.match(nav(renderLanding([{ team: football, games: [] }], today)), /<a class="brand" href="\.\/">.*<a class="pill" href="how-it-works\/">How it works<\/a><\/nav>/s)
@@ -424,7 +408,7 @@ test('a new team page shows its flag, its own feed and links every other team', 
   assert.match(html, /<img class="flag" src="\.\.\/\.\.\/flags\/es\.svg" width="32" height="24" alt="">Spain<\/a>/)
   assert.match(html, /<p class="sport-tag"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg><span>Men's basketball · FIBA<\/span><\/p>/)
   assert.match(html, /<h1>Spain basketball, in your calendar\.<\/h1>/)
-  assert.match(html, /<a class="btn-primary" href="webcal:\/\/example\.github\.io\/scarf\/spain\/basketball\.ics" data-alerts="webcal:\/\/example\.github\.io\/scarf\/spain\/basketball-alerts\.ics">/)
+  assert.match(html, /<a class="btn-primary" href="webcal:\/\/example\.github\.io\/scarf\/spain\/basketball\.ics">/)
   assert.match(html, /<a class="country-chip" href="\.\.\/\.\.\/spain\/basketball\/" aria-current="page">/)
   assert.match(html, /<a class="country-chip" href="\.\.\/\.\.\/germany\/basketball\/"><img class="flag" src="\.\.\/\.\.\/flags\/de\.svg"/)
   // The page band keeps the team's stripes.
@@ -557,12 +541,12 @@ test("a club's page sits one folder deeper, and every relative link on it climbs
   assert.match(html, /<meta property="og:url" content="https:\/\/example\.github\.io\/scarf\/greece\/basketball\/olympiacos\/">/)
   assert.match(html, /<meta property="og:image" content="https:\/\/example\.github\.io\/scarf\/greece\/basketball\/olympiacos\/share\.png">/)
   assert.ok(html.includes(`data-share="${site}/greece/basketball/olympiacos/" data-text="Olympiacos basketball in your calendar · scarf"`))
-  assert.ok(html.includes('<a class="btn-primary" href="webcal://example.github.io/scarf/greece/basketball/olympiacos.ics" data-alerts="webcal://example.github.io/scarf/greece/basketball/olympiacos-alerts.ics">'))
+  assert.ok(html.includes('<a class="btn-primary" href="webcal://example.github.io/scarf/greece/basketball/olympiacos.ics">'))
   const relative = Array.from(html.matchAll(/(?:href|src)="(\.\.\/[^"]*)"/g), (m) => m[1]!)
   assert.ok(relative.length > 10)
   for (const href of relative) assert.ok(href.startsWith('../../../') && !href.startsWith('../../../../'), href)
   // Without a public address the feed sits next to the page's folder.
-  assert.match(renderTeamPage({ team: olympiacos, games: [] }, teams), /<a class="btn-primary" href="\.\.\/olympiacos\.ics" data-alerts="\.\.\/olympiacos-alerts\.ics">/)
+  assert.match(renderTeamPage({ team: olympiacos, games: [] }, teams), /<a class="btn-primary" href="\.\.\/olympiacos\.ics">/)
 })
 
 test("a club's other teams are its neighbours: its next opponents on scarf, its competition, its country's national teams", () => {

@@ -12,8 +12,8 @@ Teams so far: men's football for all 54 UEFA nations in the Nations League, men'
 24 teams still in the FIBA World Cup 2027 European qualifiers, and the clubs of the three European
 competitions: the UEFA Champions League, the EuroLeague and the EuroCup. Pick your team at https://scarf.fan.
 
-- `/{country}/{sport}.ics`, `-alerts.ics` and `/{country}/{sport}/`: a national team's feeds and page.
-- `/{country}/{sport}/{club}.ics`, `-alerts.ics` and `/{country}/{sport}/{club}/`: a club's.
+- `/{country}/{sport}.ics` and `/{country}/{sport}/`: a national team's feed and page.
+- `/{country}/{sport}/{club}.ics` and `/{country}/{sport}/{club}/`: a club's.
 - `/{country}/`: a country's national teams and clubs.
 - `/{sport}/{competition}/`: a competition's clubs, for example `/basketball/euroleague/`.
 

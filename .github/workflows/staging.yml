@@ -30,8 +30,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
-      # Production's data: the sources' answers and the known games the last "Build feeds" run saved
-      # in its Actions cache on main, which a run on any branch may restore. The build takes them as
+      # Production's data: the sources' answers the last "Build feeds" run saved in its Actions cache
+      # on main, which a run on any branch may restore. The build takes them as
       # they are and asks UEFA and FIBA nothing; a source this branch adds, which production has no
       # answer for, uses its test fixture. Pages and feeds point at the staging address.
       - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -39,11 +39,6 @@ jobs:
           path: source-answers
           key: staging-${{ github.run_id }}
           restore-keys: source-answers-
-      - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: known-games.json
-          key: staging-${{ github.run_id }}
-          restore-keys: known-games-
       - run: npm run build:staging
         env:
           SITE_URL: https://staging.scarf.fan
