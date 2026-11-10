@@ -192,7 +192,13 @@ a.cell:hover { color: var(--ink); border-color: var(--ink); }
 .club-id .club-home { margin-top: 3px; }
 .club-home .flag { border-radius: 2px; }
 .club-body .cell-cta, .comp-body .cell-cta { margin-top: auto; }
-a.cell-cta { color: var(--ink); text-decoration: none; }
+/* A club's or a competition's card opens its page from anywhere on it: the name's link stretches over
+   the card, the club chips sit above it, and the focus ring goes round the whole card. */
+.card:has(.card-link) { position: relative; }
+.card-link::after { content: ""; position: absolute; inset: 0; }
+.card-link:focus-visible { outline: none; }
+.card:has(.card-link:focus-visible) { outline: 2px solid var(--ink); outline-offset: 2px; }
+.comp-clubs { position: relative; z-index: 1; }
 /* A competition's card: no stripe header, nothing on it is a team. */
 .comp-body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
 .comp-name { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -0.03em; line-height: 1; }

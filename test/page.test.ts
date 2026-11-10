@@ -615,11 +615,11 @@ test('a country page shows its clubs in Europe after its national teams, footbal
   assert.ok(html.includes('<article class="card club" style="--stripe: repeating-linear-gradient(90deg, #D30D24 0px 18px, #FFFFFF 18px 36px)'))
   assert.match(
     html,
-    /<span class="cell-sport"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>Basketball<small>EuroLeague<\/small><\/span>\n\s*<div class="club-head"><img class="crest" src="\.\.\/crests\/olympiacos-basketball\.png" width="44" height="44" alt=""><div><h3 class="club-name"><a href="\.\.\/greece\/basketball\/olympiacos\/">Olympiacos<\/a><\/h3><div class="club-home"><img class="flag" src="\.\.\/flags\/gr\.svg" width="16" height="12" alt="">Piraeus · Peace and Friendship Stadium<\/div><\/div><\/div>/,
+    /<span class="cell-sport"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>Basketball<small>EuroLeague<\/small><\/span>\n\s*<div class="club-head"><img class="crest" src="\.\.\/crests\/olympiacos-basketball\.png" width="44" height="44" alt=""><div><h3 class="club-name"><a class="card-link" href="\.\.\/greece\/basketball\/olympiacos\/">Olympiacos<\/a><\/h3><div class="club-home"><img class="flag" src="\.\.\/flags\/gr\.svg" width="16" height="12" alt="">Piraeus · Peace and Friendship Stadium<\/div><\/div><\/div>/,
   )
   assert.match(html, /<b>Olympiacos vs Panathinaikos<\/b><span class="num"><time datetime="2026-10-02T18:15:00Z" data-offset="3">Fri 2 Oct · Tip-off 21:15 in Piraeus<\/time><\/span>/)
   assert.match(html, /Football<small>Champions League<\/small>/)
-  assert.match(html, /<a class="cell-cta" href="\.\.\/greece\/basketball\/olympiacos\/">Games and subscribe<svg/)
+  assert.match(html, /<span class="cell-cta">Games and subscribe<svg/)
   assert.match(part(html, 'basketball/panathinaikos/">Panathinaikos', '</article>'), /No games announced yet\./)
   assert.doesNotMatch(renderCountryPage([{ team: football, games: [] }], site), /In Europe this season|card club/)
 })
@@ -632,7 +632,7 @@ test('a country with clubs and no national team on scarf shows its clubs alone, 
   assert.match(html, /<body style="--stripe: repeating-linear-gradient\(90deg, #AA151B 0px 18px, #F1BF00 18px 36px\)/)
   assert.match(html, /content="Every Spain game in your calendar: tip-off, venue, TV and tickets, updated daily\."/)
   assert.doesNotMatch(html, /card country/)
-  inOrder(html, '<h1>Spain, in your calendar.</h1>', '<p class="aside">One club · EuroLeague</p>', '<a href="../spain/basketball/real-madrid/">Real Madrid</a></h3>', '<img class="flag" src="../flags/es.svg" width="16" height="12" alt="">')
+  inOrder(html, '<h1>Spain, in your calendar.</h1>', '<p class="aside">One club · EuroLeague</p>', '<a class="card-link" href="../spain/basketball/real-madrid/">Real Madrid</a></h3>', '<img class="flag" src="../flags/es.svg" width="16" height="12" alt="">')
   // Its club's page names the country, with no national team to offer.
   const page = renderTeamPage({ team: madrid, games: [] }, [football, basketball, madrid], site)
   assert.match(page, /<img class="flag" src="\.\.\/\.\.\/\.\.\/flags\/es\.svg" width="16" height="12" alt="">Real Madrid City, Spain<\/a>/)
@@ -671,7 +671,7 @@ test('a competition page lists its clubs A to Z under a find field, with no stri
     '>Panathinaikos</a>',
   )
   // From /basketball/euroleague/, a card links the club's page under its country.
-  assert.ok(html.includes('<h3 class="club-name"><a href="../../turkiye/basketball/anadolu-efes/">Anadolu Efes</a></h3><div class="club-home"><img class="flag" src="../../flags/tr.svg" width="16" height="12" alt="">Anadolu Efes City · Anadolu Efes Arena</div>'))
+  assert.ok(html.includes('<h3 class="club-name"><a class="card-link" href="../../turkiye/basketball/anadolu-efes/">Anadolu Efes</a></h3><div class="club-home"><img class="flag" src="../../flags/tr.svg" width="16" height="12" alt="">Anadolu Efes City · Anadolu Efes Arena</div>'))
   assert.match(html, /<link rel="stylesheet" href="\.\.\/\.\.\/site\.css">/)
   assert.match(html, /getElementById\('find'\)/)
   // A crest file shows at 44 px on a card; one club reads in the singular.
@@ -712,7 +712,7 @@ test('the landing lists the competitions with their clubs, then every country wi
     '<h2 id="clubs">Clubs in Europe</h2><p class="aside">Two competitions · 8 clubs</p>',
     'Champions League<svg',
     "<p class=\"small\">Men's football · 1 club · Tuesday and Wednesday nights, September to May</p>",
-    '<a class="cell-cta" href="football/champions-league/">All 1 club<svg',
+    '<span class="cell-cta">All 1 club<svg',
     'EuroLeague<svg',
     `<h2 id="national">National teams</h2><p class="aside">${new Set(national.map((team) => team.country)).size} countries · men's football and basketball</p>`,
     '<a class="country-chip" href="england/"><img class="flag" src="flags/gb-eng.svg" width="20" height="15" alt="">England</a>',
@@ -729,10 +729,10 @@ test('the landing lists the competitions with their clubs, then every country wi
     '>Fenerbahce</a>',
     '>Milan</a>',
     '>Olympiacos</a>',
-    '<a class="cell-cta" href="basketball/euroleague/">All 7 clubs<svg',
+    '<span class="cell-cta">All 7 clubs<svg',
   )
   // The name is the way in too, with the arrow a country's name carries.
-  assert.match(html, /<h3 class="comp-name"><a href="basketball\/euroleague\/"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>EuroLeague<svg[^>]*>.*?<\/svg><\/a><\/h3>/)
+  assert.match(html, /<h3 class="comp-name"><a class="card-link" href="basketball\/euroleague\/"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>EuroLeague<svg[^>]*>.*?<\/svg><\/a><\/h3>/)
   // The country cards are gone: the chips said the same.
   assert.doesNotMatch(html, /<article class="card country"|href="#/)
   // The seventh club is in the page for the Find field, hidden, and no "and 1 more" repeats the count of "All 7 clubs".
