@@ -101,6 +101,8 @@ every signal. Analytics Engine keeps three months.
 
 ## Privacy
 
+The page fans can read is `/privacy/` (#78); a change to what is recorded changes both.
+
 - No cookies, no browser storage, no id that lasts longer than a day.
 - The visitor hash is SHA-256 of a daily key, the IP address and the User-Agent, cut to 16 hex
   characters. The daily key is an HMAC of the date with a Worker secret, so days can't be joined.

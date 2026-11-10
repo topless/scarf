@@ -1,9 +1,12 @@
 // The site on Cloudflare Workers (#43, docs/observability.md "Hosting"): dist/ served as static
-// assets at https://scarf.fan, no Worker script yet. The "Build feeds" workflow deploys it.
+// assets at https://scarf.fan. The Worker (worker/index.ts, #71) runs first only on the feeds and
+// counts each fetch. The "Build feeds" workflow deploys it.
 {
   "name": "scarf",
   "compatibility_date": "2026-10-30",
-  "assets": { "directory": "./dist" },
+  "main": "worker/index.ts",
+  "assets": { "directory": "./dist", "binding": "ASSETS", "run_worker_first": ["/*.ics"] },
+  "analytics_engine_datasets": [{ "binding": "SCARF_EVENTS", "dataset": "scarf_events" }],
   // Cloudflare keeps the DNS record and certificate for a custom domain itself.
   "routes": [{ "pattern": "scarf.fan", "custom_domain": true }],
   // The side-by-side copy at scarf.topless.workers.dev goes once scarf.fan answers here.
@@ -11,10 +14,14 @@
   // Staging (#85): "Deploy staging" (.github/workflows/staging.yml) puts one branch, built from the
   // fixtures, on the Worker scarf-staging at https://staging.scarf.fan. Routes are inherited, so this
   // environment must name its own: left out, it would claim the scarf.fan custom domain for itself.
+  // Bindings are not inherited either, so it repeats the assets binding and the dataset, under its own
+  // name (scarf_events_staging) so staging fetches never count as subscribers.
   "env": {
     "staging": {
       "name": "scarf-staging",
-      "routes": [{ "pattern": "staging.scarf.fan", "custom_domain": true }]
+      "routes": [{ "pattern": "staging.scarf.fan", "custom_domain": true }],
+      "assets": { "directory": "./dist", "binding": "ASSETS", "run_worker_first": ["/*.ics"] },
+      "analytics_engine_datasets": [{ "binding": "SCARF_EVENTS", "dataset": "scarf_events_staging" }]
     }
   }
 }

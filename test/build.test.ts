@@ -30,8 +30,13 @@ test('the fixture build writes every feed, page and share image without a single
     landingSharePath,
     'how-it-works/index.html',
     'kit/index.html',
+    'privacy/index.html',
+    'versions.json',
   ]
   for (const file of files) assert.ok(existsSync(join(dir, 'dist', file)), file)
+  const versions = JSON.parse(await readFile(join(dir, 'dist', 'versions.json'), 'utf8'))
+  assert.deepEqual(Object.keys(versions).sort(), teams.flatMap((team) => [feedPath(team), alertsFeedPath(team)]).sort())
+  for (const version of Object.values(versions)) assert.match(version as string, /^[0-9a-f]{12}$/)
   assert.ok(competitions.includes('basketball/euroleague'))
   for (const competition of competitions) assert.ok(!existsSync(join(dir, 'dist', competition, 'share.png')), competition)
   assert.ok(!existsSync(join(dir, 'known-games.json')))

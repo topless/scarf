@@ -23,6 +23,10 @@ export const shortDate = (d: Date) => `${WEEKDAY.format(d)} ${DAY_MONTH.format(d
 const longDate = (d: Date) => `${shortDate(d)} ${YEAR.format(d)}`
 
 const GOOGLE_NOTE = 'On Google Calendar, set a notification for this calendar once. It applies to every game.'
+const IPHONE_NOTE = 'On iPhone, set Default Alert Times for events to 1 hour before in the Calendar settings, or the hour-before reminder stays off.'
+// Shown by ANDROID_SCRIPT only: the webcal: buttons do nothing there and the phone app cannot subscribe to a feed.
+const ANDROID_NOTE = `<p>On Android, Google Calendar adds a calendar from a computer. Open this page there and tap Google, and every game shows up on your phone too.</p>
+        <p>Games not on your phone? In the Calendar app, open Settings, tap the calendar and turn on Sync.</p>`
 // On every club page, under the subscribe buttons (#132). "Scarf" at the start of a sentence, as docs/brand.md has it.
 const CREST_NOTE = `Crests are the clubs' trademarks, shown to say whose games these are. Scarf is not affiliated with any club or competition.`
 
@@ -113,7 +117,7 @@ ${nextGameCard(team, next)}
 ${team.club ? neighbours(section, all, root) : otherTeams(all, team, root)}
 </main>
 ${footer()}`,
-    script: COPY_SCRIPT + ALERTS_SCRIPT + SHARE_SCRIPT + (team.club ? '' : FIND_SCRIPT),
+    script: COPY_SCRIPT + (siteUrl ? ANDROID_SCRIPT : '') + ALERTS_SCRIPT + SHARE_SCRIPT + (team.club ? '' : FIND_SCRIPT),
   })
 }
 
@@ -219,15 +223,16 @@ const NIGHTS: Record<Competition, string> = {
 }
 
 // A competition on the landing: no stripes, nothing on it is a team. Six of its clubs, A to Z, and
-// the way to all of them.
+// the way to all of them. The rest are in the page, hidden, for the Find field.
 function competitionCard(competition: Competition, clubs: Team[]): string {
   const { name, sport } = COMPETITIONS[competition]
-  const shown = byName(clubs).slice(0, 6)
+  const sorted = byName(clubs)
+  const shown = sorted.slice(0, 6)
   return `  <article class="card">
     <div class="comp-body">
       <h3 class="comp-name"><a href="${competitionPath(competition)}/">${WORDS[sport].ball}${esc(name)}${ICON.arrow}</a></h3>
       <p class="small">${capitalise(`men's ${sport}`)} · ${count(clubs.length, 'club')} · ${NIGHTS[competition]}</p>
-      <div class="comp-clubs">${shown.map((team) => clubChip(team, '')).join('')}${clubs.length > shown.length ? `<span class="country-chip more">and ${clubs.length - shown.length} more</span>` : ''}</div>
+      <div class="comp-clubs">${sorted.map((team, i) => clubChip(team, '', i >= shown.length)).join('')}${clubs.length > shown.length ? `<span class="country-chip more">and ${clubs.length - shown.length} more</span>` : ''}</div>
       <a class="cell-cta" href="${competitionPath(competition)}/">All ${count(clubs.length, 'club')}${ICON.arrow}</a>
     </div>
   </article>`
@@ -357,7 +362,7 @@ export function renderHowItWorks(sections: Section[], siteUrl?: string): string 
   <ol class="steps">
 ${step(1, '<h2>Subscribe once</h2><p>Pick your team, tap Add to my calendar and pick your app. That is the whole setup: no account, no download.</p>')}
 ${step(2, `<h2>Your calendar keeps itself current</h2><p>We rebuild the feeds every day from ${federations(teams)}. New games, times and venues land in place, in your time zone.</p>`)}
-${step(3, `<h2>A nudge an hour before the game</h2><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>${GOOGLE_NOTE}</p>`)}
+${step(3, `<h2>A nudge an hour before the game</h2><p>The channel and the ticket link are inside the event, so nobody goes hunting for them as the teams walk out.</p><p>${IPHONE_NOTE} ${GOOGLE_NOTE}</p>`)}
   </ol>
 </section>
 <section class="teams">
@@ -375,6 +380,40 @@ ${byCountry(teams.filter((team) => !team.club), (team) => team).map((group) => c
 </main>
 ${footer()}`,
     script: FIND_SCRIPT,
+  })
+}
+
+// Privacy at /privacy/: what scarf counts, what it never does, who handles it and how to stop it. A
+// change to what is recorded changes this and docs/observability.md, Privacy. Feed refreshes only
+// until page views are counted (#72), which adds its paragraph here.
+export function renderPrivacy(siteUrl?: string): string {
+  return page({
+    root: '../',
+    title: `Privacy · ${siteName}`,
+    description: 'What scarf counts when a calendar refreshes a feed, what it never records, and how to stop it.',
+    share: { url: siteUrl && `${siteUrl}/privacy/`, image: siteUrl && `${siteUrl}/${landingSharePath}` },
+    body: `${header('../')}
+<main>
+<section class="wrap hero">
+  <div class="hero-text">
+    <h1>Privacy</h1>
+    <p class="lede">scarf counts how many calendars follow each team, so it knows the feeds are used. It does not follow anyone.</p>
+  </div>
+</section>
+<section class="wrap how">
+  <h2>What scarf records</h2>
+  <p>Each time a calendar refreshes a feed, scarf writes one line: which feed, which calendar app, the country, the time, and whether the calendar already had the newest version of the feed.</p>
+  <h2>What scarf never records</h2>
+  <p>No cookies, no browser storage, no IP addresses, no accounts, and nothing that follows a person beyond one day. To tell one calendar from another within a day, scarf keeps a short code made from a key that changes every day, so the same calendar gets a different code tomorrow.</p>
+  <h2>Who handles the data</h2>
+  <p>Cloudflare serves the site and keeps the counts for three months. The fonts come from scarf.fan too, so no other company sees your visit.</p>
+  <h2>How to opt out</h2>
+  <p>A calendar refresh is counted whenever the calendar fetches the feed, so the only way out is to unsubscribe from the feed in your calendar app.</p>
+  <h2>Questions</h2>
+  <p>Ask on the <a href="https://github.com/topless/scarf/issues/new/choose">scarf repository</a>.</p>
+</section>
+</main>
+${footer()}`,
   })
 }
 
@@ -519,6 +558,12 @@ const COPY_SCRIPT = `
     })
   }`
 
+const ANDROID_SCRIPT = `
+  if (/Android/.test(navigator.userAgent)) {
+    for (const a of document.querySelectorAll('.subscribe a[href^="webcal:"]')) a.style.display = 'none'
+    for (const note of document.querySelectorAll('.subscribe .android')) note.hidden = false
+  }`
+
 // Share opens the share sheet on a touch screen (phones, tablets). A desktop copies the address and
 // says "Copied", even where it has a share menu of its own (Safari and Chrome on a Mac, Windows), as
 // it does where there is no share sheet at all. The button stays hidden in a browser that can do neither.
@@ -559,8 +604,9 @@ const ALERTS_SCRIPT = `
 // A field over a long list of countries or clubs (fifty-odd country chips, the competitions' club
 // chips, a competition's club cards): typing keeps only those whose name holds what was typed, accents
 // aside. A chip's name is its text, a card's its heading; a club is a club card or a chip with a kit
-// swatch. The chips of "This week" and the dashed "more" chips stay. Without JavaScript it stays
-// hidden and everything stays listed.
+// swatch. A chip with data-find is found by that (name, city, country), and with nothing typed the
+// extra chips hide again and the "and N more" chip returns. The chips of "This week" and the dashed
+// "more" chips stay. Without JavaScript it stays hidden and everything stays listed.
 const finder = (label: string) =>
   `      <div class="find" hidden><label for="find">${label}</label><input id="find" type="search" autocomplete="off" spellcheck="false"><p class="small" role="status" id="find-status"></p></div>`
 const FIND_SCRIPT = `
@@ -569,16 +615,18 @@ const FIND_SCRIPT = `
     const fold = (text) => text.normalize('NFD').replace(/\\p{M}/gu, '').toLowerCase()
     const named = [...document.querySelectorAll('.chips .country-chip:not(.more), .comp-clubs .country-chip:not(.more), article.country, article.club')].map((el) => [
       el,
-      fold((el.querySelector('h2, .club-name') ?? el).textContent),
+      fold(el.dataset.find ?? (el.querySelector('h2, .club-name') ?? el).textContent),
       el.matches('.club') || el.querySelector('.swatch') ? 'club' : 'country',
     ])
     const status = document.getElementById('find-status')
     const count = (n, one, many) => (n === 0 ? '' : n === 1 ? '1 ' + one : n + ' ' + many)
+    const more = [...document.querySelectorAll('.comp-clubs .more')]
     const apply = () => {
       const query = fold(findField.value.trim())
+      for (const el of more) el.hidden = !!query
       const shown = { country: new Set(), club: new Set() }
       for (const [el, name, kind] of named) {
-        el.hidden = !name.includes(query)
+        el.hidden = query ? !name.includes(query) : el.hasAttribute('data-extra')
         if (!el.hidden) shown[kind].add(name)
       }
       status.textContent = !query ? '' : [count(shown.country.size, 'country', 'countries'), count(shown.club.size, 'club', 'clubs')].filter(Boolean).join(' · ') || 'Not on scarf yet'
@@ -604,6 +652,7 @@ const GITHUB_MARK = `<svg viewBox="0 0 16 16" width="16" height="16" fill="curre
 function footer(): string {
   return `<footer class="wrap site-footer">
   <div class="footer-brand">${mark(28)}<span class="wordmark">${siteName}</span><span>· Wrapped in the game.</span></div>
+  <a class="footer-link" href="/privacy/">Privacy</a>
   <a class="footer-link" href="https://github.com/topless/scarf/issues/new/choose">${GITHUB_MARK}Suggest a team or report a bug</a>
 </footer>`
 }
@@ -633,7 +682,7 @@ function subscribePanel(team: Team, siteUrl?: string): string {
       <div class="apps">
       ${secondary}
       </div>
-      <noscript><p class="small">Want a “New game” entry on the day each game is announced too? <a href="${esc(alerts.webcal)}">Add games and announcements</a> instead.</p></noscript>
+${feed.apps ? `      <div class="android small" hidden>\n        ${ANDROID_NOTE}\n      </div>\n` : ''}      <noscript><p class="small">Want a “New game” entry on the day each game is announced too? <a href="${esc(alerts.webcal)}">Add games and announcements</a> instead.</p></noscript>
 ${
   feed.https && alerts.https
     ? `      <div class="paste">
@@ -642,7 +691,7 @@ ${
       </div>
 `
     : ''
-}      <p class="small">Free. Updated daily from ${federation(team)}. Leave any time by deleting the calendar. ${team.club ? `${CREST_NOTE} ` : ''}${GOOGLE_NOTE}</p>
+}      <p class="small">Free. Updated daily from ${federation(team)}. Leave any time by deleting the calendar. ${team.club ? `${CREST_NOTE} ` : ''}${IPHONE_NOTE} ${GOOGLE_NOTE}</p>
     </div>`
 }
 
@@ -756,9 +805,12 @@ function countryChip(team: Team, root: string, href: string, current = false, la
   return `      <a class="country-chip" href="${href}"${current ? ' aria-current="page"' : ''}>${flag(team, root, 20, 15)}${esc(label)}</a>`
 }
 
-// A club's chip: a swatch of its kit stripes where a country's chip has its flag, and its name.
-function clubChip(team: Team, root: string): string {
-  return `      <a class="country-chip" href="${root}${teamPath(team)}/"><span class="swatch" style="--swatch: ${stripes(team.colours, 10)}"></span>${esc(team.club!.name)}</a>`
+// A club's chip: a swatch of its kit stripes where a country's chip has its flag, and its name. It is
+// found by its name, city and country when `extra` says so (the landing's chips: true keeps it hidden
+// until the Find field asks for it); a country's chip is found by its text, which is its country.
+function clubChip(team: Team, root: string, extra?: boolean): string {
+  const find = extra === undefined ? '' : ` data-find="${esc(`${team.club!.name} ${team.club!.city} ${countryName(team)}`)}"${extra ? ' data-extra hidden' : ''}`
+  return `      <a class="country-chip" href="${root}${teamPath(team)}/"${find}><span class="swatch" style="--swatch: ${stripes(team.colours, 10)}"></span>${esc(team.club!.name)}</a>`
 }
 
 // A club's crest from assets/crests/, or until its file is there a round swatch of its kit stripes.
