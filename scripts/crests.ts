@@ -1,6 +1,7 @@
 import { execFile } from 'node:child_process'
-import { access, mkdir, rm, stat, writeFile } from 'node:fs/promises'
+import { access, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { promisify } from 'node:util'
+import UPNG from 'upng-js'
 import { clubs } from '../src/clubs.ts'
 import type { Team } from '../src/config.ts'
 
@@ -8,7 +9,8 @@ import type { Team } from '../src/config.ts'
 // for a football club, the crest the EuroLeague Basketball clubs endpoint names for a basketball club.
 // Not part of the build, which makes one request per source and never touches these CDNs; fans' browsers
 // never do either, the files are served from scarf.fan. Each file is scaled to 192 px (twice the largest
-// size a page shows) with macOS's sips, so the repository and the pages stay light.
+// size a page shows) with macOS's sips and re-encoded with 256 colours (#162), so the repository and
+// the pages stay light.
 //
 //   node scripts/crests.ts            fetches the crests that are missing
 //   node scripts/crests.ts --force    fetches them all again (a rebrand, a new season)
@@ -70,6 +72,8 @@ for (const team of clubs) {
       await rm(path, { force: true })
       throw error
     })
+    const crest = UPNG.decode(await readFile(path))
+    await writeFile(path, Buffer.from(UPNG.encode(UPNG.toRGBA8(crest), crest.width, crest.height, 256)))
     done.push(`${file} ${Math.round((await stat(path)).size / 1024)} KB`)
   } catch (error) {
     failed.push(`${file}: ${(error as Error).message}`)

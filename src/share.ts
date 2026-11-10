@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import { Resvg, initWasm } from '@resvg/resvg-wasm'
 import satori from 'satori'
+import UPNG from 'upng-js'
 import { html } from 'satori-html'
 import { countryOf, defaultSiteUrl, shareSize, siteName, teamPath, type Team } from './config.ts'
 import { readFlag } from './flags.ts'
@@ -141,7 +142,9 @@ export function nextGameLine(game?: Game): string {
 async function renderSharePng(card: string): Promise<Buffer> {
   const svg = await satori(html(card), { width: WIDTH, height: HEIGHT, fonts: await fonts() })
   await wasm()
-  const png = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH } }).render().asPng()
+  const image = new Resvg(svg, { fitTo: { mode: 'width', value: WIDTH } }).render()
+  // 256 colours: a card is flat colour and text, so it looks the same at under half the bytes (#162).
+  const png = UPNG.encode([new Uint8Array(image.pixels).buffer], image.width, image.height, 256)
   if (png.byteLength > SHARE_MAX_BYTES) {
     throw new Error(`share image is ${png.byteLength} bytes, over the ${SHARE_MAX_BYTES} limit`)
   }

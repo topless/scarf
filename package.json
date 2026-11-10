@@ -17,10 +17,12 @@
     "flag-icons": "^7.6.0",
     "ical-generator": "^11.1.2",
     "satori": "^0.62.0",
-    "satori-html": "^0.3.2"
+    "satori-html": "^0.3.2",
+    "upng-js": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
+    "@types/upng-js": "^2.1.5",
     "typescript": "^7.0.2",
     "wrangler": "4.151.0"
   }

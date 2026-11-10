@@ -916,6 +916,12 @@ const ICON = {
   share: icon('<path d="M12 3v12M8 7l4-4 4 4"/><path d="M8 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-2"/>'),
 }
 
+// Indentation, trailing spaces, blank lines and CSS comments out. Line breaks stay: between two inline
+// tags a line break is a space, and the page script ends its comments with one (#162).
+export function minify(text: string, css = false): string {
+  return (css ? text.replace(/\/\*[\s\S]*?\*\//g, '') : text).replace(/^[ \t]+|[ \t]+$/gm, '').replace(/\n{2,}/g, '\n')
+}
+
 export function esc(text: string): string {
   return text
     .replaceAll('&', '&amp;')
