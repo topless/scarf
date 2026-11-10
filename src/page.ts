@@ -561,8 +561,8 @@ const ALERTS_SCRIPT = `
 // chips, a competition's club cards): typing keeps only those whose name holds what was typed, accents
 // aside. A chip's name is its text, a card's its heading; a club is a club card or a chip with a kit
 // swatch. A chip with data-find is found by that (name, city, country), and with nothing typed the
-// extra chips hide again and the "and N more" chip returns. The chips of "This week" and the dashed "more" chips stay. Without JavaScript it stays
-// hidden and everything stays listed.
+// extra chips hide again and the "and N more" chip returns. The chips of "This week" and the dashed
+// "more" chips stay. Without JavaScript it stays hidden and everything stays listed.
 const finder = (label: string) =>
   `      <div class="find" hidden><label for="find">${label}</label><input id="find" type="search" autocomplete="off" spellcheck="false"><p class="small" role="status" id="find-status"></p></div>`
 const FIND_SCRIPT = `
