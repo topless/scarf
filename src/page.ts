@@ -226,13 +226,11 @@ const NIGHTS: Record<Competition, string> = {
 // the way to all of them. The rest are in the page, hidden, for the Find field.
 function competitionCard(competition: Competition, clubs: Team[]): string {
   const { name, sport } = COMPETITIONS[competition]
-  const sorted = byName(clubs)
-  const shown = sorted.slice(0, 6)
   return `  <article class="card">
     <div class="comp-body">
       <h3 class="comp-name"><a href="${competitionPath(competition)}/">${WORDS[sport].ball}${esc(name)}${ICON.arrow}</a></h3>
       <p class="small">${capitalise(`men's ${sport}`)} · ${count(clubs.length, 'club')} · ${NIGHTS[competition]}</p>
-      <div class="comp-clubs">${sorted.map((team, i) => clubChip(team, '', i >= shown.length)).join('')}${clubs.length > shown.length ? `<span class="country-chip more">and ${clubs.length - shown.length} more</span>` : ''}</div>
+      <div class="comp-clubs">${byName(clubs).map((team, i) => clubChip(team, '', i >= 6)).join('')}</div>
       <a class="cell-cta" href="${competitionPath(competition)}/">All ${count(clubs.length, 'club')}${ICON.arrow}</a>
     </div>
   </article>`
@@ -605,25 +603,22 @@ const ALERTS_SCRIPT = `
 // chips, a competition's club cards): typing keeps only those whose name holds what was typed, accents
 // aside. A chip's name is its text, a card's its heading; a club is a club card or a chip with a kit
 // swatch. A chip with data-find is found by that (name, city, country), and with nothing typed the
-// extra chips hide again and the "and N more" chip returns. The chips of "This week" and the dashed
-// "more" chips stay. Without JavaScript it stays hidden and everything stays listed.
+// extra chips hide again. The chips of "This week" and the dashed "more" chips stay. Without JavaScript it stays hidden and everything stays listed.
 const finder = (label: string) =>
   `      <div class="find" hidden><label for="find">${label}</label><input id="find" type="search" autocomplete="off" spellcheck="false"><p class="small" role="status" id="find-status"></p></div>`
 const FIND_SCRIPT = `
   const findField = document.getElementById('find')
   if (findField) {
     const fold = (text) => text.normalize('NFD').replace(/\\p{M}/gu, '').toLowerCase()
-    const named = [...document.querySelectorAll('.chips .country-chip:not(.more), .comp-clubs .country-chip:not(.more), article.country, article.club')].map((el) => [
+    const named = [...document.querySelectorAll('.chips .country-chip:not(.more), .comp-clubs .country-chip, article.country, article.club')].map((el) => [
       el,
       fold(el.dataset.find ?? (el.querySelector('h2, .club-name') ?? el).textContent),
       el.matches('.club') || el.querySelector('.swatch') ? 'club' : 'country',
     ])
     const status = document.getElementById('find-status')
     const count = (n, one, many) => (n === 0 ? '' : n === 1 ? '1 ' + one : n + ' ' + many)
-    const more = [...document.querySelectorAll('.comp-clubs .more')]
     const apply = () => {
       const query = fold(findField.value.trim())
-      for (const el of more) el.hidden = !!query
       const shown = { country: new Set(), club: new Set() }
       for (const [el, name, kind] of named) {
         el.hidden = query ? !name.includes(query) : el.hasAttribute('data-extra')

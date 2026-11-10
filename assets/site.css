@@ -205,7 +205,7 @@ a.cell-cta { color: var(--ink); text-decoration: none; }
 .comp-clubs, .row-teams { display: flex; flex-wrap: wrap; gap: 8px; }
 .comp-clubs .country-chip, .row-teams .country-chip { padding: 0 12px 0 10px; font-size: 14px; }
 .comp-clubs .country-chip { border-color: var(--chalk); }
-/* "and 14 more", "All 20 EuroLeague clubs", "Every team on scarf": dashed, quieter. */
+/* "All 20 EuroLeague clubs", "Every team on scarf": dashed, quieter. */
 .country-chip.more { border-style: dashed; color: var(--stand); }
 .teams .country-chip.more { color: var(--ink-muted); }
 .country-chip.more svg { width: 16px; height: 16px; }

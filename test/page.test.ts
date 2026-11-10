@@ -301,7 +301,7 @@ test('every list of all the countries or clubs opens with a find field, hidden u
     inOrder(html, `<div class="find" hidden><label for="find">${label}</label><input id="find" type="search"`, label === 'Find your club' ? '<article class="card club"' : 'class="country-chip"')
     // It filters country chips, club chips and club cards, never This week's chips or the dashed ones,
     // and counts what it keeps in the house voice.
-    assert.ok(html.includes("querySelectorAll('.chips .country-chip:not(.more), .comp-clubs .country-chip:not(.more), article.country, article.club')"))
+    assert.ok(html.includes("querySelectorAll('.chips .country-chip:not(.more), .comp-clubs .country-chip, article.country, article.club')"))
     assert.ok(html.includes("[count(shown.country.size, 'country', 'countries'), count(shown.club.size, 'club', 'clubs')].filter(Boolean).join(' · ') || 'Not on scarf yet'"))
   }
   // A country page lists one country, and the kit is for us.
@@ -722,22 +722,22 @@ test('the landing lists the competitions with their clubs, then every country wi
   inOrder(
     part(html, 'EuroLeague<svg', '</article>'),
     "<p class=\"small\">Men's basketball · 7 clubs · Thursday and Friday nights, October to May</p>",
-    // Six chips A to Z with their kit swatches, the rest counted.
+    // Six chips A to Z with their kit swatches, then the way to all of them, counted once.
     '<a class="country-chip" href="greece/basketball/anadolu-efes/" data-find="Anadolu Efes',
     '>Barcelona</a>',
     '>Baskonia</a>',
     '>Fenerbahce</a>',
     '>Milan</a>',
     '>Olympiacos</a>',
-    '<span class="country-chip more">and 1 more</span>',
     '<a class="cell-cta" href="basketball/euroleague/">All 7 clubs<svg',
   )
   // The name is the way in too, with the arrow a country's name carries.
   assert.match(html, /<h3 class="comp-name"><a href="basketball\/euroleague\/"><svg[^>]*stroke="#D9600F"[^>]*>.*?<\/svg>EuroLeague<svg[^>]*>.*?<\/svg><\/a><\/h3>/)
   // The country cards are gone: the chips said the same.
   assert.doesNotMatch(html, /<article class="card country"|href="#/)
-  // The seventh club is in the page for the Find field, hidden, and "and 1 more" stays for the default view.
+  // The seventh club is in the page for the Find field, hidden, and no "and 1 more" repeats the count of "All 7 clubs".
   assert.match(html, /<a class="country-chip" href="greece\/basketball\/panathinaikos\/" data-find="Panathinaikos Athens Greece" data-extra hidden>/)
+  assert.doesNotMatch(html, /and 1 more/)
   const chips = part(html, '<nav class="chips" aria-label="Countries">', '</nav>')
   assert.equal(chips.match(/class="country-chip"/g)?.length, new Set(national.map((team) => team.country)).size)
   // Without clubs there is no clubs section.
