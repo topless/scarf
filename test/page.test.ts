@@ -132,6 +132,14 @@ test('a choice before the buttons offers the alerts feed: every link and the pas
   assert.match(html, new RegExp(`<noscript><p class="small">Want a “New game” entry on the day each game is announced too\\? <a href="${alerts}">Add games and announcements</a> instead\\.</p></noscript>`))
 })
 
+test('beside the buttons a QR code of the page, for a fan at a computer; none without a public address', () => {
+  const html = teamPage([timed], site)
+  // https://example.github.io/scarf/greece/football/ is 47 characters: a 29 by 29 code at the low correction level.
+  assert.match(html, /<figure class="scan"><svg class="qr" viewBox="0 0 29 29" shape-rendering="crispEdges" aria-hidden="true"><path d="(M\d+ \d+h1v1h-1z)+"\/><\/svg><figcaption>Scan on your phone<\/figcaption><\/figure>/)
+  inOrder(html, 'Outlook</a>', '<figure class="scan">', 'Or paste into any calendar app')
+  assert.doesNotMatch(teamPage([timed]), /class="scan"|class="qr"/)
+})
+
 test('without a public address the page links the feed relative to /greece/football/', () => {
   const html = teamPage([timed])
   assert.match(html, /<a class="btn-primary" href="\.\.\/football\.ics" data-alerts="\.\.\/football-alerts\.ics">/)

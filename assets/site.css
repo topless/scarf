@@ -74,6 +74,16 @@ h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(44px, 
 .paste-row { display: flex; gap: 8px; }
 .paste input { flex: 1; min-width: 0; height: 46px; box-sizing: border-box; padding: 0 12px; border: var(--border) solid var(--chalk); border-radius: var(--radius-input); background: var(--white); color: var(--ink); font: 400 14px var(--font-body); }
 .paste button { flex: none; padding: 0 16px; }
+/* The buttons, and beside them on a screen with a mouse the page's QR code, as tall as the two rows
+   of buttons. A phone cannot scan itself, so it gets the buttons alone. */
+.add { display: grid; gap: 12px 10px; }
+.scan { display: none; }
+@media (hover: hover) and (pointer: fine) and (min-width: 720px) {
+  .add { grid-template-columns: 1fr auto; }
+  .add .apps { grid-template-columns: repeat(3, 1fr); }
+  .scan { grid-area: 1 / 2 / span 2; display: flex; flex-direction: column; align-items: center; justify-content: space-between; margin: 0; padding: 10px 10px 6px; box-sizing: border-box; border: var(--border) solid var(--chalk); border-radius: var(--radius-input); background: var(--white); font-size: 12px; font-weight: 600; line-height: 1.2; white-space: nowrap; color: var(--stand); }
+  .qr { width: 76px; height: 76px; fill: var(--ink); }
+}
 /* The feed choice is hidden until the script that makes it work has run. */
 .feed-choice:not([hidden]) { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 10px; margin: 0; padding: 0; border: 0; }
 /* Safari sizes a grid fieldset's legend against zero width, which wrapped it one word per line. */

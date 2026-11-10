@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs'
+import qrcode from 'qrcode-generator'
 import { alertsFeedPath, COMPETITIONS, competitionPath, countryOf, countrySharePath, feedName, feedPath, landingSharePath, sharePath, shareSize, siteName, sourceKey, teamPath, type Competition, type Sport, type Team } from './config.ts'
 import { flagPath } from './flags.ts'
 import { byStart, type Game } from './game.ts'
@@ -100,7 +101,7 @@ ${teamBar(team, all, root, url)}
     <p class="sport-tag">${ball}<span>${capitalise(`men's ${team.sport}`)} · ${competition ?? from}</span></p>
     <h1>${esc(team.name)}, in your calendar.</h1>
     <p class="lede">Every ${start}, ${ground}, channel and ticket sale ${competition ? `of our ${competition} season` : 'for the national team'}, kept current in the calendar you already use, with a nudge an hour before we play. Nothing to install.</p>
-${subscribePanel(team, siteUrl)}
+${subscribePanel(team, siteUrl, url)}
   </div>
 ${nextGameCard(team, next)}
 </section>
@@ -660,7 +661,21 @@ function footer(): string {
 const ALERTS_LABEL = 'Games and announcements'
 const ALERTS_NOTE = 'The same games, plus an all-day “New game” entry on the day each one is announced.'
 
-function subscribePanel(team: Team, siteUrl?: string): string {
+// An address as a QR code: one path of unit squares, low error correction (a screen does not
+// smudge) so the code stays coarse enough to scan small.
+function qr(address: string): string {
+  const code = qrcode(0, 'L')
+  code.addData(address)
+  code.make()
+  const size = code.getModuleCount()
+  let squares = ''
+  for (let row = 0; row < size; row++) for (let col = 0; col < size; col++) if (code.isDark(row, col)) squares += `M${col} ${row}h1v1h-1z`
+  return `<svg class="qr" viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges" aria-hidden="true"><path d="${squares}"/></svg>`
+}
+
+// url is the team page's public address. A fan at a computer scans it to open the page on the
+// phone, where the buttons are the phone's own (ANDROID_SCRIPT); site.css hides the code on a phone.
+function subscribePanel(team: Team, siteUrl?: string, url?: string): string {
   const feed = feedLinks(team, false, siteUrl)
   const alerts = feedLinks(team, true, siteUrl)
   // Every link carries the -alerts address as well; ALERTS_SCRIPT swaps them when the box is ticked.
@@ -678,10 +693,12 @@ function subscribePanel(team: Team, siteUrl?: string): string {
         <label><input type="radio" name="feed-choice" checked autocomplete="off"><span>Games<span class="small">Every game, with a nudge an hour before.</span></span></label>
         <label><input type="radio" name="feed-choice" id="alerts-toggle" autocomplete="off"><span>${ALERTS_LABEL}<span class="small">${ALERTS_NOTE}</span></span></label>
       </fieldset>
+      <div class="add">
       ${link('btn-primary', feed.webcal, alerts.webcal, 'Add to my calendar')}
       <div class="apps">
       ${secondary}
       </div>
+${url ? `      <figure class="scan">${qr(url)}<figcaption>Scan on your phone</figcaption></figure>\n` : ''}      </div>
 ${feed.apps ? `      <div class="android small" hidden>\n        ${ANDROID_NOTE}\n      </div>\n` : ''}      <noscript><p class="small">Want a “New game” entry on the day each game is announced too? <a href="${esc(alerts.webcal)}">Add games and announcements</a> instead.</p></noscript>
 ${
   feed.https && alerts.https
