@@ -20,7 +20,7 @@ visits, which subscribe buttons get pressed, and what each daily build changed. 
 |---|---|---|---|
 | Feed subscribers | Calendars per team and app, refresh rate, how long a changed game takes to arrive | The Worker, on each `.ics` request | Dashboard |
 | Page visitors | Views and visitors per page, countries, referring sites | The page script, on load | Dashboard |
-| Subscribe clicks | Which button on which team page, with or without alerts | The page script, on click | Dashboard |
+| Subscribe clicks | Which button on which team page | The page script, on click | Dashboard |
 | Build and data changes | Did the build run, did each source answer, which games changed | The build | The run's page on GitHub |
 
 The first three are rows in one Workers Analytics Engine dataset, `scarf_events`.
@@ -71,7 +71,7 @@ changed kickoff takes to reach calendars.
 The page script sends `navigator.sendBeacon('/e', …)`:
 
 - on load, `{kind: 'view', path, ref}`, where `ref` is the referring host only;
-- on a subscribe button, `{kind: 'subscribe', path, app, alerts}`, with `app` one of `apple`,
+- on a subscribe button, `{kind: 'subscribe', path, app}`, with `app` one of `apple`,
   `google`, `outlook`, `copy`.
 
 Nothing is sent under Global Privacy Control or Do Not Track, and links never wait for the beacon.
