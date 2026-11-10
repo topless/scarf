@@ -1,9 +1,10 @@
 # Does the published site carry today's build? src/ics.ts stamps every event with the build time
 # (DTSTAMP), so the newest DTSTAMP in the live feeds says when the last successful build was
 # published. A run that is disabled, failing or stuck leaves the feeds stale, and this check fails
-# loudly through the same alert path as the build. Every team's feed is read, taken from
-# src/config.ts, because an empty feed carries no DTSTAMP. It reads our own site,
-# not a data source, so it does not count against the one-request-per-source rule.
+# loudly through the same alert path as the build. The feeds, taken from src/config.ts, are read in
+# order until one has games: an empty feed carries no DTSTAMP, and every feed of a build shares the
+# build's, so the first one with games tells the build time. It reads our own site, not a data
+# source, so it does not count against the one-request-per-source rule.
 name: Check feeds
 
 on:
@@ -45,7 +46,8 @@ jobs:
           let newest = 0
           for (const feed of feeds) {
             const url = `${site}/${feed}`
-            const response = await fetch(url)
+            // One retry: now and then a connection is reset mid-run (ECONNRESET, twice on 10 November 2026).
+            const response = await fetch(url).catch(() => fetch(url))
             if (!response.ok) fail(`${url} answered ${response.status}`)
             const stamps = [...(await response.text()).matchAll(/^DTSTAMP:(\d{4})(\d\d)(\d\d)T(\d\d)(\d\d)(\d\d)Z\r?$/gm)]
               .map(([, year, month, day, hour, minute, second]) => Date.UTC(year, month - 1, day, hour, minute, second))
@@ -53,9 +55,9 @@ jobs:
               console.log(`${feed} lists no games, so it carries no DTSTAMP`)
               continue
             }
-            const built = Math.max(...stamps)
-            console.log(`${feed} was built ${((now - built) / 3600000).toFixed(1)} h ago (${new Date(built).toISOString()})`)
-            newest = Math.max(newest, built)
+            newest = Math.max(...stamps)
+            console.log(`${feed} was built ${((now - newest) / 3600000).toFixed(1)} h ago (${new Date(newest).toISOString()})`)
+            break // every feed of a build shares its DTSTAMP
           }
           if (newest === 0) fail('No feed carries a DTSTAMP, so the time of the last build is unknown')
           const ageHours = (now - newest) / 3600000

@@ -184,7 +184,7 @@ publishing without anyone pushing a commit:
   reads "Don't notify" while off), choose "Email" and/or "On GitHub", and tick "Only notify for failed
   workflows". Those run emails for a scheduled workflow go to the person who last changed its `cron` line.
 - **Freshness check.** "Check feeds" runs once a day, six hours after the build's slot. It fetches the
-  live feeds and reads their `DTSTAMP`, the build time written into every event. If the newest is older
+  live feeds, in order until one has games, and reads its `DTSTAMP`, the build time written into every event of a build. If it is older
   than 36 hours the check fails and the alert above fires. This is what catches a build that was
   disabled, skipped or stuck rather than one that failed.
 
@@ -201,7 +201,7 @@ The health signals we have today, in the order to check them:
 - **Source answers.** The log of a "Build feeds" run has one line per request to a source: its host, the
   status and any `server`, `retry-after` or rate-limit header. When an answer is refused or unreadable,
   the error quotes its first 200 characters, so a bot-challenge page reads as one.
-- **Freshness.** The log of a "Check feeds" run prints how many hours old each live feed is.
+- **Freshness.** The log of a "Check feeds" run prints how many hours old the live feeds are.
 - **Changes.** The page of each "Build feeds" run shows "What this build changed": the games added,
   changed (with the old and new value) and removed in each feed, compared with what scarf.fan served
   just before the run, and how many played games left the feeds.
