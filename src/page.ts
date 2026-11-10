@@ -219,15 +219,16 @@ const NIGHTS: Record<Competition, string> = {
 }
 
 // A competition on the landing: no stripes, nothing on it is a team. Six of its clubs, A to Z, and
-// the way to all of them.
+// the way to all of them. The rest are in the page, hidden, for the Find field.
 function competitionCard(competition: Competition, clubs: Team[]): string {
   const { name, sport } = COMPETITIONS[competition]
-  const shown = byName(clubs).slice(0, 6)
+  const sorted = byName(clubs)
+  const shown = sorted.slice(0, 6)
   return `  <article class="card">
     <div class="comp-body">
       <h3 class="comp-name"><a href="${competitionPath(competition)}/">${WORDS[sport].ball}${esc(name)}${ICON.arrow}</a></h3>
       <p class="small">${capitalise(`men's ${sport}`)} · ${count(clubs.length, 'club')} · ${NIGHTS[competition]}</p>
-      <div class="comp-clubs">${shown.map((team) => clubChip(team, '')).join('')}${clubs.length > shown.length ? `<span class="country-chip more">and ${clubs.length - shown.length} more</span>` : ''}</div>
+      <div class="comp-clubs">${sorted.map((team, i) => clubChip(team, '', i >= shown.length)).join('')}${clubs.length > shown.length ? `<span class="country-chip more">and ${clubs.length - shown.length} more</span>` : ''}</div>
       <a class="cell-cta" href="${competitionPath(competition)}/">All ${count(clubs.length, 'club')}${ICON.arrow}</a>
     </div>
   </article>`
@@ -559,7 +560,8 @@ const ALERTS_SCRIPT = `
 // A field over a long list of countries or clubs (fifty-odd country chips, the competitions' club
 // chips, a competition's club cards): typing keeps only those whose name holds what was typed, accents
 // aside. A chip's name is its text, a card's its heading; a club is a club card or a chip with a kit
-// swatch. The chips of "This week" and the dashed "more" chips stay. Without JavaScript it stays
+// swatch. A chip with data-find is found by that (name, city, country), and with nothing typed the
+// extra chips hide again and the "and N more" chip returns. The chips of "This week" and the dashed "more" chips stay. Without JavaScript it stays
 // hidden and everything stays listed.
 const finder = (label: string) =>
   `      <div class="find" hidden><label for="find">${label}</label><input id="find" type="search" autocomplete="off" spellcheck="false"><p class="small" role="status" id="find-status"></p></div>`
@@ -569,16 +571,18 @@ const FIND_SCRIPT = `
     const fold = (text) => text.normalize('NFD').replace(/\\p{M}/gu, '').toLowerCase()
     const named = [...document.querySelectorAll('.chips .country-chip:not(.more), .comp-clubs .country-chip:not(.more), article.country, article.club')].map((el) => [
       el,
-      fold((el.querySelector('h2, .club-name') ?? el).textContent),
+      fold(el.dataset.find ?? (el.querySelector('h2, .club-name') ?? el).textContent),
       el.matches('.club') || el.querySelector('.swatch') ? 'club' : 'country',
     ])
     const status = document.getElementById('find-status')
     const count = (n, one, many) => (n === 0 ? '' : n === 1 ? '1 ' + one : n + ' ' + many)
+    const more = [...document.querySelectorAll('.comp-clubs .more')]
     const apply = () => {
       const query = fold(findField.value.trim())
+      for (const el of more) el.hidden = !!query
       const shown = { country: new Set(), club: new Set() }
       for (const [el, name, kind] of named) {
-        el.hidden = !name.includes(query)
+        el.hidden = query ? !name.includes(query) : el.hasAttribute('data-extra')
         if (!el.hidden) shown[kind].add(name)
       }
       status.textContent = !query ? '' : [count(shown.country.size, 'country', 'countries'), count(shown.club.size, 'club', 'clubs')].filter(Boolean).join(' · ') || 'Not on scarf yet'
@@ -756,9 +760,12 @@ function countryChip(team: Team, root: string, href: string, current = false, la
   return `      <a class="country-chip" href="${href}"${current ? ' aria-current="page"' : ''}>${flag(team, root, 20, 15)}${esc(label)}</a>`
 }
 
-// A club's chip: a swatch of its kit stripes where a country's chip has its flag, and its name.
-function clubChip(team: Team, root: string): string {
-  return `      <a class="country-chip" href="${root}${teamPath(team)}/"><span class="swatch" style="--swatch: ${stripes(team.colours, 10)}"></span>${esc(team.club!.name)}</a>`
+// A club's chip: a swatch of its kit stripes where a country's chip has its flag, and its name. It is
+// found by its name, city and country when `extra` says so (the landing's chips: true keeps it hidden
+// until the Find field asks for it); a country's chip is found by its text, which is its country.
+function clubChip(team: Team, root: string, extra?: boolean): string {
+  const find = extra === undefined ? '' : ` data-find="${esc(`${team.club!.name} ${team.club!.city} ${countryName(team)}`)}"${extra ? ' data-extra hidden' : ''}`
+  return `      <a class="country-chip" href="${root}${teamPath(team)}/"${find}><span class="swatch" style="--swatch: ${stripes(team.colours, 10)}"></span>${esc(team.club!.name)}</a>`
 }
 
 // A club's crest from assets/crests/, or until its file is there a round swatch of its kit stripes.
