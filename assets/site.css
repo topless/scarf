@@ -194,11 +194,13 @@ a.cell:hover { color: var(--ink); border-color: var(--ink); }
 .club-body .cell-cta, .comp-body .cell-cta { margin-top: auto; }
 /* A club's or a competition's card opens its page from anywhere on it: the name's link stretches over
    the card, the club chips sit above it, and the focus ring goes round the whole card. */
-.card:has(.card-link) { position: relative; }
+.card { position: relative; }
 .card-link::after { content: ""; position: absolute; inset: 0; }
-.card-link:focus-visible { outline: none; }
+/* Both through :has(), so a browser without it keeps the link's own ring. */
 .card:has(.card-link:focus-visible) { outline: 2px solid var(--ink); outline-offset: 2px; }
-.comp-clubs { position: relative; z-index: 1; }
+.card:has(.card-link:focus-visible) .card-link { outline: none; }
+/* Each chip above the stretched link, not the whole row, so the gaps between chips open the card. */
+.comp-clubs .country-chip { position: relative; z-index: 1; }
 /* A competition's card: no stripe header, nothing on it is a team. */
 .comp-body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
 .comp-name { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -0.03em; line-height: 1; }
