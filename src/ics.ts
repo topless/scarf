@@ -1,10 +1,33 @@
-import ical, { ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar } from 'ical-generator'
-import { defaultSiteUrl, feedName, siteName, teamPath, type Team } from './config.ts'
+import cssColours from 'color-name'
+import ical, { escape, foldLines, ICalAlarmRelatesTo, ICalAlarmType, type ICalCalendar } from 'ical-generator'
+import { defaultSiteUrl, feedName, feedPath, siteName, teamPath, type Team } from './config.ts'
 import type { Game } from './game.ts'
 import { capitalise, federation, reminder, REMINDER_HOURS, shortDate, venueTime, WORDS } from './page.ts'
 
 const GAME_HOURS = 2
 const SALE_REMINDER_HOUR = 9 // 09:00 at the venue on the day tickets go on sale
+
+// RFC 7986 COLOR takes a CSS colour name, not hex: the one closest to the eye (OKLab distance).
+export function cssColourName(hex: string): string {
+  const target = oklab([1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16)))
+  const distance = (rgb: number[]) => oklab(rgb).reduce((sum, v, i) => sum + (v - target[i]) ** 2, 0)
+  return Object.entries(cssColours).reduce((best, next) => (distance(next[1]) < distance(best[1]) ? next : best))[0]
+}
+
+// sRGB 0–255 → OKLab (Björn Ottosson's matrices).
+function oklab(rgb: number[]): number[] {
+  const [r, g, b] = rgb.map((c) => ((c /= 255) <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
+  const [l, m, s] = [
+    0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b,
+    0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b,
+    0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b,
+  ].map(Math.cbrt)
+  return [
+    0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
+  ]
+}
 
 // Event copy follows docs/calendar-event-spec.md, with "vs" between the teams and each sport's own
 // words, the same as on its page (WORDS in page.ts).
@@ -12,13 +35,18 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
   const words = WORDS[team.sport]
   const teamPage = `${siteUrl}/${teamPath(team)}`
   const footer = `Kept up to date by ${siteName} · ${teamPage.replace(/^https?:\/\//, '')}`
-  // Header fields: team first, brand last, the team's colour.
+  // Header fields: team first, brand last, the team's colour. ical-generator writes each value both the
+  // RFC 7986 way and the older X- way that Apple, Google and Outlook read; it skips DESCRIPTION and
+  // COLOR, so those two are added by hand. Every line stays: we want the feed to work in every app.
+  const description = `Every game of the ${team.side}: ${words.start}, venue, TV, tickets. Kept up to date by ${siteName}.`
   const calendar = ical({
     prodId: { company: siteName, product: 'feeds', language: 'EN' },
     name: feedName(team),
-    description: `Every game of the ${team.side}: ${words.start}, venue, TV, tickets. Kept up to date by ${siteName}.`,
+    description,
     color: team.colours[0],
     ttl: 12 * 60 * 60,
+    url: `${teamPage}/`,
+    source: `${siteUrl}/${feedPath(team)}`,
   })
   for (const game of games) {
     const title = `${game.home} vs ${game.away}`
@@ -67,8 +95,12 @@ export function toIcs(team: Team, games: Game[], now: Date, siteUrl = defaultSit
     // drops a game PLAYED_DAYS after it is played (game.ts), and a sale day with no game has nothing to sell.
     if (game.onSale && game.tickets) ticketSaleEvent(calendar, game, now, footer)
   }
+  // Calendar properties must come before the events (RFC 5545 §3.6), and ical-generator writes its
+  // custom ones after them, so DESCRIPTION and COLOR go in by hand after the last header line it writes.
+  const header = foldLines(`DESCRIPTION:${escape(description, false)}\r\nCOLOR:${cssColourName(team.colours[0])}`)
+  const ics = calendar.toString().replace(/^(X-APPLE-CALENDAR-COLOR:.*\r\n)/m, `$1${header}\r\n`)
   // RFC 5545 §3.1 ends every line, the last included, with CRLF; ical-generator leaves the last one off.
-  return `${calendar.toString()}\r\n`
+  return `${ics}\r\n`
 }
 
 // "Kickoff 21:45 in Volos", "Tip-off 20:00 in Athens": venue-local time with the city, so the copy

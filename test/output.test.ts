@@ -4,7 +4,7 @@ import { test } from 'node:test'
 import { teams } from '../src/config.ts'
 import { parseEuroleagueGames } from '../src/euroleague.ts'
 import { withDetails, type Game } from '../src/game.ts'
-import { toIcs } from '../src/ics.ts'
+import { cssColourName, toIcs } from '../src/ics.ts'
 
 const now = new Date('2026-10-02T06:00:00Z')
 const [football, basketball] = teams
@@ -53,6 +53,29 @@ test('feed header names the team then the brand, and carries the team colour', (
   )
   assert.ok(lines.includes('X-APPLE-CALENDAR-COLOR:#0D5EAF'))
   assert.ok(lines.includes('REFRESH-INTERVAL;VALUE=DURATION:PT12H'))
+})
+
+test('the header carries every RFC 7986 property and the older X- one beside it, before any event', () => {
+  const lines = icsLines(toIcs(football, [timed], now))
+  const header = lines.slice(0, lines.indexOf('BEGIN:VEVENT'))
+  for (const line of [
+    'NAME:Greece football · scarf',
+    'X-WR-CALNAME:Greece football · scarf',
+    "DESCRIPTION:Every game of the Greece men's national football team: kickoff\\, venue\\, TV\\, tickets. Kept up to date by scarf.",
+    "X-WR-CALDESC:Every game of the Greece men's national football team: kickoff, venue, TV, tickets. Kept up to date by scarf.",
+    'COLOR:royalblue',
+    'X-APPLE-CALENDAR-COLOR:#0D5EAF',
+    'URL:https://scarf.fan/greece/football/',
+    'SOURCE;VALUE=URI:https://scarf.fan/greece/football.ics',
+    'REFRESH-INTERVAL;VALUE=DURATION:PT12H',
+    'X-PUBLISHED-TTL:PT12H',
+  ]) assert.ok(header.includes(line), line)
+})
+
+test('COLOR is the CSS colour name closest to the team colour', () => {
+  assert.equal(cssColourName('#FF0000'), 'red')
+  assert.equal(cssColourName('#0D5EAF'), 'royalblue')
+  assert.equal(cssColourName('#009246'), 'forestgreen')
 })
 
 test('every line of the feed ends in CRLF, the last one too (RFC 5545 §3.1)', () => {
