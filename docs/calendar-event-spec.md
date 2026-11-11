@@ -3,6 +3,15 @@
 Team names are joined with "vs" ("Greece vs Serbia"): decided by Chris on 2026-10-17; the design
 originally wrote "v".
 
+The feeds are iCalendar, [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545) (it replaced RFC 2445),
+written by ical-generator, with every calendar property of
+[RFC 7986](https://www.rfc-editor.org/rfc/rfc7986) that fits a feed: `NAME`, `DESCRIPTION`, `COLOR`,
+`URL`, `SOURCE`, `REFRESH-INTERVAL`. Most apps never adopted 7986, so each also goes out the older way
+they read (`X-WR-CALNAME`, `X-WR-CALDESC`, `X-APPLE-CALENDAR-COLOR`, `X-PUBLISHED-TTL`). Keep both:
+we want the feed to work in every app. The other RFCs that update 5545 (scheduling, tasks,
+availability, relationships, alarm and publishing extensions) add nothing a subscribed feed uses.
+Checked 2026-11-11.
+
 This is the surface every subscriber sees, every match week. No logo lives here; the brand is the
 team's colour and the voice. All strings below are exact. `{canonical}` is the canonical domain,
 `scarf.fan`.
@@ -21,14 +30,21 @@ Each sport speaks its own words, the same in the feed as on its team page (`WORD
 
 ```
 PRODID:-//scarf//feeds//EN
+URL:https://scarf.fan/greece/football/
+SOURCE;VALUE=URI:https://scarf.fan/greece/football.ics
+NAME:Greece football · scarf
 X-WR-CALNAME:Greece football · scarf
 X-WR-CALDESC:Every game of the Greece men's national football team: kickoff, venue, TV, tickets. Kept up to date by scarf.
-X-APPLE-CALENDAR-COLOR:#0D5EAF
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 X-PUBLISHED-TTL:PT12H
+X-APPLE-CALENDAR-COLOR:#0D5EAF
+DESCRIPTION:Every game of the Greece men's national football team: kickoff\, venue\, TV\, tickets. Kept up to date by scarf.
+COLOR:royalblue
 ```
 
-Calendar name: team first, brand last, lowercase. Colour: the team's first stripe colour.
+Calendar name: team first, brand last, lowercase. Colour: the team's first stripe colour; `COLOR`
+takes a CSS colour name, so it carries the name closest to it (`cssColourName` in `src/ics.ts`).
+`URL` is the team page, `SOURCE` the feed itself.
 
 ## A club's feed
 
@@ -39,7 +55,7 @@ in the EuroLeague.
 |---|---|
 | `X-WR-CALNAME` | `Olympiacos basketball · scarf` |
 | `X-WR-CALDESC` | `Every game of the Olympiacos men's basketball team: tip-off, venue, TV, tickets. Kept up to date by scarf.` |
-| `X-APPLE-CALENDAR-COLOR` | the kit's first colour, `#D30D24` |
+| `X-APPLE-CALENDAR-COLOR` | the kit's first colour, `#D30D24` (`COLOR`: its closest CSS name) |
 | `UID` | the source's id: `euroleague-E2026_100@scarf` (EuroLeague), `euroleague-U2026_12@scarf` (EuroCup), `uefa-<matchId>@scarf` for a football club |
 | `SUMMARY` | `Olympiacos vs Crvena Zvezda`: the clubs as the source names them, EuroLeague's short name without sponsor or city |
 | Competition line | the competition, with the round where the source gives one: `EuroLeague · Round 10` |
