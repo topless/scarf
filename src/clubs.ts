@@ -1,4 +1,56 @@
-import type { Sport, Team } from './config.ts'
+import type { Competition, Sport, Team } from './config.ts'
+
+// The home broadcaster of each competition in each club's country (#172), a club's TV line unless it
+// names its own. Missing: no source names one (EuroCup: Bulgaria, England, France, Israel, Latvia,
+// Romania).
+// Champions League 2026-27: UEFA's "Where to watch" list of 2026-11-04, highlights-only channels left
+// out, with the brand fans know where UEFA names the company (Belgium, Greece, Spain):
+// https://www.uefa.com/uefachampionsleague/news/0253-0d82037aaedd-f371c464f919-1000--where-to-watch-the-uefa-champions-league-tv-channels-live-streams/
+const CLUB_TV: Record<Competition, Partial<Record<Team['country'], string>>> = {
+  'champions-league': {
+    austria: 'Sky Austria, Canal+ (Austrian TV)',
+    azerbaijan: 'CBC Sport, TVNet, İçtimai TV (Azerbaijani TV)',
+    belgium: 'VTM, RTL, Pickx, Play Sports (Belgian TV)', // DPG Media, RTL, Proximus, Telenet
+    czechia: 'TV Nova (Czech TV)',
+    england: 'TNT Sports, Amazon Prime Video (British TV)',
+    france: 'Canal+ (French TV)',
+    germany: 'DAZN, Amazon Prime Video (German TV)',
+    greece: 'Mega, MagentaTV (Greek TV)', // Alter Ego (Mega) free-to-air for 2024-27, sportcal.com
+    italy: 'Sky, Amazon Prime Video (Italian TV)',
+    netherlands: 'Ziggo Sport (Dutch TV)',
+    norway: 'TV 2 (Norwegian TV)',
+    portugal: 'Sport TV, DAZN, LiveMode (Portuguese TV)',
+    slovakia: 'TV Nova (Slovak TV)',
+    spain: 'Movistar Plus+ (Spanish TV)', // Telefónica
+    turkiye: 'TRT (Turkish TV)',
+    ukraine: 'Megogo (Ukrainian TV)',
+  },
+  // EuroLeague Basketball's and the broadcasters' rights deals covering 2026-27.
+  euroleague: {
+    france: 'beIN Sports (French TV)', // https://www.eurohoops.net/en/euroleague/2004140/bein-sports-to-broadcast-euroleague-in-france/
+    germany: 'MagentaSport (German TV)', // https://www.euroleaguebasketball.net/news/euroleague-basketball-and-deutsche-telekom-extend-partnership-for-three-more-seasons
+    israel: 'Sport 5 (Israeli TV)', // https://www.eurohoops.net/en/euroleague/1813203/euroleague-extends-broadcast-deal-with-israels-sports-channel/
+    italy: 'Sky Sport (Italian TV)', // https://www.euroleaguebasketball.net/news/sky-italia-to-exclusively-broadcast-euroleague-basketball-competitions-until-2028
+    lithuania: 'Go3 (Lithuanian TV)', // https://www.tv3.lt/gaires/zalgiriu
+    serbia: 'Sport Klub (Serbian TV)', // https://n1info.rs/english/news/euroleague-basketball-and-united-media-extend-nova-and-sportklub-partnerships/
+    spain: 'Movistar Plus+ (Spanish TV)', // https://www.euroleaguebasketball.net/news/movistar-plus-and-euroleague-extend-broadcast-partnership-until-2031
+    turkiye: 'S Sport (Turkish TV)', // https://eurohoops.net/en/euroleague/1796547/saran-media-and-euroleague-basketball-extend-media-rights-partnership-for-four-more-years
+    'united-arab-emirates': 'Dubai Sports (Emirati TV)', // https://www.euroleaguebasketball.net/news/dubai-media-secures-landmark-broadcast-agreement-to-air-euroleague-across-the-mena-region
+  },
+  // The same deals, most of which carry the EuroCup too.
+  eurocup: {
+    'bosnia-and-herzegovina': 'Sport Klub (Bosnian TV)', // the Adriatic deal, n1info.rs above
+    germany: 'MagentaSport (German TV)',
+    greece: 'Novasports (Greek TV)', // the Greek deal, n1info.rs above
+    italy: 'Sky Sport (Italian TV)',
+    lithuania: 'Go3 (Lithuanian TV)', // https://www.tv3.lt/rubrika/naujienos/sportas/krepsinis/europos-taure
+    montenegro: 'Sport Klub (Montenegrin TV)',
+    poland: 'Polsat Sport (Polish TV)', // Śląsk v Budućnost on Polsat Sport 2: https://www.wroclaw.pl/sport/prezentacja-pergola-slask-budnocost-podgorica-transmisja
+    slovenia: 'Sport Klub (Slovenian TV)',
+    spain: 'Movistar Plus+ (Spanish TV)',
+    turkiye: 'S Sport (Turkish TV)',
+  },
+}
 
 // The clubs: under their countries, below the national teams, and on their competition's page.
 // Each names the season its source lists (E2026 is EuroLeague 2026-27, U2026 EuroCup 2026-27); once
@@ -50,7 +102,7 @@ export const clubs: Team[] = [
       tickets: 'https://paobc.more.com/gr-el/tickets/',
     },
   },
-  // TV and tickets stay empty from here on until an official page names them.
+  // Tickets stay empty from here on until an official page names them; TV is CLUB_TV's.
 
   // The other 18 of the EuroLeague 2026-27: its clubs list fetched once on 2026-11-02 (E2026, 20
   // clubs), grounds from the season's games of 2026-10-31 (#113).
@@ -161,7 +213,8 @@ export const clubs: Team[] = [
 function team(country: Team['country'], flag: string, sport: Sport, club: NonNullable<Team['club']>, colours: Team['colours'], source: Team['source']): Team {
   const name = / Basket(ball)?$/.test(club.name) ? club.name : `${club.name} ${sport}`
   // The crest file scripts/crests.ts fetches, by convention; the config test checks it is there.
-  return { country, sport, club: { crest: `${club.slug}-${sport}.png`, ...club }, name, side: `${club.name} men's ${sport} team`, colours, flag, source, defaults: {} }
+  const tv = CLUB_TV[club.competition][country]
+  return { country, sport, club: { crest: `${club.slug}-${sport}.png`, ...club }, name, side: `${club.name} men's ${sport} team`, colours, flag, source, defaults: tv ? { tv } : {} }
 }
 type Club = Omit<NonNullable<Team['club']>, 'competition'>
 function euroleague(country: Team['country'], flag: string, clubCode: string, club: Club, colours: Team['colours']): Team {

@@ -130,14 +130,92 @@ export const sourceKey = ({ source }: Team): string =>
 // mark next to its home city, over the club's own stripes.
 export const countryOf = (team: Team) => COUNTRIES[team.country]
 
-// A team of one of those countries. TV and tickets stay empty until an official page confirms them.
-function team(country: keyof typeof COUNTRIES, sport: Sport, source: Team['source']): Team {
-  const { name, colours, flag } = COUNTRIES[country]
-  return { country, sport, name: `${name} ${sport}`, side: `${name} men's national ${sport} team`, colours, flag, source, defaults: {} }
+// The home broadcaster of each country's own Nations League 2026-27 games (#172): UEFA's "Where to
+// watch the Nations League" list of 2026-11-10 unless the line names another source; where UEFA names
+// several, the ones the line's press source puts on the team's own games. UEFA sells the qualifiers
+// with it through 2028, so it stands for the Euro 2028 qualifiers too. A team written out above keeps
+// its own. Missing: no source names one (Andorra: only UEFA.tv).
+// https://www.uefa.com/uefanationsleague/news/02a9-219ae5c877f5-740390ccb3e5-1000--where-to-watch-the-nations-league-tv-broadcast-partners-li/
+const NATIONS_LEAGUE_TV: Partial<Record<keyof typeof COUNTRIES, string>> = {
+  albania: 'Digitalb (Albanian TV)', // "live and exclusively on DigitAlb", balkanweb.com
+  armenia: 'Public TV of Armenia, Fast TV (Armenian TV)',
+  austria: 'ORF (Austrian TV)', // all six group games on ORF 1, weekend.at
+  azerbaijan: 'CBC Sport (Azerbaijani TV)',
+  belarus: 'CTV (Belarusian TV)',
+  belgium: 'VTM, RTL (Belgian TV)',
+  'bosnia-and-herzegovina': 'BHRT, Arena Sport, MY TV (Bosnian TV)',
+  bulgaria: 'MAX One, gong.bg (Bulgarian TV)',
+  croatia: 'Nova TV (Croatian TV)', // Czechia v Croatia "na Novoj TV", index.hr, 2026-09-26
+  cyprus: 'CyBC, Cytavision (Cypriot TV)',
+  czechia: 'ČT sport (Czech TV)', // mediaguru.cz, autumn 2026
+  denmark: 'TV 2 (Danish TV)',
+  estonia: 'ERR, Go3 (Estonian TV)',
+  'faroe-islands': 'KVF, TV 2 (Faroese TV)',
+  finland: 'Yle, MTV Katsomo (Finnish TV)',
+  france: "TF1, L'Équipe (French TV)",
+  georgia: '1TV, Silk Go (Georgian TV)',
+  gibraltar: 'GBC (Gibraltarian TV)',
+  hungary: 'M4 Sport (Hungarian TV)', // national team games on M4 until 2028, infostart.hu
+  iceland: 'Sýn, Viaplay (Icelandic TV)',
+  israel: 'Sport 5, Sport 1 (Israeli TV)',
+  italy: 'Rai (Italian TV)', // Rai 1 has all of Italy's games, diretta.it
+  kazakhstan: 'Qazsport (Kazakh TV)',
+  kosovo: 'Artmotion (Kosovan TV)',
+  latvia: 'LTV7 (Latvian TV)', // LTV holds Latvia's UEFA games, lvportals.lv, 2024
+  liechtenstein: 'Landeskanal, DAZN (Liechtenstein TV)',
+  lithuania: 'LRT (Lithuanian TV)',
+  luxembourg: 'RTL (Luxembourgish TV)',
+  malta: 'TVMSport (Maltese TV)',
+  moldova: 'TRM (Moldovan TV)',
+  montenegro: 'RTCG, Arena Sport (Montenegrin TV)',
+  netherlands: 'NOS, Ziggo Sport (Dutch TV)',
+  'north-macedonia': 'MRT, Arena Sport (Macedonian TV)',
+  // The BBC keeps the home nations' games until mid-2028 (sportcal.com, 2026-06-25).
+  'northern-ireland': 'BBC Northern Ireland, BBC iPlayer (British TV)',
+  norway: 'TV 2 (Norwegian TV)',
+  poland: 'TVP (Polish TV)', // TVP shows all six Poland games, flashscore.pl
+  portugal: 'RTP, Sport TV (Portuguese TV)',
+  'republic-of-ireland': 'RTÉ, Virgin Media (Irish TV)',
+  romania: 'Antena 1 (Romanian TV)', // Romania's games on Antena 1 alone, spotmedia.ro
+  'san-marino': 'San Marino RTV (Sammarinese TV)',
+  scotland: 'BBC Scotland, BBC iPlayer (Scottish TV)',
+  serbia: 'RTS, Arena Sport (Serbian TV)',
+  slovakia: 'STVR, Sport1 (Slovak TV)',
+  slovenia: 'Sportklub (Slovenian TV)',
+  sweden: 'Viaplay (Swedish TV)',
+  turkiye: 'ATV (Turkish TV)', // the national team free-to-air on ATV, aspor.com.tr, 2026-09
+  ukraine: 'Megogo (Ukrainian TV)',
+  wales: 'S4C, BBC (Welsh TV)', // every autumn game on S4C, nation.cymru
 }
-const football = (country: keyof typeof COUNTRIES, teamId: number) => team(country, 'football', { kind: 'uefa', teamId })
+
+// The home broadcaster of each country's own World Cup 2027 qualifiers (#172), from the federation's
+// or broadcaster's preview of a 2025-26 or 2026 window. Missing: no source names one (Bosnia and
+// Herzegovina, Hungary, Montenegro, Netherlands, Portugal, Serbia, Sweden).
+const FIBA_TV: Partial<Record<keyof typeof COUNTRIES, string>> = {
+  croatia: 'Arena Sport (Croatian TV)', // https://www.index.hr/clanak.aspx?id=2810520
+  estonia: 'ERR (Estonian TV)', // https://news.err.ee/1609952867/watch-estonia-v-sweden-in-men-s-basketball-world-cup-qualifier-friday-evening
+  finland: 'Yle (Finnish TV)', // https://yle.fi/a/74-20196657
+  georgia: '1TV (Georgian TV)', // https://1tv.ge/lang/en/news/georgia-begins-world-cup-qualifying-campaign-against-ukraine-tonight-live-coverage-on-gpb-first-channel/
+  iceland: 'RÚV (Icelandic TV)', // https://www.ruv.is/sjonvarp/flokkur/ithrottir
+  israel: 'Sport 5 (Israeli TV)', // rights through 2029: https://www.ice.co.il/tv/news/article/1092462
+  italy: 'Sky Sport, NOW (Italian TV)', // https://sport.sky.it/basket/2026/07/01/italia-basket-islanda-lituania-qualificazioni-mondiali
+  latvia: 'LTV7 (Latvian TV)', // through 2029: https://www.lsm.lv/raksts/sports/basketbols/09.10.2024-latvijas-televizija-iegust-tiesibas-parraidit-nozimigakos-basketbola-turnirus-ari-valstsvienibu-speles.a571892/
+  lithuania: 'LRT (Lithuanian TV)', // https://www.lrt.lt/naujienos/sportas/10/2978279/lrt-tiesiogiai-rodys-rinktines-kovas-debiutuos-naujas-komentatoriu-duetas
+  poland: 'TVP Sport (Polish TV)', // https://www.tvp.info/95096789/polska-niemcy-koszykowka-eliminacje-ms-2027-stawka-awans-na-mistrzostwa-swiata-transmisja-w-tvp
+  slovenia: 'TV Slovenija, Arena Sport (Slovenian TV)', // https://www.rtvslo.si/n/792121
+  turkiye: 'TRT 1, S Sport (Turkish TV)', // https://www.aspor.com.tr/milli-takim/2026/08/31/canli-izle-izlanda-turkiye-maci-saat-kacta-hangi-kanalda
+  ukraine: 'Suspilne Sport, Kyivstar TV (Ukrainian TV)', // https://www.obozrevatel.com/ukr/sport-oboz/daniya-ukraina-anons-ta-vsi-podrobitsi-matchu-vidboru-do-chs-2027-z-basketbolu.htm
+}
+
+// A team of one of those countries, with its home broadcaster where one is known. Tickets stay empty
+// until an official page confirms them.
+function team(country: keyof typeof COUNTRIES, sport: Sport, source: Team['source'], tv?: string): Team {
+  const { name, colours, flag } = COUNTRIES[country]
+  return { country, sport, name: `${name} ${sport}`, side: `${name} men's national ${sport} team`, colours, flag, source, defaults: tv ? { tv } : {} }
+}
+const football = (country: keyof typeof COUNTRIES, teamId: number) => team(country, 'football', { kind: 'uefa', teamId }, NATIONS_LEAGUE_TV[country])
 const basketball = (country: keyof typeof COUNTRIES, teamCode: string) =>
-  team(country, 'basketball', { kind: 'fiba', event: 'fiba-basketball-world-cup-2027-european-qualifiers', teamCode })
+  team(country, 'basketball', { kind: 'fiba', event: 'fiba-basketball-world-cup-2027-european-qualifiers', teamCode }, FIBA_TV[country])
 
 export const teams: Team[] = [
   {
