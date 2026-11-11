@@ -223,15 +223,16 @@ const NIGHTS: Record<Competition, string> = {
 }
 
 // A competition on the landing: no stripes, nothing on it is a team. Six of its clubs, A to Z, and
-// the way to all of them. The rest are in the page, hidden, for the Find field.
+// the way to all of them. The rest are in the page, hidden, for the Find field. The whole card opens
+// the competition's page; its chips open their clubs'.
 function competitionCard(competition: Competition, clubs: Team[]): string {
   const { name, sport } = COMPETITIONS[competition]
   return `  <article class="card">
     <div class="comp-body">
-      <h3 class="comp-name"><a href="${competitionPath(competition)}/">${WORDS[sport].ball}${esc(name)}${ICON.arrow}</a></h3>
+      <h3 class="comp-name"><a class="card-link" href="${competitionPath(competition)}/">${WORDS[sport].ball}${esc(name)}${ICON.arrow}</a></h3>
       <p class="small">${capitalise(`men's ${sport}`)} · ${count(clubs.length, 'club')} · ${NIGHTS[competition]}</p>
       <div class="comp-clubs">${byName(clubs).map((team, i) => clubChip(team, '', i >= 6)).join('')}</div>
-      <a class="cell-cta" href="${competitionPath(competition)}/">All ${count(clubs.length, 'club')}${ICON.arrow}</a>
+      <span class="cell-cta">All ${count(clubs.length, 'club')}${ICON.arrow}</span>
     </div>
   </article>`
 }
@@ -778,7 +779,7 @@ const crest = (team: Team, root: string, size: number) =>
 
 // A club's card, on its country's page and its competition's: its kit stripes, the sport first as on
 // a country's cells (so two teams of one club read as two), the crest and name, its home with the
-// country's flag as a small mark, and its next game.
+// country's flag as a small mark, and its next game. The whole card opens the club's page.
 function clubCard({ team, games }: Section, root: string): string {
   const club = team.club!
   const { ball, start } = WORDS[team.sport]
@@ -788,9 +789,9 @@ function clubCard({ team, games }: Section, root: string): string {
     <div class="card-stripe"></div>
     <div class="club-body">
       <span class="cell-sport">${ball}${capitalise(team.sport)}<small>${esc(COMPETITIONS[club.competition].name)}</small></span>
-      <div class="club-head">${crest(team, root, 44)}<div><h3 class="club-name"><a href="${href}">${esc(club.name)}</a></h3><div class="club-home">${flag(team, root, 16, 12)}${esc(club.city)} · ${esc(club.ground)}</div></div></div>
+      <div class="club-head">${crest(team, root, 44)}<div><h3 class="club-name"><a class="card-link" href="${href}">${esc(club.name)}</a></h3><div class="club-home">${flag(team, root, 16, 12)}${esc(club.city)} · ${esc(club.ground)}</div></div></div>
       <div class="cell-next">${next ? `<b>${matchTitle(next)}</b><span class="num">${when(next, shortDate, start)}</span>` : '<span>No games announced yet.</span>'}</div>
-      <a class="cell-cta" href="${href}">Games and subscribe${ICON.arrow}</a>
+      <span class="cell-cta">Games and subscribe${ICON.arrow}</span>
     </div>
   </article>`
 }

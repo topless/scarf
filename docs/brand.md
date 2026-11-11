@@ -134,11 +134,14 @@ Never rotate the mark further, never stretch, never add a drop shadow.
   stripe header and a 1.5 px ink rule under it. Padding 24–28 px.
 - **Club card**: a card that opens with the sport line (ball icon, Football or Basketball, the
   competition at the right), then the kit-stripe header, the crest slot (44 px), the club's name, the
-  flag (16 × 12 px) with the home city and ground, the next game and "Games and subscribe".
+  flag (16 × 12 px) with the home city and ground, the next game and "Games and subscribe". The
+  whole card is one link to the club's page, named by the club: its name's link stretches over the
+  card, and the focus ring goes round the card.
 - **Club bar**: the top of a club's page: the crest (48 px), the club's name, under it the country line
   (flag, "Piraeus, Greece") linking to the country page, the club's own sport switch, and Share.
 - **Competition card**: a plain card, no stripes: ball icon and name, a line of facts, six club chips
-  with their kit swatches, and "All N clubs".
+  with their kit swatches, and "All N clubs". Like the club card, the whole card opens the
+  competition's page; the chips sit above it and open their clubs.
 - **Crest**: small, beside the club's name, unmodified; until a club's file exists, a round swatch of
   its kit stripes stands in. Never in scarf's mark, a share image or the favicon, and never a
   competition's logo. With the crests comes a line in a club page's small print: they are the clubs'
